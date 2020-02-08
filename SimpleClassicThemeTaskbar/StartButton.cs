@@ -11,7 +11,7 @@ namespace SimpleClassicThemeTaskbar
 {
     public partial class StartButton : UserControl
     {
-        private bool pressed = false;
+        public bool pressed = false;
 
         public bool Pressed
         {
@@ -24,9 +24,6 @@ namespace SimpleClassicThemeTaskbar
                 pressed = value;
                 panel1.style = pressed ? Border3DStyle.Sunken : Border3DStyle.Raised;
                 panel1.Invalidate();
-
-                if (value)
-                    SendKeys.Send("^{ESC}");
             }
         }
 
@@ -38,12 +35,26 @@ namespace SimpleClassicThemeTaskbar
         private void StartButton_Load(object sender, EventArgs e)
         {
             //Add event handlers
-            pictureBox1.Click += delegate { OnClick(new EventArgs()); };
-            label1.Click += delegate { OnClick(new EventArgs()); };
+            pictureBox1.Click += delegate { OnMouseClick(new MouseEventArgs(MouseButtons.Left, 0, 0, 0, 0)); };
+            label1.Click += delegate { OnMouseClick(new MouseEventArgs(MouseButtons.Left, 0, 0, 0, 0)); };
 
             //Absolutely terribly way to do it.
             //TODO: Check if start menu is open or not
-            Click += delegate { Pressed = !Pressed; };
+            MouseClick += delegate(object senderr, MouseEventArgs ee)
+            {
+                if (ee.Button == MouseButtons.Right)
+                    return;
+                Window wnd = new Window(Taskbar.lastOpenWindow);
+                if (wnd.ClassName == "OpenShell.CMenuContainer" || wnd.ClassName == "Windows.UI.Core.CoreWindow")
+                {
+                    Taskbar.lastOpenWindow = Parent.Handle;
+                    Pressed = false;
+                }
+                else
+                {
+                    SendKeys.Send("^{ESC}");
+                }
+            };
         }
     }
 }

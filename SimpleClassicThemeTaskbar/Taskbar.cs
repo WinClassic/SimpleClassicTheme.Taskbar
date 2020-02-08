@@ -209,13 +209,18 @@ namespace SimpleClassicThemeTaskbar
 
         private List<TaskbarProgram> icons = new List<TaskbarProgram>();
 
-        private HWND lastOpenWindow;
+        public static HWND lastOpenWindow;
         private void timer1_Tick(object sender, EventArgs e)
         {
             //Get the foreground window (Used later)
             HWND ForegroundWindow = GetForegroundWindow();
             if (ForegroundWindow != Handle)
+            {
                 lastOpenWindow = ForegroundWindow;
+                Window wnd = new Window(Taskbar.lastOpenWindow);
+                startButton1.Pressed = wnd.ClassName == "OpenShell.CMenuContainer" ||
+                                       wnd.ClassName == "Windows.UI.Core.CoreWindow";
+            }
 
             //Re-check the window handle list
             windows.Clear();

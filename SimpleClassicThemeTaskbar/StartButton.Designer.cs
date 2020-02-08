@@ -83,6 +83,6 @@
 
         private SimpleClassicThemeTaskbar.BetterBorderPanel panel1;
         private System.Windows.Forms.PictureBox pictureBox1;
-        private System.Windows.Forms.Label label1;
+        public System.Windows.Forms.Label label1;
     }
 }

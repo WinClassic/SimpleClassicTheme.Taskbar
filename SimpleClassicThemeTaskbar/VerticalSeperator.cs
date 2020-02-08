@@ -2,52 +2,52 @@
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 
-public class VertSep : Control
+namespace SimpleClassicThemeTaskbar
 {
-    private Color lineColor;
-    private Pen linePen;
-
-    public VertSep()
+    public partial class VertSep : Control
     {
-        LineColor = Color.LightGray;
-        SetStyle(ControlStyles.SupportsTransparentBackColor, true);
-    }
+        private Color lineColor;
+        private Pen linePen;
 
-    public Color LineColor
-    {
-        get
+        public VertSep()
         {
-            return this.lineColor;
-        }
-        set
-        {
-            this.lineColor = value;
-
-            this.linePen = new Pen(this.lineColor, 1);
-            this.linePen.Alignment = PenAlignment.Inset;
-
-            Refresh();
-        }
-    }
-
-    protected override void Dispose(bool disposing)
-    {
-        if (disposing && this.linePen != null)
-        {
-            this.linePen.Dispose();
-            this.linePen = null;
+            LineColor = Color.LightGray;
+            SetStyle(ControlStyles.SupportsTransparentBackColor, true);
         }
 
-        base.Dispose(disposing);
-    }
+        public Color LineColor
+        {
+            get { return this.lineColor; }
+            set
+            {
+                this.lineColor = value;
 
-    protected override void OnPaint(PaintEventArgs e)
-    {
-        var g = e.Graphics;
-        int x = this.Width / 2;
+                this.linePen = new Pen(this.lineColor, 1);
+                this.linePen.Alignment = PenAlignment.Inset;
 
-        g.DrawLine(linePen, x, 0, x, this.Height);
+                Refresh();
+            }
+        }
 
-        base.OnPaint(e);
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && this.linePen != null)
+            {
+                this.linePen.Dispose();
+                this.linePen = null;
+            }
+
+            base.Dispose(disposing);
+        }
+
+        protected override void OnPaint(PaintEventArgs e)
+        {
+            var g = e.Graphics;
+            int x = this.Width / 2;
+
+            g.DrawLine(linePen, x, 0, x, this.Height);
+
+            base.OnPaint(e);
+        }
     }
 }

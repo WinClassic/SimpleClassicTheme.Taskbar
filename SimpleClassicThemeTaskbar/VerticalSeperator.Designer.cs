@@ -1,24 +1,11 @@
 ﻿namespace SimpleClassicThemeTaskbar
 {
-    partial class VerticalSeperator : System.Windows.Forms.Control
+    partial class VertSep : System.Windows.Forms.Control
     {
         /// <summary> 
         /// Required designer variable.
         /// </summary>
         private System.ComponentModel.IContainer components = null;
-
-        /// <summary> 
-        /// Clean up any resources being used.
-        /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing && (components != null))
-            {
-                components.Dispose();
-            }
-            base.Dispose(disposing);
-        }
 
         #region Component Designer generated code
 
@@ -32,7 +19,7 @@
             // 
             // StartButton
             // 
-            this.Name = "VerticalSeperator";
+            this.Name = "VertSep";
             this.Size = new System.Drawing.Size(146, 146);
             this.ResumeLayout(false);
 

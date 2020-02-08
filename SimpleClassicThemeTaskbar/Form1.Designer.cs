@@ -32,8 +32,9 @@
             this.line = new System.Windows.Forms.Label();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.startButton1 = new SimpleClassicThemeTaskbar.StartButton();
-            this.vertSep2 = new VertSep();
-            this.vertSep1 = new VertSep();
+            this.vertSep2 = new SimpleClassicThemeTaskbar.VertSep();
+            this.vertSep1 = new SimpleClassicThemeTaskbar.VertSep();
+            this.label1 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // line
@@ -76,11 +77,21 @@
             this.vertSep1.TabIndex = 2;
             this.vertSep1.Text = "vertSep1";
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(437, 8);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(35, 13);
+            this.label1.TabIndex = 5;
+            this.label1.Text = "label1";
+            // 
             // Taskbar
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(742, 30);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.startButton1);
             this.Controls.Add(this.vertSep2);
             this.Controls.Add(this.vertSep1);
@@ -94,6 +105,7 @@
             this.Load += new System.EventHandler(this.Form1_Load);
             this.MouseClick += new System.Windows.Forms.MouseEventHandler(this.Taskbar_MouseClick);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -104,6 +116,7 @@
         private VertSep vertSep2;
         private System.Windows.Forms.Timer timer1;
         private StartButton startButton1;
+        private System.Windows.Forms.Label label1;
     }
 }
 
