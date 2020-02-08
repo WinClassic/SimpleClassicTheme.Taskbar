@@ -14,8 +14,6 @@ using HWND = System.IntPtr;
 
 namespace SimpleClassicThemeTaskbar
 {
-    
-
     public partial class Taskbar : Form
     {
         //Constructor
@@ -75,6 +73,9 @@ namespace SimpleClassicThemeTaskbar
                 return HWND.Zero;
             return GetLastActivePopupOfWindow(lastPopup);
         }
+
+        [DllImport("dwmapi.dll")]
+        static extern int DwmGetWindowAttribute(IntPtr hwnd, DWMWINDOWATTRIBUTE dwAttribute, out int pvAttribute, int cbAttribute);
 
         [DllImport("user32.dll", EntryPoint = "GetClassLong")]
         public static extern uint GetClassLongPtr32(IntPtr hWnd, int nIndex);
@@ -144,6 +145,20 @@ namespace SimpleClassicThemeTaskbar
                 wi.ClassName.StartsWith("WMP9MediaBarFlyout") ||            //WMP's "now playing" taskbar-toolbar
                 wi.Title.Length == 0)                                       //Window without a name
                 return false;
+
+            //UWP app
+            if (wi.ClassName == "ApplicationFrameWindow")
+            {
+                //Do an API call to see if app isn't cloaked
+                int d;
+                DwmGetWindowAttribute(wi.Handle, DWMWINDOWATTRIBUTE.Cloaked, out d, Marshal.SizeOf(0));
+
+                //If returned value is not 0, the window is cloaked
+                if (d > 0)
+                {
+                    return false;
+                }
+            }
 
             //If none of those things failed: Yay, we have a window we should display!
             return true;
@@ -217,10 +232,10 @@ namespace SimpleClassicThemeTaskbar
             if (ForegroundWindow != Handle)
             {
                 lastOpenWindow = ForegroundWindow;
-                Window wnd = new Window(Taskbar.lastOpenWindow);
-                startButton1.Pressed = wnd.ClassName == "OpenShell.CMenuContainer" ||
-                                       wnd.ClassName == "Windows.UI.Core.CoreWindow";
             }
+            Window wnd = new Window(ForegroundWindow);
+            startButton1.Pressed = wnd.ClassName == "OpenShell.CMenuContainer" ||
+                                   wnd.ClassName == "Windows.UI.Core.CoreWindow";
 
             //Re-check the window handle list
             windows.Clear();
