@@ -29,3 +29,4 @@ _ReSharper*/
 $tf*/
 .vs/
 [Pp]ackages/
+*.sdf
