@@ -55,6 +55,10 @@ namespace SimpleClassicThemeTaskbar
         public TaskbarProgram()
         {
             InitializeComponent();
+            
+            panel1.Do3DBorder = false;
+            panel1.Invalidate();
+
             Click += OnClick;
             pictureBox1.Click += OnClick;
             panel1.Click += OnClick;
@@ -63,9 +67,26 @@ namespace SimpleClassicThemeTaskbar
 
         private void OnClick(object sender, EventArgs e)
         {
-            if ((Window.WindowInfo.dwStyle & 0x20000000) > 0)
-                ShowWindow(WindowHandle, 9);
-            SetForegroundWindow(WindowHandle);
+            if (ActiveWindow)
+            {
+                ShowWindow(WindowHandle, 6);
+            }
+            else
+            {
+                if ((Window.WindowInfo.dwStyle & 0x20000000) > 0)
+                    ShowWindow(WindowHandle, 9);
+                SetForegroundWindow(WindowHandle);
+
+                foreach (Control d in Parent.Controls)
+                {
+                    if (d is TaskbarProgram b)
+                    {
+                        b.ActiveWindow = false;
+                    }
+                }
+
+                ActiveWindow = true;
+            }
         }
 
         private void TaskbarProgram_Load(object sender, EventArgs e)

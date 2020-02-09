@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -16,15 +17,28 @@ namespace SimpleClassicThemeTaskbar
 {
     public partial class Taskbar : Form
     {
+        //Constants that will later be options
+        private const int tb_height = 28;
+
         //Constructor
         public Taskbar()
         {
             InitializeComponent();
             TopLevel = true;
+            cppCode.InitCom();
         }
 
-        //Constants that will later be options
-        private const int tb_height = 30;
+        //Make sure form doesnt show in alt tab
+        protected override CreateParams CreateParams
+        {
+            get
+            {
+                CreateParams cp = base.CreateParams;
+                // Turn on WS_EX_TOOLWINDOW style bit
+                cp.ExStyle |= 0x80;
+                return cp;
+            }
+        }
 
         #region Win32
 
@@ -84,7 +98,7 @@ namespace SimpleClassicThemeTaskbar
         public static extern IntPtr GetClassLongPtr64(IntPtr hWnd, int nIndex);
 
         [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = false)]
-        static extern IntPtr SendMessage(IntPtr hWnd, int Msg, int wParam, int lParam);
+        public static extern IntPtr SendMessage(IntPtr hWnd, int Msg, int wParam, int lParam);
 
         [DllImport("user32.dll")]
         private static extern int EnumWindows(EnumWindowsCallback callPtr, int lParam);
@@ -99,21 +113,31 @@ namespace SimpleClassicThemeTaskbar
         private static extern BOOL IsWindowVisible(IntPtr hWnd);
 
         [DllImport("user32.dll")]
-        private static extern IntPtr GetAncestor(IntPtr hWnd, uint gaFlags);
+        public static extern IntPtr GetAncestor(IntPtr hWnd, uint gaFlags);
+
+        [DllImport("user32.dll")]
+        public static extern IntPtr GetWindow(IntPtr hWnd, uint gwFlags);
 
         [DllImport("user32.dll")]
         private static extern BOOL ShowWindow(HWND hWnd, int nCmdShow);
 
         [DllImport("user32.dll", CharSet = CharSet.Unicode)]
-        private static extern HWND FindWindowW(string a, string b);
+        public static extern HWND FindWindowW(string a, string b);
 
         #endregion
+
+        private static Cpp.CLI.Interop cppCode = new Cpp.CLI.Interop();
 
         //Function to determine which windows to add to the window list
         private static BOOL IsAltTabWindow(HWND hwnd)
         {
             //If window isn't visible it can't possibly be on the taskbar
             if (!IsWindowVisible(hwnd))
+                return false;
+
+            bool result = cppCode.WindowIsOnCurrentDesktop(hwnd);
+
+            if (!result)
                 return false;
 
             //Get the root owner of the window
@@ -184,7 +208,7 @@ namespace SimpleClassicThemeTaskbar
             Width = taskbarScreen.Bounds.Width;
             Height = tb_height;
             int X = taskbarScreen.WorkingArea.Left;
-            int Y = taskbarScreen.WorkingArea.Bottom;
+            int Y = taskbarScreen.WorkingArea.Bottom + 2;
             Location = new Point(X, Y);
             line.Width = Width;
 
@@ -194,6 +218,8 @@ namespace SimpleClassicThemeTaskbar
 
         private void Taskbar_FormClosing(object sender, FormClosingEventArgs e)
         {
+            cppCode.DeInitCom();
+
             //Make taskbar show up again
             ShowWindow(FindWindowW("Shell_TrayWnd", ""), 5);
         }
@@ -225,90 +251,106 @@ namespace SimpleClassicThemeTaskbar
         private List<TaskbarProgram> icons = new List<TaskbarProgram>();
 
         public static HWND lastOpenWindow;
+        public bool busy = false;
         private void timer1_Tick(object sender, EventArgs e)
         {
-            //Get the foreground window (Used later)
-            HWND ForegroundWindow = GetForegroundWindow();
-            if (ForegroundWindow != Handle)
+            if (!busy)
             {
-                lastOpenWindow = ForegroundWindow;
-            }
-            Window wnd = new Window(ForegroundWindow);
-            startButton1.Pressed = wnd.ClassName == "OpenShell.CMenuContainer" ||
-                                   wnd.ClassName == "Windows.UI.Core.CoreWindow";
-
-            //Re-check the window handle list
-            windows.Clear();
-            EnumWindowsCallback d = EnumWind;
-            EnumWindows(d, 0);
-
-            //Check if any new window exists, if so: add it
-            foreach (Window z in windows)
-            {
-                //Get a handle
-                HWND hWnd = z.Handle;
-                //Check if it already exists
-                bool exists = false;
-                foreach (TaskbarProgram icon in icons)
-                    if (icon.WindowHandle == hWnd)
-                        exists = true;
-                if (!exists)
+                busy = true;
+                //Get the foreground window (Used later)
+                HWND ForegroundWindow = GetForegroundWindow();
+                if (ForegroundWindow != Handle)
                 {
-                    //Create the button
-                    TaskbarProgram button = new TaskbarProgram();
-                    button.Window = z;
-                    button.WindowHandle = z.Handle;
-                    button.Icon = GetAppIcon(z.Handle);
-                    button.Title = z.Title;
-                    //Add it to the list
-                    icons.Add(button);
+                    lastOpenWindow = ForegroundWindow;
                 }
-            }
 
-            //The new list of icons
-            List<TaskbarProgram> newIcons = new List<TaskbarProgram>();
+                Window wnd = new Window(ForegroundWindow);
+                startButton1.Pressed = wnd.ClassName == "OpenShell.CMenuContainer" ||
+                                       wnd.ClassName == "Windows.UI.Core.CoreWindow";
 
-            //Create a new list with only the windows that are still open
-            foreach (TaskbarProgram icon in icons)
-            {
-                bool contains = false;
+                //Re-check the window handle list
+                windows.Clear();
+                EnumWindowsCallback d = EnumWind;
+                EnumWindows(d, 0);
+
+                Application.DoEvents(); Application.DoEvents(); Application.DoEvents();
+
+                //Check if any new window exists, if so: add it
                 foreach (Window z in windows)
-                    if (z.Handle == icon.WindowHandle)
-                    {
-                        contains = true;
-                        icon.Window = z;
-                    }
-
-                if (contains)
-                    newIcons.Add(icon);
-            }
-
-            //Remove controls of the windows that were removed from the list
-            foreach (Control dd in Controls)
-            {
-                if (dd is TaskbarProgram)
                 {
-                    TaskbarProgram icon = dd as TaskbarProgram;
-                    if (!newIcons.Contains(icon))
+                    //Get a handle
+                    HWND hWnd = z.Handle;
+                    //Check if it already exists
+                    bool exists = false;
+                    foreach (TaskbarProgram icon in icons)
+                        if (icon.WindowHandle == hWnd)
+                            exists = true;
+                    if (!exists)
                     {
-                        icons.Remove(icon);
-                        Controls.Remove(icon);
-                        icon.Dispose();
+                        //Create the button
+                        TaskbarProgram button = new TaskbarProgram();
+                        button.Window = z;
+                        button.WindowHandle = z.Handle;
+                        button.Icon = GetAppIcon(z.Handle);
+                        button.Title = z.Title;
+                        //Add it to the list
+                        icons.Add(button);
                     }
                 }
-            }
 
-            //Re-display all windows
-            int x = startButton1.Location.X + startButton1.Width + 2;
-            foreach (TaskbarProgram icon in newIcons)
-            {
-                icon.ActiveWindow = icon.WindowHandle == ForegroundWindow;
-                icon.Location = new Point(x, 0);
-                icon.Title = icon.Window.Title;
-                icon.Icon = GetAppIcon(icon.WindowHandle);
-                if (!Controls.Contains(icon))
-                    Controls.Add(icon);
-                x += 162;
+                //The new list of icons
+                List<TaskbarProgram> newIcons = new List<TaskbarProgram>();
+
+                //Create a new list with only the windows that are still open
+                foreach (TaskbarProgram icon in icons)
+                {
+                    bool contains = false;
+                    foreach (Window z in windows)
+                        if (z.Handle == icon.WindowHandle)
+                        {
+                            contains = true;
+                            icon.Window = z;
+                        }
+
+                    if (contains)
+                        newIcons.Add(icon);
+                }
+
+                Application.DoEvents(); Application.DoEvents(); Application.DoEvents();
+
+                //Remove controls of the windows that were removed from the list
+                foreach (Control dd in Controls)
+                {
+                    if (dd is TaskbarProgram)
+                    {
+                        TaskbarProgram icon = dd as TaskbarProgram;
+                        if (!newIcons.Contains(icon))
+                        {
+                            icons.Remove(icon);
+                            Controls.Remove(icon);
+                            icon.Dispose();
+                        }
+                    }
+                }
+
+                ForegroundWindow = GetForegroundWindow();
+
+                //Re-display all windows
+                int x = panel1.Location.X;
+                foreach (TaskbarProgram icon in newIcons)
+                {
+                    icon.ActiveWindow = icon.WindowHandle == ForegroundWindow;
+                    icon.Location = new Point(x, 0);
+                    icon.Title = icon.Window.Title;
+                    icon.Icon = GetAppIcon(icon.WindowHandle);
+                    if (!Controls.Contains(icon))
+                        Controls.Add(icon);
+                    x += icon.Width + 1;
+                }
+
+                Application.DoEvents(); Application.DoEvents(); Application.DoEvents();
+
+                busy = false;
             }
         }
     }

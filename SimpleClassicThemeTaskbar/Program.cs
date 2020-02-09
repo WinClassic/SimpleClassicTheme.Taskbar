@@ -1,7 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
+using System.Runtime.InteropServices;
+using System.Runtime.Remoting.Messaging;
 using System.Windows.Forms;
+
+using HWND = System.IntPtr;
+using HDC = System.IntPtr;
 
 namespace SimpleClassicThemeTaskbar
 {

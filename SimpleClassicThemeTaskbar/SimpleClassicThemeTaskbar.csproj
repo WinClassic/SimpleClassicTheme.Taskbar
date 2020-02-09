@@ -13,6 +13,8 @@
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <PlatformTarget>x86</PlatformTarget>
@@ -34,6 +36,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="SimpleClassicThemeTaskbar.Cpp.CLI">
+      <HintPath>..\Debug\SimpleClassicThemeTaskbar.Cpp.CLI.dll</HintPath>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -64,11 +70,11 @@
     <Compile Include="TaskbarProgram.Designer.cs">
       <DependentUpon>TaskbarProgram.cs</DependentUpon>
     </Compile>
-    <Compile Include="VerticalSeperator.cs">
-      <SubType>Component</SubType>
+    <Compile Include="VerticalDivider.cs">
+      <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="VerticalSeperator.Designer.cs">
-      <DependentUpon>VerticalSeperator.cs</DependentUpon>
+    <Compile Include="VerticalDivider.Designer.cs">
+      <DependentUpon>VerticalDivider.cs</DependentUpon>
     </Compile>
     <Compile Include="Taskbar.cs">
       <SubType>Form</SubType>
@@ -95,8 +101,8 @@
     <EmbeddedResource Include="TaskbarProgram.resx">
       <DependentUpon>TaskbarProgram.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="VerticalSeperator.resx">
-      <DependentUpon>VerticalSeperator.cs</DependentUpon>
+    <EmbeddedResource Include="VerticalDivider.resx">
+      <DependentUpon>VerticalDivider.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Taskbar.resx">
       <DependentUpon>Taskbar.cs</DependentUpon>
