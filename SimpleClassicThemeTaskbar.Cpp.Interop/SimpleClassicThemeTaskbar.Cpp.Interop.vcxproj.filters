@@ -23,5 +23,8 @@
     <ClInclude Include="Interop.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ProcessData.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

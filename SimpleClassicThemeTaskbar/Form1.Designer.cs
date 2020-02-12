@@ -32,6 +32,9 @@
             this.line = new System.Windows.Forms.Label();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.panel1 = new System.Windows.Forms.Panel();
+            this.label1 = new System.Windows.Forms.Label();
+            this.verticalDivider3 = new SimpleClassicThemeTaskbar.VerticalDivider();
+            this.systemTray1 = new SimpleClassicThemeTaskbar.SystemTray();
             this.verticalDivider2 = new SimpleClassicThemeTaskbar.VerticalDivider();
             this.verticalDivider1 = new SimpleClassicThemeTaskbar.VerticalDivider();
             this.startButton1 = new SimpleClassicThemeTaskbar.StartButton();
@@ -59,6 +62,35 @@
             this.panel1.Size = new System.Drawing.Size(200, 100);
             this.panel1.TabIndex = 7;
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(71, 9);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(35, 13);
+            this.label1.TabIndex = 10;
+            this.label1.Text = "label1";
+            // 
+            // verticalDivider3
+            // 
+            this.verticalDivider3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.verticalDivider3.BackColor = System.Drawing.SystemColors.Control;
+            this.verticalDivider3.Location = new System.Drawing.Point(637, 4);
+            this.verticalDivider3.Name = "verticalDivider3";
+            this.verticalDivider3.Size = new System.Drawing.Size(2, 22);
+            this.verticalDivider3.TabIndex = 12;
+            this.verticalDivider3.Wide = false;
+            // 
+            // systemTray1
+            // 
+            this.systemTray1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.systemTray1.Location = new System.Drawing.Point(642, 4);
+            this.systemTray1.Name = "systemTray1";
+            this.systemTray1.Size = new System.Drawing.Size(98, 22);
+            this.systemTray1.TabIndex = 11;
+            // 
             // verticalDivider2
             // 
             this.verticalDivider2.BackColor = System.Drawing.SystemColors.Control;
@@ -66,6 +98,7 @@
             this.verticalDivider2.Name = "verticalDivider2";
             this.verticalDivider2.Size = new System.Drawing.Size(7, 22);
             this.verticalDivider2.TabIndex = 9;
+            this.verticalDivider2.Wide = true;
             // 
             // verticalDivider1
             // 
@@ -74,6 +107,7 @@
             this.verticalDivider1.Name = "verticalDivider1";
             this.verticalDivider1.Size = new System.Drawing.Size(7, 22);
             this.verticalDivider1.TabIndex = 8;
+            this.verticalDivider1.Wide = true;
             // 
             // startButton1
             // 
@@ -88,6 +122,9 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(742, 28);
+            this.Controls.Add(this.verticalDivider3);
+            this.Controls.Add(this.systemTray1);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.verticalDivider2);
             this.Controls.Add(this.verticalDivider1);
             this.Controls.Add(this.panel1);
@@ -103,6 +140,7 @@
             this.Load += new System.EventHandler(this.Form1_Load);
             this.MouseClick += new System.Windows.Forms.MouseEventHandler(this.Taskbar_MouseClick);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -114,6 +152,9 @@
         private System.Windows.Forms.Panel panel1;
         private VerticalDivider verticalDivider1;
         private VerticalDivider verticalDivider2;
+        private System.Windows.Forms.Label label1;
+        private SystemTray systemTray1;
+        private VerticalDivider verticalDivider3;
     }
 }
 

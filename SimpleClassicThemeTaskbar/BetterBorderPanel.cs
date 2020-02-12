@@ -22,6 +22,18 @@ namespace SimpleClassicThemeTaskbar
 
         public Border3DStyle style = Border3DStyle.Raised;
 
+        [Description("Defines the style to be used when drawing ")]
+        [Category("Appearance")]
+        public new Border3DStyle BorderStyle
+        {
+            get => style;
+            set
+            {
+                style = value;
+                Invalidate();
+            }
+        }
+
         private void OnPaint(object sender, PaintEventArgs e)
         {
             if (Do3DBorder)

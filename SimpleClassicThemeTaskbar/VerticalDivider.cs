@@ -11,6 +11,20 @@ namespace SimpleClassicThemeTaskbar
 {
     public partial class VerticalDivider : UserControl
     {
+        private bool wide = true;
+
+        [Description("Tells the control to use 1 or 2 (wide) dividers when drawing")]
+        [Category("Appearance")]
+        public bool Wide
+        {
+            get => wide;
+            set
+            {
+                wide = value;
+                Width = wide ? 7 : 2;
+            }
+        }
+
         public VerticalDivider()
         {
             InitializeComponent();

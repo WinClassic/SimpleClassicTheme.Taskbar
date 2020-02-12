@@ -8,6 +8,17 @@ namespace SimpleClassicThemeTaskbar
 
 		namespace CLI
 		{
+			public ref struct TBUTTONINFO
+			{
+				System::IntPtr hwnd;
+				unsigned long pid;
+				System::String^ toolTip;
+				bool visible;
+				System::IntPtr icon;
+				unsigned int callbackMessage;
+				unsigned int id;
+			};
+			
 			public ref class Interop
 			{
 			public:
@@ -17,8 +28,11 @@ namespace SimpleClassicThemeTaskbar
 
 				void InitCom();
 				void DeInitCom();
+				int GetSize(System::IntPtr hWnd);
 				bool WindowIsOnCurrentDesktop(System::IntPtr hWnd);
-
+				int GetTrayButtonCount(System::IntPtr sysTray);
+				bool GetTrayButton(System::IntPtr sysTray, int i, TBUTTONINFO^% button);
+				
 				void Destroy();
 			private:
 				Cpp::Interop* _impl;

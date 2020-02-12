@@ -48,14 +48,16 @@ namespace SimpleClassicThemeTaskbar
         {
             if (e.Button == MouseButtons.Right)
             {
+                //Doesn't work :(
                 HWND wnd = Taskbar.FindWindowW("Progman", "Program Manager");
-                Taskbar.SendMessage(wnd, 0x0204, 0x0002, (-1 << 15) + -1);
-                Taskbar.SendMessage(wnd, 0x0205, 0x0000, (-1 << 15) + -1);
+                Taskbar.SendMessage(wnd, 0x0204, 0x0002, 0);
+                Taskbar.SendMessage(wnd, 0x0205, 0x0000, 0);
             }
             else
             {
-                Window wnd = new Window(Taskbar.lastOpenWindow);
-                if (wnd.ClassName == "OpenShell.CMenuContainer" || wnd.ClassName == "Windows.UI.Core.CoreWindow")
+                //Window wnd = new Window(Taskbar.lastOpenWindow);
+                //if (wnd.ClassName == "OpenShell.CMenuContainer" || wnd.ClassName == "Windows.UI.Core.CoreWindow")
+                if (pressed)
                 {
                     Taskbar.lastOpenWindow = Parent.Handle;
                     Pressed = false;

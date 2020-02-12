@@ -9,6 +9,11 @@ SimpleClassicThemeTaskbar::Cpp::CLI::Interop::Interop()
 {
 }
 
+int SimpleClassicThemeTaskbar::Cpp::CLI::Interop::GetSize(System::IntPtr wnd)
+{
+	return _impl->GetSize((HWND) wnd.ToPointer());
+}
+
 void SimpleClassicThemeTaskbar::Cpp::CLI::Interop::InitCom()
 {
 	_impl->InitCom();
@@ -22,6 +27,26 @@ void SimpleClassicThemeTaskbar::Cpp::CLI::Interop::DeInitCom()
 bool SimpleClassicThemeTaskbar::Cpp::CLI::Interop::WindowIsOnCurrentDesktop(System::IntPtr wnd)
 {
 	return _impl->WindowIsOnCurrentDesktop((HWND) wnd.ToPointer()); // Call native Get
+}
+
+int SimpleClassicThemeTaskbar::Cpp::CLI::Interop::GetTrayButtonCount(System::IntPtr sysTray)
+{
+	return _impl->GetTrayButtonCount((HWND) sysTray.ToPointer());
+}
+
+bool SimpleClassicThemeTaskbar::Cpp::CLI::Interop::GetTrayButton(System::IntPtr sysTray, int i, TBUTTONINFO^% button)
+{
+	TRAYBUTTONINFO q = _impl->GetTrayButton(HWND(sysTray.ToPointer()), i);
+	if (q.hwnd == nullptr)
+		return false;
+	button->hwnd = System::IntPtr(q.hwnd);
+	button->icon = System::IntPtr(q.icon);
+	button->pid = q.pid;
+	button->toolTip = gcnew System::String(q.toolTip);
+	button->visible = q.visible;
+	button->callbackMessage = q.callbackMessage;
+	button->id = q.id;
+	return true;
 }
 
 void SimpleClassicThemeTaskbar::Cpp::CLI::Interop::Destroy()

@@ -8,6 +8,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
+using System.Windows.Forms.VisualStyles;
 
 //Really don't know why I chose to do this
 using BOOL = System.Boolean;
@@ -90,6 +91,9 @@ namespace SimpleClassicThemeTaskbar
 
         [DllImport("dwmapi.dll")]
         static extern int DwmGetWindowAttribute(IntPtr hwnd, DWMWINDOWATTRIBUTE dwAttribute, out int pvAttribute, int cbAttribute);
+
+        [DllImport("user32.dll", SetLastError = true)]
+        static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int X, int Y, int cx, int cy, uint uFlags);
 
         [DllImport("user32.dll", EntryPoint = "GetClassLong")]
         public static extern uint GetClassLongPtr32(IntPtr hWnd, int nIndex);
@@ -208,12 +212,20 @@ namespace SimpleClassicThemeTaskbar
             Width = taskbarScreen.Bounds.Width;
             Height = tb_height;
             int X = taskbarScreen.WorkingArea.Left;
-            int Y = taskbarScreen.WorkingArea.Bottom + 2;
+            int Y = taskbarScreen.Bounds.Bottom - Height;
             Location = new Point(X, Y);
             line.Width = Width;
 
+            //Send taskbar behind classic taskbar
+            //Shown += delegate
+            //{
+            //    SetWindowPos(FindWindowW("Shell_TrayWnd", ""), new IntPtr(1), 0, 0, 0, 0, 0x0010 | 0x0002 | 0x0001);
+            //};
+
             //Hide taskbar
-            ShowWindow(FindWindowW("Shell_TrayWnd", ""), 0);
+            //Window w = new Window(FindWindowW("Shell_TrayWnd", ""));
+            //if ((w.WindowInfo.dwStyle & 0x10000000L) > 0)
+            //    ShowWindow(w.Handle, 0);
         }
 
         private void Taskbar_FormClosing(object sender, FormClosingEventArgs e)
@@ -250,10 +262,13 @@ namespace SimpleClassicThemeTaskbar
 
         private List<TaskbarProgram> icons = new List<TaskbarProgram>();
 
+        public static bool waitBeforeShow = false;
         public static HWND lastOpenWindow;
         public bool busy = false;
         private void timer1_Tick(object sender, EventArgs e)
         {
+            systemTray1.UpdateTime();
+            verticalDivider3.Location = new Point(systemTray1.Location.X - 4, verticalDivider3.Location.Y);
             if (!busy)
             {
                 busy = true;
@@ -264,9 +279,31 @@ namespace SimpleClassicThemeTaskbar
                     lastOpenWindow = ForegroundWindow;
                 }
 
+                //Check if it was the start menu
                 Window wnd = new Window(ForegroundWindow);
                 startButton1.Pressed = wnd.ClassName == "OpenShell.CMenuContainer" ||
                                        wnd.ClassName == "Windows.UI.Core.CoreWindow";
+
+                if (waitBeforeShow)
+                {
+
+                    //if (wnd.ClassName != "Shell_TrayWnd")
+                    //    waitBeforeShow = false;
+                }
+                else
+                {
+                    //Hide taskbar
+                    Window w = new Window(FindWindowW("Shell_TrayWnd", ""));
+                    if ((w.WindowInfo.dwStyle & 0x10000000L) > 0)
+                        ShowWindow(w.Handle, 0);
+                    //Check if it's a fullscreen window. If so: hide
+                    Screen scr = Screen.FromHandle(wnd.Handle);
+                    int xy = cppCode.GetSize(wnd.Handle);
+                    int width = xy >> 16, height = xy & 0x0000FFFF;
+                    label1.Text = $"{width}x{height}";
+                    bool full = width >= scr.Bounds.Width && height >= scr.Bounds.Height;
+                    Visible = !full;
+                }
 
                 //Re-check the window handle list
                 windows.Clear();
