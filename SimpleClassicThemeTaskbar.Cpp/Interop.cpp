@@ -3,6 +3,11 @@
 
 using namespace std;
 
+void SimpleClassicThemeTaskbar::Cpp::CLI::Interop::SetWorkingArea(int left, int right, int top, int bottom)
+{
+	_impl->SetWorkingArea(left, right, top, bottom);
+}
+
 SimpleClassicThemeTaskbar::Cpp::CLI::Interop::Interop()
 	: _impl(new Cpp::Interop())
 	// Allocate some memory for the native implementation

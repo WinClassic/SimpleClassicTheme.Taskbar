@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
-using System.Data;
 using System.Globalization;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
+using System.Threading;
 using System.Windows.Forms;
 using SimpleClassicThemeTaskbar.Cpp.CLI;
 
@@ -23,8 +20,8 @@ namespace SimpleClassicThemeTaskbar
         public static extern HWND FindWindowExW(HWND hWndParent, HWND hWndChildAfter, string lpszClass, string lpszWindow);
 
         private Interop d = new Cpp.CLI.Interop();
-        private bool firstTime = true;
-
+        public bool firstTime = true;
+        
         static HWND GetSystemTrayHandle()
         {
             HWND hWndTray = FindWindowW("Shell_TrayWnd", null);
@@ -44,12 +41,15 @@ namespace SimpleClassicThemeTaskbar
             return HWND.Zero;
         }
 
-        List<SystemTrayIcon> buttons = new List<SystemTrayIcon>();
+        //TODO: Make tray icons moveable
         public void UpdateButtons()
         {
+            //Get button count
             int count = d.GetTrayButtonCount(GetSystemTrayHandle());
 
-            List<HWND> existingButtons = new List<HWND>();
+            //Lists that will receive all button information
+            List<TBUTTONINFO> existingButtons = new List<TBUTTONINFO>();
+            List<HWND> existingHWNDs = new List<HWND>();
 
             //Loop through all buttons
             for (int i = 0; i < count; i++)
@@ -57,43 +57,51 @@ namespace SimpleClassicThemeTaskbar
                 //Get the button info
                 TBUTTONINFO bInfo = new TBUTTONINFO();
                 d.GetTrayButton(GetSystemTrayHandle(), i, ref bInfo);
-                existingButtons.Add(bInfo.hwnd);
 
-                //Check if the button already exists
-                SystemTrayIcon icon = null;
-                bool exists = false;
-                foreach (SystemTrayIcon existingIcon in buttons)
-                    if (existingIcon.Handle == bInfo.hwnd)
-                    {
-                        exists = true;
-                        icon = existingIcon;
-                    }
-
-                //If not, create it
-                if (!exists)
-                    icon = new SystemTrayIcon(bInfo);
-
-                //If it does: update info
-                icon.UpdateTrayIcon(bInfo);
-
-                //Add the button at the left side of the tray
-                buttons.Insert(0, icon);
+                //Save it
+                if (bInfo.visible)
+                {
+                    existingButtons.Add(bInfo);
+                    existingHWNDs.Add(bInfo.hwnd);
+                }
             }
 
             //Remove any icons that are now invalid or hidden
             List<SystemTrayIcon> newIconList = new List<SystemTrayIcon>();
-            foreach (SystemTrayIcon existingIcon in buttons)
-                if (existingButtons.Contains(existingIcon.Handle) && existingIcon.TBUTTONINFO_Struct.visible)
-                    newIconList.Add(existingIcon);
-                else
-                {
-                    betterBorderPanel1.Controls.Remove(existingIcon);
-                    existingIcon.Dispose();
-                }
+            foreach (Control existingIco in betterBorderPanel1.Controls)
+                if (existingIco is SystemTrayIcon existingIcon)
+                    if (existingHWNDs.Contains(existingIcon.Handle))
+                        newIconList.Add(existingIcon);
+                    else
+                    {
+                        betterBorderPanel1.Controls.Remove(existingIcon);
+                        existingIcon.Dispose();
+                    }
 
-            if (firstTime)
+            //Add icons that didn't display before
+            foreach (TBUTTONINFO info in existingButtons)
             {
-                firstTime = false;
+                //By default we say the icon doesn't exist
+                bool exists = false;
+                SystemTrayIcon existingIcon = null;
+
+                //Then we loop through each control to see if it actually does exist
+                foreach (SystemTrayIcon icon in newIconList)
+                    if (icon.Handle == info.hwnd)
+                    {
+                        existingIcon = icon;
+                        exists = true;
+                    }
+
+                //If it does we just update it, else we create it
+                if (exists)
+                    existingIcon.UpdateTrayIcon(info);
+                else
+                    newIconList.Add(new SystemTrayIcon(info));
+            }
+
+            //Icons are drawn from right to left so we reverse it so we can draw left to right (probably as easy)
+            if (firstTime) { 
                 newIconList.Reverse();
             }
 
@@ -109,7 +117,7 @@ namespace SimpleClassicThemeTaskbar
 
                 //Put the control at the correct position
                 icon.Location = new Point(x, 3);
-                x += virtualWidth;
+                x += virtualWidth; 
             }
 
             //Move to the left

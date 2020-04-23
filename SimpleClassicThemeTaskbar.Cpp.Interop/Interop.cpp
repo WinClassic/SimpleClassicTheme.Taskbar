@@ -5,6 +5,50 @@ using namespace std;
 
 IVirtualDesktopManager* g_pvdm;
 
+char* itoa(int value)
+{
+	static char buffer[12];        // 12 bytes is big enough for an INT32
+	int original = value;        // save original value
+
+	int c = sizeof(buffer) - 1;
+
+	buffer[c] = 0;                // write trailing null in last byte of buffer    
+
+	if (value < 0)                 // if it's negative, note that and take the absolute value
+		value = -value;
+
+	do                             // write least significant digit of value that's left
+	{
+		buffer[--c] = (value % 10) + '0';
+		value /= 10;
+	} while (value);
+
+	if (original < 0)
+		buffer[--c] = '-';
+
+	return &buffer[c];
+}
+
+void SimpleClassicThemeTaskbar::Cpp::Interop::SetWorkingArea(int left, int right, int top, int bottom) 
+{
+	RECT workarea;
+
+	//Get the current work area
+	SystemParametersInfo(SPI_GETWORKAREA, 0, &workarea, 0);
+
+	//Modify workarea
+	workarea.left = left;
+	workarea.right = right;
+	workarea.top = top;
+	workarea.bottom = bottom;
+
+	//Set the new work area and broadcast the change to all running applications
+	if (!SystemParametersInfo(SPI_SETWORKAREA, 0, &workarea, SPIF_UPDATEINIFILE))
+	{
+		MessageBox(0, itoa(GetLastError()), "Uhm, failed?", 0);
+	}
+}
+
 void SimpleClassicThemeTaskbar::Cpp::Interop::InitCom()
 {
 	if (SUCCEEDED(CoInitialize(NULL)))

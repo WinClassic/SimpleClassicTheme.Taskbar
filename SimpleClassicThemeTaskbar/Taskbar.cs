@@ -1,14 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Diagnostics;
 using System.Drawing;
-using System.Linq;
+using System.Reflection;
 using System.Runtime.InteropServices;
-using System.Text;
 using System.Windows.Forms;
-using System.Windows.Forms.VisualStyles;
 
 //Really don't know why I chose to do this
 using BOOL = System.Boolean;
@@ -62,7 +58,11 @@ namespace SimpleClassicThemeTaskbar
                 return new IntPtr(GetClassLongPtr32(hWnd, nIndex));
         }
 
-        public Icon GetAppIcon(IntPtr hwnd)
+
+        [DllImport("User32.dll")]
+        static extern uint GetWindowThreadProcessId(HWND hWnd, out uint lpdwProcessId);
+
+        public Icon GetAppIcon(HWND hwnd)
         {
             //Try different ways of getting the icon
             IntPtr iconHandle = SendMessage(hwnd, WM_GETICON, ICON_SMALL2, 0);
@@ -139,6 +139,7 @@ namespace SimpleClassicThemeTaskbar
             if (!IsWindowVisible(hwnd))
                 return false;
 
+            //TODO: Only do certain checks on certain operating systems to retain the best compatibility
             bool result = cppCode.WindowIsOnCurrentDesktop(hwnd);
 
             if (!result)
@@ -205,6 +206,9 @@ namespace SimpleClassicThemeTaskbar
         //Initialize stuff
         private void Form1_Load(object sender, EventArgs e)
         {
+            //TODO: Make sure the working area of the screen is the total height - height of taskbar
+            //TODO: Add an option to registry tweak classic alt+tab
+
             //Get the monitor on which the current taskbar is located
             Screen taskbarScreen = Screen.FromHandle(FindWindowW("Shell_TrayWnd", ""));
 
@@ -216,16 +220,10 @@ namespace SimpleClassicThemeTaskbar
             Location = new Point(X, Y);
             line.Width = Width;
 
-            //Send taskbar behind classic taskbar
-            //Shown += delegate
-            //{
-            //    SetWindowPos(FindWindowW("Shell_TrayWnd", ""), new IntPtr(1), 0, 0, 0, 0, 0x0010 | 0x0002 | 0x0001);
-            //};
-
             //Hide taskbar
-            //Window w = new Window(FindWindowW("Shell_TrayWnd", ""));
-            //if ((w.WindowInfo.dwStyle & 0x10000000L) > 0)
-            //    ShowWindow(w.Handle, 0);
+            Window w = new Window(FindWindowW("Shell_TrayWnd", ""));
+            if ((w.WindowInfo.dwStyle & 0x10000000L) > 0)
+                ShowWindow(w.Handle, 0);
         }
 
         private void Taskbar_FormClosing(object sender, FormClosingEventArgs e)
@@ -260,13 +258,17 @@ namespace SimpleClassicThemeTaskbar
             }
         }
 
+        //TODO: Make TaskbarProgams moveable
         private List<TaskbarProgram> icons = new List<TaskbarProgram>();
 
+        public static bool CanInvoke = false;
         public static bool waitBeforeShow = false;
         public static HWND lastOpenWindow;
         public bool busy = false;
         private void timer1_Tick(object sender, EventArgs e)
         {
+            //TODO: Optimize update loop
+            //TODO: Add quick-launch icons
             systemTray1.UpdateTime();
             verticalDivider3.Location = new Point(systemTray1.Location.X - 4, verticalDivider3.Location.Y);
             if (!busy)
@@ -286,7 +288,6 @@ namespace SimpleClassicThemeTaskbar
 
                 if (waitBeforeShow)
                 {
-
                     //if (wnd.ClassName != "Shell_TrayWnd")
                     //    waitBeforeShow = false;
                 }
@@ -300,9 +301,9 @@ namespace SimpleClassicThemeTaskbar
                     Screen scr = Screen.FromHandle(wnd.Handle);
                     int xy = cppCode.GetSize(wnd.Handle);
                     int width = xy >> 16, height = xy & 0x0000FFFF;
-                    label1.Text = $"{width}x{height}";
                     bool full = width >= scr.Bounds.Width && height >= scr.Bounds.Height;
-                    Visible = !full;
+                    //The window should only be visible if the active window is not fullscreen (with the exception of the desktop window)
+                    Visible = !(full && wnd.ClassName != "Progman" && wnd.ClassName != "WorkerW");
                 }
 
                 //Re-check the window handle list
@@ -370,12 +371,23 @@ namespace SimpleClassicThemeTaskbar
                     }
                 }
 
+                //Update systray
+                systemTray1.UpdateButtons();
+
+                //Make sure the ForegroundWindow variable is updated
                 ForegroundWindow = GetForegroundWindow();
+
+                //Calculate availabe space in taskbar and then divide that space over all programs
+                int availableSpace = verticalDivider3.Location.X - panel1.Location.X - 4;
+                if (newIcons.Count > 0 && availableSpace / newIcons.Count > Config.TaskbarProgramWidth)
+                    availableSpace = newIcons.Count * Config.TaskbarProgramWidth;
 
                 //Re-display all windows
                 int x = panel1.Location.X;
+                int iconWidth = newIcons.Count > 0 ? (int) Math.Floor((double)availableSpace / newIcons.Count) : 01;
                 foreach (TaskbarProgram icon in newIcons)
                 {
+                    icon.Width = iconWidth;
                     icon.ActiveWindow = icon.WindowHandle == ForegroundWindow;
                     icon.Location = new Point(x, 0);
                     icon.Title = icon.Window.Title;
@@ -385,7 +397,13 @@ namespace SimpleClassicThemeTaskbar
                     x += icon.Width + 1;
                 }
 
+                CanInvoke = true;
+
                 Application.DoEvents(); Application.DoEvents(); Application.DoEvents();
+                Application.DoEvents(); Application.DoEvents(); Application.DoEvents();
+                Application.DoEvents(); Application.DoEvents(); Application.DoEvents();
+
+                CanInvoke = false;
 
                 busy = false;
             }

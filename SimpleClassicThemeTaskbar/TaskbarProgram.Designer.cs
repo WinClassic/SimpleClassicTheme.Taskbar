@@ -87,7 +87,7 @@
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.line);
             this.Name = "TaskbarProgram";
-            this.Size = new System.Drawing.Size(145, 28);
+            this.Size = new System.Drawing.Size(Config.TaskbarProgramWidth, 28);
             this.Load += new System.EventHandler(this.TaskbarProgram_Load);
             this.panel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();

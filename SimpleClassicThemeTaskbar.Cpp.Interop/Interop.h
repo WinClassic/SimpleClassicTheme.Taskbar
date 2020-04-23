@@ -24,6 +24,7 @@ namespace SimpleClassicThemeTaskbar
         class __declspec(dllexport) Interop
         {
         public:
+			void SimpleClassicThemeTaskbar::Cpp::Interop::SetWorkingArea(int left, int right, int top, int bottom);
 			void InitCom();
 			int GetSize(HWND hWnd);
 			void DeInitCom();

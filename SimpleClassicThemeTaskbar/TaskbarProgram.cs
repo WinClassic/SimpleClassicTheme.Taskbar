@@ -48,6 +48,7 @@ namespace SimpleClassicThemeTaskbar
             { 
                 activeWindow = value;
                 panel1.style = activeWindow ? Border3DStyle.Sunken : Border3DStyle.Raised;
+                BackColor = activeWindow ? SystemColors.ControlLightLight : SystemColors.Control;
                 panel1.Invalidate();
             }
         }
@@ -55,7 +56,9 @@ namespace SimpleClassicThemeTaskbar
         public TaskbarProgram()
         {
             InitializeComponent();
-            
+
+            SizeChanged += delegate { panel1.Width = this.Width; };
+
             panel1.Do3DBorder = false;
             panel1.Invalidate();
 

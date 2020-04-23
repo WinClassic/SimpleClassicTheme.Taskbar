@@ -12,23 +12,16 @@ using HWND = System.IntPtr;
 
 namespace SimpleClassicThemeTaskbar
 {
-    //Temporary config class
-    public static class Config
-    {
-        public static bool EnableSystemTrayHover = true;
-        public static int SpaceBetweenTrayIcons = 1;
-    }
-
     public class SystemTrayIcon : PictureBox
     {
         //[DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = false)]
         //public static extern IntPtr SendMessage(IntPtr hWnd, int Msg, int wParam, int lParam);
 
         [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Auto)]
-        static extern bool SendMessage(HWND hWnd, uint Msg, uint wParam, uint lParam);
+        public static extern bool SendMessage(HWND hWnd, uint Msg, uint wParam, uint lParam);
 
         [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Auto)]
-        static extern bool PostMessage(HWND hWnd, uint Msg, uint wParam, uint lParam);
+        public static extern bool PostMessage(HWND hWnd, uint Msg, uint wParam, uint lParam);
 
         [DllImport("User32.dll")]
         static extern uint GetWindowThreadProcessId(IntPtr hWnd, out uint lpdwProcessId);
@@ -42,14 +35,27 @@ namespace SimpleClassicThemeTaskbar
         [DllImport("user32.dll")]
         private static extern bool ShowWindow(HWND hWnd, int nCmdShow);
 
+        public HWND BaseHandle
+        {
+            get => base.Handle;
+        }
         public TBUTTONINFO TBUTTONINFO_Struct;
-        public HWND Handle;
+        public new HWND Handle;
         public new string Text;
         public uint PID;
+        public ToolTip toolTip;
         public Icon Icon
         {
             get => Icon.FromHandle(((Bitmap) Image).GetHicon());
-            set { Image = value.ToBitmap(); }
+            set
+            {
+                try
+                {
+                    Image = value.ToBitmap();
+                }
+                catch { }    
+                value.Dispose();
+            }
         }
   
         public SystemTrayIcon(TBUTTONINFO button)
@@ -71,6 +77,13 @@ namespace SimpleClassicThemeTaskbar
                 MouseLeave += delegate { BackColor = SystemColors.Control; };
             }
 
+           
+            toolTip = new ToolTip();
+            toolTip.IsBalloon = true;
+            toolTip.ShowAlways = true;
+
+            toolTip.SetToolTip(this, Text);
+
             const uint WM_LBUTTONDOWN = 0x0201;
             const uint WM_LBUTTONUP = 0x0202;
             const uint WM_RBUTTONDOWN = 0x0204;
@@ -79,13 +92,12 @@ namespace SimpleClassicThemeTaskbar
             {
                 HWND Shell_TrayWnd = FindWindowW("Shell_TrayWnd", "");
                 uint pidExplorer;
-                GetWindowThreadProcessId(Shell_TrayWnd, out pidExplorer);
                 uint pid;
+                GetWindowThreadProcessId(Shell_TrayWnd, out pidExplorer);
                 GetWindowThreadProcessId(Handle, out pid);
-                //pid = 0;
                 if (pid == pidExplorer)
                 {
-                    //TODO: Fix bug with explorer icons that require Shell_TrayWnd to be the active window
+                    //TODO: Fix issue with explorer icons that require Shell_TrayWnd to be the active window
                     MessageBox.Show("The clicked icon is from explorer.exe\r\nThis means that the icon currently only works when clicked from Shell_TrayWnd", "Not implemented");
                     //SetWindowPos(FindWindowW("Shell_TrayWnd", ""), new IntPtr(0), 0, 0, 0, 0, 0x0002 | 0x0001 | 0x0040);
                     //FindForm().Hide();
@@ -107,12 +119,25 @@ namespace SimpleClassicThemeTaskbar
         public void UpdateTrayIcon(TBUTTONINFO button)
         {
             //Update icon
-            if (TBUTTONINFO_Struct.icon != button.icon)
-                Icon = Icon.FromHandle(button.icon);
+            Image oldImage = Image;
+            try
+            {
+                Image = Icon.FromHandle(button.icon).ToBitmap();
+                oldImage.Dispose();
+            }
+            catch { }
+            Invalidate();
+            Refresh();
+            Update();
 
             //Update tooltip
             if (TBUTTONINFO_Struct.toolTip != button.toolTip)
+            {
                 Text = button.toolTip;
+
+                //Refresh ToolTip
+                toolTip.SetToolTip(this, Text);
+            }
 
             //Save new TBUTTONINFO into current object
             TBUTTONINFO_Struct = button;

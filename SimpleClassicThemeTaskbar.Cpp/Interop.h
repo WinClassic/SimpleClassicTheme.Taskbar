@@ -32,7 +32,7 @@ namespace SimpleClassicThemeTaskbar
 				bool WindowIsOnCurrentDesktop(System::IntPtr hWnd);
 				int GetTrayButtonCount(System::IntPtr sysTray);
 				bool GetTrayButton(System::IntPtr sysTray, int i, TBUTTONINFO^% button);
-				
+				void SetWorkingArea(int left, int right, int top, int bottom);
 				void Destroy();
 			private:
 				Cpp::Interop* _impl;

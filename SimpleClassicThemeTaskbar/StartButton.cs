@@ -1,10 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 
 using HWND = System.IntPtr;
@@ -13,6 +7,8 @@ namespace SimpleClassicThemeTaskbar
 {
     public partial class StartButton : UserControl
     {
+
+        public bool WasPressed = false;
         public bool pressed = false;
 
         public bool Pressed
@@ -41,30 +37,44 @@ namespace SimpleClassicThemeTaskbar
             pictureBox1.MouseClick += OnMouseClick;
             label1.MouseClick += OnMouseClick;
             MouseClick += OnMouseClick;
+
+            pictureBox1.MouseDown += OnMouseDown;
+            label1.MouseDown += OnMouseDown;
+            MouseDown += OnMouseDown;
         }
 
-        //Absolutely terribly way to do it.
+        private void OnMouseDown(object sender, MouseEventArgs e)
+        {
+            WasPressed = Pressed;
+        }
+
         private void OnMouseClick(object sender, MouseEventArgs e)
         {
+            //Gets the state of the button when the mouse went down
+            //This ensures the menu doesnt re-open if the button was held down longer then a milisecond
+            if (WasPressed)
+            {
+                WasPressed = false;
+                return;
+            }
+            HWND wnd = Taskbar.FindWindowW("Shell_TrayWnd", "");
             if (e.Button == MouseButtons.Right)
             {
-                //Doesn't work :(
-                HWND wnd = Taskbar.FindWindowW("Progman", "Program Manager");
-                Taskbar.SendMessage(wnd, 0x0204, 0x0002, 0);
-                Taskbar.SendMessage(wnd, 0x0205, 0x0000, 0);
+                SystemTrayIcon.PostMessage(wnd, WIN32.WM_RBUTTONDOWN, 0x0002, 0);
+                SystemTrayIcon.SendMessage(wnd, WIN32.WM_RBUTTONUP, 0x0000, 0);
             }
             else
             {
-                //Window wnd = new Window(Taskbar.lastOpenWindow);
-                //if (wnd.ClassName == "OpenShell.CMenuContainer" || wnd.ClassName == "Windows.UI.Core.CoreWindow")
+                Window d = new Window(Taskbar.lastOpenWindow);
                 if (pressed)
                 {
                     Taskbar.lastOpenWindow = Parent.Handle;
                     Pressed = false;
                 }
-                else
+                else if (d.ClassName != "OpenShell.CMenuContainer" && d.ClassName != "Windows.UI.Core.CoreWindow")
                 {
-                    SendKeys.Send("^{ESC}");
+                    Keyboard.KeyDown(Keys.LWin);
+                    Keyboard.KeyUp(Keys.LWin);
                 }
             }
         }
