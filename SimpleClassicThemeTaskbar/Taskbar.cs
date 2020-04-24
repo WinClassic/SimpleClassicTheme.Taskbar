@@ -247,10 +247,13 @@ namespace SimpleClassicThemeTaskbar
                     d = new ContextMenu();
 
                     //Exit menu item
+                    MenuItem taskmanager = new MenuItem { Text = "Open Task &Manager" };
+                    taskmanager.Click += delegate { Process.Start("taskmgr"); };
                     MenuItem exit = new MenuItem { Text = "&Exit" };
                     exit.Click += delegate { Close(); };
 
                     //Add all menu items
+                    d.MenuItems.Add(taskmanager);
                     d.MenuItems.Add(exit);
                 }
                 //Show the context menu

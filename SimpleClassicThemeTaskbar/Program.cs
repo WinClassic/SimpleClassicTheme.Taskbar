@@ -20,6 +20,39 @@ namespace SimpleClassicThemeTaskbar
         [STAThread]
         static void Main()
         {
+            /*
+             * I felt like this was needed:
+             * 
+             * ===========================================
+             *         Simple Classic Theme Taskbar
+             * ===========================================
+             * An advanced taskbar replacement for Win10
+             * 
+             * The goal of this project is to replace the 
+             * explorer taskbar and also my other project
+             * SimpleClassicTheme
+             * 
+             * ===========================================
+             * DEFAULT PROGRAM FLOW GOAL:
+             * 
+             * (CHECK) Set new working area
+             * Enable classic theme
+             * Restart explorer
+             * (CHECK) Show the tasbkbar
+             * (CHECK) Reset working area
+             * Disable classic theme
+             * Restart explorer
+             * (CHECK) Exit
+             * 
+             * ===========================================
+             * COMMAND LINE GOALS (arguments will be 
+             * executed in following order and afterwards 
+             * the program will exit):
+             * --enable     | Enable classic theme
+             * --disable    | Disable classic theme
+             * --config     | Open classic theme config
+             * 
+             */
             Interop d = new Interop();
             Rectangle screen = Screen.PrimaryScreen.Bounds;
             d.SetWorkingArea(0, screen.Width, 0, screen.Height - 28);
