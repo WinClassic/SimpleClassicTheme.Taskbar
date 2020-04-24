@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using SimpleClassicThemeTaskbar.Cpp.CLI;
 
@@ -82,7 +83,11 @@ namespace SimpleClassicThemeTaskbar
             toolTip.IsBalloon = true;
             toolTip.ShowAlways = true;
 
-            toolTip.SetToolTip(this, Text);
+            uint PId;
+            GetWindowThreadProcessId(Handle, out PId);
+            string Pname = Process.GetProcessById(checked((int)PId)).ProcessName;
+            string tooltip = $"{Text}\r\n\r\n{Pname} - {PId}\r\n{Handle}";
+            toolTip.SetToolTip(this, tooltip);
 
             const uint WM_LBUTTONDOWN = 0x0201;
             const uint WM_LBUTTONUP = 0x0202;
@@ -97,14 +102,32 @@ namespace SimpleClassicThemeTaskbar
                 GetWindowThreadProcessId(Handle, out pid);
                 if (pid == pidExplorer)
                 {
+                    //TODO: Actually fix the issue instead of using this workaround
+                    Regex volume = new Regex(@"^[A-z]+\:{1}");
+                    Regex battery = new Regex(@"^[0-9]+");
+                    if (volume.IsMatch(Text))
+                        Process.Start("sndvol");
+                    else if (battery.IsMatch(Text))
+                    {
+                        SetWindowPos(FindWindowW("Shell_TrayWnd", ""), new IntPtr(0), 0, 0, 0, 0, 0x0002 | 0x0001 | 0x0040);
+                        FindForm().Hide();
+                        ShowWindow(FindWindowW("Shell_TrayWnd", ""), 5);
+                        PostMessage(TBUTTONINFO_Struct.hwnd, TBUTTONINFO_Struct.callbackMessage, TBUTTONINFO_Struct.id, e.Button == MouseButtons.Left ? WM_LBUTTONDOWN : WM_RBUTTONDOWN);
+                        SendMessage(TBUTTONINFO_Struct.hwnd, TBUTTONINFO_Struct.callbackMessage, TBUTTONINFO_Struct.id, e.Button == MouseButtons.Left ? WM_LBUTTONUP : WM_RBUTTONUP);
+                        SetWindowPos(FindWindowW("Shell_TrayWnd", ""), new IntPtr(-1), 0, 0, 0, 0, 0x0002 | 0x0001 | 0x0040);
+                        FindForm().Hide();
+                        Taskbar.waitBeforeShow = true;
+                        
+                    }
+                    else
+                    {
+                        Process.Start("ms-availablenetworks:");
+                    }
+
+
                     //TODO: Fix issue with explorer icons that require Shell_TrayWnd to be the active window
-                    MessageBox.Show("The clicked icon is from explorer.exe\r\nThis means that the icon currently only works when clicked from Shell_TrayWnd", "Not implemented");
-                    //SetWindowPos(FindWindowW("Shell_TrayWnd", ""), new IntPtr(0), 0, 0, 0, 0, 0x0002 | 0x0001 | 0x0040);
-                    //FindForm().Hide();
-                    //ShowWindow(FindWindowW("Shell_TrayWnd", ""), 5);
-                    //SetWindowPos(FindWindowW("Shell_TrayWnd", ""), new IntPtr(-1), 0, 0, 0, 0, 0x0002 | 0x0001 | 0x0040);
-                    //FindForm().Hide();
-                    //Taskbar.waitBeforeShow = true;
+                    //MessageBox.Show("The clicked icon is from explorer.exe\r\nThis means that the icon currently only works when clicked from Shell_TrayWnd", "Not implemented");
+
                 }
                 else
                 {
@@ -135,8 +158,11 @@ namespace SimpleClassicThemeTaskbar
             {
                 Text = button.toolTip;
 
-                //Refresh ToolTip
-                toolTip.SetToolTip(this, Text);
+                uint PId;
+                GetWindowThreadProcessId(Handle, out PId);
+                string Pname = Process.GetProcessById(checked((int)PId)).ProcessName;
+                string tooltip = $"{Text}\r\n\r\n{Pname} - {PId}\r\n{Handle}";
+                toolTip.SetToolTip(this, tooltip);
             }
 
             //Save new TBUTTONINFO into current object

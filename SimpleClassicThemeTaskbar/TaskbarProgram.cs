@@ -48,7 +48,7 @@ namespace SimpleClassicThemeTaskbar
             { 
                 activeWindow = value;
                 panel1.style = activeWindow ? Border3DStyle.Sunken : Border3DStyle.Raised;
-                BackColor = activeWindow ? SystemColors.ControlLightLight : SystemColors.Control;
+                panel1.BackColor = activeWindow ? SystemColors.ControlLightLight : SystemColors.Control;
                 panel1.Invalidate();
             }
         }

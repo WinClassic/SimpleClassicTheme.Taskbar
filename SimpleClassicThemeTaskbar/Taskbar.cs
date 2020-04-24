@@ -291,8 +291,8 @@ namespace SimpleClassicThemeTaskbar
 
                 if (waitBeforeShow)
                 {
-                    //if (wnd.ClassName != "Shell_TrayWnd")
-                    //    waitBeforeShow = false;
+                    if (wnd.ClassName != "Shell_TrayWnd")
+                        waitBeforeShow = false;
                 }
                 else
                 {

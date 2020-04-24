@@ -30,3 +30,4 @@ $tf*/
 .vs/
 [Pp]ackages/
 *.sdf
+*.ipch

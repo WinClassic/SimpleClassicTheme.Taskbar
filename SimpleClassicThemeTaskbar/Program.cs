@@ -18,7 +18,7 @@ namespace SimpleClassicThemeTaskbar
         /// The main entry point for the application.
         /// </summary>
         [STAThread]
-        static void Main()
+        static void Main(string[] args)
         {
             /*
              * I felt like this was needed:
@@ -29,8 +29,8 @@ namespace SimpleClassicThemeTaskbar
              * An advanced taskbar replacement for Win10
              * 
              * The goal of this project is to replace the 
-             * explorer taskbar and also my other project
-             * SimpleClassicTheme
+             * explorer taskbar and also replace my other
+             * project SimpleClassicTheme.
              * 
              * ===========================================
              * DEFAULT PROGRAM FLOW GOAL:
@@ -45,14 +45,18 @@ namespace SimpleClassicThemeTaskbar
              * (CHECK) Exit
              * 
              * ===========================================
-             * COMMAND LINE GOALS (arguments will be 
-             * executed in following order and afterwards 
-             * the program will exit):
+             * COMMAND LINE GOALS (if there are any, 
+             * arguments will be executed in following 
+             * order and afterwards the program will exit)
              * --enable     | Enable classic theme
              * --disable    | Disable classic theme
              * --config     | Open classic theme config
              * 
              */
+            if (args.Length > 0)
+            {
+                return;
+            }
             Interop d = new Interop();
             Rectangle screen = Screen.PrimaryScreen.Bounds;
             d.SetWorkingArea(0, screen.Width, 0, screen.Height - 28);
