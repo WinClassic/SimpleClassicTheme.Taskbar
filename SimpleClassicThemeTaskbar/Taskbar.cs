@@ -21,6 +21,7 @@ namespace SimpleClassicThemeTaskbar
         public Taskbar()
         {
             InitializeComponent();
+            MouseMove += Taskbar_MouseMove;
             TopLevel = true;
             cppCode.InitCom();
         }
@@ -209,6 +210,8 @@ namespace SimpleClassicThemeTaskbar
             //TODO: Make sure the working area of the screen is the total height - height of taskbar
             //TODO: Add an option to registry tweak classic alt+tab
 
+            label1.Text = Assembly.GetExecutingAssembly().GetName().Version.ToString(4);
+
             //Get the monitor on which the current taskbar is located
             Screen taskbarScreen = Screen.FromHandle(FindWindowW("Shell_TrayWnd", ""));
 
@@ -264,6 +267,9 @@ namespace SimpleClassicThemeTaskbar
         //TODO: Make TaskbarProgams moveable
         private List<TaskbarProgram> icons = new List<TaskbarProgram>();
 
+        public TaskbarProgram heldDown;
+        public bool held = false;
+
         public static bool CanInvoke = false;
         public static bool waitBeforeShow = false;
         public static HWND lastOpenWindow;
@@ -274,7 +280,7 @@ namespace SimpleClassicThemeTaskbar
             //TODO: Add quick-launch icons
             systemTray1.UpdateTime();
             verticalDivider3.Location = new Point(systemTray1.Location.X - 4, verticalDivider3.Location.Y);
-            if (!busy)
+            if (!busy && !held)
             {
                 busy = true;
                 //Get the foreground window (Used later)
@@ -334,6 +340,15 @@ namespace SimpleClassicThemeTaskbar
                         button.WindowHandle = z.Handle;
                         button.Icon = GetAppIcon(z.Handle);
                         button.Title = z.Title;
+                        button.MouseDown += delegate
+                        {
+                            heldDown = button;
+                            held = true;
+                        };
+                        button.MouseUp += delegate
+                        {
+                            held = false;
+                        };
                         //Add it to the list
                         icons.Add(button);
                     }
@@ -410,6 +425,11 @@ namespace SimpleClassicThemeTaskbar
 
                 busy = false;
             }
+        }
+
+        private void Taskbar_MouseMove(object sender, MouseEventArgs e)
+        {
+
         }
     }
 }

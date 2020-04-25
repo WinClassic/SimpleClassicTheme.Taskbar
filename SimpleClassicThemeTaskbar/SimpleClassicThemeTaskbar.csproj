@@ -81,7 +81,8 @@
   <ItemGroup>
     <Reference Include="SimpleClassicThemeTaskbar.Cpp.CLI, Version=0.0.0.0, Culture=neutral, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\x64\Debug\SimpleClassicThemeTaskbar.Cpp.CLI.dll</HintPath>
+      <HintPath>..\$(Platform)\Debug\SimpleClassicThemeTaskbar.Cpp.CLI.dll</HintPath>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

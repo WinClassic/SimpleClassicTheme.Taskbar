@@ -37,6 +37,10 @@ namespace SimpleClassicThemeTaskbar
 
         public HWND WindowHandle;
 
+        public new MouseEventHandler MouseDown;
+        public new MouseEventHandler MouseUp;
+        public new MouseEventHandler MouseMove;
+
         private bool activeWindow = false;
         public BOOL ActiveWindow
         {
@@ -49,6 +53,7 @@ namespace SimpleClassicThemeTaskbar
                 activeWindow = value;
                 panel1.style = activeWindow ? Border3DStyle.Sunken : Border3DStyle.Raised;
                 panel1.BackColor = activeWindow ? SystemColors.ControlLightLight : SystemColors.Control;
+                label1.Font = activeWindow ? new Font(label1.Font.FontFamily, label1.Font.Size, FontStyle.Bold, GraphicsUnit.Pixel) : new Font(label1.Font.FontFamily, label1.Font.Size, FontStyle.Regular, GraphicsUnit.Pixel);
                 panel1.Invalidate();
             }
         }
@@ -56,6 +61,20 @@ namespace SimpleClassicThemeTaskbar
         public TaskbarProgram()
         {
             InitializeComponent();
+
+            base.MouseDown += delegate (object sender, MouseEventArgs e) { MouseDown?.DynamicInvoke(this, e); };
+            panel1.MouseDown += delegate (object sender, MouseEventArgs e) { MouseDown?.DynamicInvoke(this, e); };
+            pictureBox1.MouseDown += delegate (object sender, MouseEventArgs e) { MouseDown?.DynamicInvoke(this, e); };
+            label1.MouseDown += delegate (object sender, MouseEventArgs e) { MouseDown?.DynamicInvoke(this, e); };
+            base.MouseUp += delegate (object sender, MouseEventArgs e) { MouseUp?.DynamicInvoke(this, e); };
+            panel1.MouseUp += delegate (object sender, MouseEventArgs e) { MouseUp?.DynamicInvoke(this, e); };
+            pictureBox1.MouseUp += delegate (object sender, MouseEventArgs e) { MouseUp?.DynamicInvoke(this, e); };
+            label1.MouseUp += delegate (object sender, MouseEventArgs e) { MouseUp?.DynamicInvoke(this, e); };
+            base.MouseMove += delegate (object sender, MouseEventArgs e) { MouseMove?.DynamicInvoke(this, e); };
+            panel1.MouseMove += delegate (object sender, MouseEventArgs e) { MouseMove?.DynamicInvoke(this, e); };
+            pictureBox1.MouseMove += delegate (object sender, MouseEventArgs e) { MouseMove?.DynamicInvoke(this, e); };
+            label1.MouseMove += delegate (object sender, MouseEventArgs e) { MouseMove?.DynamicInvoke(this, e); };
+
 
             SizeChanged += delegate { panel1.Width = this.Width; };
 
