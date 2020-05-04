@@ -118,16 +118,22 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="startPressed" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\startPressed.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="win98scttbanner" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\win98scttbanner.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="startIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\startIcon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="startDepressed" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\startDepressed.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="startPressed" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\startPressed.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="startIcon95" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\startIcon95.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="wifiIconTemp" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\wifiIconTemp.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

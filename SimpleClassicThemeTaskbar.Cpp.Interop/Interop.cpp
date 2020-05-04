@@ -31,10 +31,7 @@ char* itoa(int value)
 
 void SimpleClassicThemeTaskbar::Cpp::Interop::SetWorkingArea(int left, int right, int top, int bottom) 
 {
-	RECT workarea;
-
-	//Get the current work area
-	SystemParametersInfo(SPI_GETWORKAREA, 0, &workarea, 0);
+	RECT workarea = { 0 };
 
 	//Modify workarea
 	workarea.left = left;
@@ -43,7 +40,7 @@ void SimpleClassicThemeTaskbar::Cpp::Interop::SetWorkingArea(int left, int right
 	workarea.bottom = bottom;
 
 	//Set the new work area and broadcast the change to all running applications
-	if (!SystemParametersInfo(SPI_SETWORKAREA, 0, &workarea, SPIF_UPDATEINIFILE))
+	if (!SystemParametersInfo(SPI_SETWORKAREA, 0, &workarea, 0))
 	{
 		MessageBox(0, itoa(GetLastError()), "Uhm, failed?", 0);
 	}

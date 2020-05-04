@@ -31,3 +31,4 @@ $tf*/
 [Pp]ackages/
 *.sdf
 *.ipch
+!/libraries/*
