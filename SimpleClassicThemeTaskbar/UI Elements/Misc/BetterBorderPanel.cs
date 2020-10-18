@@ -9,7 +9,7 @@ using System.Windows.Forms;
 using System.Runtime.InteropServices;
 using System.Drawing.Drawing2D;
 
-namespace SimpleClassicThemeTaskbar
+namespace SimpleClassicThemeTaskbar.UIElements.Misc
 {
     public partial class BetterBorderPanel : Panel
     {

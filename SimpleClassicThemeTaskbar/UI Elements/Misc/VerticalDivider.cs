@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace SimpleClassicThemeTaskbar
+namespace SimpleClassicThemeTaskbar.UIElements.Misc
 {
     public partial class VerticalDivider : UserControl
     {

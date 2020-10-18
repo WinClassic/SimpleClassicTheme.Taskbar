@@ -9,7 +9,7 @@ using SimpleClassicThemeTaskbar.Cpp.CLI;
 
 using HWND = System.IntPtr;
 
-namespace SimpleClassicThemeTaskbar
+namespace SimpleClassicThemeTaskbar.UIElements.SystemTray
 {
     public partial class SystemTray : UserControl
     {

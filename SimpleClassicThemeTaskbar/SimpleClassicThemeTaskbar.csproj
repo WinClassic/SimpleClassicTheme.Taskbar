@@ -64,7 +64,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
     <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\AnyCPU\Debug\</OutputPath>
+    <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <DebugType>full</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -91,16 +91,16 @@
     <Reference Include="CrashReporter.NET, Version=1.5.8.0, Culture=neutral, PublicKeyToken=7828e0fd88cab698, processorArchitecture=MSIL">
       <HintPath>..\packages\CrashReporter.NET.Official.1.5.8\lib\net462\CrashReporter.NET.dll</HintPath>
     </Reference>
+    <Reference Include="SimpleClassicThemeTaskbar.Cpp.CLI">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\SimpleClassicThemeTaskbar.Cpp\$(Platform)\$(Configuration)\SimpleClassicThemeTaskbar.Cpp.CLI.dll</HintPath>
+    </Reference>
     <Reference Include="ManagedWifi">
       <HintPath>..\libraries\ManagedWifi.dll</HintPath>
     </Reference>
-    <Reference Include="SimpleClassicThemeTaskbar.Cpp.CLI, Version=0.0.0.0, Culture=neutral, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\$(Platform)\$(Configuration)\SimpleClassicThemeTaskbar.Cpp.CLI.dll</HintPath>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Management" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -117,11 +117,23 @@
     <Compile Include="Forms\GraphicsTest.Designer.cs">
       <DependentUpon>GraphicsTest.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\NetworkPasswordPrompt.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\NetworkPasswordPrompt.Designer.cs">
+      <DependentUpon>NetworkPasswordPrompt.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\NetworkUI.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\NetworkUI.Designer.cs">
       <DependentUpon>NetworkUI.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI Elements\Misc\BetterToolTip.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UI Elements\Misc\DoubleBufferedPanel.cs">
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="UI Elements\NetworkUI\NetworkControl.cs">
       <SubType>UserControl</SubType>
@@ -194,6 +206,9 @@
     <EmbeddedResource Include="Forms\GraphicsTest.resx">
       <DependentUpon>GraphicsTest.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\NetworkPasswordPrompt.resx">
+      <DependentUpon>NetworkPasswordPrompt.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\NetworkUI.resx">
       <DependentUpon>NetworkUI.cs</DependentUpon>
     </EmbeddedResource>
@@ -237,6 +252,9 @@
     <EmbeddedResource Include="Forms\Taskbar.resx">
       <DependentUpon>Taskbar.cs</DependentUpon>
     </EmbeddedResource>
+    <None Include="..\.editorconfig">
+      <Link>.editorconfig</Link>
+    </None>
     <None Include="app.config" />
     <None Include="App.manifest" />
     <None Include="packages.config" />
@@ -268,9 +286,12 @@
   <ItemGroup>
     <None Include="Resources\wifiIconTemp.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\lock.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>
+    <PostBuildEvent>cmd /k copy /D "$(TargetPath)" "C:\SCT\Taskbar\SCT_Taskbar.exe"
 "$(ProjectDir)tools\package.bat" "$(TargetPath)" "$(ProjectDir)" "$(PlatformName)" "$(ConfigurationName)" "$(TargetDir)"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

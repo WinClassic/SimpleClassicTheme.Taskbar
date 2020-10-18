@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Reflection;
 
-namespace SimpleClassicThemeTaskbar
+namespace SimpleClassicThemeTaskbar.UIElements.QuickLaunch
 {
     public partial class QuickLaunchIcon : UserControl
     {

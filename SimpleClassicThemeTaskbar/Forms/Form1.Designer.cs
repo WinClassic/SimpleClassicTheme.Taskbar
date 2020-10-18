@@ -1,4 +1,5 @@
-﻿namespace SimpleClassicThemeTaskbar
+﻿
+namespace SimpleClassicThemeTaskbar
 {
     partial class Taskbar
     {
@@ -31,10 +32,10 @@
             this.components = new System.ComponentModel.Container();
             this.line = new System.Windows.Forms.Label();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.quickLaunch1 = new SimpleClassicThemeTaskbar.QuickLaunch();
-            this.verticalDivider3 = new SimpleClassicThemeTaskbar.VerticalDivider();
-            this.systemTray1 = new SimpleClassicThemeTaskbar.SystemTray();
-            this.startButton1 = new SimpleClassicThemeTaskbar.StartButton();
+            this.quickLaunch1 = new SimpleClassicThemeTaskbar.UIElements.QuickLaunch.QuickLaunch();
+            this.verticalDivider3 = new SimpleClassicThemeTaskbar.UIElements.Misc.VerticalDivider();
+            this.systemTray1 = new SimpleClassicThemeTaskbar.UIElements.SystemTray.SystemTray();
+            this.startButton1 = new SimpleClassicThemeTaskbar.UIElements.StartButton.StartButton();
             this.SuspendLayout();
             // 
             // line
@@ -122,10 +123,10 @@
 
         private System.Windows.Forms.Label line;
         private System.Windows.Forms.Timer timer1;
-        private StartButton startButton1;
-        private SystemTray systemTray1;
-        private VerticalDivider verticalDivider3;
-        private QuickLaunch quickLaunch1;
+        private UIElements.StartButton.StartButton startButton1;
+        private UIElements.SystemTray.SystemTray systemTray1;
+        private UIElements.Misc.VerticalDivider verticalDivider3;
+        private UIElements.QuickLaunch.QuickLaunch quickLaunch1;
     }
 }
 

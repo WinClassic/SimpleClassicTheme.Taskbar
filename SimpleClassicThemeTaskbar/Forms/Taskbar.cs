@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Forms;
@@ -19,6 +20,22 @@ namespace SimpleClassicThemeTaskbar
     {
         public bool isPrimaryTaskbar = true;
         public bool NeverShow = false;
+
+        bool temp = false;
+        HWND wParam = new HWND(0x5354); //ST
+        HWND lParam = new HWND(0x4F50); //OP
+        protected override void WndProc(ref Message m)
+        { 
+            if (m.Msg == WM_EXITTASKBAR && !temp)
+            {
+                temp = true;
+                if (m.Msg == WM_EXITTASKBAR && m.WParam == wParam && m.LParam == lParam)
+                {
+                    selfClose = true; Close(); Application.Exit();
+                }
+            }
+            base.WndProc(ref m);
+        }
 
         //Constructor
         public Taskbar(bool isPrimary)
@@ -72,6 +89,7 @@ namespace SimpleClassicThemeTaskbar
         public const int ICON_SMALL2 = 2;
 
         public const int WM_GETICON = 0x7F;
+        public const int WM_EXITTASKBAR = 0x0420;
 
         public delegate bool EnumWindowsCallback(IntPtr hWnd, int lParam);
 
@@ -258,6 +276,9 @@ namespace SimpleClassicThemeTaskbar
         //Initialize stuff
         private void Form1_Load(object sender, EventArgs e)
         {
+            if (isPrimaryTaskbar && Path.GetFileName(Assembly.GetExecutingAssembly().Location).ToLower() == "sct_taskbar.exe")
+                File.WriteAllText("C:\\SCT\\Taskbar\\MainWindow.txt", Handle.ToString());
+
             //TODO: Add an option to registry tweak classic alt+tab
             line.Width = Width + 2;
             line.Anchor = AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Right;
@@ -354,9 +375,6 @@ namespace SimpleClassicThemeTaskbar
                     if (wnd.ClassName != "Shell_TrayWnd" && wnd.ClassName != "Shell_SecondaryTrayWnd")
                     {
                         waitBeforeShow = false;
-                        Screen screen = Screen.FromControl(this);
-                        Rectangle rect = screen.Bounds;
-                        cppCode.SetWorkingArea(rect.Left, rect.Right, rect.Top, rect.Bottom - 28);
                     }
                 }
                 else
@@ -368,6 +386,10 @@ namespace SimpleClassicThemeTaskbar
                     EnumWindows(callback, 0);
                     LookingForTray = false;
 
+                    Screen scrr = Screen.FromControl(this);
+                    Rectangle rct = scrr.Bounds;
+                    cppCode.SetWorkingArea(rct.Left, rct.Right, rct.Top, rct.Bottom - 28);
+
                     if (NeverShow)
                     {
                         Screen screen = Screen.FromControl(this);
@@ -378,6 +400,7 @@ namespace SimpleClassicThemeTaskbar
                     foreach (Window w in windows)
                         if ((w.WindowInfo.dwStyle & 0x10000000L) > 0)
                             ShowWindow(w.Handle, 0);
+
                     //Check if it's a fullscreen window. If so: hide
                     Screen scr = Screen.FromHandle(wnd.Handle);
                     int xy = cppCode.GetSize(wnd.Handle);
@@ -492,15 +515,16 @@ namespace SimpleClassicThemeTaskbar
 
                 int startX = quickLaunch1.Location.X + quickLaunch1.Width + 4;
 
-                int programWidth = isPrimaryTaskbar ? Config.TaskbarProgramWidth : 24;
+                int programWidth = isPrimaryTaskbar ? Config.TaskbarProgramWidth + Config.SpaceBetweenTaskbarIcons : 24;
                 //Calculate availabe space in taskbar and then divide that space over all programs
                 int availableSpace = verticalDivider3.Location.X - startX - 6;
+                availableSpace += Config.SpaceBetweenTaskbarIcons;
                 if (newIcons.Count > 0 && availableSpace / newIcons.Count > programWidth)
                     availableSpace = newIcons.Count * programWidth;
 
                 //Re-display all windows
                 int x = startX;
-                int iconWidth = newIcons.Count > 0 ? (int) Math.Floor((double)availableSpace / newIcons.Count) : 01;
+                int iconWidth = newIcons.Count > 0 ? (int) Math.Floor((double)availableSpace / newIcons.Count) - Config.SpaceBetweenTaskbarIcons : 01;
                 foreach (TaskbarProgram icon in newIcons)
                 {
                     icon.Width = iconWidth;

@@ -1,4 +1,6 @@
-﻿namespace SimpleClassicThemeTaskbar
+﻿using System.Windows.Forms;
+
+namespace SimpleClassicThemeTaskbar.UIElements.QuickLaunch
 {
     partial class QuickLaunch
     {
@@ -28,8 +30,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.verticalDivider1 = new SimpleClassicThemeTaskbar.VerticalDivider();
-            this.verticalDivider2 = new SimpleClassicThemeTaskbar.VerticalDivider();
+            this.verticalDivider1 = new SimpleClassicThemeTaskbar.UIElements.Misc.VerticalDivider();
+            this.verticalDivider2 = new SimpleClassicThemeTaskbar.UIElements.Misc.VerticalDivider();
             this.SuspendLayout();
             // 
             // verticalDivider1
@@ -66,7 +68,7 @@
 
         #endregion
 
-        private VerticalDivider verticalDivider1;
-        private VerticalDivider verticalDivider2;
+        private UIElements.Misc.VerticalDivider verticalDivider1;
+        private UIElements.Misc.VerticalDivider verticalDivider2;
     }
 }

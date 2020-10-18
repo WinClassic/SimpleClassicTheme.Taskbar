@@ -5,6 +5,7 @@ using System.Data;
 using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -20,6 +21,13 @@ namespace SimpleClassicThemeTaskbar
 
         private void Settings_Load(object sender, EventArgs e)
         {
+            label4.Text = label4.Text.Replace("{sctt_ver}", Assembly.GetExecutingAssembly().GetName().Version.ToString());
+            if (Program.SCTCompatMode)
+			{
+                label7.Show();
+                label7.Text = label7.Text.Replace("{sct_ver}", Assembly.LoadFrom("C:\\SCT\\SCT.exe").GetName().Version.ToString());
+			}
+
             enableSysTrayHover.Checked = Config.EnableSystemTrayHover;
             showTaskbarOnAllDesktops.Checked = Config.ShowTaskbarOnAllDesktops;
             enableQuickLaunch.Checked = Config.EnableQuickLaunch;
@@ -34,6 +42,16 @@ namespace SimpleClassicThemeTaskbar
             else
                 spaceBetweenTrayIcons.Value = spaceBetweenTrayIcons.Maximum;
 
+            if (Config.SpaceBetweenTaskbarIcons <= spaceBetweenTaskbarIcons.Maximum)
+                spaceBetweenTaskbarIcons.Value = Config.SpaceBetweenTaskbarIcons;
+            else
+                spaceBetweenTaskbarIcons.Value = spaceBetweenTaskbarIcons.Maximum;
+
+            if (Config.SpaceBetweenQuickLaunchIcons <= spaceBetweenQuickLaunchIcons.Maximum)
+                spaceBetweenQuickLaunchIcons.Value = Config.SpaceBetweenQuickLaunchIcons;
+            else
+                spaceBetweenQuickLaunchIcons.Value = spaceBetweenQuickLaunchIcons.Maximum;
+
             taskbarProgramWidth.Maximum = Screen.PrimaryScreen.Bounds.Width;
         }
 
@@ -44,6 +62,8 @@ namespace SimpleClassicThemeTaskbar
             Config.EnableQuickLaunch = enableQuickLaunch.Checked;
             Config.TaskbarProgramWidth = (int)taskbarProgramWidth.Value;
             Config.SpaceBetweenTrayIcons = (int)spaceBetweenTrayIcons.Value;
+            Config.SpaceBetweenTaskbarIcons = (int)spaceBetweenTaskbarIcons.Value;
+            Config.SpaceBetweenQuickLaunchIcons = (int)spaceBetweenQuickLaunchIcons.Value;
 
             Config.configChanged = true;
             Config.SaveToRegistry();

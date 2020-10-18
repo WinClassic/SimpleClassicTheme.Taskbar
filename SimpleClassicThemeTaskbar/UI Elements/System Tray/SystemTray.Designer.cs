@@ -1,4 +1,4 @@
-﻿namespace SimpleClassicThemeTaskbar
+﻿namespace SimpleClassicThemeTaskbar.UIElements.SystemTray
 {
     partial class SystemTray
     {
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.betterBorderPanel1 = new SimpleClassicThemeTaskbar.BetterBorderPanel();
+            this.betterBorderPanel1 = new SimpleClassicThemeTaskbar.UIElements.Misc.BetterBorderPanel();
             this.labelTime = new System.Windows.Forms.Label();
             this.betterBorderPanel1.SuspendLayout();
             this.SuspendLayout();
@@ -45,7 +45,7 @@
             // 
             // labelTime
             // 
-            this.labelTime.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.labelTime.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.labelTime.AutoSize = true;
             this.labelTime.Location = new System.Drawing.Point(44, 5);
@@ -69,7 +69,7 @@
 
         #endregion
 
-        private BetterBorderPanel betterBorderPanel1;
+        private SimpleClassicThemeTaskbar.UIElements.Misc.BetterBorderPanel betterBorderPanel1;
         private System.Windows.Forms.Label labelTime;
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace SimpleClassicThemeTaskbar
+﻿namespace SimpleClassicThemeTaskbar.UIElements.StartButton
 {
     partial class StartButton
     {
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.panel1 = new SimpleClassicThemeTaskbar.BetterBorderPanel();
+            this.panel1 = new SimpleClassicThemeTaskbar.UIElements.Misc.BetterBorderPanel();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.label1 = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
@@ -85,7 +85,7 @@
 
         #endregion
 
-        private SimpleClassicThemeTaskbar.BetterBorderPanel panel1;
+        private SimpleClassicThemeTaskbar.UIElements.Misc.BetterBorderPanel panel1;
         private System.Windows.Forms.PictureBox pictureBox1;
         public System.Windows.Forms.Label label1;
     }

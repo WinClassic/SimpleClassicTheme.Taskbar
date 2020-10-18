@@ -11,7 +11,7 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Diagnostics;
 
-namespace SimpleClassicThemeTaskbar
+namespace SimpleClassicThemeTaskbar.UIElements.QuickLaunch
 {
     public partial class QuickLaunch : UserControl
     {
@@ -97,14 +97,14 @@ namespace SimpleClassicThemeTaskbar
             }
 
             //Display everything
-            Width = 22 + (icons.Count * 18);
-            int x = 11;
+            Width = 22 + ((icons.Count * 16) + (Config.SpaceBetweenQuickLaunchIcons * (icons.Count - 1)));
+            int x = 12;
             foreach (QuickLaunchIcon icon in icons)
             {
                 icon.Location = new Point(x, 0);
                 if (!Controls.Contains(icon))
                     Controls.Add(icon);
-                x += 18;
+                x += 16 + Config.SpaceBetweenQuickLaunchIcons;
             }
         }
     }

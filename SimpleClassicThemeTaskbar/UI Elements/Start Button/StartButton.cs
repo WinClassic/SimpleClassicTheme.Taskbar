@@ -1,10 +1,11 @@
-﻿using System;
+﻿using SimpleClassicThemeTaskbar.UIElements.SystemTray;
+using System;
 using System.Drawing;
 using System.Windows.Forms;
 
 using HWND = System.IntPtr;
 
-namespace SimpleClassicThemeTaskbar
+namespace SimpleClassicThemeTaskbar.UIElements.StartButton
 {
     public partial class StartButton : UserControl
     {

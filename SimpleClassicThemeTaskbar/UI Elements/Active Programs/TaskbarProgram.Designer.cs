@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.line = new System.Windows.Forms.Label();
-            this.panel1 = new SimpleClassicThemeTaskbar.BetterBorderPanel();
+            this.panel1 = new SimpleClassicThemeTaskbar.UIElements.Misc.BetterBorderPanel();
             this.label1 = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.panel1.SuspendLayout();
@@ -100,7 +100,7 @@
         #endregion
 
         private System.Windows.Forms.Label line;
-        public SimpleClassicThemeTaskbar.BetterBorderPanel panel1;
+        public SimpleClassicThemeTaskbar.UIElements.Misc.BetterBorderPanel panel1;
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Label label1;
     }

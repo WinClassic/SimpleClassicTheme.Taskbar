@@ -130,6 +130,9 @@
   <data name="buttonCancel.Text" xml:space="preserve">
     <value>Annuleren</value>
   </data>
+  <data name="tabAppearance.Text" xml:space="preserve">
+    <value>Vormgeving</value>
+  </data>
   <data name="label4.Text" xml:space="preserve">
     <value>Simple Classic Theme Taskbar
 © 2020 Anis Errais
@@ -164,9 +167,6 @@ Alle rechten voorbehouden</value>
   </data>
   <data name="label1.Text" xml:space="preserve">
     <value>Breedte van programma's op de taakbalk</value>
-  </data>
-  <data name="tabAppearance.Text" xml:space="preserve">
-    <value>Vormgeving</value>
   </data>
   <data name="$this.Text" xml:space="preserve">
     <value>SimpleClassicTheme Taskbar - Configuratiescherm</value>

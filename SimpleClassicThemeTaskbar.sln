@@ -15,6 +15,11 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SimpleClassicThemeTaskbar.C
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SimpleClassicThemeTaskbar.Cpp.Interop", "SimpleClassicThemeTaskbar.Cpp.Interop\SimpleClassicThemeTaskbar.Cpp.Interop.vcxproj", "{7AAB5462-4C1D-48F1-B59E-25844B76C551}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{16D0D798-44E2-4863-A6FB-8AF59A7AA463}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|AMD64 = Debug|AMD64

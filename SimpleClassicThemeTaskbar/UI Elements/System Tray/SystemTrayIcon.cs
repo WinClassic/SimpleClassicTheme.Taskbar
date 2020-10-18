@@ -12,7 +12,7 @@ using SimpleClassicThemeTaskbar.Cpp.CLI;
 
 using HWND = System.IntPtr;
 
-namespace SimpleClassicThemeTaskbar
+namespace SimpleClassicThemeTaskbar.UIElements.SystemTray
 {
     public class SystemTrayIcon : PictureBox
     {
@@ -45,7 +45,7 @@ namespace SimpleClassicThemeTaskbar
         public new HWND Handle;
         public new string Text;
         public uint PID;
-        public ToolTip toolTip;
+        public Misc.BetterToolTip toolTip;
         public Icon Icon
         {
             get => Icon.FromHandle(((Bitmap) Image).GetHicon());
@@ -80,14 +80,17 @@ namespace SimpleClassicThemeTaskbar
             }
 
            
-            toolTip = new ToolTip();
-            toolTip.IsBalloon = true;
+            toolTip = new Misc.BetterToolTip();
             toolTip.ShowAlways = true;
 
             GetWindowThreadProcessId(Handle, out PID);
             string Pname = Process.GetProcessById(checked((int)PID)).ProcessName;
-            string tooltip = $"{Text}\r\n\r\n{Pname} - {PID}\r\n{Handle}";
+
+            string tempText = Text.Replace("\r\n", "\n");
+            string text = tempText.Contains("\n") ? tempText.Substring(tempText.IndexOf('\n') + 1) : "";
+            string tooltip = $"{text}\r\n\r\n{Pname} - {PID}\r\n{Handle}";
             toolTip.SetToolTip(this, tooltip);
+            toolTip.ToolTipTitle = tempText.Contains("\n") ? tempText.Substring(0, tempText.IndexOf("\n")) : tempText;
 
             const uint WM_LBUTTONDOWN = 0x0201;
             const uint WM_LBUTTONUP = 0x0202;
@@ -153,17 +156,26 @@ namespace SimpleClassicThemeTaskbar
                     byte[] pixelValues = new byte[bytes];
                     Marshal.Copy(ptr, pixelValues, 0, bytes);
                     int pixWidth = temp.PixelFormat == PixelFormat.Format24bppRgb ? 3 : temp.PixelFormat == PixelFormat.Format32bppArgb ? 4 : 4;
+
+                    Color clr = SystemColors.ControlText;
+                    float factorA = clr.A / 255F;
+                    float factorR = clr.R / 255F;
+                    float factorG = clr.G / 255F;
+                    float factorB = clr.B / 255F;
+
                     for (int i = 0; i < pixelValues.Length; i += 4)
                     {
-                        byte r = pixelValues[i + 0];
+                        byte a = pixelValues[i + 3];
+                        byte r = pixelValues[i + 2];
                         byte g = pixelValues[i + 1];
-                        byte b = pixelValues[i + 2];
+                        byte b = pixelValues[i + 0];
                         if (((r << 16) + (g << 8) + (b << 0)) > 0)
                         {
-                            pixelValues[i + 0] = SystemColors.ControlText.R;
-                            pixelValues[i + 1] = SystemColors.ControlText.G;
-                            pixelValues[i + 2] = SystemColors.ControlText.B;
-                        }    
+                            pixelValues[i + 3] = (byte)(a * factorA);
+                            pixelValues[i + 2] = (byte)(r * factorR);
+                            pixelValues[i + 1] = (byte)(g * factorG);
+                            pixelValues[i + 0] = (byte)(b * factorB);
+                        }   
                     }
                     Marshal.Copy(pixelValues, 0, ptr, bytes);
                     temp.UnlockBits(data);

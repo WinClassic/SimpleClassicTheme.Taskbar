@@ -30,5 +30,7 @@ $tf*/
 .vs/
 [Pp]ackages/
 *.sdf
+*.zip
 *.ipch
 !/libraries/*
+*binaries*

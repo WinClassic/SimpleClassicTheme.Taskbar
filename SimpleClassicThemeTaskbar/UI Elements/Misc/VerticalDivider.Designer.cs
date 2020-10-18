@@ -1,4 +1,4 @@
-﻿namespace SimpleClassicThemeTaskbar
+﻿namespace SimpleClassicThemeTaskbar.UIElements.Misc
 {
     partial class VerticalDivider
     {
@@ -28,8 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.betterBorderPanel1 = new SimpleClassicThemeTaskbar.BetterBorderPanel();
-            this.betterBorderPanel2 = new SimpleClassicThemeTaskbar.BetterBorderPanel();
+            this.betterBorderPanel1 = new SimpleClassicThemeTaskbar.UIElements.Misc.BetterBorderPanel();
+            this.betterBorderPanel2 = new SimpleClassicThemeTaskbar.UIElements.Misc.BetterBorderPanel();
             this.betterBorderPanel1.SuspendLayout();
             this.SuspendLayout();
             // 

@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.betterBorderPanel1 = new SimpleClassicThemeTaskbar.BetterBorderPanel();
+            this.betterBorderPanel1 = new SimpleClassicThemeTaskbar.UIElements.Misc.BetterBorderPanel();
             this.SuspendLayout();
             // 
             // betterBorderPanel1
@@ -54,6 +54,6 @@
 
         #endregion
 
-        private BetterBorderPanel betterBorderPanel1;
+        private UIElements.Misc.BetterBorderPanel betterBorderPanel1;
     }
 }

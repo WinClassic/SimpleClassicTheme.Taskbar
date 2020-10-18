@@ -1,4 +1,4 @@
-﻿namespace SimpleClassicThemeTaskbar
+﻿namespace SimpleClassicThemeTaskbar.UIElements.QuickLaunch
 {
     partial class QuickLaunchIcon
     {
@@ -35,7 +35,7 @@
             // pictureBox1
             // 
             this.pictureBox1.BackColor = System.Drawing.Color.Transparent;
-            this.pictureBox1.Location = new System.Drawing.Point(1, 6);
+            this.pictureBox1.Location = new System.Drawing.Point(0, 6);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(16, 16);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -49,7 +49,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.pictureBox1);
             this.Name = "QuickLaunchIcon";
-            this.Size = new System.Drawing.Size(18, 28);
+            this.Size = new System.Drawing.Size(16, 28);
             this.Load += new System.EventHandler(this.QuickLaunchIcon_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);

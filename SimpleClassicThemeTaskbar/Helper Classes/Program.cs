@@ -2,20 +2,15 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Runtime.InteropServices;
-using System.Runtime.Remoting.Messaging;
 using System.Windows.Forms;
-
-using HWND = System.IntPtr;
-using HDC = System.IntPtr;
-using SimpleClassicThemeTaskbar.Cpp.CLI;
 using CrashReporterDotNET;
-using System.Diagnostics;
+using SimpleClassicThemeTaskbar.Cpp.CLI;
 
 namespace SimpleClassicThemeTaskbar
 {
     static class Program
     {
+        public static bool SCTCompatMode = false;
         static Interop d = new Interop();
         /// <summary>
         /// The main entry point for the application.
@@ -23,20 +18,32 @@ namespace SimpleClassicThemeTaskbar
         [STAThread]
         static void Main(string[] args)
         {
-            //Application.SetCompatibleTextRenderingDefault(false);
-            //Application.Run(new Forms.GraphicsTest());
-            //return;
+            if (args.Contains("--gui-test")) 
+            {
+                Application.SetCompatibleTextRenderingDefault(false);
+                Application.Run(new Forms.GraphicsTest());
+                return;
+            }
 
-            Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Forms.NetworkUI());
-            return;
+            if (args.Contains("--network-ui"))
+            {
+                Application.VisualStyleState = System.Windows.Forms.VisualStyles.VisualStyleState.NoneEnabled;
+                Application.SetCompatibleTextRenderingDefault(false);
+                Application.Run(new Forms.NetworkUI());
+                return;
+            }
+
+            if (args.Contains("--sct"))
+			{
+                SCTCompatMode = true;
+            }
 
             List<Taskbar> t = new List<Taskbar>();
             //Setup crash reports
             Application.ThreadException += (sender, arg) => 
             {
 #if DEBUG
-                return;
+                throw arg.Exception;
 #else
                 foreach (Taskbar bar in t)
                 {
@@ -62,43 +69,7 @@ namespace SimpleClassicThemeTaskbar
 #else
                 return;
 #endif
-            }    
-            /*
-             * I felt like this was needed:
-             * 
-             * ===========================================
-             *         Simple Classic Theme Taskbar
-             * ===========================================
-             * An advanced taskbar replacement for Win10
-             * 
-             * The goal of this project is to replace the 
-             * explorer taskbar and also replace my other
-             * project SimpleClassicTheme.
-             * 
-             * ===========================================
-             * DEFAULT PROGRAM FLOW GOAL:
-             * 
-             * (CHECK) Set new working area
-             *     If enabled: 
-             *      Enable classic theme
-             *      Restart explorer
-             * (CHECK) Show the tasbkbar
-             * Disable classic theme
-             * (CHECK) Exit
-             * 
-             * ===========================================
-             * COMMAND LINE GOALS (if there are any, 
-             * arguments will be executed in following 
-             * order and afterwards the program will exit)
-             * --enable     | Enable classic theme
-             * --disable    | Disable classic theme
-             * --config     | Open classic theme config
-             * 
-             */
-            if (args.Length > 0)
-            {
-                return;
-            }
+            }   
             Application.SetCompatibleTextRenderingDefault(false);
             Microsoft.Win32.SystemEvents.DisplaySettingsChanged += delegate
             {
