@@ -21,11 +21,11 @@ namespace SimpleClassicThemeTaskbar
 
         private void Settings_Load(object sender, EventArgs e)
         {
-            label4.Text = label4.Text.Replace("{sctt_ver}", Assembly.GetExecutingAssembly().GetName().Version.ToString());
+            labelCopyrightSCTT.Text = labelCopyrightSCTT.Text.Replace("{sctt_ver}", Assembly.GetExecutingAssembly().GetName().Version.ToString());
             if (Program.SCTCompatMode)
 			{
-                label7.Show();
-                label7.Text = label7.Text.Replace("{sct_ver}", Assembly.LoadFrom("C:\\SCT\\SCT.exe").GetName().Version.ToString());
+                labelCopyrightSCT.Show();
+                labelCopyrightSCT.Text = labelCopyrightSCT.Text.Replace("{sct_ver}", Assembly.LoadFrom("C:\\SCT\\SCT.exe").GetName().Version.ToString());
 			}
 
             enableSysTrayHover.Checked = Config.EnableSystemTrayHover;
