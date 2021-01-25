@@ -1,16 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
-using System.Data;
-using System.Linq;
+using System.Drawing.Drawing2D;
+using System.Drawing.Text;
 using System.Runtime.InteropServices;
-using System.Text;
 using System.Windows.Forms;
-
-using HWND = System.IntPtr;
-using BOOL = System.Boolean;
-using DWORD = System.Int32;
+using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace SimpleClassicThemeTaskbar
 {
@@ -22,27 +17,43 @@ namespace SimpleClassicThemeTaskbar
         [DllImport("user32.dll")]
         static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
 
-        public string Title
-        {
-            get { return label1.Text; }
-            set { label1.Text = value;  }
-        }
+        [DllImport("user32.dll")]
+        public static extern int DrawFrameControl(IntPtr hdc, ref RECT lpRect, uint un1, uint un2);
 
-        internal Window Window;
+        public const uint DFC_BUTTON = 4;
+        public const uint DFCS_BUTTONPUSH = 0x10;
+        public const uint DFCS_PUSHED = 512;
+
+        public Process Process;
+        public Window Window;
         public Icon Icon
         {
-            get { return Icon.FromHandle(((Bitmap) pictureBox1.Image).GetHicon()); }
-            set { if (value != null) pictureBox1.Image = value.ToBitmap(); }
+            get { return iconBackup; }
+            set { try { icon = new Icon(value, 16, 16).ToBitmap(); iconBackup = value; Invalidate(); } catch { } }
+        }
+        public string Title
+        {
+            get { return text; }
+            set { text = value; Invalidate(); }
         }
 
-        public HWND WindowHandle;
-
+        public bool IsMoving = false;
         public new MouseEventHandler MouseDown;
         public new MouseEventHandler MouseUp;
         public new MouseEventHandler MouseMove;
 
+        private Icon iconBackup;
+        private Image icon;
+        private string text = "";
+
+        private Font textFont;
+        private bool textIndent = false;
+        private bool drawBackground = false;
+        private Border3DStyle style;
+
+        private Bitmap d;
         private bool activeWindow = false;
-        public BOOL ActiveWindow
+        public bool ActiveWindow
         {
             get
             {
@@ -51,64 +62,86 @@ namespace SimpleClassicThemeTaskbar
             set 
             { 
                 activeWindow = value;
-                panel1.style = activeWindow ? Border3DStyle.Sunken : Border3DStyle.Raised;
-                Bitmap d = new Bitmap(2, 2);
-                d.SetPixel(0, 0, SystemColors.Control);
-                d.SetPixel(0, 1, SystemColors.ControlLightLight);
-                d.SetPixel(1, 1, SystemColors.Control);
-                d.SetPixel(1, 0, SystemColors.ControlLightLight);
-                //panel1.BackColor = activeWindow ? SystemColors.ControlLightLight : SystemColors.Control;
-                panel1.BackgroundImage = activeWindow ? d : null;
-                label1.Font = activeWindow ? new Font(label1.Font.FontFamily, label1.Font.Size, FontStyle.Bold, GraphicsUnit.Point) : new Font(label1.Font.FontFamily, label1.Font.Size, FontStyle.Regular, GraphicsUnit.Point);
-                panel1.Invalidate();
+                
+                if (ClientRectangle.Contains(PointToClient(MousePosition)))
+                {
+                    if ((MouseButtons & MouseButtons.Left) != 0)
+                    {
+                        //Don't update if the mouse is held down on this control
+                        return;
+                    }
+                }
+
+                if (activeWindow)
+                {
+                    style = Border3DStyle.Sunken;
+                    drawBackground = true;
+                    textFont = new Font(textFont.FontFamily, textFont.Size, FontStyle.Bold, GraphicsUnit.Point);
+                }
+                else
+				{
+                    style = Border3DStyle.Raised;
+                    drawBackground = false;
+                    textFont = new Font(textFont.FontFamily, textFont.Size, FontStyle.Regular, GraphicsUnit.Point);
+                }
+
+                Invalidate();
             }
         }
 
         public TaskbarProgram()
         {
             InitializeComponent();
+            DoubleBuffered = true;
+            Paint += OnPaint;
+
+            d = new Bitmap(2, 2);
+            d.SetPixel(0, 0, SystemColors.Control);
+            d.SetPixel(0, 1, SystemColors.ControlLightLight);
+            d.SetPixel(1, 1, SystemColors.Control);
+            d.SetPixel(1, 0, SystemColors.ControlLightLight);
 
             BackColor = Color.Transparent;
-            panel1.isButton = true;
-            panel1.BackgroundImageLayout = ImageLayout.Tile;
-            panel1.Location = new Point(0, 4);
-            panel1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            panel1.Width = Width;
+            textFont = new Font("Tahoma", 8F, FontStyle.Regular, GraphicsUnit.Point, 0);
 
             base.MouseDown += delegate (object sender, MouseEventArgs e) { MouseDown?.DynamicInvoke(this, e); };
-            panel1.MouseDown += delegate (object sender, MouseEventArgs e) { MouseDown?.DynamicInvoke(this, e); };
-            pictureBox1.MouseDown += delegate (object sender, MouseEventArgs e) { MouseDown?.DynamicInvoke(this, e); };
-            label1.MouseDown += delegate (object sender, MouseEventArgs e) { MouseDown?.DynamicInvoke(this, e); };
             base.MouseUp += delegate (object sender, MouseEventArgs e) { MouseUp?.DynamicInvoke(this, e); };
-            panel1.MouseUp += delegate (object sender, MouseEventArgs e) { MouseUp?.DynamicInvoke(this, e); };
-            pictureBox1.MouseUp += delegate (object sender, MouseEventArgs e) { MouseUp?.DynamicInvoke(this, e); };
-            label1.MouseUp += delegate (object sender, MouseEventArgs e) { MouseUp?.DynamicInvoke(this, e); };
             base.MouseMove += delegate (object sender, MouseEventArgs e) { MouseMove?.DynamicInvoke(this, e); };
-            panel1.MouseMove += delegate (object sender, MouseEventArgs e) { MouseMove?.DynamicInvoke(this, e); };
-            pictureBox1.MouseMove += delegate (object sender, MouseEventArgs e) { MouseMove?.DynamicInvoke(this, e); };
-            label1.MouseMove += delegate (object sender, MouseEventArgs e) { MouseMove?.DynamicInvoke(this, e); };
 
-            SizeChanged += delegate { panel1.Width = this.Width; };
-
-            panel1.Invalidate();
-
+            MouseDown += delegate {
+                style = Border3DStyle.Sunken;
+                d.SetPixel(0, 0, SystemColors.Control);
+                d.SetPixel(0, 1, SystemColors.ControlLightLight);
+                d.SetPixel(1, 1, SystemColors.Control);
+                d.SetPixel(1, 0, SystemColors.ControlLightLight);
+                textFont = new Font(textFont.FontFamily, textFont.Size, FontStyle.Bold, GraphicsUnit.Point);
+                drawBackground = true;
+                textIndent = true;
+                Invalidate();
+            };
+            MouseUp += delegate
+            {
+                textIndent = false;
+                Invalidate();
+            };
             Click += OnClick;
-            pictureBox1.Click += OnClick;
-            panel1.Click += OnClick;
-            label1.Click += OnClick;
         }
 
-        private void OnClick(object sender, EventArgs e)
+        public void OnClick(object sender, EventArgs e)
         {
-            if (ActiveWindow)
+            if (IsMoving)
             {
-                ShowWindow(WindowHandle, 6);
+                IsMoving = false;
+            }
+            else if (ActiveWindow)
+            {
+                ShowWindow(Window.Handle, 6);
             }
             else
             {
                 if ((Window.WindowInfo.dwStyle & 0x20000000) > 0)
-                    ShowWindow(WindowHandle, 9);
-                SetForegroundWindow(WindowHandle);
+                    ShowWindow(Window.Handle, 9);
+                SetForegroundWindow(Window.Handle);
 
                 foreach (Control d in Parent.Controls)
                 {
@@ -119,6 +152,48 @@ namespace SimpleClassicThemeTaskbar
                 }
 
                 ActiveWindow = true;
+            }
+        }
+
+        private void OnPaint(object sender, PaintEventArgs e)
+        {
+            e.Graphics.TextRenderingHint = TextRenderingHint.SingleBitPerPixelGridFit;
+
+            Rectangle newRect = ClientRectangle;
+            newRect.Y += 4;
+            newRect.Height -= 6;
+            //ControlPaint.DrawBorder3D(e.Graphics, newRect, style);
+            RECT rect = new RECT(newRect);
+            uint buttonStyle = style == Border3DStyle.Raised ? DFCS_BUTTONPUSH : DFCS_BUTTONPUSH | DFCS_PUSHED;
+            DrawFrameControl(e.Graphics.GetHdc(), ref rect, DFC_BUTTON, buttonStyle);
+            e.Graphics.ReleaseHdc();
+            e.Graphics.ResetTransform();
+
+            if (drawBackground && d != null)
+            {
+                using (TextureBrush brush = new TextureBrush(d, WrapMode.Tile))
+                {
+                    e.Graphics.FillRectangle(brush, Rectangle.Inflate(newRect, -2, -2));
+                }
+            }
+
+            StringFormat format = new StringFormat();
+            format.HotkeyPrefix = HotkeyPrefix.None;
+            format.Alignment = StringAlignment.Near;
+            format.LineAlignment = StringAlignment.Center;
+            format.Trimming = StringTrimming.EllipsisCharacter;
+            if (icon != null)
+            {
+
+                e.Graphics.DrawImage(icon, textIndent ? new Rectangle(5, 8, 16, 16) : new Rectangle(4, 7, 16, 16));
+                //e.Graphics.DrawString(Title, textFont, SystemBrushes.ControlText, textIndent ? new PointF(20F, 8F) : new PointF(19F, 8F)/*, new StringFormat() { Trimming = StringTrimming.EllipsisCharacter }*/);
+                //e.Graphics.DrawString("Start", new Font("Tahoma", 8F, FontStyle.Bold), SystemBrushes.ControlText, mouseIsDown ? new PointF(21F, 5F) : new PointF(20F, 4F));
+                //e.Graphics.FillRectangle(Brushes.Red, textIndent ? new Rectangle(21, 10, Width - 21 - 4, 11) : new Rectangle(20, 10, Width - 20 - 4, 11));
+                e.Graphics.DrawString(Title, textFont, SystemBrushes.ControlText, textIndent ? new Rectangle(21, 11, Width - 21 - 4, 10) : new Rectangle(20, 10, Width - 20 - 4, 11), format);
+            }
+            else
+            {
+                e.Graphics.DrawString(Title, textFont, SystemBrushes.ControlText, textIndent ? new Rectangle(5, 11, Width - 5 - 4, 10) : new Rectangle(4, 10, Width - 4 - 4, 11), format);
             }
         }
 

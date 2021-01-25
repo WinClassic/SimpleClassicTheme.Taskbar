@@ -8,7 +8,6 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
-using SimpleClassicThemeTaskbar.Cpp.CLI;
 
 using HWND = System.IntPtr;
 
@@ -41,11 +40,12 @@ namespace SimpleClassicThemeTaskbar.UIElements.SystemTray
         {
             get => base.Handle;
         }
-        public TBUTTONINFO TBUTTONINFO_Struct;
+        public CodeBridge.TBUTTONINFO TBUTTONINFO_Struct;
         public new HWND Handle;
         public new string Text;
         public uint PID;
         public Misc.BetterToolTip toolTip;
+        public bool IsMoving = false;
         public Icon Icon
         {
             get => Icon.FromHandle(((Bitmap) Image).GetHicon());
@@ -60,7 +60,7 @@ namespace SimpleClassicThemeTaskbar.UIElements.SystemTray
             }
         }
   
-        public SystemTrayIcon(TBUTTONINFO button)
+        public SystemTrayIcon(CodeBridge.TBUTTONINFO button)
         {
             Handle = button.hwnd;
             Text = button.toolTip;
@@ -88,7 +88,8 @@ namespace SimpleClassicThemeTaskbar.UIElements.SystemTray
 
             string tempText = Text.Replace("\r\n", "\n");
             string text = tempText.Contains("\n") ? tempText.Substring(tempText.IndexOf('\n') + 1) : "";
-            string tooltip = $"{text}\r\n\r\n{Pname} - {PID}\r\n{Handle}";
+            string tooltip = $"{text}";
+            //string tooltip = $"{text}\r\n\r\n{Pname} - {PID}\r\n{Handle}";
             toolTip.SetToolTip(this, tooltip);
             toolTip.ToolTipTitle = tempText.Contains("\n") ? tempText.Substring(0, tempText.IndexOf("\n")) : tempText;
 
@@ -98,10 +99,15 @@ namespace SimpleClassicThemeTaskbar.UIElements.SystemTray
             const uint WM_RBUTTONUP = 0x0205;
             MouseClick += delegate(object sender, MouseEventArgs e)
             {
+                if (IsMoving)
+                {
+                    IsMoving = false;
+                    return;
+                }
                 HWND Shell_TrayWnd = FindWindowW("Shell_TrayWnd", "");
                 uint pidExplorer;
                 GetWindowThreadProcessId(Shell_TrayWnd, out pidExplorer);
-                if (PID == pidExplorer)
+                if (Environment.OSVersion.Version.Major == 10 && PID == pidExplorer)
                 {
                     //TODO: Actually fix the issue instead of using this workaround
                     Regex volume = new Regex(@"^[A-z]+\:{1}");
@@ -140,14 +146,14 @@ namespace SimpleClassicThemeTaskbar.UIElements.SystemTray
             };
         }
 
-        public unsafe void UpdateTrayIcon(TBUTTONINFO button)
+        public unsafe void UpdateTrayIcon(CodeBridge.TBUTTONINFO button)
         {
             //Update icon
             Image oldImage = Image;
             try
             {
                 //20 lines of code just to get the explorer tray icons looking right
-                if (Process.GetProcessById((int)PID).ProcessName == "explorer")
+                if (Config.EnableSystemTrayColorChange && Environment.OSVersion.Version.Major == 10 && Process.GetProcessById((int)PID).ProcessName == "explorer")
                 {
                     Bitmap temp = Icon.FromHandle(button.icon).ToBitmap();
                     BitmapData data = temp.LockBits(new Rectangle(new Point(0, 0), temp.Size), System.Drawing.Imaging.ImageLockMode.ReadWrite, temp.PixelFormat);
@@ -198,8 +204,9 @@ namespace SimpleClassicThemeTaskbar.UIElements.SystemTray
             {
                 Text = button.toolTip;
 
-                string Pname = Process.GetProcessById(checked((int)PID)).ProcessName;
-                string tooltip = $"{Text}\r\n\r\n{Pname} - {PID}\r\n{Handle}";
+                string tooltip = $"{Text}";
+                //string Pname = Process.GetProcessById(checked((int)PID)).ProcessName;
+                //string tooltip = $"{Text}\r\n\r\n{Pname} - {PID}\r\n{Handle}";
                 toolTip.SetToolTip(this, tooltip);
             }
 
@@ -207,7 +214,9 @@ namespace SimpleClassicThemeTaskbar.UIElements.SystemTray
             TBUTTONINFO_Struct = button;
         }
 
-        public static bool operator ==(SystemTrayIcon left, SystemTrayIcon right) => left.Handle == right.Handle;
-        public static bool operator !=(SystemTrayIcon left, SystemTrayIcon right) => left.Handle != right.Handle;
+        public override string ToString()
+        {
+            return Text;
+        }
     }
 }

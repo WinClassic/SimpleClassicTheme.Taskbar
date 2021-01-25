@@ -73,6 +73,26 @@ namespace SimpleClassicThemeTaskbar.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap logo_sct_t {
+            get {
+                object obj = ResourceManager.GetObject("logo_sct+t", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap logo_sctt {
+            get {
+                object obj = ResourceManager.GetObject("logo_sctt", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap startDepressed {
             get {
                 object obj = ResourceManager.GetObject("startDepressed", resourceCulture);

@@ -53,7 +53,7 @@ namespace SimpleClassicThemeTaskbar
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    struct WINDOWINFO
+    public struct WINDOWINFO
     {
         [DllImport("user32.dll")]
         private static extern bool GetWindowInfo(IntPtr hWnd, out WINDOWINFO pwi);
@@ -77,7 +77,7 @@ namespace SimpleClassicThemeTaskbar
         }
     }
 
-    struct Window
+    public struct Window
     {
         [DllImport("user32.dll")]
         private static extern bool GetClassName(IntPtr hWnd, StringBuilder lpClassName, int nMaxCount);

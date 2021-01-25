@@ -10,40 +10,56 @@ using System.Windows.Forms;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Diagnostics;
+using SimpleClassicThemeTaskbar.Helper_Classes;
 
 namespace SimpleClassicThemeTaskbar.UIElements.QuickLaunch
 {
     public partial class QuickLaunch : UserControl
     {
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
-        public struct SHFILEINFO
-        {
-            public IntPtr hIcon;
-            public int iIcon;
-            public uint dwAttributes;
-            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 260)]
-            public string szDisplayName;
-            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 80)]
-            public string szTypeName;
-        }
-        
-        [DllImport("Comctl32.dll")]
-        public static extern IntPtr ImageList_GetIcon(IntPtr himl, int i, uint flags);
-        
-        [DllImport("shell32.dll")]
-        public static extern IntPtr SHGetFileInfo(string pszPath, uint dwFileAttributes, ref SHFILEINFO psfi, uint cbSizeFileInfo, uint uFlags);
-
         public QuickLaunch()
         {
             InitializeComponent();
+            AllowDrop = true;
+
+            DragEnter += QuickLaunch_DragEnter;
+            DragDrop += QuickLaunch_DragDrop;
+        }
+
+        private void QuickLaunch_DragEnter(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+                e.Effect = DragDropEffects.Copy;
+            else
+                e.Effect = DragDropEffects.None;
+        }
+
+        private void QuickLaunch_DragDrop(object sender, DragEventArgs e)
+        {
+            string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+            foreach (string file in files)
+            { 
+                
+            }
         }
 
         public List<QuickLaunchIcon> icons = new List<QuickLaunchIcon>();
+        public string LastOrder = "";
+        public QuickLaunchIcon heldDownIcon;
+        public int heldDownOriginalX = 0;
+        public int mouseOriginalX = 0;
         public bool Disabled = false;
+        public bool FirstUpdate = true;
 
         private void QuickLaunch_Load(object sender, EventArgs e)
         {
 
+        }
+
+        private void QuickLaunch_IconDown(object sender, MouseEventArgs e)
+        {
+            heldDownIcon = (QuickLaunchIcon)sender;
+            heldDownOriginalX = heldDownIcon.Location.X;
+            mouseOriginalX = Cursor.Position.X;
         }
 
         public void UpdateIcons()
@@ -68,18 +84,17 @@ namespace SimpleClassicThemeTaskbar.UIElements.QuickLaunch
                 {
                     QuickLaunchIcon icon = new QuickLaunchIcon();
                     icon.FileName = file;
+                    icon.MouseDown += QuickLaunch_IconDown;
                     icon.Click += delegate
                     {
                         Process.Start(icon.FileName);
                     };
-                    SHFILEINFO shFileInfo = new SHFILEINFO();
-                    IntPtr list = SHGetFileInfo(file, 0, ref shFileInfo, (uint)Marshal.SizeOf(shFileInfo), 0x4000);
-                    var iconHandle = ImageList_GetIcon(list, shFileInfo.iIcon, 0);
-                    Icon icn = Icon.FromHandle(iconHandle);
+                    Icon icn = Icon.FromHandle(Win32Icon.GetIconHandleFromFilePath(icon.FileName, Win32Icon.IconSizeEnum.SmallIcon16));
                     icon.Image = icn.ToBitmap();
                     icons.Add(icon);
                 }
             }
+
 
             //Remove all deleted elements
             foreach (QuickLaunchIcon icon in icons.ToArray())
@@ -89,6 +104,31 @@ namespace SimpleClassicThemeTaskbar.UIElements.QuickLaunch
                     icon.Dispose();
                 }
 
+            //Get the icons in the correct order
+            if (FirstUpdate && Config.QuickLaunchOrder != "")
+            {
+                string[] shortcutOrder = Config.QuickLaunchOrder.Split('|');
+                List<QuickLaunchIcon> newOrder = new List<QuickLaunchIcon>();
+                foreach (string shortcut in shortcutOrder)
+                {
+                    foreach (QuickLaunchIcon icon in icons)
+                    {
+                        if (icon.FileName.EndsWith(shortcut))
+                        {
+                            newOrder.Add(icon);
+                        }
+                    }
+                }
+                foreach (QuickLaunchIcon icon in icons)
+                {
+                    if (!newOrder.Contains(icon))
+                        newOrder.Add(icon);
+                }
+                icons.Clear();
+                icons.AddRange(newOrder);
+                FirstUpdate = false;
+            }
+
             //If there aren't any elements just don't render
             if (icons.Count < 1)
             {
@@ -97,8 +137,47 @@ namespace SimpleClassicThemeTaskbar.UIElements.QuickLaunch
             }
 
             //Display everything
-            Width = 22 + ((icons.Count * 16) + (Config.SpaceBetweenQuickLaunchIcons * (icons.Count - 1)));
-            int x = 12;
+            Width = 32 + ((icons.Count * 16) + (Config.SpaceBetweenQuickLaunchIcons * (icons.Count - 1)));
+            int x = 16;
+
+            int startX = x;
+            int iconWidth = 16;
+            int iconSpacing = Config.SpaceBetweenQuickLaunchIcons;
+
+            //See if we're moving, if so calculate new position, if we finished calculate new position and finalize position values
+            if (heldDownIcon != null)
+            {
+                if (Math.Abs(mouseOriginalX - Cursor.Position.X) > 3)
+                    heldDownIcon.IsMoving = true;
+                if ((MouseButtons & MouseButtons.Left) != 0)
+                {
+                    Point p = new Point(heldDownOriginalX + (Cursor.Position.X - mouseOriginalX), heldDownIcon.Location.Y);
+                    int newIndex = (startX - p.X - ((iconWidth + iconSpacing) / 2)) / (iconWidth + iconSpacing) * -1;
+                    if (newIndex < 0) newIndex = 0;
+                    icons.Remove(heldDownIcon);
+                    icons.Insert(Math.Min(icons.Count, newIndex), heldDownIcon);
+                }
+                else
+                {
+                    Point p = new Point(heldDownOriginalX + (Cursor.Position.X - mouseOriginalX), heldDownIcon.Location.Y);
+                    int newIndex = (startX - p.X - ((iconWidth + iconSpacing) / 2)) / (iconWidth + iconSpacing) * -1;
+                    if (newIndex < 0) newIndex = 0;
+                    icons.Remove(heldDownIcon);
+                    icons.Insert(Math.Min(icons.Count, newIndex), heldDownIcon);
+                    heldDownIcon = null;
+                }
+            }
+
+            //Save correct order
+            string correctOrder = "";
+            foreach (QuickLaunchIcon icon in icons)
+                correctOrder += Path.GetFileName(icon.FileName) + "|";
+            correctOrder = correctOrder.Trim('|');
+            Config.QuickLaunchOrder = correctOrder;
+            if (LastOrder != correctOrder)
+                Config.SaveToRegistry();
+            LastOrder = correctOrder;
+
             foreach (QuickLaunchIcon icon in icons)
             {
                 icon.Location = new Point(x, 0);
@@ -106,6 +185,11 @@ namespace SimpleClassicThemeTaskbar.UIElements.QuickLaunch
                     Controls.Add(icon);
                 x += 16 + Config.SpaceBetweenQuickLaunchIcons;
             }
+
+            if (heldDownIcon != null)
+                heldDownIcon.BringToFront();
+
+            Invalidate();
         }
     }
 }

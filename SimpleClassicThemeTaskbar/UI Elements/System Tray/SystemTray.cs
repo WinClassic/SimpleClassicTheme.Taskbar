@@ -5,7 +5,6 @@ using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Forms;
-using SimpleClassicThemeTaskbar.Cpp.CLI;
 
 using HWND = System.IntPtr;
 
@@ -19,9 +18,19 @@ namespace SimpleClassicThemeTaskbar.UIElements.SystemTray
         [DllImport("user32.dll", CharSet = CharSet.Unicode)]
         public static extern HWND FindWindowExW(HWND hWndParent, HWND hWndChildAfter, string lpszClass, string lpszWindow);
 
-        private Interop d = new Cpp.CLI.Interop();
-        public bool firstTime = true;
-        
+        public List<SystemTrayIcon> icons = new List<SystemTrayIcon>();
+        private CodeBridge d = new CodeBridge();
+        public SystemTrayIcon heldDownIcon = null;
+        public int heldDownOriginalX = 0;
+        public int mouseOriginalX = 0;
+
+        private void SystemTray_IconDown(object sender, MouseEventArgs e)
+        {
+            heldDownIcon = (SystemTrayIcon)sender;
+            heldDownOriginalX = heldDownIcon.Location.X;
+            mouseOriginalX = Cursor.Position.X;
+        }
+
         static HWND GetSystemTrayHandle()
         {
             HWND hWndTray = FindWindowW("Shell_TrayWnd", null);
@@ -56,20 +65,20 @@ namespace SimpleClassicThemeTaskbar.UIElements.SystemTray
         }
 
         //TODO: Make tray icons moveable
-        public void UpdateButtons()
+        public void UpdateIcons()
         {
             //Get button count
             int count = d.GetTrayButtonCount(GetSystemTrayHandle());
 
             //Lists that will receive all button information
-            List<TBUTTONINFO> existingButtons = new List<TBUTTONINFO>();
+            List<CodeBridge.TBUTTONINFO> existingButtons = new List<CodeBridge.TBUTTONINFO>();
             List<HWND> existingHWNDs = new List<HWND>();
 
             //Loop through all buttons
             for (int i = 0; i < count; i++)
             {
                 //Get the button info
-                TBUTTONINFO bInfo = new TBUTTONINFO();
+                CodeBridge.TBUTTONINFO bInfo = new CodeBridge.TBUTTONINFO();
                 d.GetTrayButton(GetSystemTrayHandle(), i, ref bInfo);
 
                 //Save it
@@ -82,18 +91,21 @@ namespace SimpleClassicThemeTaskbar.UIElements.SystemTray
 
             //Remove any icons that are now invalid or hidden
             List<SystemTrayIcon> newIconList = new List<SystemTrayIcon>();
-            foreach (Control existingIco in betterBorderPanel1.Controls)
+            SystemTrayIcon[] enumerator = new SystemTrayIcon[icons.Count];
+            icons.CopyTo(enumerator);
+            foreach (SystemTrayIcon existingIco in enumerator)
                 if (existingIco is SystemTrayIcon existingIcon)
                     if (existingHWNDs.Contains(existingIcon.Handle))
                         newIconList.Add(existingIcon);
                     else
                     {
+                        icons.Remove(existingIcon);
                         betterBorderPanel1.Controls.Remove(existingIcon);
                         existingIcon.Dispose();
                     }
 
             //Add icons that didn't display before
-            foreach (TBUTTONINFO info in existingButtons)
+            foreach (CodeBridge.TBUTTONINFO info in existingButtons)
             {
                 //By default we say the icon doesn't exist
                 bool exists = false;
@@ -111,7 +123,11 @@ namespace SimpleClassicThemeTaskbar.UIElements.SystemTray
                 if (exists)
                     existingIcon.UpdateTrayIcon(info);
                 else
-                    newIconList.Add(new SystemTrayIcon(info));
+                {
+                    SystemTrayIcon trayIcon = new SystemTrayIcon(info);
+                    trayIcon.MouseDown += SystemTray_IconDown;
+                    newIconList.Add(trayIcon);
+                }
             }
 
             //De-dupe all controls
@@ -127,19 +143,52 @@ namespace SimpleClassicThemeTaskbar.UIElements.SystemTray
             }
 
             //Icons are drawn from right to left so we reverse it so we can draw left to right (probably as easy)
-            if (firstTime) {
-                finalIconList.Reverse();
-            }
+            finalIconList.Reverse();
 
             //Display all controls
             int virtualWidth = 16 + Config.SpaceBetweenTrayIcons;
             int x = 3;
             Width = 63 + (finalIconList.Count * virtualWidth);
+
+            int startX = x;
+            int iconWidth = 16;
+            int iconSpacing = Config.SpaceBetweenTrayIcons;
+
+            //See if we're moving, if so calculate new position, if we finished calculate new position and finalize position values
+            if (heldDownIcon != null)
+            {
+                if (Math.Abs(mouseOriginalX - Cursor.Position.X) > 3)
+                    heldDownIcon.IsMoving = true;
+                if ((MouseButtons & MouseButtons.Left) != 0)
+                {
+                    Point p = new Point(heldDownOriginalX + (Cursor.Position.X - mouseOriginalX), heldDownIcon.Location.Y);
+                    int newIndex = (startX - p.X - ((iconWidth + iconSpacing) / 2)) / (iconWidth + iconSpacing) * -1;
+                    if (newIndex < 0) newIndex = 0;
+                    finalIconList.Remove(heldDownIcon);
+                    finalIconList.Insert(Math.Min(finalIconList.Count, newIndex), heldDownIcon);
+                }
+                else
+                {
+                    Point p = new Point(heldDownOriginalX + (Cursor.Position.X - mouseOriginalX), heldDownIcon.Location.Y);
+                    int newIndex = (startX - p.X - ((iconWidth + iconSpacing) / 2)) / (iconWidth + iconSpacing) * -1;
+                    if (newIndex < 0) newIndex = 0;
+                    finalIconList.Remove(heldDownIcon);
+                    finalIconList.Insert(Math.Min(finalIconList.Count, newIndex), heldDownIcon);
+                    icons.Remove(heldDownIcon);
+                    icons.Insert(Math.Min(icons.Count, finalIconList.Count - newIndex - 1), heldDownIcon);
+                    heldDownIcon = null;
+                }
+            }
+
+            
             foreach (SystemTrayIcon icon in finalIconList)
             {
                 //Add the control
                 if (icon.Parent != betterBorderPanel1)
+                {
+                    icons.Add(icon);
                     betterBorderPanel1.Controls.Add(icon);
+                }
 
                 //Put the control at the correct position
                 icon.Location = new Point(x, 3);
@@ -161,6 +210,11 @@ namespace SimpleClassicThemeTaskbar.UIElements.SystemTray
         public void UpdateTime()
         {
             labelTime.Text = DateTime.Now.ToString(CultureInfo.CurrentCulture.DateTimeFormat.ShortTimePattern);
+        }
+
+        private void labelTime_MouseHover(object sender, EventArgs e)
+        {
+            toolTip1.SetToolTip(labelTime, DateTime.Now.ToShortDateString());
         }
     }
 }

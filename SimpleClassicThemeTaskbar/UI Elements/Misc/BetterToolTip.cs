@@ -16,7 +16,7 @@ namespace SimpleClassicThemeTaskbar.UIElements.Misc
             get
             {
                 var cp = base.CreateParams;
-                cp.Style = TTS_BALLOON /*| TTS_CLOSE*/;
+                /*cp.Style = TTS_BALLOON /*| TTS_CLOSE*/;
                 return cp;
             }
         }

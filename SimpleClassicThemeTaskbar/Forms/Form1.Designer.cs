@@ -31,11 +31,11 @@ namespace SimpleClassicThemeTaskbar
         {
             this.components = new System.ComponentModel.Container();
             this.line = new System.Windows.Forms.Label();
-            this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.quickLaunch1 = new SimpleClassicThemeTaskbar.UIElements.QuickLaunch.QuickLaunch();
             this.verticalDivider3 = new SimpleClassicThemeTaskbar.UIElements.Misc.VerticalDivider();
             this.systemTray1 = new SimpleClassicThemeTaskbar.UIElements.SystemTray.SystemTray();
             this.startButton1 = new SimpleClassicThemeTaskbar.UIElements.StartButton.StartButton();
+            this.startButtonPanel = new System.Windows.Forms.Panel();
             this.SuspendLayout();
             // 
             // line
@@ -48,16 +48,10 @@ namespace SimpleClassicThemeTaskbar
             this.line.TabIndex = 0;
             this.line.Text = "label1";
             // 
-            // timer1
-            // 
-            this.timer1.Enabled = true;
-            this.timer1.Interval = 150;
-            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
-            // 
             // quickLaunch1
             // 
             this.quickLaunch1.BackColor = System.Drawing.Color.Transparent;
-            this.quickLaunch1.Location = new System.Drawing.Point(57, 1);
+            this.quickLaunch1.Location = new System.Drawing.Point(59, 1);
             this.quickLaunch1.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.quickLaunch1.Name = "quickLaunch1";
             this.quickLaunch1.Size = new System.Drawing.Size(150, 27);
@@ -74,6 +68,7 @@ namespace SimpleClassicThemeTaskbar
             this.verticalDivider3.Size = new System.Drawing.Size(2, 22);
             this.verticalDivider3.TabIndex = 12;
             this.verticalDivider3.Wide = false;
+            this.verticalDivider3.Visible = false;
             // 
             // systemTray1
             // 
@@ -95,6 +90,16 @@ namespace SimpleClassicThemeTaskbar
             this.startButton1.Size = new System.Drawing.Size(55, 22);
             this.startButton1.TabIndex = 4;
             // 
+            // startButtonPanel
+            // 
+            this.startButtonPanel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold);
+            this.startButtonPanel.Location = new System.Drawing.Point(0, 0);
+            this.startButtonPanel.Name = "startButtonPanel";
+            this.startButtonPanel.Size = new System.Drawing.Size(57, 28);
+            this.startButtonPanel.MouseDown += StartButtonPanel_MouseDown;
+            this.startButtonPanel.MouseUp += StartButtonPanel_MouseUp;
+            this.startButtonPanel.MouseClick += StartButtonPanel_MouseClick;
+            // 
             // Taskbar
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -105,6 +110,7 @@ namespace SimpleClassicThemeTaskbar
             this.Controls.Add(this.verticalDivider3);
             this.Controls.Add(this.systemTray1);
             this.Controls.Add(this.startButton1);
+            this.Controls.Add(this.startButtonPanel);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
@@ -122,7 +128,7 @@ namespace SimpleClassicThemeTaskbar
         #endregion
 
         private System.Windows.Forms.Label line;
-        private System.Windows.Forms.Timer timer1;
+        private System.Windows.Forms.Panel startButtonPanel;
         private UIElements.StartButton.StartButton startButton1;
         private UIElements.SystemTray.SystemTray systemTray1;
         private UIElements.Misc.VerticalDivider verticalDivider3;

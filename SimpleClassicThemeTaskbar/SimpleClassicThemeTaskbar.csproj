@@ -87,14 +87,10 @@
   <PropertyGroup>
     <ApplicationManifest>App.manifest</ApplicationManifest>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>SimpleClassicTheme.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CrashReporter.NET, Version=1.5.8.0, Culture=neutral, PublicKeyToken=7828e0fd88cab698, processorArchitecture=MSIL">
-      <HintPath>..\packages\CrashReporter.NET.Official.1.5.8\lib\net462\CrashReporter.NET.dll</HintPath>
-    </Reference>
-    <Reference Include="SimpleClassicThemeTaskbar.Cpp.CLI">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\SimpleClassicThemeTaskbar.Cpp\$(Platform)\$(Configuration)\SimpleClassicThemeTaskbar.Cpp.CLI.dll</HintPath>
-    </Reference>
     <Reference Include="ManagedWifi">
       <HintPath>..\libraries\ManagedWifi.dll</HintPath>
     </Reference>
@@ -128,6 +124,35 @@
     </Compile>
     <Compile Include="Forms\NetworkUI.Designer.cs">
       <DependentUpon>NetworkUI.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\PopupTaskbarGroup.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\PopupTaskbarGroup.Designer.cs">
+      <DependentUpon>PopupTaskbarGroup.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\SettingsAddProgramFilter.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\SettingsAddProgramFilter.Designer.cs">
+      <DependentUpon>SettingsAddProgramFilter.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Taskbar_Win32.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Helper Classes\Enums.cs" />
+    <Compile Include="Helper Classes\Win32Icon.cs" />
+    <Compile Include="UI Elements\Active Programs\BaseTaskbarProgram.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UI Elements\Active Programs\BaseTaskbarProgram.Designer.cs">
+      <DependentUpon>BaseTaskbarProgram.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI Elements\Active Programs\GroupedTaskbarProgram.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UI Elements\Active Programs\SingleTaskbarProgram.cs">
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="UI Elements\Misc\BetterToolTip.cs">
       <SubType>Component</SubType>
@@ -200,7 +225,7 @@
     <Compile Include="Forms\Form1.Designer.cs">
       <DependentUpon>Taskbar.cs</DependentUpon>
     </Compile>
-    <Compile Include="Helper Classes\Program.cs" />
+    <Compile Include="ApplicationEntryPoint.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Helper Classes\Win32Structs.cs" />
     <EmbeddedResource Include="Forms\GraphicsTest.resx">
@@ -211,6 +236,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\NetworkUI.resx">
       <DependentUpon>NetworkUI.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\PopupTaskbarGroup.resx">
+      <DependentUpon>PopupTaskbarGroup.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Settings.nl.resx">
+      <DependentUpon>Settings.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\SettingsAddProgramFilter.resx">
+      <DependentUpon>SettingsAddProgramFilter.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -289,10 +323,24 @@
   <ItemGroup>
     <None Include="Resources\lock.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\logo_sctt.png" />
+    <None Include="Resources\SCT+T Banner 708x111.png" />
+    <None Include="Resources\SimpleClassicTheme.ico" />
+    <None Include="Resources\SCT+T Banner 708x106.png" />
+    <None Include="Resources\SCTT Banner 708x107.png" />
+    <Content Include="SimpleClassicTheme.ico" />
+    <Content Include="win98.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SimpleClassicThemeTaskbar.CodeBridge\SimpleClassicThemeTaskbar.CodeBridge.vcxproj">
+      <Project>{11b39786-bd1c-49d1-8c9f-5823b0c8c12e}</Project>
+      <Name>SimpleClassicThemeTaskbar.CodeBridge</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>cmd /k copy /D "$(TargetPath)" "C:\SCT\Taskbar\SCT_Taskbar.exe"
-"$(ProjectDir)tools\package.bat" "$(TargetPath)" "$(ProjectDir)" "$(PlatformName)" "$(ConfigurationName)" "$(TargetDir)"</PostBuildEvent>
+    <PostBuildEvent>"$(ProjectDir)tools\package.bat" "$(TargetPath)" "$(ProjectDir)" "$(PlatformName)" "$(ConfigurationName)" "$(TargetDir)"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
