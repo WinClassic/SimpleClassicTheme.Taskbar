@@ -1,0 +1,13 @@
+{
+  "profiles": {
+    "SCTT (C#)": {
+      "commandName": "Project",
+      "nativeDebugging": true
+    },
+    "SCTT (C++)": {
+      "commandName": "Project",
+      "commandLineArgs": "--unmanaged",
+      "nativeDebugging": true
+    }
+  }
+}

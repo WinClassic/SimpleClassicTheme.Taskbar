@@ -87,7 +87,7 @@ namespace SimpleClassicThemeTaskbar.UIElements.QuickLaunch
                     icon.MouseDown += QuickLaunch_IconDown;
                     icon.Click += delegate
                     {
-                        Process.Start(icon.FileName);
+                        Process.Start(new ProcessStartInfo(icon.FileName) { UseShellExecute = true });
                     };
                     Icon icn = Icon.FromHandle(Win32Icon.GetIconHandleFromFilePath(icon.FileName, Win32Icon.IconSizeEnum.SmallIcon16));
                     icon.Image = icn.ToBitmap();
@@ -188,6 +188,12 @@ namespace SimpleClassicThemeTaskbar.UIElements.QuickLaunch
 
             if (heldDownIcon != null)
                 heldDownIcon.BringToFront();
+
+            Point verticalDividerLocation = new Point(Width - verticalDivider2.Width, verticalDivider2.Location.Y);
+            //Point verticalDividerLocation = new Point(icons.Count > 0 ? icons[icons.Count - 1].Location.X + 16 + Config.SpaceBetweenQuickLaunchIcons : 3, verticalDivider2.Location.Y);
+            if (verticalDivider2.Location != verticalDividerLocation)
+                verticalDivider2.Location = verticalDividerLocation;
+
 
             Invalidate();
         }

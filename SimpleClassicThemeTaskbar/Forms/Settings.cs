@@ -1,15 +1,7 @@
-﻿using SimpleClassicThemeTaskbar.Forms;
-using System;
-using System.CodeDom.Compiler;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
+﻿using System;
 using System.Diagnostics;
 using System.Drawing;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace SimpleClassicThemeTaskbar
@@ -19,6 +11,8 @@ namespace SimpleClassicThemeTaskbar
         public Settings()
         {
             InitializeComponent();
+
+            labelCopyrightSCT.Location = new Point(tabAbout.Width - labelCopyrightSCT.Width, labelCopyrightSCT.Location.Y);
         }
 
         private void Settings_Load(object sender, EventArgs e)

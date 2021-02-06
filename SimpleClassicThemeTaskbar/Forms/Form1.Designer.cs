@@ -1,4 +1,6 @@
 ﻿
+using System.Drawing;
+
 namespace SimpleClassicThemeTaskbar
 {
     partial class Taskbar
@@ -111,6 +113,7 @@ namespace SimpleClassicThemeTaskbar
             this.Controls.Add(this.systemTray1);
             this.Controls.Add(this.startButton1);
             this.Controls.Add(this.startButtonPanel);
+            //this.Font = SystemFonts.MessageBoxFont;
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);

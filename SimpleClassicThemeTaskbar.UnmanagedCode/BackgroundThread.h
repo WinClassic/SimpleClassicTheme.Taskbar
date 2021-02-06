@@ -4,7 +4,7 @@
 
 namespace SimpleClassicThemeTaskbar
 {
-	namespace UnmanagedCode 
+	namespace Unmanaged
 	{
 		static class BackgroundThread
 		{

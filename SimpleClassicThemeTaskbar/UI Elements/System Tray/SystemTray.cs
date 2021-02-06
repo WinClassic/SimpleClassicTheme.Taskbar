@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
 using System.Runtime.InteropServices;
@@ -10,7 +11,7 @@ using HWND = System.IntPtr;
 
 namespace SimpleClassicThemeTaskbar.UIElements.SystemTray
 {
-    public partial class SystemTray : UserControl
+    public partial class SystemTray : UserControlEx
     {
         [DllImport("user32.dll", CharSet = CharSet.Unicode)]
         public static extern HWND FindWindowW(string lpszClass, string lpszWindow);
@@ -20,6 +21,7 @@ namespace SimpleClassicThemeTaskbar.UIElements.SystemTray
 
         public List<SystemTrayIcon> icons = new List<SystemTrayIcon>();
         private CodeBridge d = new CodeBridge();
+        private object culprit;
         public SystemTrayIcon heldDownIcon = null;
         public int heldDownOriginalX = 0;
         public int mouseOriginalX = 0;
@@ -119,11 +121,15 @@ namespace SimpleClassicThemeTaskbar.UIElements.SystemTray
                         exists = true;
                     }
 
+                controlState = "updating existing tray icon";
+                culprit = existingIcon;
                 //If it does we just update it, else we create it
                 if (exists)
                     existingIcon.UpdateTrayIcon(info);
                 else
                 {
+                    controlState = "creating new tray icon";
+                    culprit = info;
                     SystemTrayIcon trayIcon = new SystemTrayIcon(info);
                     trayIcon.MouseDown += SystemTray_IconDown;
                     newIconList.Add(trayIcon);
@@ -215,6 +221,27 @@ namespace SimpleClassicThemeTaskbar.UIElements.SystemTray
         private void labelTime_MouseHover(object sender, EventArgs e)
         {
             toolTip1.SetToolTip(labelTime, DateTime.Now.ToShortDateString());
+        }
+
+        public override string GetErrorString()
+            => GetBaseErrorString() +
+            $"Unexpected error occured while {controlState}\n" +
+            (culprit is SystemTrayIcon trayIcon ?
+                $"Process: {GetProcessFromIcon(trayIcon.TBUTTONINFO_Struct).MainModule.ModuleName} ({trayIcon.TBUTTONINFO_Struct.pid})\n" +
+                $"Corresponding Window HWND: {trayIcon.TBUTTONINFO_Struct.hwnd} (Valid: {IsWindow(trayIcon.TBUTTONINFO_Struct.hwnd)})\n" +
+                $"Icon HWND: {trayIcon.TBUTTONINFO_Struct.icon} (Valid: {IsWindow(trayIcon.TBUTTONINFO_Struct.icon)})\n" +
+                $"Icon caption: \n({trayIcon.TBUTTONINFO_Struct.toolTip})\n" +
+                $"Icon ID: {trayIcon.TBUTTONINFO_Struct.id}\n" : String.Empty) +
+            (culprit is CodeBridge.TBUTTONINFO TBUTTONINFO_Struct ?
+                $"Process: {GetProcessFromIcon(TBUTTONINFO_Struct).MainModule.ModuleName} ({TBUTTONINFO_Struct.pid})\n" +
+                $"Corresponding Window HWND: {TBUTTONINFO_Struct.hwnd} (Valid: {IsWindow(TBUTTONINFO_Struct.hwnd)})\n" +
+                $"Icon HWND: {TBUTTONINFO_Struct.icon} (Valid: {IsWindow(TBUTTONINFO_Struct.icon)})\n" +
+                $"Icon caption: \n({TBUTTONINFO_Struct.toolTip})\n" +
+                $"Icon ID: {TBUTTONINFO_Struct.id}\n" : String.Empty);
+        private Process GetProcessFromIcon(CodeBridge.TBUTTONINFO TBUTTONINFO_Struct)
+        {
+            GetWindowThreadProcessId(TBUTTONINFO_Struct.hwnd, out uint pid);
+            return Process.GetProcessById((int)pid);
         }
     }
 }

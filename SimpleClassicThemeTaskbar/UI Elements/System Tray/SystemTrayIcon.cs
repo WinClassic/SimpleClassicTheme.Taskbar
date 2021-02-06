@@ -59,7 +59,7 @@ namespace SimpleClassicThemeTaskbar.UIElements.SystemTray
                 value.Dispose();
             }
         }
-  
+
         public SystemTrayIcon(CodeBridge.TBUTTONINFO button)
         {
             Handle = button.hwnd;
@@ -186,12 +186,12 @@ namespace SimpleClassicThemeTaskbar.UIElements.SystemTray
                     Marshal.Copy(pixelValues, 0, ptr, bytes);
                     temp.UnlockBits(data);
                     Image = temp;
-                    oldImage.Dispose();
+                    if (oldImage != null) oldImage.Dispose();
                 }
                 else
                 {
                     Image = Icon.FromHandle(button.icon).ToBitmap();
-                    oldImage.Dispose();
+                    if (oldImage != null) oldImage.Dispose();
                 }
             }
             catch { }

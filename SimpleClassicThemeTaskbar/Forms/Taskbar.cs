@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Threading;
@@ -14,7 +15,7 @@ namespace SimpleClassicThemeTaskbar
     public partial class Taskbar : Form
     {
         //TODO: Clean this shitty mess like wth
-        private ContextMenu d;
+        private ContextMenuStrip d;
 
         //Window handle list
         private readonly List<Window> windows = new List<Window>();
@@ -49,20 +50,35 @@ namespace SimpleClassicThemeTaskbar
         { 
             if (m.Msg == WM_ENDSESSION)
             {
-                temp = true;
-                if (m.Msg == WM_EXITTASKBAR && m.WParam == wParam && m.LParam == lParam)
-                {
-                    selfClose = true; Close(); Application.Exit();
-                }
+                selfClose = true; 
+                Config.SaveToRegistry();
+                Environment.Exit(0);
+            }
+            if (m.Msg == WM_QUERYENDSESSION)
+            {
+                m.Result = new IntPtr(1);
             }
             if (m.Msg == WM_EXITTASKBAR && !temp)
             {
                 temp = true;
                 if (m.Msg == WM_EXITTASKBAR && m.WParam == wParam && m.LParam == lParam)
                 {
-                    selfClose = true; Close(); Application.Exit();
+                    selfClose = true; 
+                    Close(); 
+                    Application.Exit();
                 }
             }
+            if (m.Msg == 0x15/*WM_SYSCOLORCHANGE*/)
+            {
+                //SuspendLayout();
+                //Font = SystemFonts.MessageBoxFont;
+                //ResumeLayout();
+            }
+            if (m.Msg == 0x1a/*WM_SETTINGCHANGE*/)
+			{
+                //Rectangle screen = Screen.FromControl(this).WorkingArea;
+                //Console.WriteLine($"{screen.X},{screen.Y} {screen.Width}x{screen.Height}");
+			}
             base.WndProc(ref m);
         }
 
@@ -89,7 +105,7 @@ namespace SimpleClassicThemeTaskbar
                 }
             }
 
-            Thread.CurrentThread.CurrentUICulture = CultureInfo.InstalledUICulture;
+            //Thread.CurrentThread.CurrentUICulture = CultureInfo.InstalledUICulture;
             Primary = isPrimary;
             Config.LoadFromRegistry();
 
@@ -132,9 +148,9 @@ namespace SimpleClassicThemeTaskbar
         public void ShowOnScreen(Screen screen)
         {
             StartPosition = FormStartPosition.Manual;
-            Location = new Point(screen.WorkingArea.Left, screen.WorkingArea.Bottom);
+            Location = new Point(screen.WorkingArea.Left, screen.Bounds.Bottom - 28);
             Size = new Size(screen.Bounds.Width, 28);
-            Show();
+			Show();
         }
 
         //Function to determine which windows to add to the window list
@@ -252,7 +268,6 @@ namespace SimpleClassicThemeTaskbar
             else
             {
                 //Kill background thread and show taskbar
-                BackgroundThread.Abort();
                 ShowWindow(FindWindowW("Shell_TrayWnd", ""), 5);
             }
         }
@@ -266,21 +281,21 @@ namespace SimpleClassicThemeTaskbar
                 if (d == null)
                 {
                     //Create the context menu
-                    d = new ContextMenu();
+                    d = new ContextMenuStrip();
 
                     //Exit menu item
-                    MenuItem toolbars = new MenuItem("(NIY) &Toolbars");
-                    MenuItem seperator1 = new MenuItem("-");
-                    MenuItem cascadeWindows = new MenuItem("Casca&de windows");
-                    MenuItem showWindowsStacked = new MenuItem("Show windows stack&ed");
-                    MenuItem showWindowsSideBySide = new MenuItem("Show windows s&ide by side");
-                    MenuItem showDesktop = new MenuItem("&Show the desktop");
-                    MenuItem seperator2 = new MenuItem("-");
-                    MenuItem taskManager = new MenuItem("Tas&k Manager");
-                    MenuItem seperator3 = new MenuItem("-");
-                    MenuItem lockTaskbar = new MenuItem("(NIY) &Lock the taskbar");
-                    MenuItem settings = new MenuItem("Configu&re SCT Taskbar");
-                    MenuItem exit = new MenuItem("&Exit SCT Taskbar");
+                    ToolStripMenuItem toolbars = new ToolStripMenuItem("(NIY) &Toolbars");
+                    ToolStripSeparator seperator1 = new ToolStripSeparator();
+                    ToolStripMenuItem cascadeWindows = new ToolStripMenuItem("Casca&de windows");
+                    ToolStripMenuItem showWindowsStacked = new ToolStripMenuItem("Show windows stack&ed");
+                    ToolStripMenuItem showWindowsSideBySide = new ToolStripMenuItem("Show windows s&ide by side");
+                    ToolStripMenuItem showDesktop = new ToolStripMenuItem("&Show the desktop");
+                    ToolStripSeparator seperator2 = new ToolStripSeparator();
+                    ToolStripMenuItem taskManager = new ToolStripMenuItem("Tas&k Manager");
+                    ToolStripSeparator seperator3 = new ToolStripSeparator();
+                    ToolStripMenuItem lockTaskbar = new ToolStripMenuItem("(NIY) &Lock the taskbar");
+                    ToolStripMenuItem settings = new ToolStripMenuItem("Configu&re SCT Taskbar");
+                    ToolStripMenuItem exit = new ToolStripMenuItem("&Exit SCT Taskbar");
 
                     cascadeWindows.Click += delegate { CascadeWindows(IntPtr.Zero, MDITILE_ZORDER, IntPtr.Zero, 0, IntPtr.Zero); };
                     showWindowsStacked.Click += delegate { TileWindows(IntPtr.Zero, MDITILE_HORIZONTAL, IntPtr.Zero, 0, IntPtr.Zero); };
@@ -291,18 +306,20 @@ namespace SimpleClassicThemeTaskbar
                     exit.Click += delegate { selfClose = true; Close(); Application.Exit(); };
 
                     //Add all menu items
-                    d.MenuItems.Add(toolbars);
-                    d.MenuItems.Add(seperator1);
-                    d.MenuItems.Add(cascadeWindows);
-                    d.MenuItems.Add(showWindowsStacked);
-                    d.MenuItems.Add(showWindowsSideBySide);
-                    d.MenuItems.Add(showDesktop);
-                    d.MenuItems.Add(seperator2);
-                    d.MenuItems.Add(taskManager);
-                    d.MenuItems.Add(seperator3);
-                    d.MenuItems.Add(lockTaskbar);
-                    d.MenuItems.Add(settings);
-                    d.MenuItems.Add(exit);
+                    d.Items.Add(toolbars);
+                    d.Items.Add(seperator1);
+                    d.Items.Add(cascadeWindows);
+                    d.Items.Add(showWindowsStacked);
+                    d.Items.Add(showWindowsSideBySide);
+                    d.Items.Add(showDesktop);
+                    d.Items.Add(seperator2);
+                    d.Items.Add(taskManager);
+                    d.Items.Add(seperator3);
+                    d.Items.Add(lockTaskbar);
+                    d.Items.Add(settings);
+                    d.Items.Add(exit);
+
+                    d.RenderMode = ToolStripRenderMode.Professional;
                 }
                 //Show the context menu
                 d.Show(this, e.Location);
@@ -336,15 +353,11 @@ namespace SimpleClassicThemeTaskbar
                     EnumWindows(callback, 0);
                     LookingForTray = false;
 
-                    Screen scrr = Screen.FromHandle(CrossThreadHandle);
-                    Rectangle rct = scrr.Bounds;
-                    cppCode.SetWorkingArea(rct.Left, rct.Right, rct.Top, rct.Bottom - 28, Environment.OSVersion.Version.Major < 10);
-
                     if (NeverShow)
                     {
                         Screen screen = Screen.FromHandle(CrossThreadHandle);
                         Rectangle rect = screen.Bounds;
-                        cppCode.SetWorkingArea(rect.Left, rect.Right, rect.Top, rect.Bottom, Environment.OSVersion.Version.Major < 10);
+                        //cppCode.SetWorkingArea(rect.Left, rect.Right, rect.Top, rect.Bottom, Environment.OSVersion.Version.Major < 10);
                     }
 
                     foreach (Window w in windows)
@@ -381,11 +394,6 @@ namespace SimpleClassicThemeTaskbar
                     }
                     catch (Exception e) 
                     {
-#if DEBUG
-                        Console.WriteLine(e.StackTrace);
-                        throw e;
-#endif
-                        MessageBox.Show("Unhandled exception ocurred while drawing GUI", "Exiting");
                         if (ApplicationEntryPoint.SCTCompatMode)
                         {
                             File.WriteAllLines($"C:\\SCT\\Taskbar\\crash{DateTime.Now:yyyy-dd-M--HH-mm-ss}", new string[] {
@@ -395,18 +403,54 @@ namespace SimpleClassicThemeTaskbar
                                 e.Source
                             });
                         }
-                        selfClose = true; Close(); Application.Exit();
+                        if (ApplicationEntryPoint.ErrorCount < 2)
+                        {
+                            (ApplicationEntryPoint.ErrorSource as UserControlEx).Erroring = true;
+                            (ApplicationEntryPoint.ErrorSource as UserControlEx).Invalidate();
+                            (ApplicationEntryPoint.ErrorSource as UserControlEx).Update();
+                            (ApplicationEntryPoint.ErrorSource as UserControlEx).Refresh();
+                            Application.DoEvents();
+
+                            MessageBox.Show("Unhandled exception ocurred while drawing GUI", "Error");
+                            (ApplicationEntryPoint.ErrorSource as UserControlEx).Erroring = false;
+                            (ApplicationEntryPoint.ErrorSource as UserControlEx).Invalidate();
+                            (ApplicationEntryPoint.ErrorSource as UserControlEx).Update();
+                            (ApplicationEntryPoint.ErrorSource as UserControlEx).Refresh();
+                            Application.DoEvents();
+
+                            busy = false;
+
+                            ApplicationEntryPoint.ErrorCount++;
+						}
+                        else
+						{
+                            MessageBox.Show("3 unhandled exceptions occured, safely exiting", "Exiting");
+#if DEBUG
+                            throw e;
+#endif
+                            selfClose = true; Close(); Application.Exit();
+                        }
                     }
                 }));
                 if (selfClose)
-                    Thread.CurrentThread.Abort();
+                    return;
             }
         }
 
         public void UpdateGUI()
-		{
+		{   
             busy = true;
 
+            //Resize work area
+            Screen screen = Screen.FromHandle(CrossThreadHandle);
+            Rectangle rct = screen.Bounds;
+            rct.Height -= Height;
+            Point desiredLocation = new Point(rct.Left, rct.Bottom);
+            if (screen.WorkingArea.ToString() != rct.ToString())
+                cppCode.SetWorkingArea(rct.Left, rct.Right, rct.Top, rct.Bottom, Environment.OSVersion.Version.Major < 10, windows.Select(a => a.Handle).ToArray());
+            if (Location.ToString() != desiredLocation.ToString())
+                Location = desiredLocation;
+            
             //Get the foreground window (Used later)
             IntPtr ForegroundWindow = GetForegroundWindow();
             if (ForegroundWindow != Handle)

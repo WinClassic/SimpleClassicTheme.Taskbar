@@ -1,5 +1,9 @@
+#include "Taskbar.h"
 #include "UnmanagedCode.h"
 #include "ProcessData.h"
+#include <gdiplus.h>
+using namespace Gdiplus;
+#pragma comment (lib,"Gdiplus.lib")
 
 using namespace std;
 
@@ -20,7 +24,7 @@ WCHAR* SimpleClassicThemeTaskbar::UnmanagedCode::GetAppUserModelId(int pid)
 	return buffer;
 }
 
-void SimpleClassicThemeTaskbar::UnmanagedCode::SetWorkingArea(int left, int right, int top, int bottom, bool sendChange) 
+void SimpleClassicThemeTaskbar::UnmanagedCode::SetWorkingArea(int left, int right, int top, int bottom, bool sendChange, HWND* windows, int count) 
 {
 	RECT workarea = { 0 };
 
@@ -33,9 +37,26 @@ void SimpleClassicThemeTaskbar::UnmanagedCode::SetWorkingArea(int left, int righ
 	//Set the new work area and broadcast the change to all running applications
 	if (!SystemParametersInfo(SPI_SETWORKAREA, 0, &workarea, sendChange ? SPIF_SENDCHANGE | SPIF_UPDATEINIFILE : 0))
 	{
-		LPSTR error = 0;
-		if (FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM, NULL, GetLastError(), 0, (LPSTR)&error, 0, NULL) == 0);
-			MessageBox(0, error, "Could not change workarea", 0);
+		LPWSTR error = 0;
+		if (FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM, NULL, GetLastError(), 0, (LPWSTR)&error, 0, NULL) == 0);
+			MessageBox(0, error, L"Could not change workarea", 0);
+	}
+
+	//Unmaximize and maximize any maximized applications
+	if (count > 0)
+	{
+		for (int i = 0; i < count; i++)
+		{
+			HWND hwnd = windows[i];
+			WINDOWPLACEMENT placement = { 0 };
+			placement.length = sizeof(WINDOWPLACEMENT);
+			GetWindowPlacement(hwnd, &placement);
+			if (placement.showCmd == SW_SHOWMAXIMIZED)
+			{
+				ShowWindow(hwnd, SW_RESTORE);
+				ShowWindow(hwnd, SW_MAXIMIZE);
+			}
+		}
 	}
 }
 
@@ -92,6 +113,53 @@ bool SimpleClassicThemeTaskbar::UnmanagedCode::WindowIsOnCurrentDesktop(HWND hWn
 int SimpleClassicThemeTaskbar::UnmanagedCode::GetTrayButtonCount(HWND sysTray)
 {
 	return SendMessage(sysTray, TB_BUTTONCOUNT, 0, 0);
+}
+
+int SimpleClassicThemeTaskbar::UnmanagedCode::UnmanagedSCTT()
+{
+	const POINT ptZero = { 0, 0 };
+	HMONITOR monitor;
+	MSG msg;
+	BOOL bRet; 
+	GdiplusStartupInput gdiplusStartupInput;
+	ULONG_PTR           gdiplusToken;
+
+	_CrtSetReportMode(_CRT_WARN, _CRTDBG_MODE_FILE);
+	_CrtSetReportFile(_CRT_WARN, _CRTDBG_FILE_STDERR);
+	_CrtSetReportMode(_CRT_ERROR, _CRTDBG_MODE_FILE);
+	_CrtSetReportFile(_CRT_ERROR, _CRTDBG_FILE_STDERR);
+	_CrtSetReportMode(_CRT_ASSERT, _CRTDBG_MODE_FILE);
+	_CrtSetReportFile(_CRT_ASSERT, _CRTDBG_FILE_STDERR);
+
+	//Initialize GDI+.
+	GdiplusStartup(&gdiplusToken, &gdiplusStartupInput, NULL);
+
+	//Initialize a taskbar
+	Unmanaged::Taskbar tb(true);
+
+	//Get primary monitor working area and display the taskbar
+	monitor = MonitorFromPoint(ptZero, MONITOR_DEFAULTTOPRIMARY);
+	MONITORINFO monitorInfo = { 0 };
+	monitorInfo.cbSize = sizeof(MONITORINFO);
+	GetMonitorInfo(monitor, &monitorInfo);
+	tb.ShowOnScreen(monitorInfo.rcMonitor);
+
+	//Start the message loop. 
+	while ((bRet = GetMessage(&msg, NULL, 0, 0)) != 0)
+	{
+		if (bRet == -1)
+		{
+			//Handle the error and possibly exit
+		}
+		else
+		{
+			TranslateMessage(&msg);
+			DispatchMessage(&msg);
+		}
+	}
+	CloseHandle(monitor);
+
+	return 0;
 }
 
 struct TRAYDATA
@@ -154,6 +222,9 @@ SimpleClassicThemeTaskbar::UnmanagedCode::TRAYBUTTONINFO SimpleClassicThemeTaskb
 	tbinfo.icon = tray.hIcon;
 	tbinfo.callbackMessage = tray.uCallbackMessage;
 	tbinfo.id = tray.uID;
+
+	//Free process data handle
+	data.~CProcessData();
 
 	//Return the info struct
 	return tbinfo;

@@ -1,352 +1,62 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
-    <ProductVersion>8.0.30703</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{340EC021-CF3C-46F7-ABF6-57B87B0591CF}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SimpleClassicThemeTaskbar</RootNamespace>
+    <TargetFramework>net5.0-windows</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+	  <RootNamespace>SimpleClassicThemeTaskbar</RootNamespace>
     <AssemblyName>SimpleClassicThemeTaskbar</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
-    <TargetFrameworkProfile>
-    </TargetFrameworkProfile>
-    <FileAlignment>512</FileAlignment>
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
+    <Deterministic>false</Deterministic>
+	<Platforms>x86;x64</Platforms>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
-    <PlatformTarget>x86</PlatformTarget>
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\x86\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
-    <PlatformTarget>x86</PlatformTarget>
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\x86\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\AMD64\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <DebugType>full</DebugType>
-    <PlatformTarget>x64</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <Prefer32Bit>false</Prefer32Bit>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
-    <OutputPath>bin\AMD64\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>x64</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <Prefer32Bit>false</Prefer32Bit>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <DebugType>full</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <Prefer32Bit>false</Prefer32Bit>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <Prefer32Bit>false</Prefer32Bit>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-  </PropertyGroup>
-  <PropertyGroup>
-    <ApplicationManifest>App.manifest</ApplicationManifest>
-  </PropertyGroup>
-  <PropertyGroup>
-    <ApplicationIcon>SimpleClassicTheme.ico</ApplicationIcon>
-  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="binaries\**" />
+    <Compile Remove="tools\**" />
+    <EmbeddedResource Remove="binaries\**" />
+    <EmbeddedResource Remove="tools\**" />
+    <None Remove="binaries\**" />
+    <None Remove="tools\**" />
+    <None Include="..\..\..\..\..\Desktop\Simple Classic Theme Family Artwork\Icons\SimpleClassicTheme.ico">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+  </ItemGroup>
+  
   <ItemGroup>
     <Reference Include="ManagedWifi">
       <HintPath>..\libraries\ManagedWifi.dll</HintPath>
     </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Management" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Deployment" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Forms\GraphicsTest.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\GraphicsTest.Designer.cs">
-      <DependentUpon>GraphicsTest.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\NetworkPasswordPrompt.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\NetworkPasswordPrompt.Designer.cs">
-      <DependentUpon>NetworkPasswordPrompt.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\NetworkUI.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\NetworkUI.Designer.cs">
-      <DependentUpon>NetworkUI.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\PopupTaskbarGroup.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\PopupTaskbarGroup.Designer.cs">
-      <DependentUpon>PopupTaskbarGroup.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\SettingsAddProgramFilter.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\SettingsAddProgramFilter.Designer.cs">
-      <DependentUpon>SettingsAddProgramFilter.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\Taskbar_Win32.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Helper Classes\Enums.cs" />
-    <Compile Include="Helper Classes\Win32Icon.cs" />
-    <Compile Include="UI Elements\Active Programs\BaseTaskbarProgram.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UI Elements\Active Programs\BaseTaskbarProgram.Designer.cs">
-      <DependentUpon>BaseTaskbarProgram.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UI Elements\Active Programs\GroupedTaskbarProgram.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UI Elements\Active Programs\SingleTaskbarProgram.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UI Elements\Misc\BetterToolTip.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="UI Elements\Misc\DoubleBufferedPanel.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="UI Elements\NetworkUI\NetworkControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UI Elements\NetworkUI\NetworkControl.Designer.cs">
-      <DependentUpon>NetworkControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UI Elements\Quick Launch Toolbar\QuickLaunchIcon.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UI Elements\Quick Launch Toolbar\QuickLaunchIcon.Designer.cs">
-      <DependentUpon>QuickLaunchIcon.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UI Elements\Misc\BetterBorderPanel.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="UI Elements\Misc\BetterBorderPanel.Designer.cs">
-      <DependentUpon>BetterBorderPanel.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Helper Classes\Config.cs" />
-    <Compile Include="Helper Classes\Keyboard.cs" />
-    <Compile Include="UI Elements\Quick Launch Toolbar\QuickLaunch.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UI Elements\Quick Launch Toolbar\QuickLaunch.Designer.cs">
-      <DependentUpon>QuickLaunch.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\Settings.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\Settings.Designer.cs">
-      <DependentUpon>Settings.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UI Elements\Start Button\StartButton.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UI Elements\Start Button\StartButton.Designer.cs">
-      <DependentUpon>StartButton.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UI Elements\System Tray\SystemTray.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UI Elements\System Tray\SystemTray.Designer.cs">
-      <DependentUpon>SystemTray.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UI Elements\System Tray\SystemTrayIcon.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="UI Elements\Active Programs\TaskbarProgram.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UI Elements\Active Programs\TaskbarProgram.Designer.cs">
-      <DependentUpon>TaskbarProgram.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UI Elements\Misc\VerticalDivider.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UI Elements\Misc\VerticalDivider.Designer.cs">
-      <DependentUpon>VerticalDivider.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\Taskbar.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\Form1.Designer.cs">
-      <DependentUpon>Taskbar.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ApplicationEntryPoint.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Helper Classes\Win32Structs.cs" />
-    <EmbeddedResource Include="Forms\GraphicsTest.resx">
-      <DependentUpon>GraphicsTest.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\NetworkPasswordPrompt.resx">
-      <DependentUpon>NetworkPasswordPrompt.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\NetworkUI.resx">
-      <DependentUpon>NetworkUI.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\PopupTaskbarGroup.resx">
-      <DependentUpon>PopupTaskbarGroup.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\Settings.nl.resx">
-      <DependentUpon>Settings.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\SettingsAddProgramFilter.resx">
-      <DependentUpon>SettingsAddProgramFilter.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <EmbeddedResource Include="UI Elements\NetworkUI\NetworkControl.resx">
-      <DependentUpon>NetworkControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UI Elements\Quick Launch Toolbar\QuickLaunch.resx">
-      <DependentUpon>QuickLaunch.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\Settings.nl-NL.resx">
-      <DependentUpon>Settings.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\Settings.resx">
-      <DependentUpon>Settings.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UI Elements\Quick Launch Toolbar\QuickLaunchIcon.resx">
-      <DependentUpon>QuickLaunchIcon.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UI Elements\Start Button\StartButton.resx">
-      <DependentUpon>StartButton.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UI Elements\System Tray\SystemTray.resx">
-      <DependentUpon>SystemTray.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UI Elements\Active Programs\TaskbarProgram.resx">
-      <DependentUpon>TaskbarProgram.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UI Elements\Misc\VerticalDivider.resx">
-      <DependentUpon>VerticalDivider.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\Taskbar.resx">
-      <DependentUpon>Taskbar.cs</DependentUpon>
-    </EmbeddedResource>
-    <None Include="..\.editorconfig">
-      <Link>.editorconfig</Link>
-    </None>
-    <None Include="app.config" />
-    <None Include="App.manifest" />
-    <None Include="packages.config" />
-    <None Include="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-    </None>
-    <Compile Include="Properties\Settings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Settings.settings</DependentUpon>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-    </Compile>
+    <ProjectReference Include="..\SimpleClassicThemeTaskbar.CodeBridge\SimpleClassicThemeTaskbar.CodeBridge.vcxproj" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\startDepressed.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\startPressed.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\startIcon.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\startIcon95.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\win98scttbanner.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\wifiIconTemp.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\lock.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\logo_sctt.png" />
-    <None Include="Resources\SCT+T Banner 708x111.png" />
-    <None Include="Resources\SimpleClassicTheme.ico" />
-    <None Include="Resources\SCT+T Banner 708x106.png" />
-    <None Include="Resources\SCTT Banner 708x107.png" />
-    <Content Include="SimpleClassicTheme.ico" />
-    <Content Include="win98.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\SimpleClassicThemeTaskbar.CodeBridge\SimpleClassicThemeTaskbar.CodeBridge.vcxproj">
-      <Project>{11b39786-bd1c-49d1-8c9f-5823b0c8c12e}</Project>
-      <Name>SimpleClassicThemeTaskbar.CodeBridge</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="&quot;$(ProjectDir)tools\package.bat&quot; &quot;$(TargetPath)&quot; &quot;$(ProjectDir)&quot; &quot;$(PlatformName)&quot; &quot;$(ConfigurationName)&quot; &quot;$(TargetDir)&quot;" />
+  </Target>
   <PropertyGroup>
-    <PostBuildEvent>"$(ProjectDir)tools\package.bat" "$(TargetPath)" "$(ProjectDir)" "$(PlatformName)" "$(ConfigurationName)" "$(TargetDir)"</PostBuildEvent>
+    <PostBuildEvent></PostBuildEvent>
   </PropertyGroup>
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+  <PropertyGroup>
+   <LangVersion>preview</LangVersion>
+   <StartupObject>SimpleClassicThemeTaskbar.ApplicationEntryPoint</StartupObject>
+   <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
+   <PackageIcon>SimpleClassicTheme.ico</PackageIcon>
+   <ApplicationIcon>SimpleClassicTheme.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+
 </Project>

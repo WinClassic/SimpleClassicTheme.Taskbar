@@ -22,7 +22,15 @@ namespace SimpleClassicThemeTaskbar
         public override Icon Icon { get => icon; set => icon = value; }
         public override Image IconImage { get { try { return new Icon(Icon, 16, 16).ToBitmap(); } catch { return null; } } }
 
-        public override bool IsActiveWindow(IntPtr activeWindow)
+        public override string GetErrorString()
+            => GetBaseErrorString() +
+            $"Process: {Process.MainModule.ModuleName} ({Process.Id})\n" +
+            $"Window title: {Title}\n" +
+            $"Window class: {Window.ClassName}\n" +
+            $"Window HWND: {Window.Handle:X8} {(IsWindow(Window.Handle) ? "Valid" : "Invalid")}\n" +
+            $"Icon HWND: {Icon.Handle:X8} ({(IsWindow(Icon.Handle) ? "Valid" : "Invalid")})";
+
+		public override bool IsActiveWindow(IntPtr activeWindow)
         {
             bool result = activeWindow == Window.Handle;
             ActiveWindow = result;
@@ -33,6 +41,8 @@ namespace SimpleClassicThemeTaskbar
 
         public override void OnClick(object sender, MouseEventArgs e)
 		{
+            ApplicationEntryPoint.ErrorSource = this;
+            controlState = "handling mouse click";
             if (IsMoving)
             {
                 IsMoving = false;

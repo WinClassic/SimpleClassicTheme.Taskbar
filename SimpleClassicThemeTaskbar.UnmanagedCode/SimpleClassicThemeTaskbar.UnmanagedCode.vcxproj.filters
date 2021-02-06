@@ -13,6 +13,12 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Source Files\UI Components">
+      <UniqueIdentifier>{48aefc74-49a7-4f71-9de0-e47744d71332}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\UI Components">
+      <UniqueIdentifier>{93042088-0ce7-4c50-b2e6-6234a6550c27}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="UnmanagedCode.cpp">
@@ -22,6 +28,27 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="BackgroundThread.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ApplicationWindow.cpp">
+      <Filter>Source Files\UI Components</Filter>
+    </ClCompile>
+    <ClCompile Include="ButtonWindow.cpp">
+      <Filter>Source Files\UI Components</Filter>
+    </ClCompile>
+    <ClCompile Include="BaseWindow.cpp">
+      <Filter>Source Files\UI Components</Filter>
+    </ClCompile>
+    <ClCompile Include="StartWindow.cpp">
+      <Filter>Source Files\UI Components</Filter>
+    </ClCompile>
+    <ClCompile Include="TaskListWindow.cpp">
+      <Filter>Source Files\UI Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Win32Window.cpp">
+      <Filter>Source Files\UI Components</Filter>
+    </ClCompile>
+    <ClCompile Include="ComponentRenderer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -36,6 +63,30 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="BackgroundThread.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ApplicationWindow.h">
+      <Filter>Header Files\UI Components</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseWindow.h">
+      <Filter>Header Files\UI Components</Filter>
+    </ClInclude>
+    <ClInclude Include="ButtonWindow.h">
+      <Filter>Header Files\UI Components</Filter>
+    </ClInclude>
+    <ClInclude Include="StartWindow.h">
+      <Filter>Header Files\UI Components</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TaskListWindow.h">
+      <Filter>Header Files\UI Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Win32Window.h">
+      <Filter>Header Files\UI Components</Filter>
+    </ClInclude>
+    <ClInclude Include="ComponentRenderer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

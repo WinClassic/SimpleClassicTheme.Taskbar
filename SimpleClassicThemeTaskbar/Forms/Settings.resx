@@ -112,27 +112,27 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="buttonApply.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Bottom, Right</value>
   </data>
   <data name="buttonApply.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
-  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-  <data name="buttonApply.Location" type="System.Drawing.Point, System.Drawing">
+  <assembly alias="System.Drawing.Primitives" name="System.Drawing.Primitives, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="buttonApply.Location" type="System.Drawing.Point, System.Drawing.Primitives">
     <value>641, 432</value>
   </data>
-  <data name="buttonApply.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="buttonApply.Size" type="System.Drawing.Size, System.Drawing.Primitives">
     <value>75, 23</value>
   </data>
-  <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="buttonApply.TabIndex" type="System.Int32, mscorlib">
+  <assembly alias="System.Runtime" name="System.Runtime, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="buttonApply.TabIndex" type="System.Int32, System.Runtime">
     <value>2</value>
   </data>
   <data name="buttonApply.Text" xml:space="preserve">
@@ -156,13 +156,13 @@
   <data name="buttonCancel.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
-  <data name="buttonCancel.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="buttonCancel.Location" type="System.Drawing.Point, System.Drawing.Primitives">
     <value>560, 432</value>
   </data>
-  <data name="buttonCancel.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="buttonCancel.Size" type="System.Drawing.Size, System.Drawing.Primitives">
     <value>75, 23</value>
   </data>
-  <data name="buttonCancel.TabIndex" type="System.Int32, mscorlib">
+  <data name="buttonCancel.TabIndex" type="System.Int32, System.Runtime">
     <value>3</value>
   </data>
   <data name="buttonCancel.Text" xml:space="preserve">
@@ -186,13 +186,13 @@
   <data name="buttonOK.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
-  <data name="buttonOK.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="buttonOK.Location" type="System.Drawing.Point, System.Drawing.Primitives">
     <value>479, 432</value>
   </data>
-  <data name="buttonOK.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="buttonOK.Size" type="System.Drawing.Size, System.Drawing.Primitives">
     <value>75, 23</value>
   </data>
-  <data name="buttonOK.TabIndex" type="System.Int32, mscorlib">
+  <data name="buttonOK.TabIndex" type="System.Int32, System.Runtime">
     <value>4</value>
   </data>
   <data name="buttonOK.Text" xml:space="preserve">
@@ -354,16 +354,17 @@
   <data name="&gt;&gt;label1.ZOrder" xml:space="preserve">
     <value>11</value>
   </data>
-  <data name="tabTaskviewAppearance.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="tabTaskviewAppearance.Location" type="System.Drawing.Point, System.Drawing.Primitives">
     <value>4, 22</value>
   </data>
-  <data name="tabTaskviewAppearance.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+  <assembly alias="System.Windows.Forms.Primitives" name="System.Windows.Forms.Primitives, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="tabTaskviewAppearance.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms.Primitives">
     <value>3, 3, 3, 3</value>
   </data>
-  <data name="tabTaskviewAppearance.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="tabTaskviewAppearance.Size" type="System.Drawing.Size, System.Drawing.Primitives">
     <value>702, 395</value>
   </data>
-  <data name="tabTaskviewAppearance.TabIndex" type="System.Int32, mscorlib">
+  <data name="tabTaskviewAppearance.TabIndex" type="System.Int32, System.Runtime">
     <value>0</value>
   </data>
   <data name="tabTaskviewAppearance.Text" xml:space="preserve">
@@ -429,13 +430,13 @@
   <data name="&gt;&gt;enableQuickLaunch.ZOrder" xml:space="preserve">
     <value>3</value>
   </data>
-  <data name="groupBox2.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="groupBox2.Location" type="System.Drawing.Point, System.Drawing.Primitives">
     <value>8, 243</value>
   </data>
-  <data name="groupBox2.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="groupBox2.Size" type="System.Drawing.Size, System.Drawing.Primitives">
     <value>685, 95</value>
   </data>
-  <data name="groupBox2.TabIndex" type="System.Int32, mscorlib">
+  <data name="groupBox2.TabIndex" type="System.Int32, System.Runtime">
     <value>32</value>
   </data>
   <data name="groupBox2.Text" xml:space="preserve">
@@ -453,25 +454,26 @@
   <data name="&gt;&gt;groupBox2.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
-  <data name="label7.Font" type="System.Drawing.Font, System.Drawing">
+  <assembly alias="System.Drawing.Common" name="System.Drawing.Common, Version=5.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51" />
+  <data name="label7.Font" type="System.Drawing.Font, System.Drawing.Common">
     <value>Franklin Gothic Medium, 10pt, style=Bold</value>
   </data>
   <data name="label7.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
-  <data name="label7.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="label7.Location" type="System.Drawing.Point, System.Drawing.Primitives">
     <value>3, 341</value>
   </data>
-  <data name="label7.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="label7.Size" type="System.Drawing.Size, System.Drawing.Primitives">
     <value>696, 45</value>
   </data>
-  <data name="label7.TabIndex" type="System.Int32, mscorlib">
+  <data name="label7.TabIndex" type="System.Int32, System.Runtime">
     <value>31</value>
   </data>
   <data name="label7.Text" xml:space="preserve">
-    <value>This software is in alpha stages. Unexpected issues can occur.</value>
+    <value>This software is in beta stages. Unexpected issues can occur.</value>
   </data>
-  <data name="label7.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+  <data name="label7.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing.Common">
     <value>MiddleCenter</value>
   </data>
   <data name="&gt;&gt;label7.Name" xml:space="preserve">
@@ -486,19 +488,19 @@
   <data name="&gt;&gt;label7.ZOrder" xml:space="preserve">
     <value>1</value>
   </data>
-  <data name="label4.AutoSize" type="System.Boolean, mscorlib">
+  <data name="label4.AutoSize" type="System.Boolean, System.Runtime">
     <value>True</value>
   </data>
   <data name="label4.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
-  <data name="label4.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="label4.Location" type="System.Drawing.Point, System.Drawing.Primitives">
     <value>26, 139</value>
   </data>
-  <data name="label4.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="label4.Size" type="System.Drawing.Size, System.Drawing.Primitives">
     <value>48, 13</value>
   </data>
-  <data name="label4.TabIndex" type="System.Int32, mscorlib">
+  <data name="label4.TabIndex" type="System.Int32, System.Runtime">
     <value>30</value>
   </data>
   <data name="label4.Text" xml:space="preserve">
@@ -516,13 +518,13 @@
   <data name="&gt;&gt;label4.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
-  <data name="startButton1.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="startButton1.Location" type="System.Drawing.Point, System.Drawing.Primitives">
     <value>29, 155</value>
   </data>
-  <data name="startButton1.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="startButton1.Size" type="System.Drawing.Size, System.Drawing.Primitives">
     <value>55, 22</value>
   </data>
-  <data name="startButton1.TabIndex" type="System.Int32, mscorlib">
+  <data name="startButton1.TabIndex" type="System.Int32, System.Runtime">
     <value>29</value>
   </data>
   <data name="&gt;&gt;startButton1.Name" xml:space="preserve">
@@ -540,13 +542,13 @@
   <data name="button1.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
-  <data name="button1.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="button1.Location" type="System.Drawing.Point, System.Drawing.Primitives">
     <value>582, 152</value>
   </data>
-  <data name="button1.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="button1.Size" type="System.Drawing.Size, System.Drawing.Primitives">
     <value>75, 23</value>
   </data>
-  <data name="button1.TabIndex" type="System.Int32, mscorlib">
+  <data name="button1.TabIndex" type="System.Int32, System.Runtime">
     <value>4</value>
   </data>
   <data name="button1.Text" xml:space="preserve">
@@ -564,13 +566,13 @@
   <data name="&gt;&gt;button1.ZOrder" xml:space="preserve">
     <value>2</value>
   </data>
-  <data name="textStartLocation.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="textStartLocation.Location" type="System.Drawing.Point, System.Drawing.Primitives">
     <value>29, 181</value>
   </data>
-  <data name="textStartLocation.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="textStartLocation.Size" type="System.Drawing.Size, System.Drawing.Primitives">
     <value>628, 20</value>
   </data>
-  <data name="textStartLocation.TabIndex" type="System.Int32, mscorlib">
+  <data name="textStartLocation.TabIndex" type="System.Int32, System.Runtime">
     <value>3</value>
   </data>
   <data name="&gt;&gt;textStartLocation.Name" xml:space="preserve">
@@ -585,19 +587,19 @@
   <data name="&gt;&gt;textStartLocation.ZOrder" xml:space="preserve">
     <value>3</value>
   </data>
-  <data name="radioStartButton.AutoSize" type="System.Boolean, mscorlib">
+  <data name="radioStartButton.AutoSize" type="System.Boolean, System.Runtime">
     <value>True</value>
   </data>
   <data name="radioStartButton.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
-  <data name="radioStartButton.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="radioStartButton.Location" type="System.Drawing.Point, System.Drawing.Primitives">
     <value>26, 69</value>
   </data>
-  <data name="radioStartButton.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="radioStartButton.Size" type="System.Drawing.Size, System.Drawing.Primitives">
     <value>93, 17</value>
   </data>
-  <data name="radioStartButton.TabIndex" type="System.Int32, mscorlib">
+  <data name="radioStartButton.TabIndex" type="System.Int32, System.Runtime">
     <value>2</value>
   </data>
   <data name="radioStartButton.Text" xml:space="preserve">
@@ -615,19 +617,19 @@
   <data name="&gt;&gt;radioStartButton.ZOrder" xml:space="preserve">
     <value>4</value>
   </data>
-  <data name="radioStartIcon.AutoSize" type="System.Boolean, mscorlib">
+  <data name="radioStartIcon.AutoSize" type="System.Boolean, System.Runtime">
     <value>True</value>
   </data>
   <data name="radioStartIcon.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
-  <data name="radioStartIcon.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="radioStartIcon.Location" type="System.Drawing.Point, System.Drawing.Primitives">
     <value>26, 46</value>
   </data>
-  <data name="radioStartIcon.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="radioStartIcon.Size" type="System.Drawing.Size, System.Drawing.Primitives">
     <value>83, 17</value>
   </data>
-  <data name="radioStartIcon.TabIndex" type="System.Int32, mscorlib">
+  <data name="radioStartIcon.TabIndex" type="System.Int32, System.Runtime">
     <value>1</value>
   </data>
   <data name="radioStartIcon.Text" xml:space="preserve">
@@ -645,19 +647,19 @@
   <data name="&gt;&gt;radioStartIcon.ZOrder" xml:space="preserve">
     <value>5</value>
   </data>
-  <data name="radioStartDefault.AutoSize" type="System.Boolean, mscorlib">
+  <data name="radioStartDefault.AutoSize" type="System.Boolean, System.Runtime">
     <value>True</value>
   </data>
   <data name="radioStartDefault.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
-  <data name="radioStartDefault.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="radioStartDefault.Location" type="System.Drawing.Point, System.Drawing.Primitives">
     <value>26, 23</value>
   </data>
-  <data name="radioStartDefault.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="radioStartDefault.Size" type="System.Drawing.Size, System.Drawing.Primitives">
     <value>115, 17</value>
   </data>
-  <data name="radioStartDefault.TabIndex" type="System.Int32, mscorlib">
+  <data name="radioStartDefault.TabIndex" type="System.Int32, System.Runtime">
     <value>0</value>
   </data>
   <data name="radioStartDefault.Text" xml:space="preserve">
@@ -675,13 +677,13 @@
   <data name="&gt;&gt;radioStartDefault.ZOrder" xml:space="preserve">
     <value>6</value>
   </data>
-  <data name="groupBox1.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="groupBox1.Location" type="System.Drawing.Point, System.Drawing.Primitives">
     <value>8, 6</value>
   </data>
-  <data name="groupBox1.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="groupBox1.Size" type="System.Drawing.Size, System.Drawing.Primitives">
     <value>685, 231</value>
   </data>
-  <data name="groupBox1.TabIndex" type="System.Int32, mscorlib">
+  <data name="groupBox1.TabIndex" type="System.Int32, System.Runtime">
     <value>29</value>
   </data>
   <data name="groupBox1.Text" xml:space="preserve">
@@ -699,16 +701,16 @@
   <data name="&gt;&gt;groupBox1.ZOrder" xml:space="preserve">
     <value>2</value>
   </data>
-  <data name="tabStartButtonAppearance.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="tabStartButtonAppearance.Location" type="System.Drawing.Point, System.Drawing.Primitives">
     <value>4, 22</value>
   </data>
-  <data name="tabStartButtonAppearance.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+  <data name="tabStartButtonAppearance.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms.Primitives">
     <value>3, 3, 3, 3</value>
   </data>
-  <data name="tabStartButtonAppearance.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="tabStartButtonAppearance.Size" type="System.Drawing.Size, System.Drawing.Primitives">
     <value>702, 395</value>
   </data>
-  <data name="tabStartButtonAppearance.TabIndex" type="System.Int32, mscorlib">
+  <data name="tabStartButtonAppearance.TabIndex" type="System.Int32, System.Runtime">
     <value>2</value>
   </data>
   <data name="tabStartButtonAppearance.Text" xml:space="preserve">
@@ -786,13 +788,13 @@
   <data name="&gt;&gt;enableSysTrayHover.ZOrder" xml:space="preserve">
     <value>4</value>
   </data>
-  <data name="tabSysTrayAppearance.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="tabSysTrayAppearance.Location" type="System.Drawing.Point, System.Drawing.Primitives">
     <value>4, 22</value>
   </data>
-  <data name="tabSysTrayAppearance.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="tabSysTrayAppearance.Size" type="System.Drawing.Size, System.Drawing.Primitives">
     <value>702, 395</value>
   </data>
-  <data name="tabSysTrayAppearance.TabIndex" type="System.Int32, mscorlib">
+  <data name="tabSysTrayAppearance.TabIndex" type="System.Int32, System.Runtime">
     <value>3</value>
   </data>
   <data name="tabSysTrayAppearance.Text" xml:space="preserve">
@@ -894,16 +896,16 @@
   <data name="&gt;&gt;labelCopyrightSCTT.ZOrder" xml:space="preserve">
     <value>6</value>
   </data>
-  <data name="tabAbout.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="tabAbout.Location" type="System.Drawing.Point, System.Drawing.Primitives">
     <value>4, 22</value>
   </data>
-  <data name="tabAbout.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+  <data name="tabAbout.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms.Primitives">
     <value>3, 3, 3, 3</value>
   </data>
-  <data name="tabAbout.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="tabAbout.Size" type="System.Drawing.Size, System.Drawing.Primitives">
     <value>702, 395</value>
   </data>
-  <data name="tabAbout.TabIndex" type="System.Int32, mscorlib">
+  <data name="tabAbout.TabIndex" type="System.Int32, System.Runtime">
     <value>1</value>
   </data>
   <data name="tabAbout.Text" xml:space="preserve">
@@ -921,13 +923,13 @@
   <data name="&gt;&gt;tabAbout.ZOrder" xml:space="preserve">
     <value>3</value>
   </data>
-  <data name="settingsTabs.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="settingsTabs.Location" type="System.Drawing.Point, System.Drawing.Primitives">
     <value>6, 5</value>
   </data>
-  <data name="settingsTabs.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="settingsTabs.Size" type="System.Drawing.Size, System.Drawing.Primitives">
     <value>710, 421</value>
   </data>
-  <data name="settingsTabs.TabIndex" type="System.Int32, mscorlib">
+  <data name="settingsTabs.TabIndex" type="System.Int32, System.Runtime">
     <value>5</value>
   </data>
   <data name="&gt;&gt;settingsTabs.Name" xml:space="preserve">
@@ -945,107 +947,59 @@
   <data name="button3.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
-  <data name="button3.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="button3.Location" type="System.Drawing.Point, System.Drawing.Primitives">
     <value>619, 214</value>
   </data>
-  <data name="button3.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="button3.Size" type="System.Drawing.Size, System.Drawing.Primitives">
     <value>51, 23</value>
   </data>
-  <data name="button3.TabIndex" type="System.Int32, mscorlib">
+  <data name="button3.TabIndex" type="System.Int32, System.Runtime">
     <value>36</value>
   </data>
   <data name="button3.Text" xml:space="preserve">
     <value>-</value>
   </data>
-  <data name="&gt;&gt;button3.Name" xml:space="preserve">
-    <value>button3</value>
-  </data>
-  <data name="&gt;&gt;button3.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;button3.Parent" xml:space="preserve">
-    <value>tabTaskviewAppearance</value>
-  </data>
-  <data name="&gt;&gt;button3.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
   <data name="button2.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
-  <data name="button2.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="button2.Location" type="System.Drawing.Point, System.Drawing.Primitives">
     <value>550, 214</value>
   </data>
-  <data name="button2.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="button2.Size" type="System.Drawing.Size, System.Drawing.Primitives">
     <value>51, 23</value>
   </data>
-  <data name="button2.TabIndex" type="System.Int32, mscorlib">
+  <data name="button2.TabIndex" type="System.Int32, System.Runtime">
     <value>35</value>
   </data>
   <data name="button2.Text" xml:space="preserve">
     <value>+</value>
   </data>
-  <data name="&gt;&gt;button2.Name" xml:space="preserve">
-    <value>button2</value>
-  </data>
-  <data name="&gt;&gt;button2.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;button2.Parent" xml:space="preserve">
-    <value>tabTaskviewAppearance</value>
-  </data>
-  <data name="&gt;&gt;button2.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="label11.AutoSize" type="System.Boolean, mscorlib">
+  <data name="label11.AutoSize" type="System.Boolean, System.Runtime">
     <value>True</value>
   </data>
   <data name="label11.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
-  <data name="label11.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="label11.Location" type="System.Drawing.Point, System.Drawing.Primitives">
     <value>26, 139</value>
   </data>
-  <data name="label11.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="label11.Size" type="System.Drawing.Size, System.Drawing.Primitives">
     <value>135, 13</value>
   </data>
-  <data name="label11.TabIndex" type="System.Int32, mscorlib">
+  <data name="label11.TabIndex" type="System.Int32, System.Runtime">
     <value>34</value>
   </data>
   <data name="label11.Text" xml:space="preserve">
     <value>Hide elements in the taskar</value>
   </data>
-  <data name="&gt;&gt;label11.Name" xml:space="preserve">
-    <value>label11</value>
-  </data>
-  <data name="&gt;&gt;label11.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;label11.Parent" xml:space="preserve">
-    <value>tabTaskviewAppearance</value>
-  </data>
-  <data name="&gt;&gt;label11.ZOrder" xml:space="preserve">
-    <value>2</value>
-  </data>
-  <data name="listBox1.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="listBox1.Location" type="System.Drawing.Point, System.Drawing.Primitives">
     <value>550, 139</value>
   </data>
-  <data name="listBox1.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="listBox1.Size" type="System.Drawing.Size, System.Drawing.Primitives">
     <value>120, 69</value>
   </data>
-  <data name="listBox1.TabIndex" type="System.Int32, mscorlib">
+  <data name="listBox1.TabIndex" type="System.Int32, System.Runtime">
     <value>33</value>
-  </data>
-  <data name="&gt;&gt;listBox1.Name" xml:space="preserve">
-    <value>listBox1</value>
-  </data>
-  <data name="&gt;&gt;listBox1.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ListBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;listBox1.Parent" xml:space="preserve">
-    <value>tabTaskviewAppearance</value>
-  </data>
-  <data name="&gt;&gt;listBox1.ZOrder" xml:space="preserve">
-    <value>3</value>
   </data>
   <data name="comboBoxGroupingMethod.Items" xml:space="preserve">
     <value>None</value>
@@ -1059,479 +1013,275 @@
   <data name="comboBoxGroupingMethod.Items3" xml:space="preserve">
     <value>Module Name</value>
   </data>
-  <data name="comboBoxGroupingMethod.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="comboBoxGroupingMethod.Location" type="System.Drawing.Point, System.Drawing.Primitives">
     <value>550, 73</value>
   </data>
-  <data name="comboBoxGroupingMethod.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="comboBoxGroupingMethod.Size" type="System.Drawing.Size, System.Drawing.Primitives">
     <value>120, 21</value>
   </data>
-  <data name="comboBoxGroupingMethod.TabIndex" type="System.Int32, mscorlib">
+  <data name="comboBoxGroupingMethod.TabIndex" type="System.Int32, System.Runtime">
     <value>32</value>
   </data>
-  <data name="&gt;&gt;comboBoxGroupingMethod.Name" xml:space="preserve">
-    <value>comboBoxGroupingMethod</value>
-  </data>
-  <data name="&gt;&gt;comboBoxGroupingMethod.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;comboBoxGroupingMethod.Parent" xml:space="preserve">
-    <value>tabTaskviewAppearance</value>
-  </data>
-  <data name="&gt;&gt;comboBoxGroupingMethod.ZOrder" xml:space="preserve">
-    <value>4</value>
-  </data>
-  <data name="label9.AutoSize" type="System.Boolean, mscorlib">
+  <data name="label9.AutoSize" type="System.Boolean, System.Runtime">
     <value>True</value>
   </data>
   <data name="label9.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
-  <data name="label9.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="label9.Location" type="System.Drawing.Point, System.Drawing.Primitives">
     <value>26, 75</value>
   </data>
-  <data name="label9.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="label9.Size" type="System.Drawing.Size, System.Drawing.Primitives">
     <value>226, 13</value>
   </data>
-  <data name="label9.TabIndex" type="System.Int32, mscorlib">
+  <data name="label9.TabIndex" type="System.Int32, System.Runtime">
     <value>31</value>
   </data>
   <data name="label9.Text" xml:space="preserve">
     <value>Grouping method for programs in the task view</value>
   </data>
-  <data name="&gt;&gt;label9.Name" xml:space="preserve">
-    <value>label9</value>
-  </data>
-  <data name="&gt;&gt;label9.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;label9.Parent" xml:space="preserve">
-    <value>tabTaskviewAppearance</value>
-  </data>
-  <data name="&gt;&gt;label9.ZOrder" xml:space="preserve">
-    <value>5</value>
-  </data>
-  <data name="label8.Font" type="System.Drawing.Font, System.Drawing">
+  <data name="label8.Font" type="System.Drawing.Font, System.Drawing.Common">
     <value>Franklin Gothic Medium, 10pt, style=Bold</value>
   </data>
   <data name="label8.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
-  <data name="label8.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="label8.Location" type="System.Drawing.Point, System.Drawing.Primitives">
     <value>3, 341</value>
   </data>
-  <data name="label8.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="label8.Size" type="System.Drawing.Size, System.Drawing.Primitives">
     <value>696, 45</value>
   </data>
-  <data name="label8.TabIndex" type="System.Int32, mscorlib">
+  <data name="label8.TabIndex" type="System.Int32, System.Runtime">
     <value>27</value>
   </data>
   <data name="label8.Text" xml:space="preserve">
-    <value>This software is in alpha stages. Unexpected issues can occur.</value>
+    <value>This software is in beta stages. Unexpected issues can occur.</value>
   </data>
-  <data name="label8.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+  <data name="label8.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing.Common">
     <value>MiddleCenter</value>
   </data>
-  <data name="&gt;&gt;label8.Name" xml:space="preserve">
-    <value>label8</value>
-  </data>
-  <data name="&gt;&gt;label8.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;label8.Parent" xml:space="preserve">
-    <value>tabTaskviewAppearance</value>
-  </data>
-  <data name="&gt;&gt;label8.ZOrder" xml:space="preserve">
-    <value>6</value>
-  </data>
-  <data name="label5.AutoSize" type="System.Boolean, mscorlib">
+  <data name="label5.AutoSize" type="System.Boolean, System.Runtime">
     <value>True</value>
   </data>
   <data name="label5.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
-  <data name="label5.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="label5.Location" type="System.Drawing.Point, System.Drawing.Primitives">
     <value>26, 49</value>
   </data>
-  <data name="label5.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="label5.Size" type="System.Drawing.Size, System.Drawing.Primitives">
     <value>166, 13</value>
   </data>
-  <data name="label5.TabIndex" type="System.Int32, mscorlib">
+  <data name="label5.TabIndex" type="System.Int32, System.Runtime">
     <value>18</value>
   </data>
   <data name="label5.Text" xml:space="preserve">
     <value>Space between taskbar programs</value>
   </data>
-  <data name="&gt;&gt;label5.Name" xml:space="preserve">
-    <value>label5</value>
-  </data>
-  <data name="&gt;&gt;label5.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;label5.Parent" xml:space="preserve">
-    <value>tabTaskviewAppearance</value>
-  </data>
-  <data name="&gt;&gt;label5.ZOrder" xml:space="preserve">
-    <value>7</value>
-  </data>
-  <data name="spaceBetweenTaskbarIcons.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="spaceBetweenTaskbarIcons.Location" type="System.Drawing.Point, System.Drawing.Primitives">
     <value>550, 47</value>
   </data>
-  <data name="spaceBetweenTaskbarIcons.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="spaceBetweenTaskbarIcons.Size" type="System.Drawing.Size, System.Drawing.Primitives">
     <value>120, 20</value>
   </data>
-  <data name="spaceBetweenTaskbarIcons.TabIndex" type="System.Int32, mscorlib">
+  <data name="spaceBetweenTaskbarIcons.TabIndex" type="System.Int32, System.Runtime">
     <value>17</value>
   </data>
-  <data name="&gt;&gt;spaceBetweenTaskbarIcons.Name" xml:space="preserve">
-    <value>spaceBetweenTaskbarIcons</value>
-  </data>
-  <data name="&gt;&gt;spaceBetweenTaskbarIcons.Type" xml:space="preserve">
-    <value>System.Windows.Forms.NumericUpDown, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;spaceBetweenTaskbarIcons.Parent" xml:space="preserve">
-    <value>tabTaskviewAppearance</value>
-  </data>
-  <data name="&gt;&gt;spaceBetweenTaskbarIcons.ZOrder" xml:space="preserve">
-    <value>8</value>
-  </data>
-  <data name="showTaskbarOnAllDesktops.AutoSize" type="System.Boolean, mscorlib">
+  <data name="showTaskbarOnAllDesktops.AutoSize" type="System.Boolean, System.Runtime">
     <value>True</value>
   </data>
   <data name="showTaskbarOnAllDesktops.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
-  <data name="showTaskbarOnAllDesktops.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="showTaskbarOnAllDesktops.Location" type="System.Drawing.Point, System.Drawing.Primitives">
     <value>29, 110</value>
   </data>
-  <data name="showTaskbarOnAllDesktops.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="showTaskbarOnAllDesktops.Size" type="System.Drawing.Size, System.Drawing.Primitives">
     <value>170, 17</value>
   </data>
-  <data name="showTaskbarOnAllDesktops.TabIndex" type="System.Int32, mscorlib">
+  <data name="showTaskbarOnAllDesktops.TabIndex" type="System.Int32, System.Runtime">
     <value>9</value>
   </data>
   <data name="showTaskbarOnAllDesktops.Text" xml:space="preserve">
     <value>Show a taskbar on all monitors</value>
   </data>
-  <data name="&gt;&gt;showTaskbarOnAllDesktops.Name" xml:space="preserve">
-    <value>showTaskbarOnAllDesktops</value>
-  </data>
-  <data name="&gt;&gt;showTaskbarOnAllDesktops.Type" xml:space="preserve">
-    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;showTaskbarOnAllDesktops.Parent" xml:space="preserve">
-    <value>tabTaskviewAppearance</value>
-  </data>
-  <data name="&gt;&gt;showTaskbarOnAllDesktops.ZOrder" xml:space="preserve">
-    <value>9</value>
-  </data>
-  <data name="taskbarProgramWidth.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="taskbarProgramWidth.Location" type="System.Drawing.Point, System.Drawing.Primitives">
     <value>550, 21</value>
   </data>
-  <data name="taskbarProgramWidth.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="taskbarProgramWidth.Size" type="System.Drawing.Size, System.Drawing.Primitives">
     <value>120, 20</value>
   </data>
-  <data name="taskbarProgramWidth.TabIndex" type="System.Int32, mscorlib">
+  <data name="taskbarProgramWidth.TabIndex" type="System.Int32, System.Runtime">
     <value>4</value>
   </data>
-  <data name="&gt;&gt;taskbarProgramWidth.Name" xml:space="preserve">
-    <value>taskbarProgramWidth</value>
-  </data>
-  <data name="&gt;&gt;taskbarProgramWidth.Type" xml:space="preserve">
-    <value>System.Windows.Forms.NumericUpDown, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;taskbarProgramWidth.Parent" xml:space="preserve">
-    <value>tabTaskviewAppearance</value>
-  </data>
-  <data name="&gt;&gt;taskbarProgramWidth.ZOrder" xml:space="preserve">
-    <value>10</value>
-  </data>
-  <data name="label1.AutoSize" type="System.Boolean, mscorlib">
+  <data name="label1.AutoSize" type="System.Boolean, System.Runtime">
     <value>True</value>
   </data>
   <data name="label1.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
-  <data name="label1.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="label1.Location" type="System.Drawing.Point, System.Drawing.Primitives">
     <value>26, 23</value>
   </data>
-  <data name="label1.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="label1.Size" type="System.Drawing.Size, System.Drawing.Primitives">
     <value>115, 13</value>
   </data>
-  <data name="label1.TabIndex" type="System.Int32, mscorlib">
+  <data name="label1.TabIndex" type="System.Int32, System.Runtime">
     <value>2</value>
   </data>
   <data name="label1.Text" xml:space="preserve">
     <value>Taskbar program width</value>
   </data>
-  <data name="&gt;&gt;label1.Name" xml:space="preserve">
-    <value>label1</value>
-  </data>
-  <data name="&gt;&gt;label1.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;label1.Parent" xml:space="preserve">
-    <value>tabTaskviewAppearance</value>
-  </data>
-  <data name="&gt;&gt;label1.ZOrder" xml:space="preserve">
-    <value>11</value>
-  </data>
-  <data name="label3.AutoSize" type="System.Boolean, mscorlib">
+  <data name="label3.AutoSize" type="System.Boolean, System.Runtime">
     <value>True</value>
   </data>
-  <data name="label3.Font" type="System.Drawing.Font, System.Drawing">
+  <data name="label3.Font" type="System.Drawing.Font, System.Drawing.Common">
     <value>Microsoft Sans Serif, 8.25pt, style=Underline</value>
   </data>
   <data name="label3.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
-  <data name="label3.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="label3.Location" type="System.Drawing.Point, System.Drawing.Primitives">
     <value>525, 23</value>
   </data>
-  <data name="label3.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="label3.Size" type="System.Drawing.Size, System.Drawing.Primitives">
     <value>132, 13</value>
   </data>
-  <data name="label3.TabIndex" type="System.Int32, mscorlib">
+  <data name="label3.TabIndex" type="System.Int32, System.Runtime">
     <value>23</value>
   </data>
   <data name="label3.Text" xml:space="preserve">
     <value>Open Quick Launch folder</value>
   </data>
-  <data name="&gt;&gt;label3.Name" xml:space="preserve">
-    <value>label3</value>
-  </data>
-  <data name="&gt;&gt;label3.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;label3.Parent" xml:space="preserve">
-    <value>groupBox2</value>
-  </data>
-  <data name="&gt;&gt;label3.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="label6.AutoSize" type="System.Boolean, mscorlib">
+  <data name="label6.AutoSize" type="System.Boolean, System.Runtime">
     <value>True</value>
   </data>
   <data name="label6.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
-  <data name="label6.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="label6.Location" type="System.Drawing.Point, System.Drawing.Primitives">
     <value>26, 23</value>
   </data>
-  <data name="label6.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="label6.Size" type="System.Drawing.Size, System.Drawing.Primitives">
     <value>180, 13</value>
   </data>
-  <data name="label6.TabIndex" type="System.Int32, mscorlib">
+  <data name="label6.TabIndex" type="System.Int32, System.Runtime">
     <value>22</value>
   </data>
   <data name="label6.Text" xml:space="preserve">
     <value>Space between Quick Launch icons</value>
   </data>
-  <data name="&gt;&gt;label6.Name" xml:space="preserve">
-    <value>label6</value>
-  </data>
-  <data name="&gt;&gt;label6.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;label6.Parent" xml:space="preserve">
-    <value>groupBox2</value>
-  </data>
-  <data name="&gt;&gt;label6.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="spaceBetweenQuickLaunchIcons.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="spaceBetweenQuickLaunchIcons.Location" type="System.Drawing.Point, System.Drawing.Primitives">
     <value>537, 55</value>
   </data>
-  <data name="spaceBetweenQuickLaunchIcons.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="spaceBetweenQuickLaunchIcons.Size" type="System.Drawing.Size, System.Drawing.Primitives">
     <value>120, 20</value>
   </data>
-  <data name="spaceBetweenQuickLaunchIcons.TabIndex" type="System.Int32, mscorlib">
+  <data name="spaceBetweenQuickLaunchIcons.TabIndex" type="System.Int32, System.Runtime">
     <value>21</value>
   </data>
-  <data name="&gt;&gt;spaceBetweenQuickLaunchIcons.Name" xml:space="preserve">
-    <value>spaceBetweenQuickLaunchIcons</value>
-  </data>
-  <data name="&gt;&gt;spaceBetweenQuickLaunchIcons.Type" xml:space="preserve">
-    <value>System.Windows.Forms.NumericUpDown, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;spaceBetweenQuickLaunchIcons.Parent" xml:space="preserve">
-    <value>groupBox2</value>
-  </data>
-  <data name="&gt;&gt;spaceBetweenQuickLaunchIcons.ZOrder" xml:space="preserve">
-    <value>2</value>
-  </data>
-  <data name="enableQuickLaunch.AutoSize" type="System.Boolean, mscorlib">
+  <data name="enableQuickLaunch.AutoSize" type="System.Boolean, System.Runtime">
     <value>True</value>
   </data>
   <data name="enableQuickLaunch.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
-  <data name="enableQuickLaunch.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="enableQuickLaunch.Location" type="System.Drawing.Point, System.Drawing.Primitives">
     <value>29, 55</value>
   </data>
-  <data name="enableQuickLaunch.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="enableQuickLaunch.Size" type="System.Drawing.Size, System.Drawing.Primitives">
     <value>158, 17</value>
   </data>
-  <data name="enableQuickLaunch.TabIndex" type="System.Int32, mscorlib">
+  <data name="enableQuickLaunch.TabIndex" type="System.Int32, System.Runtime">
     <value>14</value>
   </data>
   <data name="enableQuickLaunch.Text" xml:space="preserve">
     <value>Show Quick Launch toolbar</value>
   </data>
-  <data name="&gt;&gt;enableQuickLaunch.Name" xml:space="preserve">
-    <value>enableQuickLaunch</value>
-  </data>
-  <data name="&gt;&gt;enableQuickLaunch.Type" xml:space="preserve">
-    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;enableQuickLaunch.Parent" xml:space="preserve">
-    <value>groupBox2</value>
-  </data>
-  <data name="&gt;&gt;enableQuickLaunch.ZOrder" xml:space="preserve">
-    <value>3</value>
-  </data>
-  <data name="label10.Font" type="System.Drawing.Font, System.Drawing">
+  <data name="label10.Font" type="System.Drawing.Font, System.Drawing.Common">
     <value>Franklin Gothic Medium, 10pt, style=Bold</value>
   </data>
   <data name="label10.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
-  <data name="label10.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="label10.Location" type="System.Drawing.Point, System.Drawing.Primitives">
     <value>3, 341</value>
   </data>
-  <data name="label10.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="label10.Size" type="System.Drawing.Size, System.Drawing.Primitives">
     <value>696, 45</value>
   </data>
-  <data name="label10.TabIndex" type="System.Int32, mscorlib">
+  <data name="label10.TabIndex" type="System.Int32, System.Runtime">
     <value>34</value>
   </data>
   <data name="label10.Text" xml:space="preserve">
-    <value>This software is in alpha stages. Unexpected issues can occur.</value>
+    <value>This software is in beta stages. Unexpected issues can occur.</value>
   </data>
-  <data name="label10.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+  <data name="label10.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing.Common">
     <value>MiddleCenter</value>
   </data>
-  <data name="&gt;&gt;label10.Name" xml:space="preserve">
-    <value>label10</value>
-  </data>
-  <data name="&gt;&gt;label10.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;label10.Parent" xml:space="preserve">
-    <value>tabSysTrayAppearance</value>
-  </data>
-  <data name="&gt;&gt;label10.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="label2.AutoSize" type="System.Boolean, mscorlib">
+  <data name="label2.AutoSize" type="System.Boolean, System.Runtime">
     <value>True</value>
   </data>
   <data name="label2.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
-  <data name="label2.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="label2.Location" type="System.Drawing.Point, System.Drawing.Primitives">
     <value>26, 23</value>
   </data>
-  <data name="label2.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="label2.Size" type="System.Drawing.Size, System.Drawing.Primitives">
     <value>165, 13</value>
   </data>
-  <data name="label2.TabIndex" type="System.Int32, mscorlib">
+  <data name="label2.TabIndex" type="System.Int32, System.Runtime">
     <value>33</value>
   </data>
   <data name="label2.Text" xml:space="preserve">
     <value>Space between system tray icons</value>
   </data>
-  <data name="&gt;&gt;label2.Name" xml:space="preserve">
-    <value>label2</value>
-  </data>
-  <data name="&gt;&gt;label2.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;label2.Parent" xml:space="preserve">
-    <value>tabSysTrayAppearance</value>
-  </data>
-  <data name="&gt;&gt;label2.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="spaceBetweenTrayIcons.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="spaceBetweenTrayIcons.Location" type="System.Drawing.Point, System.Drawing.Primitives">
     <value>550, 21</value>
   </data>
-  <data name="spaceBetweenTrayIcons.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="spaceBetweenTrayIcons.Size" type="System.Drawing.Size, System.Drawing.Primitives">
     <value>120, 20</value>
   </data>
-  <data name="spaceBetweenTrayIcons.TabIndex" type="System.Int32, mscorlib">
+  <data name="spaceBetweenTrayIcons.TabIndex" type="System.Int32, System.Runtime">
     <value>32</value>
   </data>
-  <data name="&gt;&gt;spaceBetweenTrayIcons.Name" xml:space="preserve">
-    <value>spaceBetweenTrayIcons</value>
-  </data>
-  <data name="&gt;&gt;spaceBetweenTrayIcons.Type" xml:space="preserve">
-    <value>System.Windows.Forms.NumericUpDown, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;spaceBetweenTrayIcons.Parent" xml:space="preserve">
-    <value>tabSysTrayAppearance</value>
-  </data>
-  <data name="&gt;&gt;spaceBetweenTrayIcons.ZOrder" xml:space="preserve">
-    <value>2</value>
-  </data>
-  <data name="enableSysTrayColorChange.AutoSize" type="System.Boolean, mscorlib">
+  <data name="enableSysTrayColorChange.AutoSize" type="System.Boolean, System.Runtime">
     <value>True</value>
   </data>
   <data name="enableSysTrayColorChange.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
-  <data name="enableSysTrayColorChange.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="enableSysTrayColorChange.Location" type="System.Drawing.Point, System.Drawing.Primitives">
     <value>29, 81</value>
   </data>
-  <data name="enableSysTrayColorChange.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="enableSysTrayColorChange.Size" type="System.Drawing.Size, System.Drawing.Primitives">
     <value>188, 17</value>
   </data>
-  <data name="enableSysTrayColorChange.TabIndex" type="System.Int32, mscorlib">
+  <data name="enableSysTrayColorChange.TabIndex" type="System.Int32, System.Runtime">
     <value>31</value>
   </data>
   <data name="enableSysTrayColorChange.Text" xml:space="preserve">
     <value>Auto adjust system tray icon colors</value>
   </data>
-  <data name="&gt;&gt;enableSysTrayColorChange.Name" xml:space="preserve">
-    <value>enableSysTrayColorChange</value>
-  </data>
-  <data name="&gt;&gt;enableSysTrayColorChange.Type" xml:space="preserve">
-    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;enableSysTrayColorChange.Parent" xml:space="preserve">
-    <value>tabSysTrayAppearance</value>
-  </data>
-  <data name="&gt;&gt;enableSysTrayColorChange.ZOrder" xml:space="preserve">
-    <value>3</value>
-  </data>
-  <data name="enableSysTrayHover.AutoSize" type="System.Boolean, mscorlib">
+  <data name="enableSysTrayHover.AutoSize" type="System.Boolean, System.Runtime">
     <value>True</value>
   </data>
   <data name="enableSysTrayHover.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
-  <data name="enableSysTrayHover.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="enableSysTrayHover.Location" type="System.Drawing.Point, System.Drawing.Primitives">
     <value>29, 58</value>
   </data>
-  <data name="enableSysTrayHover.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="enableSysTrayHover.Size" type="System.Drawing.Size, System.Drawing.Primitives">
     <value>197, 17</value>
   </data>
-  <data name="enableSysTrayHover.TabIndex" type="System.Int32, mscorlib">
+  <data name="enableSysTrayHover.TabIndex" type="System.Int32, System.Runtime">
     <value>30</value>
   </data>
   <data name="enableSysTrayHover.Text" xml:space="preserve">
     <value>Enable hover highlight in system tray</value>
-  </data>
-  <data name="&gt;&gt;enableSysTrayHover.Name" xml:space="preserve">
-    <value>enableSysTrayHover</value>
-  </data>
-  <data name="&gt;&gt;enableSysTrayHover.Type" xml:space="preserve">
-    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;enableSysTrayHover.Parent" xml:space="preserve">
-    <value>tabSysTrayAppearance</value>
-  </data>
-  <data name="&gt;&gt;enableSysTrayHover.ZOrder" xml:space="preserve">
-    <value>4</value>
   </data>
   <data name="pictureBox2.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Top, Left, Right</value>
@@ -1539,50 +1289,26 @@
   <data name="pictureBox2.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
-  <data name="pictureBox2.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="pictureBox2.Location" type="System.Drawing.Point, System.Drawing.Primitives">
     <value>3, 125</value>
   </data>
-  <data name="pictureBox2.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="pictureBox2.Size" type="System.Drawing.Size, System.Drawing.Primitives">
     <value>696, 5</value>
   </data>
-  <data name="pictureBox2.TabIndex" type="System.Int32, mscorlib">
+  <data name="pictureBox2.TabIndex" type="System.Int32, System.Runtime">
     <value>28</value>
-  </data>
-  <data name="&gt;&gt;pictureBox2.Name" xml:space="preserve">
-    <value>pictureBox2</value>
-  </data>
-  <data name="&gt;&gt;pictureBox2.Type" xml:space="preserve">
-    <value>System.Windows.Forms.PictureBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;pictureBox2.Parent" xml:space="preserve">
-    <value>tabAbout</value>
-  </data>
-  <data name="&gt;&gt;pictureBox2.ZOrder" xml:space="preserve">
-    <value>0</value>
   </data>
   <data name="pictureBox1.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
-  <data name="pictureBox1.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="pictureBox1.Location" type="System.Drawing.Point, System.Drawing.Primitives">
     <value>8, 18</value>
   </data>
-  <data name="pictureBox1.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="pictureBox1.Size" type="System.Drawing.Size, System.Drawing.Primitives">
     <value>691, 107</value>
   </data>
-  <data name="pictureBox1.TabIndex" type="System.Int32, mscorlib">
+  <data name="pictureBox1.TabIndex" type="System.Int32, System.Runtime">
     <value>24</value>
-  </data>
-  <data name="&gt;&gt;pictureBox1.Name" xml:space="preserve">
-    <value>pictureBox1</value>
-  </data>
-  <data name="&gt;&gt;pictureBox1.Type" xml:space="preserve">
-    <value>System.Windows.Forms.PictureBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;pictureBox1.Parent" xml:space="preserve">
-    <value>tabAbout</value>
-  </data>
-  <data name="&gt;&gt;pictureBox1.ZOrder" xml:space="preserve">
-    <value>1</value>
   </data>
   <data name="pictureBox3.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Top</value>
@@ -1590,43 +1316,31 @@
   <data name="pictureBox3.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
-  <data name="pictureBox3.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="pictureBox3.Location" type="System.Drawing.Point, System.Drawing.Primitives">
     <value>3, 3</value>
   </data>
-  <data name="pictureBox3.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+  <data name="pictureBox3.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms.Primitives">
     <value>0, 0, 0, 0</value>
   </data>
-  <data name="pictureBox3.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="pictureBox3.Size" type="System.Drawing.Size, System.Drawing.Primitives">
     <value>696, 122</value>
   </data>
-  <data name="pictureBox3.TabIndex" type="System.Int32, mscorlib">
+  <data name="pictureBox3.TabIndex" type="System.Int32, System.Runtime">
     <value>29</value>
   </data>
-  <data name="&gt;&gt;pictureBox3.Name" xml:space="preserve">
-    <value>pictureBox3</value>
-  </data>
-  <data name="&gt;&gt;pictureBox3.Type" xml:space="preserve">
-    <value>System.Windows.Forms.PictureBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;pictureBox3.Parent" xml:space="preserve">
-    <value>tabAbout</value>
-  </data>
-  <data name="&gt;&gt;pictureBox3.ZOrder" xml:space="preserve">
-    <value>2</value>
-  </data>
-  <data name="labelCopyrightWindows.AutoSize" type="System.Boolean, mscorlib">
+  <data name="labelCopyrightWindows.AutoSize" type="System.Boolean, System.Runtime">
     <value>True</value>
   </data>
   <data name="labelCopyrightWindows.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
-  <data name="labelCopyrightWindows.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="labelCopyrightWindows.Location" type="System.Drawing.Point, System.Drawing.Primitives">
     <value>3, 236</value>
   </data>
-  <data name="labelCopyrightWindows.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="labelCopyrightWindows.Size" type="System.Drawing.Size, System.Drawing.Primitives">
     <value>146, 39</value>
   </data>
-  <data name="labelCopyrightWindows.TabIndex" type="System.Int32, mscorlib">
+  <data name="labelCopyrightWindows.TabIndex" type="System.Int32, System.Runtime">
     <value>27</value>
   </data>
   <data name="labelCopyrightWindows.Text" xml:space="preserve">
@@ -1634,67 +1348,43 @@
 © 2020 Microsoft Corporation
 All rights reserved</value>
   </data>
-  <data name="&gt;&gt;labelCopyrightWindows.Name" xml:space="preserve">
-    <value>labelCopyrightWindows</value>
-  </data>
-  <data name="&gt;&gt;labelCopyrightWindows.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;labelCopyrightWindows.Parent" xml:space="preserve">
-    <value>tabAbout</value>
-  </data>
-  <data name="&gt;&gt;labelCopyrightWindows.ZOrder" xml:space="preserve">
-    <value>3</value>
-  </data>
-  <data name="labelAlpha2.Font" type="System.Drawing.Font, System.Drawing">
+  <data name="labelAlpha2.Font" type="System.Drawing.Font, System.Drawing.Common">
     <value>Franklin Gothic Medium, 10pt, style=Bold</value>
   </data>
   <data name="labelAlpha2.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
-  <data name="labelAlpha2.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="labelAlpha2.Location" type="System.Drawing.Point, System.Drawing.Primitives">
     <value>3, 341</value>
   </data>
-  <data name="labelAlpha2.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="labelAlpha2.Size" type="System.Drawing.Size, System.Drawing.Primitives">
     <value>696, 45</value>
   </data>
-  <data name="labelAlpha2.TabIndex" type="System.Int32, mscorlib">
+  <data name="labelAlpha2.TabIndex" type="System.Int32, System.Runtime">
     <value>26</value>
   </data>
   <data name="labelAlpha2.Text" xml:space="preserve">
-    <value>This software is in alpha stages. Unexpected issues can occur.</value>
+    <value>This software is in beta stages. Unexpected issues can occur.</value>
   </data>
-  <data name="labelAlpha2.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+  <data name="labelAlpha2.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing.Common">
     <value>MiddleCenter</value>
-  </data>
-  <data name="&gt;&gt;labelAlpha2.Name" xml:space="preserve">
-    <value>labelAlpha2</value>
-  </data>
-  <data name="&gt;&gt;labelAlpha2.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;labelAlpha2.Parent" xml:space="preserve">
-    <value>tabAbout</value>
-  </data>
-  <data name="&gt;&gt;labelAlpha2.ZOrder" xml:space="preserve">
-    <value>4</value>
   </data>
   <data name="labelCopyrightSCT.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Bottom, Right</value>
   </data>
-  <data name="labelCopyrightSCT.AutoSize" type="System.Boolean, mscorlib">
+  <data name="labelCopyrightSCT.AutoSize" type="System.Boolean, System.Runtime">
     <value>True</value>
   </data>
   <data name="labelCopyrightSCT.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
-  <data name="labelCopyrightSCT.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="labelCopyrightSCT.Location" type="System.Drawing.Point, System.Drawing.Primitives">
     <value>570, 164</value>
   </data>
-  <data name="labelCopyrightSCT.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="labelCopyrightSCT.Size" type="System.Drawing.Size, System.Drawing.Primitives">
     <value>129, 117</value>
   </data>
-  <data name="labelCopyrightSCT.TabIndex" type="System.Int32, mscorlib">
+  <data name="labelCopyrightSCT.TabIndex" type="System.Int32, System.Runtime">
     <value>25</value>
   </data>
   <data name="labelCopyrightSCT.Text" xml:space="preserve">
@@ -1708,75 +1398,52 @@ the GPLv3 license.
 This means it comes with 
 no warranty what so ever.</value>
   </data>
-  <data name="labelCopyrightSCT.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+  <data name="labelCopyrightSCT.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing.Common">
     <value>MiddleRight</value>
   </data>
-  <data name="labelCopyrightSCT.Visible" type="System.Boolean, mscorlib">
+  <data name="labelCopyrightSCT.Visible" type="System.Boolean, System.Runtime">
     <value>False</value>
-  </data>
-  <data name="&gt;&gt;labelCopyrightSCT.Name" xml:space="preserve">
-    <value>labelCopyrightSCT</value>
-  </data>
-  <data name="&gt;&gt;labelCopyrightSCT.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;labelCopyrightSCT.Parent" xml:space="preserve">
-    <value>tabAbout</value>
-  </data>
-  <data name="&gt;&gt;labelCopyrightSCT.ZOrder" xml:space="preserve">
-    <value>5</value>
   </data>
   <data name="labelCopyrightSCTT.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Bottom, Right</value>
   </data>
-  <data name="labelCopyrightSCTT.AutoSize" type="System.Boolean, mscorlib">
+  <data name="labelCopyrightSCTT.AutoSize" type="System.Boolean, System.Runtime">
     <value>True</value>
   </data>
   <data name="labelCopyrightSCTT.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
-  <data name="labelCopyrightSCTT.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="labelCopyrightSCTT.Location" type="System.Drawing.Point, System.Drawing.Primitives">
     <value>2, 164</value>
   </data>
-  <data name="labelCopyrightSCTT.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="labelCopyrightSCTT.Size" type="System.Drawing.Size, System.Drawing.Primitives">
     <value>152, 52</value>
   </data>
-  <data name="labelCopyrightSCTT.TabIndex" type="System.Int32, mscorlib">
+  <data name="labelCopyrightSCTT.TabIndex" type="System.Int32, System.Runtime">
     <value>23</value>
   </data>
   <data name="labelCopyrightSCTT.Text" xml:space="preserve">
     <value>Simple Classic Theme Taskbar
-Alpha Version {sctt_ver}
+Beta Version {sctt_ver}
 © 2020 Anis Errais
 All rights reserved</value>
   </data>
-  <data name="labelCopyrightSCTT.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+  <data name="labelCopyrightSCTT.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing.Common">
     <value>MiddleLeft</value>
   </data>
-  <data name="&gt;&gt;labelCopyrightSCTT.Name" xml:space="preserve">
-    <value>labelCopyrightSCTT</value>
-  </data>
-  <data name="&gt;&gt;labelCopyrightSCTT.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;labelCopyrightSCTT.Parent" xml:space="preserve">
-    <value>tabAbout</value>
-  </data>
-  <data name="&gt;&gt;labelCopyrightSCTT.ZOrder" xml:space="preserve">
-    <value>6</value>
-  </data>
-  <metadata name="openFileDialog1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+  <data name="openFileDialog1.TrayLocation" type="System.Drawing.Point, System.Drawing.Primitives">
     <value>17, 17</value>
-  </metadata>
-  <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+  </data>
+  <data name="$this.Localizable" type="System.Boolean, System.Runtime">
     <value>True</value>
-  </metadata>
-  <data name="$this.AutoScaleDimensions" type="System.Drawing.SizeF, System.Drawing">
+  </data>
+  <data name="$this.AutoScaleDimensions" type="System.Drawing.SizeF, System.Drawing.Primitives">
     <value>6, 13</value>
   </data>
-  <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
+  <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing.Primitives">
     <value>722, 462</value>
   </data>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         AAABAAsAEBAAAAEAIABoBAAAtgAAABgYAAABACAAiAkAAB4FAAAgIAAAAQAgAKgQAACmDgAAMDAAAAEA
@@ -5727,7 +5394,7 @@ All rights reserved</value>
         Kaf+Px253tMGUJiFAAAAAElFTkSuQmCC
 </value>
   </data>
-  <data name="$this.MinimumSize" type="System.Drawing.Size, System.Drawing">
+  <data name="$this.MinimumSize" type="System.Drawing.Size, System.Drawing.Primitives">
     <value>470, 489</value>
   </data>
   <data name="$this.Text" xml:space="preserve">

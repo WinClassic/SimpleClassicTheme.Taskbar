@@ -20,6 +20,7 @@ namespace SimpleClassicThemeTaskbar
         public const int WM_GETICON = 0x007F;
         public const int WM_EXITTASKBAR = 0x0420;
         public const int WM_ENDSESSION = 0x0016;
+        public const int WM_QUERYENDSESSION = 0x0011;
 
         public const int MDITILE_ZORDER = 0x0004;
         public const int MDITILE_VERTICAL = 0x0000;
@@ -43,11 +44,11 @@ namespace SimpleClassicThemeTaskbar
         {
             IntPtr hwnd = wnd.Handle;
             //Try different ways of getting the icon
-            IntPtr iconHandle = GetClassLongPtr(hwnd, GCL_HICONSM);
+            IntPtr iconHandle = SendMessage(hwnd, WM_GETICON, ICON_SMALL2, 0);
+            if (iconHandle == IntPtr.Zero)
+                iconHandle = GetClassLongPtr(hwnd, GCL_HICONSM);
             if (iconHandle == IntPtr.Zero)
                 iconHandle = SendMessage(hwnd, WM_GETICON, ICON_SMALL, 0);
-            if (iconHandle == IntPtr.Zero)
-                iconHandle = SendMessage(hwnd, WM_GETICON, ICON_SMALL2, 0);
             if (iconHandle == IntPtr.Zero)
                 iconHandle = SendMessage(hwnd, WM_GETICON, ICON_BIG, 0);
             if (iconHandle == IntPtr.Zero)

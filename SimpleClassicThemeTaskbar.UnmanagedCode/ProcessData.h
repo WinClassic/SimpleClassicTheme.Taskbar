@@ -44,7 +44,10 @@ public:
 			{
 				VirtualFreeEx(m_hProcess, m_lpData, NULL, MEM_RELEASE);
 			}
-			CloseHandle(m_hProcess);
+			else 
+			{
+				CloseHandle(m_hProcess);
+			}
 		}
 	}
 

@@ -112,10 +112,10 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="buttonApply.Text" xml:space="preserve">
     <value>&amp;Toepassen</value>
@@ -138,30 +138,30 @@
   <data name="comboBoxGroupingMethod.Items3" xml:space="preserve">
     <value>Module naam</value>
   </data>
-  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-  <data name="label9.Size" type="System.Drawing.Size, System.Drawing">
+  <assembly alias="System.Drawing.Primitives" name="System.Drawing.Primitives, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="label9.Size" type="System.Drawing.Size, System.Drawing.Primitives">
     <value>199, 13</value>
   </data>
   <data name="label9.Text" xml:space="preserve">
     <value>Programma's groeperen door middel van:</value>
   </data>
   <data name="label8.Text" xml:space="preserve">
-    <value>Deze software is momenteel in zijn alpha fase. 
+    <value>Deze software is momenteel in zijn beta fase. 
 Problemen kunnen zich voordoen</value>
   </data>
-  <data name="label5.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="label5.Size" type="System.Drawing.Size, System.Drawing.Primitives">
     <value>210, 13</value>
   </data>
   <data name="label5.Text" xml:space="preserve">
     <value>Ruimte tussen programma's op de taakbalk</value>
   </data>
-  <data name="showTaskbarOnAllDesktops.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="showTaskbarOnAllDesktops.Size" type="System.Drawing.Size, System.Drawing.Primitives">
     <value>215, 17</value>
   </data>
   <data name="showTaskbarOnAllDesktops.Text" xml:space="preserve">
     <value>Op elk scherm een taakbalk weergeven</value>
   </data>
-  <data name="label1.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="label1.Size" type="System.Drawing.Size, System.Drawing.Primitives">
     <value>201, 13</value>
   </data>
   <data name="label1.Text" xml:space="preserve">
@@ -173,32 +173,32 @@ Problemen kunnen zich voordoen</value>
   <data name="groupBox2.Text" xml:space="preserve">
     <value>Snelle Toegang instellingen</value>
   </data>
-  <data name="label3.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="label3.Location" type="System.Drawing.Point, System.Drawing.Primitives">
     <value>543, 56</value>
   </data>
-  <data name="label3.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="label3.Size" type="System.Drawing.Size, System.Drawing.Primitives">
     <value>134, 13</value>
   </data>
   <data name="label3.Text" xml:space="preserve">
     <value>Open Snelle Toegang map</value>
   </data>
-  <data name="label6.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="label6.Size" type="System.Drawing.Size, System.Drawing.Primitives">
     <value>187, 13</value>
   </data>
   <data name="label6.Text" xml:space="preserve">
     <value>Ruimte tussen Snelle Toegang iconen</value>
   </data>
-  <data name="spaceBetweenQuickLaunchIcons.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="spaceBetweenQuickLaunchIcons.Location" type="System.Drawing.Point, System.Drawing.Primitives">
     <value>557, 21</value>
   </data>
-  <data name="enableQuickLaunch.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="enableQuickLaunch.Size" type="System.Drawing.Size, System.Drawing.Primitives">
     <value>177, 17</value>
   </data>
   <data name="enableQuickLaunch.Text" xml:space="preserve">
     <value>Snelle Toegang werkbalk tonen</value>
   </data>
   <data name="label7.Text" xml:space="preserve">
-    <value>Deze software is momenteel in zijn alpha fase. 
+    <value>Deze software is momenteel in zijn beta fase. 
 Problemen kunnen zich voordoen
 
 </value>
@@ -206,7 +206,7 @@ Problemen kunnen zich voordoen
   <data name="groupBox1.Text" xml:space="preserve">
     <value>Start knop instellingen</value>
   </data>
-  <data name="label4.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="label4.Size" type="System.Drawing.Size, System.Drawing.Primitives">
     <value>62, 13</value>
   </data>
   <data name="label4.Text" xml:space="preserve">
@@ -215,19 +215,19 @@ Problemen kunnen zich voordoen
   <data name="button1.Text" xml:space="preserve">
     <value>Bestand kiezen</value>
   </data>
-  <data name="radioStartButton.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="radioStartButton.Size" type="System.Drawing.Size, System.Drawing.Primitives">
     <value>79, 17</value>
   </data>
   <data name="radioStartButton.Text" xml:space="preserve">
     <value>Eigen knop</value>
   </data>
-  <data name="radioStartIcon.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="radioStartIcon.Size" type="System.Drawing.Size, System.Drawing.Primitives">
     <value>81, 17</value>
   </data>
   <data name="radioStartIcon.Text" xml:space="preserve">
     <value>Eigen icoon</value>
   </data>
-  <data name="radioStartDefault.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="radioStartDefault.Size" type="System.Drawing.Size, System.Drawing.Primitives">
     <value>101, 17</value>
   </data>
   <data name="radioStartDefault.Text" xml:space="preserve">
@@ -237,23 +237,23 @@ Problemen kunnen zich voordoen
     <value>Uiterlijk (Systeemvak)</value>
   </data>
   <data name="label10.Text" xml:space="preserve">
-    <value>Deze software is momenteel in zijn alpha fase. 
+    <value>Deze software is momenteel in zijn beta fase. 
 Problemen kunnen zich voordoen
 </value>
   </data>
-  <data name="label2.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="label2.Size" type="System.Drawing.Size, System.Drawing.Primitives">
     <value>168, 13</value>
   </data>
   <data name="label2.Text" xml:space="preserve">
     <value>Ruimte tussen systeemvak iconen</value>
   </data>
-  <data name="enableSysTrayColorChange.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="enableSysTrayColorChange.Size" type="System.Drawing.Size, System.Drawing.Primitives">
     <value>247, 17</value>
   </data>
   <data name="enableSysTrayColorChange.Text" xml:space="preserve">
     <value>Automatisch kleuren aanpassen in systeemvak</value>
   </data>
-  <data name="enableSysTrayHover.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="enableSysTrayHover.Size" type="System.Drawing.Size, System.Drawing.Primitives">
     <value>263, 17</value>
   </data>
   <data name="enableSysTrayHover.Text" xml:space="preserve">
@@ -268,27 +268,33 @@ Problemen kunnen zich voordoen
 Alle rechten voorbehouden.</value>
   </data>
   <data name="labelAlpha2.Text" xml:space="preserve">
-    <value>Deze software is momenteel in zijn alpha fase. 
+    <value>Deze software is momenteel in zijn beta fase. 
 Problemen kunnen zich voordoen</value>
   </data>
-  <data name="labelCopyrightSCT.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="labelCopyrightSCT.Location" type="System.Drawing.Point, System.Drawing.Primitives">
     <value>576, 158</value>
   </data>
-  <data name="labelCopyrightSCT.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="labelCopyrightSCT.Size" type="System.Drawing.Size, System.Drawing.Primitives">
     <value>138, 52</value>
   </data>
   <data name="labelCopyrightSCT.Text" xml:space="preserve">
     <value>SimpleClassicTheme
 Versie {sct_ver}
 © 2020 Anis Errais
-Alle rechten voorbehouden.</value>
+Alle rechten voorbehouden.
+
+SCT is gedistribueerd 
+onder de GPLv3 licentie. 
+Dit betekent dat het 
+zonder enige garantie komt.</value>
   </data>
   <data name="labelCopyrightSCTT.Text" xml:space="preserve">
     <value>Simple Classic Theme Taskbar
-Alpha Versie {sctt_ver}
+Beta Versie {sctt_ver}
 © 2020 Anis Errais
 Alle rechten voorbehouden.</value>
   </data>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         AAABAAYAAAAAAAEAIAD0rgAAZgAAAICAAAABACAAKAgBAFqvAABAQAAAAQAgAChCAACCtwEAMDAAAAEA

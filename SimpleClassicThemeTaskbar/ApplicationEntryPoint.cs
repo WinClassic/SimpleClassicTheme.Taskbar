@@ -10,6 +10,9 @@ namespace SimpleClassicThemeTaskbar
 {
     static class ApplicationEntryPoint
     {
+        public static int ErrorCount = 0;
+        public static Control ErrorSource;
+
         [DllImport("user32.dll", CharSet = CharSet.Auto)]
         public static extern IntPtr SendMessage(IntPtr hWnd, int Msg, IntPtr wParam, IntPtr lParam);
         public const int WM_EXITTASKBAR = 0x0420;
@@ -22,6 +25,12 @@ namespace SimpleClassicThemeTaskbar
         [STAThread]
         static void Main(string[] args)
         {
+            if (!args.Contains("--dutch"))
+			{
+                System.Globalization.CultureInfo ci = new System.Globalization.CultureInfo("nl-NL");
+                System.Threading.Thread.CurrentThread.CurrentCulture = ci;
+                System.Threading.Thread.CurrentThread.CurrentUICulture = ci;
+            }
             if (args.Contains("--exit"))
             {
                 IntPtr window = File.Exists("C:\\SCT\\Taskbar\\MainWindow.txt") ? new IntPtr(Int32.Parse(File.ReadAllText("C:\\SCT\\Taskbar\\MainWindow.txt"))) : new IntPtr(0);
@@ -46,15 +55,22 @@ namespace SimpleClassicThemeTaskbar
                 return;
             }
 
+            if (args.Contains("--unmanaged"))
+            {
+                Environment.Exit(d.UnmanagedSCTT());
+            }
+
             if (args.Contains("--sct"))
             {
                 SCTCompatMode = true;
             }
+
 #if DEBUG
 #else
             else 
             {
-                MessageBox.Show("This version of SCTT is part of the SCT Private Alpha.\nPlease use the latest public build instead.", "SCT Private alpha");
+                MessageBox.Show("SCT Taskbar does not currently work without SCT. Please install SCTT via the Options menu in SCT 1.2.0 or higher", "SCT required");
+                //MessageBox.Show("This version of SCTT is part of the SCT Private Alpha.\nPlease use the latest public build instead.", "SCT Private alpha");
                 return;
             }
 #endif
@@ -122,7 +138,6 @@ namespace SimpleClassicThemeTaskbar
             foreach (Screen screen in Screen.AllScreens)
             {
                 Rectangle rect = screen.Bounds;
-                d.SetWorkingArea(rect.Left, rect.Right, rect.Top, rect.Bottom - 28, Environment.OSVersion.Version.Major < 10);
                 Taskbar taskbar = new Taskbar(screen.Primary);
                 taskbar.ShowOnScreen(screen);
                 if (!Config.ShowTaskbarOnAllDesktops && !screen.Primary)

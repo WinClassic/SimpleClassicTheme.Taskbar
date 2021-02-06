@@ -8,9 +8,26 @@ System::String^ SimpleClassicThemeTaskbar::CodeBridge::GetAppUserModelId(int pid
 	return gcnew System::String(_impl->GetAppUserModelId(pid));
 }
 
-void SimpleClassicThemeTaskbar::CodeBridge::SetWorkingArea(int left, int right, int top, int bottom, bool sendChange)
+void SimpleClassicThemeTaskbar::CodeBridge::SetWorkingArea(int left, int right, int top, 
+	int bottom, bool sendChange, array<System::IntPtr>^ windows)
 {
-	_impl->SetWorkingArea(left, right, top, bottom, sendChange);
+	int length = windows->Length;
+	if (length > 0)
+	{
+		HWND* hwnds = (HWND*)malloc(sizeof(HWND) * length);
+		for (int i = 0; i < length; i++)
+		{
+			System::IntPtr ptr = (System::IntPtr)windows->GetValue(i);
+			HWND hwnd = (HWND)ptr.ToPointer();
+			hwnds[i] = hwnd;
+		}
+		_impl->SetWorkingArea(left, right, top, bottom, sendChange, hwnds, length);
+		free(hwnds);
+	}
+	else
+	{
+		_impl->SetWorkingArea(left, right, top, bottom, sendChange, NULL, length);
+	}
 }
 
 SimpleClassicThemeTaskbar::CodeBridge::CodeBridge()
@@ -42,6 +59,11 @@ bool SimpleClassicThemeTaskbar::CodeBridge::WindowIsOnCurrentDesktop(System::Int
 int SimpleClassicThemeTaskbar::CodeBridge::GetTrayButtonCount(System::IntPtr sysTray)
 {
 	return _impl->GetTrayButtonCount((HWND) sysTray.ToPointer());
+}
+
+int SimpleClassicThemeTaskbar::CodeBridge::UnmanagedSCTT()
+{
+	return _impl->UnmanagedSCTT();
 }
 
 bool SimpleClassicThemeTaskbar::CodeBridge::GetTrayButton(System::IntPtr sysTray, int i, TBUTTONINFO^% button)

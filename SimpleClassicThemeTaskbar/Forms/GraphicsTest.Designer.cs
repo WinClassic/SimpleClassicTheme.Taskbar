@@ -28,24 +28,14 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.betterBorderPanel1 = new SimpleClassicThemeTaskbar.UIElements.Misc.BetterBorderPanel();
             this.SuspendLayout();
-            // 
-            // betterBorderPanel1
-            // 
-            this.betterBorderPanel1.BorderStyle = System.Windows.Forms.Border3DStyle.Raised;
-            this.betterBorderPanel1.IsButton = true;
-            this.betterBorderPanel1.Location = new System.Drawing.Point(193, 120);
-            this.betterBorderPanel1.Name = "betterBorderPanel1";
-            this.betterBorderPanel1.Size = new System.Drawing.Size(200, 100);
-            this.betterBorderPanel1.TabIndex = 0;
+            
             // 
             // GraphicsTest
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Controls.Add(this.betterBorderPanel1);
             this.Name = "GraphicsTest";
             this.Text = "GraphicsTest";
             this.ResumeLayout(false);
@@ -53,7 +43,5 @@
         }
 
         #endregion
-
-        private UIElements.Misc.BetterBorderPanel betterBorderPanel1;
     }
 }

@@ -15,12 +15,13 @@ namespace SimpleClassicThemeTaskbar
     {
     public:
 		WCHAR* GetAppUserModelId(int pid);
-		void SetWorkingArea(int left, int right, int top, int bottom, bool sendChange);
+		void SetWorkingArea(int left, int right, int top, int bottom, bool sendChange, HWND* windows, int count);
 		void InitCom();
 		int GetSize(HWND hWnd);
 		void DeInitCom();
         bool WindowIsOnCurrentDesktop(HWND hWnd) const;
 		int GetTrayButtonCount(HWND sysTray);
+		int UnmanagedSCTT();
 
 		struct TRAYBUTTONINFO
 		{

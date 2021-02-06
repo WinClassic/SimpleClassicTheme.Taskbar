@@ -6,7 +6,6 @@ using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Drawing;
 using System.Linq;
-using System.Management;
 
 using SimpleClassicThemeTaskbar.UIElements.NetworkUI;
 using System.Threading;

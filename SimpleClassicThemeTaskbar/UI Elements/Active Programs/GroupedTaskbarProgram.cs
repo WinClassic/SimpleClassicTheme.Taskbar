@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Text;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
@@ -40,8 +41,18 @@ namespace SimpleClassicThemeTaskbar
 		public override Icon Icon { get => ProgramWindows[0].Icon; set => ProgramWindows[0].Icon = value; }
 		public override Image IconImage { get { try { return new Icon(Icon, 16, 16).ToBitmap(); } catch { return null; } } }
 
+		public override string GetErrorString()
+			=> GetBaseErrorString() +
+			$"Process: {Process.MainModule.ModuleName} ({Process.Id})\n" +
+			$"Window title: {Title}\n" +
+			$"Window class: {Window.ClassName}\n" +
+			$"Window HWND: {string.Join(", ", ProgramWindows.Select(o => o.Window.Handle.ToString("X8") + (IsWindow(o.Window.Handle) ? "Valid" : "Invalid")).ToArray())}\n" +
+			$"Icon HWND: {string.Join(", ", ProgramWindows.Select(o => o.Icon.Handle.ToString("X8") + (IsWindow(o.Icon.Handle) ? "Valid" : "Invalid")).ToArray())}";
+
 		public override bool IsActiveWindow(IntPtr activeWindow)
 		{
+			ApplicationEntryPoint.ErrorSource = this;
+			controlState = "reordering group";
 			foreach (SingleTaskbarProgram window in ProgramWindows)
 			{
 				window.Icon = Taskbar.GetAppIcon(window.Window);
@@ -65,6 +76,8 @@ namespace SimpleClassicThemeTaskbar
 
 		public override void FinishOnPaint(PaintEventArgs e)
 		{
+			ApplicationEntryPoint.ErrorSource = this;
+			controlState = "painting grouped window extension";
 			if (line)
 			{
 				//Seperator instead of border
