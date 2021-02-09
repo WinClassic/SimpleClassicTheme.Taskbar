@@ -44,8 +44,6 @@ namespace SimpleClassicThemeTaskbar
         public bool NeverShow = false;
 
         bool temp = false;
-        IntPtr wParam = new IntPtr(0x5354); //ST
-        IntPtr lParam = new IntPtr(0x4F50); //OP
         protected override void WndProc(ref Message m)
         { 
             if (m.Msg == WM_ENDSESSION)
@@ -58,14 +56,24 @@ namespace SimpleClassicThemeTaskbar
             {
                 m.Result = new IntPtr(1);
             }
-            if (m.Msg == WM_EXITTASKBAR && !temp)
+            if (m.Msg == WM_SCT)
             {
-                temp = true;
-                if (m.Msg == WM_EXITTASKBAR && m.WParam == wParam && m.LParam == lParam)
+                switch (m.WParam.ToInt32())
                 {
-                    selfClose = true; 
-                    Close(); 
-                    Application.Exit();
+                    case SCTWP_EXIT:
+                        if (ApplicationEntryPoint.SCTCompatMode || m.LParam.ToInt32() == SCTLP_FORCE)
+                        {
+                            selfClose = true;
+                            Close();
+                            Application.Exit();
+                        }
+                        break;
+                    case SCTWP_ISMANAGED:
+                        m.Result = new IntPtr(1);
+                        return;
+                    case SCTWP_ISSCT:
+                        m.Result = new IntPtr(ApplicationEntryPoint.SCTCompatMode ? 1 : 0);
+                        return;
                 }
             }
             if (m.Msg == 0x15/*WM_SYSCOLORCHANGE*/)
@@ -239,8 +247,8 @@ namespace SimpleClassicThemeTaskbar
         //Initialize stuff
         private void Form1_Load(object sender, EventArgs e)
         {
-            if (Primary && Path.GetFileName(Assembly.GetExecutingAssembly().Location).ToLower() == "sct_taskbar.exe")
-                File.WriteAllText("C:\\SCT\\Taskbar\\MainWindow.txt", Handle.ToString());
+            //if (Primary && Path.GetFileName(Assembly.GetExecutingAssembly().Location).ToLower() == "sct_taskbar.exe")
+            //    File.WriteAllText("C:\\SCT\\Taskbar\\MainWindow.txt", Handle.ToString());
 
             //TODO: Add an option to registry tweak classic alt+tab
             line.Width = Width + 2;
@@ -332,6 +340,8 @@ namespace SimpleClassicThemeTaskbar
 
         private void BackgroundThreadFunction()
         {
+            Stopwatch t = new Stopwatch();
+            t.Start();
             while (!selfClose)
             {
                 IntPtr ForegroundWindow = GetForegroundWindow();
@@ -381,59 +391,66 @@ namespace SimpleClassicThemeTaskbar
                 EnumWindowsCallback d = EnumWind;
                 EnumWindows(d, 0);
 
-                //Obtain tray list
-
+                //Check stopwatch
+                //while (t.ElapsedMilliseconds < 200) { Thread.Sleep(15); }
+                //t.Restart();
 
                 //Send an update signal to UI (when ready)
-                while (busy) { }
-                Invoke(new Action(delegate 
+                while (busy) { /* Thread.Sleep(15); */ }
+                if (!IsDisposed)
                 {
-                    try
+                    Invoke(new Action(delegate
                     {
-                        UpdateGUI();
-                    }
-                    catch (Exception e) 
-                    {
-                        if (ApplicationEntryPoint.SCTCompatMode)
+                        try
                         {
-                            File.WriteAllLines($"C:\\SCT\\Taskbar\\crash{DateTime.Now:yyyy-dd-M--HH-mm-ss}", new string[] {
+                            UpdateGUI();
+                        }
+                        catch (Exception e)
+                        {
+                            if (ApplicationEntryPoint.SCTCompatMode)
+                            {
+                                File.WriteAllLines($"C:\\SCT\\Taskbar\\crash{DateTime.Now:yyyy-dd-M--HH-mm-ss}", new string[] {
                                 e.GetType().Name,
                                 e.StackTrace,
                                 e.Message,
                                 e.Source
-                            });
-                        }
-                        if (ApplicationEntryPoint.ErrorCount < 2)
-                        {
-                            (ApplicationEntryPoint.ErrorSource as UserControlEx).Erroring = true;
-                            (ApplicationEntryPoint.ErrorSource as UserControlEx).Invalidate();
-                            (ApplicationEntryPoint.ErrorSource as UserControlEx).Update();
-                            (ApplicationEntryPoint.ErrorSource as UserControlEx).Refresh();
-                            Application.DoEvents();
+                                });
+                            }
+                            if (ApplicationEntryPoint.ErrorCount < 2)
+                            {
+                                (ApplicationEntryPoint.ErrorSource as UserControlEx).Erroring = true;
+                                (ApplicationEntryPoint.ErrorSource as UserControlEx).Invalidate();
+                                (ApplicationEntryPoint.ErrorSource as UserControlEx).Update();
+                                (ApplicationEntryPoint.ErrorSource as UserControlEx).Refresh();
+                                Application.DoEvents();
 
-                            MessageBox.Show("Unhandled exception ocurred while drawing GUI", "Error");
-                            (ApplicationEntryPoint.ErrorSource as UserControlEx).Erroring = false;
-                            (ApplicationEntryPoint.ErrorSource as UserControlEx).Invalidate();
-                            (ApplicationEntryPoint.ErrorSource as UserControlEx).Update();
-                            (ApplicationEntryPoint.ErrorSource as UserControlEx).Refresh();
-                            Application.DoEvents();
+                                MessageBox.Show("Unhandled exception ocurred while drawing GUI\n" + ApplicationEntryPoint.ErrorSource.GetErrorString(), "Error");
+                                (ApplicationEntryPoint.ErrorSource as UserControlEx).Erroring = false;
+                                (ApplicationEntryPoint.ErrorSource as UserControlEx).Invalidate();
+                                (ApplicationEntryPoint.ErrorSource as UserControlEx).Update();
+                                (ApplicationEntryPoint.ErrorSource as UserControlEx).Refresh();
+                                Application.DoEvents();
 
-                            busy = false;
+                                busy = false;
 
-                            ApplicationEntryPoint.ErrorCount++;
-						}
-                        else
-						{
-                            MessageBox.Show("3 unhandled exceptions occured, safely exiting", "Exiting");
+                                ApplicationEntryPoint.ErrorCount++;
+                            }
+                            else
+                            {
+                                MessageBox.Show("3 unhandled exceptions occured, safely exiting", "Exiting");
 #if DEBUG
                             throw e;
 #endif
                             selfClose = true; Close(); Application.Exit();
+                            }
                         }
-                    }
-                }));
+                    }));
+                }
                 if (selfClose)
+                {
+                    t.Stop();
                     return;
+                }
             }
         }
 

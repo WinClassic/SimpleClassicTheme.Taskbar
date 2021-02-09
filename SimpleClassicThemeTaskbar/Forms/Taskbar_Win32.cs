@@ -18,9 +18,14 @@ namespace SimpleClassicThemeTaskbar
         public const int ICON_SMALL2 = 2;
 
         public const int WM_GETICON = 0x007F;
-        public const int WM_EXITTASKBAR = 0x0420;
         public const int WM_ENDSESSION = 0x0016;
         public const int WM_QUERYENDSESSION = 0x0011;
+
+        public const int WM_SCT = 0x0420;
+        public const int SCTWP_EXIT = 0x0001;
+        public const int SCTWP_ISMANAGED = 0x0002;
+        public const int SCTWP_ISSCT = 0x0003;
+        public const int SCTLP_FORCE = 0x0001;
 
         public const int MDITILE_ZORDER = 0x0004;
         public const int MDITILE_VERTICAL = 0x0000;

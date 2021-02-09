@@ -29,7 +29,8 @@ REM ============================================================
 REM Copy and pack files to appropriate directories
 REM ============================================================
 :copy
-"%~2tools\7z.exe" a "%~2binaries\%~4-%~3-sctt-%ver%.zip" "%~5*.exe" "%~5*.dll" "%~5nl\" "%~5nl-NL\" "%~5ref\" >> nul
+del "%~2binaries\%~4-%~3-sctt-%ver%.zip"
+"%~2tools\7z.exe" a "%~2binaries\%~4-%~3-sctt-%ver%.zip" "%~5*.exe" "%~5*.dll" "%~5*runtimeconfig.json" "%~5*deps.json" "%~5nl\" "%~5nl-NL\" "%~5ref\" >> nul
 del "%userprofile%\OneDrive\Visual Studio Repositories\SimpleClassicThemeTaskbar\Binaries\%~4-%~3-sctt.zip" /q
 copy "%~2binaries\%~4-%~3-sctt-%ver%.zip" "%userprofile%\OneDrive\Visual Studio Repositories\SimpleClassicThemeTaskbar\Binaries\%~4-%~3-sctt.zip"
 REM copy "%~2binaries\%~4-%~3-sctt-%ver%.zip" "%~2binaries\latest\%~4-%~3-sctt.zip"

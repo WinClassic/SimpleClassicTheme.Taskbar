@@ -8,7 +8,7 @@
 	  <RootNamespace>SimpleClassicThemeTaskbar</RootNamespace>
     <AssemblyName>SimpleClassicThemeTaskbar</AssemblyName>
     <Deterministic>false</Deterministic>
-	<Platforms>x86;x64</Platforms>
+	  <Platforms>x86;x64</Platforms>
   </PropertyGroup>
 
   <ItemGroup>

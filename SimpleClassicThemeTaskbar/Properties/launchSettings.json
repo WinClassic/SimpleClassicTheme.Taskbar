@@ -2,6 +2,7 @@
   "profiles": {
     "SCTT (C#)": {
       "commandName": "Project",
+      "commandLineArgs": "--sct",
       "nativeDebugging": true
     },
     "SCTT (C++)": {

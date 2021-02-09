@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Text;
 using System.Windows.Forms;
 
 namespace SimpleClassicThemeTaskbar
@@ -11,11 +13,19 @@ namespace SimpleClassicThemeTaskbar
     static class ApplicationEntryPoint
     {
         public static int ErrorCount = 0;
-        public static Control ErrorSource;
+        public static UserControlEx ErrorSource;
 
+        delegate bool EnumThreadDelegate(IntPtr hWnd, IntPtr lParam);
+        [DllImport("user32.dll")]
+        static extern bool EnumThreadWindows(int dwThreadId, EnumThreadDelegate lpfn, IntPtr lParam);
+        [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Auto)]
+        static extern int GetClassName(IntPtr hWnd, StringBuilder lpClassName, int nMaxCount);
         [DllImport("user32.dll", CharSet = CharSet.Auto)]
         public static extern IntPtr SendMessage(IntPtr hWnd, int Msg, IntPtr wParam, IntPtr lParam);
-        public const int WM_EXITTASKBAR = 0x0420;
+        public const int WM_SCT = 0x0420;
+        public const int SCTWP_EXIT = 0x0001;
+        public const int SCTWP_ISSCT = 0x0003;
+        public const int SCTLP_FORCE = 0x0001;
 
         public static bool SCTCompatMode = false;
         internal static CodeBridge d = new CodeBridge();
@@ -25,28 +35,54 @@ namespace SimpleClassicThemeTaskbar
         [STAThread]
         static void Main(string[] args)
         {
-            if (!args.Contains("--dutch"))
+            if (args.Contains("--dutch"))
 			{
                 System.Globalization.CultureInfo ci = new System.Globalization.CultureInfo("nl-NL");
                 System.Threading.Thread.CurrentThread.CurrentCulture = ci;
                 System.Threading.Thread.CurrentThread.CurrentUICulture = ci;
             }
             if (args.Contains("--exit"))
-            {
-                IntPtr window = File.Exists("C:\\SCT\\Taskbar\\MainWindow.txt") ? new IntPtr(Int32.Parse(File.ReadAllText("C:\\SCT\\Taskbar\\MainWindow.txt"))) : new IntPtr(0);
-                IntPtr wParam = new IntPtr(0x5354); //ST
-                IntPtr lParam = new IntPtr(0x4F50); //OP
-                SendMessage(window, WM_EXITTASKBAR, wParam, lParam);
-                return;
-            }
+            { 
+                static List<IntPtr> EnumerateProcessWindowHandles(int processId, string name)
+                {
+                    List<IntPtr> handles = new List<IntPtr>();
 
+                    foreach (ProcessThread thread in Process.GetProcessById(processId).Threads)
+                    {
+                        EnumThreadWindows(thread.Id, (hWnd, lParam) =>
+                        {
+                            handles.Add(hWnd);
+                            return true;
+                        }, IntPtr.Zero);
+                    }
+                    return handles;
+                }
+
+                Process[] scttInstances = Process.GetProcessesByName("SimpleClassicThemeTaskbar");
+                Array.ForEach(scttInstances, a =>
+                {
+                    List<IntPtr> handles = EnumerateProcessWindowHandles(a.Id, "SCTT_Shell_TrayWnd");
+                    string s = "";
+                    foreach (IntPtr handle in handles)
+                    {
+                        StringBuilder builder = new StringBuilder(1000);
+                        GetClassName(handle, builder, 1000);
+                        if (builder.Length > 0)
+                            s = s + builder.ToString() + "\n";
+                        IntPtr returnValue = SendMessage(handle, WM_SCT, new IntPtr(SCTWP_ISSCT), IntPtr.Zero);
+                        if (returnValue != IntPtr.Zero)
+                        {
+                            SendMessage(handle, WM_SCT, new IntPtr(SCTWP_EXIT), IntPtr.Zero);
+                        }
+                    }
+                });
+            }
             if (args.Contains("--gui-test")) 
             {
                 Application.SetCompatibleTextRenderingDefault(false);
                 Application.Run(new Forms.GraphicsTest());
                 return;
             }
-
             if (args.Contains("--network-ui"))
             {
                 Application.VisualStyleState = System.Windows.Forms.VisualStyles.VisualStyleState.NoneEnabled;
@@ -54,12 +90,10 @@ namespace SimpleClassicThemeTaskbar
                 Application.Run(new Forms.NetworkUI());
                 return;
             }
-
             if (args.Contains("--unmanaged"))
             {
                 Environment.Exit(d.UnmanagedSCTT());
             }
-
             if (args.Contains("--sct"))
             {
                 SCTCompatMode = true;
