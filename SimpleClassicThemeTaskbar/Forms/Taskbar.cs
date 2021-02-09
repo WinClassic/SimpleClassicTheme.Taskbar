@@ -14,6 +14,8 @@ namespace SimpleClassicThemeTaskbar
 {
     public partial class Taskbar : Form
     {
+
+        static string test = "";
         //TODO: Clean this shitty mess like wth
         private ContextMenuStrip d;
 
@@ -311,7 +313,7 @@ namespace SimpleClassicThemeTaskbar
                     taskManager.Click += delegate { Process.Start("taskmgr"); };
                     settings.Click += delegate { new Settings().Show(); };
                     showDesktop.Click += delegate { Keyboard.KeyDown(Keys.LWin); Keyboard.KeyDown(Keys.D); Keyboard.KeyUp(Keys.D); Keyboard.KeyUp(Keys.LWin); };
-                    exit.Click += delegate { selfClose = true; Close(); Application.Exit(); };
+                    exit.Click += delegate { MessageBox.Show(test); selfClose = true; Close(); Application.Exit(); };
 
                     //Add all menu items
                     d.Items.Add(toolbars);
@@ -338,12 +340,14 @@ namespace SimpleClassicThemeTaskbar
             }
         }
 
+        int count = 0;
         private void BackgroundThreadFunction()
         {
             Stopwatch t = new Stopwatch();
             t.Start();
             while (!selfClose)
             {
+                test += "BG Start\n";
                 IntPtr ForegroundWindow = GetForegroundWindow();
                 Window wnd = new Window(ForegroundWindow);
 
@@ -392,11 +396,18 @@ namespace SimpleClassicThemeTaskbar
                 EnumWindows(d, 0);
 
                 //Check stopwatch
-                //while (t.ElapsedMilliseconds < 200) { Thread.Sleep(15); }
-                //t.Restart();
+                if (t.ElapsedMilliseconds > 1000) 
+                { 
+                    test += count; 
+                    test += "\n"; 
+                    count = 0;
+                    t.Restart();
+                }
 
                 //Send an update signal to UI (when ready)
-                while (busy) { /* Thread.Sleep(15); */ }
+                while (busy) { /*Console.WriteLine("waiting"); Thread.Sleep(15);*/ }
+                Thread.Sleep(15);
+                test += "BG Done\n"; count++;
                 if (!IsDisposed)
                 {
                     Invoke(new Action(delegate
@@ -418,17 +429,17 @@ namespace SimpleClassicThemeTaskbar
                             }
                             if (ApplicationEntryPoint.ErrorCount < 2)
                             {
-                                (ApplicationEntryPoint.ErrorSource as UserControlEx).Erroring = true;
-                                (ApplicationEntryPoint.ErrorSource as UserControlEx).Invalidate();
-                                (ApplicationEntryPoint.ErrorSource as UserControlEx).Update();
-                                (ApplicationEntryPoint.ErrorSource as UserControlEx).Refresh();
+                                ApplicationEntryPoint.ErrorSource.Erroring = true;
+                                ApplicationEntryPoint.ErrorSource.Invalidate();
+                                ApplicationEntryPoint.ErrorSource.Update();
+                                ApplicationEntryPoint.ErrorSource.Refresh();
                                 Application.DoEvents();
 
                                 MessageBox.Show("Unhandled exception ocurred while drawing GUI\n" + ApplicationEntryPoint.ErrorSource.GetErrorString(), "Error");
-                                (ApplicationEntryPoint.ErrorSource as UserControlEx).Erroring = false;
-                                (ApplicationEntryPoint.ErrorSource as UserControlEx).Invalidate();
-                                (ApplicationEntryPoint.ErrorSource as UserControlEx).Update();
-                                (ApplicationEntryPoint.ErrorSource as UserControlEx).Refresh();
+                                ApplicationEntryPoint.ErrorSource.Erroring = false;
+                                ApplicationEntryPoint.ErrorSource.Invalidate();
+                                ApplicationEntryPoint.ErrorSource.Update();
+                                ApplicationEntryPoint.ErrorSource.Refresh();
                                 Application.DoEvents();
 
                                 busy = false;
@@ -455,7 +466,8 @@ namespace SimpleClassicThemeTaskbar
         }
 
         public void UpdateGUI()
-		{   
+		{
+            test += "FG Start\n";
             busy = true;
 
             //Resize work area
@@ -810,6 +822,7 @@ namespace SimpleClassicThemeTaskbar
                 icons.Add(program);
 
             busy = false;
+            test += "FG Done\n";
         }
 
         private void Taskbar_IconDown(object sender, MouseEventArgs e)
