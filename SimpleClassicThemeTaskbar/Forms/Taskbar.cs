@@ -315,7 +315,11 @@ namespace SimpleClassicThemeTaskbar
                     taskManager.Click += delegate { Process.Start("taskmgr"); };
                     settings.Click += delegate { new Settings().Show(); };
                     showDesktop.Click += delegate { Keyboard.KeyDown(Keys.LWin); Keyboard.KeyDown(Keys.D); Keyboard.KeyUp(Keys.D); Keyboard.KeyUp(Keys.LWin); };
-                    exit.Click += delegate { MessageBox.Show(test); selfClose = true; Close(); Application.Exit(); };
+                    exit.Click += delegate {
+#if DEBUG
+                        MessageBox.Show(test);
+#endif
+                        selfClose = true; Close(); Application.Exit(); };
 
                     //Add all menu items
                     d.Items.Add(toolbars);
@@ -1210,8 +1214,18 @@ namespace SimpleClassicThemeTaskbar
 
             //Re-display all windows (except heldDownButton)
             displayWindows:
-
             icons = programs;
+
+            //Update systray
+            if (Primary)
+                systemTray1.UpdateIcons();
+
+            //Update quick-launch
+            if (Primary)
+                quickLaunch1.UpdateIcons();
+
+            //Update clock
+            systemTray1.UpdateTime();
 
             //Update UI
             timerUpdateUI_Tick(null, null);

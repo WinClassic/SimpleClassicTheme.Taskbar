@@ -181,14 +181,21 @@ namespace SimpleClassicThemeTaskbar
             format.Trimming = StringTrimming.EllipsisCharacter;
             if (IconImage != null)
             {
-                const int DI_NORMAL = 0x0003;
-                [DllImport("user32.dll", SetLastError = true)]
-                static extern bool DrawIconEx(IntPtr hdc, int xLeft, int yTop, IntPtr hIcon, int cxWidth, int cyHeight, int istepIfAniCur, int hbrFlickerFreeDraw, int diFlags);
-                //e.Graphics.DrawImage(IconImage, textIndent ? new Rectangle(5, 8, 16, 16) : new Rectangle(4, 7, 16, 16));
-                Rectangle dest = textIndent ? new Rectangle(5, 8, 16, 16) : new Rectangle(4, 7, 16, 16);
-                DrawIconEx(e.Graphics.GetHdc(), dest.X, dest.Y, Icon.Handle, dest.Width, dest.Height, 0, 0, DI_NORMAL);
+                //const int DI_NORMAL = 0x0003;
+                //const int DI_IMAGE = 0x0002;
+                //const int DI_NOMIRROR = 0x0010;
+                //[DllImport("user32.dll", SetLastError = true)]
+                //static extern bool DrawIconEx(IntPtr hdc, int xLeft, int yTop, IntPtr hIcon, int cxWidth, int cyHeight, int istepIfAniCur, int hbrFlickerFreeDraw, int diFlags);
+                
+                //Rectangle dest = textIndent ? new Rectangle(5, 8, 16, 16) : new Rectangle(4, 7, 16, 16);
+                //DrawIconEx(e.Graphics.GetHdc(), dest.X, dest.Y, Icon.Handle, dest.Width, dest.Height, 0, 0, DI_NORMAL);
                 //MessageBox.Show(GetLastError().ToString());
-                e.Graphics.ReleaseHdc();
+                //e.Graphics.ReleaseHdc();
+
+                //e.Graphics.DrawImage(IconImage, textIndent ? new Rectangle(5, 8, 16, 16) : new Rectangle(4, 7, 16, 16));
+                //e.Graphics.DrawImage(Bitmap.FromHicon(Icon.Handle), textIndent ? new Rectangle(5, 8, 16, 16) : new Rectangle(4, 7, 16, 16));
+
+                e.Graphics.DrawImage(IconImage, textIndent ? new Rectangle(5, 8, 16, 16) : new Rectangle(4, 7, 16, 16));
 
                 e.Graphics.DrawString(Title, textFont, SystemBrushes.ControlText, textIndent ? new Rectangle(21, 11, Width - 21 - 3 - SpaceNeededNextToText, 10) : new Rectangle(20, 10, Width - 20 - 3 - SpaceNeededNextToText, 11), format);
             }

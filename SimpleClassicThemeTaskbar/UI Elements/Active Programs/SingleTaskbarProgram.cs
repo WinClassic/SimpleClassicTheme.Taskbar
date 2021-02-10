@@ -1,13 +1,44 @@
-﻿using System;
+﻿using SimpleClassicThemeTaskbar.Forms;
+using System;
 using System.Diagnostics;
 using System.Drawing;
+using System.Drawing.Imaging;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 namespace SimpleClassicThemeTaskbar
 {
 	public class SingleTaskbarProgram : BaseTaskbarProgram
 	{
-		public SingleTaskbarProgram()
+        [DllImport("user32.dll")]
+        static extern bool GetIconInfo(IntPtr hIcon, out ICONINFO piconinfo);
+        [StructLayout(LayoutKind.Sequential)]
+        struct ICONINFO
+        {
+            /// <summary>
+            /// Specifies whether this structure defines an icon or a cursor.
+            /// A value of TRUE specifies an icon; FALSE specifies a cursor
+            /// </summary>
+            public bool fIcon;
+            /// <summary>
+            /// The x-coordinate of a cursor's hot spot
+            /// </summary>
+            public Int32 xHotspot;
+            /// <summary>
+            /// The y-coordinate of a cursor's hot spot
+            /// </summary>
+            public Int32 yHotspot;
+            /// <summary>
+            /// The icon bitmask bitmap
+            /// </summary>
+            public IntPtr hbmMask;
+            /// <summary>
+            /// A handle to the icon color bitmap.
+            /// </summary>
+            public IntPtr hbmColor;
+        }
+
+        public SingleTaskbarProgram()
 		{
             Constructor();
         }
@@ -15,12 +46,35 @@ namespace SimpleClassicThemeTaskbar
         private Process process;
         private Window window;
         private Icon icon;
+        private Bitmap iconImage;
 
         public override Process Process { get => process; set { process = value; /*MessageBox.Show(ApplicationEntryPoint.d.GetAppUserModelId(Process.Id));*/ } }
 		public override Window Window { get => window; set => window = value; }
         public override string Title { get => window.Title; set => window.Title = value; }
-        public override Icon Icon { get => icon; set => icon = value; }
-        public override Image IconImage { get { try { return new Icon(Icon, 16, 16).ToBitmap(); } catch { return null; } } }
+        public override Icon Icon 
+        { 
+            get => icon; 
+            set
+            {
+                icon = value;
+                if (icon != null)
+                    iconImage = new Icon(icon, 16, 16).ToBitmap();
+                else
+                    iconImage = null;
+                /*if (icon == null)
+                    return;
+                ICONINFO ii;
+                GetIconInfo(icon.Handle, out ii);
+                Bitmap bmpIcon = Bitmap.FromHbitmap(ii.hbmColor);
+                Rectangle rectBounds = new Rectangle(0, 0, bmpIcon.Width, bmpIcon.Height );
+                BitmapData bmData = new BitmapData();
+                bmpIcon.LockBits(rectBounds, ImageLockMode.ReadOnly, bmpIcon.PixelFormat, bmData);
+                Bitmap bmpAlpha = new Bitmap(bmData.Width, bmData.Height, bmData.Stride, PixelFormat.Format32bppArgb, bmData.Scan0);
+                bmpIcon.UnlockBits(bmData);
+                iconImage = bmpAlpha;*/
+            }
+        }
+        public override Image IconImage { get => iconImage;/* { try { return new Icon(Icon, 16, 16).ToBitmap(); } catch { return null; } } */}
 
         public override string GetErrorString()
             => GetBaseErrorString() +
@@ -41,6 +95,12 @@ namespace SimpleClassicThemeTaskbar
 
         public override void OnClick(object sender, MouseEventArgs e)
 		{
+            if (e.Button == MouseButtons.Right)
+			{
+                new IconTest(Window).Show();
+                return;
+			}
+
             ApplicationEntryPoint.ErrorSource = this;
             controlState = "handling mouse click";
             if (IsMoving)

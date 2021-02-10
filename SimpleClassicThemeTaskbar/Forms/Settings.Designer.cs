@@ -125,7 +125,6 @@
 			// 
 			// tabTaskviewAppearance
 			// 
-			this.tabTaskviewAppearance.BackColor = System.Drawing.SystemColors.Control;
 			this.tabTaskviewAppearance.Controls.Add(this.button3);
 			this.tabTaskviewAppearance.Controls.Add(this.button2);
 			this.tabTaskviewAppearance.Controls.Add(this.label11);
@@ -246,7 +245,6 @@
 			this.tabStartButtonAppearance.Controls.Add(this.groupBox1);
 			resources.ApplyResources(this.tabStartButtonAppearance, "tabStartButtonAppearance");
 			this.tabStartButtonAppearance.Name = "tabStartButtonAppearance";
-			this.tabStartButtonAppearance.UseVisualStyleBackColor = true;
 			// 
 			// groupBox2
 			// 
@@ -361,7 +359,6 @@
 			this.tabSysTrayAppearance.Controls.Add(this.enableSysTrayHover);
 			resources.ApplyResources(this.tabSysTrayAppearance, "tabSysTrayAppearance");
 			this.tabSysTrayAppearance.Name = "tabSysTrayAppearance";
-			this.tabSysTrayAppearance.UseVisualStyleBackColor = true;
 			// 
 			// label10
 			// 
@@ -401,7 +398,6 @@
 			// 
 			// tabAbout
 			// 
-			this.tabAbout.BackColor = System.Drawing.SystemColors.Control;
 			this.tabAbout.Controls.Add(this.pictureBox2);
 			this.tabAbout.Controls.Add(this.pictureBox1);
 			this.tabAbout.Controls.Add(this.pictureBox3);
@@ -421,7 +417,7 @@
 			// pictureBox1
 			// 
 			this.pictureBox1.BackColor = System.Drawing.Color.White;
-			this.pictureBox1.Image = global::SimpleClassicThemeTaskbar.Properties.Resources.win98scttbanner;
+			this.pictureBox1.Image = SimpleClassicThemeTaskbar.Properties.Resources.win98scttbanner;
 			resources.ApplyResources(this.pictureBox1, "pictureBox1");
 			this.pictureBox1.Name = "pictureBox1";
 			this.pictureBox1.TabStop = false;

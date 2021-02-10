@@ -144,7 +144,8 @@ namespace SimpleClassicThemeTaskbar
 #else
                 return;
 #endif
-            }   
+            }
+            Application.VisualStyleState = System.Windows.Forms.VisualStyles.VisualStyleState.NoneEnabled;
             Application.SetCompatibleTextRenderingDefault(false);
             Microsoft.Win32.SystemEvents.DisplaySettingsChanged += delegate
             {

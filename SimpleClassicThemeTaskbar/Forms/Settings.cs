@@ -2,12 +2,16 @@
 using System.Diagnostics;
 using System.Drawing;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 namespace SimpleClassicThemeTaskbar
 {
     public partial class Settings : Form
     {
+        [DllImport("uxtheme.dll", SetLastError = true, ExactSpelling = true, CharSet = CharSet.Unicode)]
+        public static extern int SetWindowTheme(IntPtr hWnd, string pszSubAppName, string pszSubIdList);
+
         public Settings()
         {
             InitializeComponent();
@@ -101,6 +105,8 @@ namespace SimpleClassicThemeTaskbar
             if (IntPtr.Size == 8)
                 pictureBox2.Location = new Point(pictureBox2.Location.X + 3, pictureBox2.Location.Y);
             pictureBox2.Image = bitmap;
+
+            SetWindowTheme(Handle, " ", " ");
         }
 
 		private void RadioStart_CheckedChanged(object sender, EventArgs e)
