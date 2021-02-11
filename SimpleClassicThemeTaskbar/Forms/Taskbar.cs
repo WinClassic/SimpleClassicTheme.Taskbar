@@ -448,8 +448,6 @@ namespace SimpleClassicThemeTaskbar
                 }
                 x += icon.Width + Config.SpaceBetweenTaskbarIcons;
                 icon.Visible = true;
-
-                //Application.DoEvents();
             }
             if (heldDownButton != null)
             {
