@@ -144,7 +144,8 @@
     <ClCompile Include="BackgroundThread.cpp" />
     <ClCompile Include="BaseWindow.cpp" />
     <ClCompile Include="ButtonWindow.cpp" />
-    <ClCompile Include="ComponentRenderer.cpp" />
+    <ClCompile Include="BaseComponentRenderer.cpp" />
+    <ClCompile Include="ClassicComponentRenderer.cpp" />
     <ClCompile Include="StartWindow.cpp" />
     <ClCompile Include="Taskbar.cpp" />
     <ClCompile Include="TaskListWindow.cpp" />
@@ -156,14 +157,20 @@
     <ClInclude Include="BackgroundThread.h" />
     <ClInclude Include="BaseWindow.h" />
     <ClInclude Include="ButtonWindow.h" />
-    <ClInclude Include="ComponentRenderer.h" />
+    <ClInclude Include="BaseComponentRenderer.h" />
+    <ClInclude Include="ClassicComponentRenderer.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="resource1.h" />
     <ClInclude Include="StartWindow.h" />
     <ClInclude Include="Taskbar.h" />
     <ClInclude Include="TaskListWindow.h" />
+    <ClInclude Include="UIComponents.h" />
     <ClInclude Include="UnmanagedCode.h" />
     <ClInclude Include="ProcessData.h" />
     <ClInclude Include="Win32Window.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="SimpleClassicThemeTaskbar.UnmanagedCode1.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -380,6 +380,11 @@ namespace SimpleClassicThemeTaskbar
             //Check if the foreground window was the start menu
             startButton1.UpdateState(wnd);
 
+            //Put left side controls in the correct place
+            startButton1.Location = new Point(2, 4);
+            startButtonPanel.Width = startButton1.Width + 2;
+            quickLaunch1.Location = new Point(startButton1.Location.X + startButton1.Width + 2, 1);
+
             //Calculate availabe space in taskbar and then divide that space over all programs
             int startX = quickLaunch1.Location.X + quickLaunch1.Width + 4;
             int programWidth = Primary ? Config.TaskbarProgramWidth + Config.SpaceBetweenTaskbarIcons : 24;

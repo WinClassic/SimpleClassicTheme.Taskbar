@@ -19,6 +19,12 @@
     <Filter Include="Header Files\UI Components">
       <UniqueIdentifier>{93042088-0ce7-4c50-b2e6-6234a6550c27}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Renderers">
+      <UniqueIdentifier>{98040295-b12a-43c7-97d5-53888d6f2d5a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Renderers">
+      <UniqueIdentifier>{2d019d15-e1a4-49d7-93e7-718e0270956a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="UnmanagedCode.cpp">
@@ -48,8 +54,11 @@
     <ClCompile Include="Win32Window.cpp">
       <Filter>Source Files\UI Components</Filter>
     </ClCompile>
-    <ClCompile Include="ComponentRenderer.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="BaseComponentRenderer.cpp">
+      <Filter>Source Files\Renderers</Filter>
+    </ClCompile>
+    <ClCompile Include="ClassicComponentRenderer.cpp">
+      <Filter>Source Files\Renderers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -86,8 +95,22 @@
     <ClInclude Include="Win32Window.h">
       <Filter>Header Files\UI Components</Filter>
     </ClInclude>
-    <ClInclude Include="ComponentRenderer.h">
+    <ClInclude Include="resource1.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="UIComponents.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseComponentRenderer.h">
+      <Filter>Header Files\Renderers</Filter>
+    </ClInclude>
+    <ClInclude Include="ClassicComponentRenderer.h">
+      <Filter>Header Files\Renderers</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="SimpleClassicThemeTaskbar.UnmanagedCode1.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>
