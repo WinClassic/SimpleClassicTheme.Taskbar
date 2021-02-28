@@ -429,7 +429,7 @@ namespace SimpleClassicThemeTaskbar
             //Re-display all windows (except heldDownButton)
             foreach (BaseTaskbarProgram icon in icons)
             {
-                icon.Width = iconWidth;
+                icon.Width = Math.Max(icon.MinimumWidth, iconWidth);
                 if (icon == heldDownButton)
                 {
                     x += icon.Width + Config.SpaceBetweenTaskbarIcons;
@@ -739,6 +739,9 @@ namespace SimpleClassicThemeTaskbar
             //Update quick-launch
             if (Primary)
                 quickLaunch1.UpdateIcons();
+
+            //Put divider in correct place
+            verticalDivider3.Location = new Point(systemTray1.Location.X - 9, verticalDivider3.Location.Y);
 
             //Update clock
             systemTray1.UpdateTime();

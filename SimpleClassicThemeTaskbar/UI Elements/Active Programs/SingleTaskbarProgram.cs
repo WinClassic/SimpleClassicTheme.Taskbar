@@ -75,8 +75,9 @@ namespace SimpleClassicThemeTaskbar
             }
         }
         public override Image IconImage { get => iconImage;/* { try { return new Icon(Icon, 16, 16).ToBitmap(); } catch { return null; } } */}
+        public override int MinimumWidth => 24;
 
-        public override string GetErrorString()
+		public override string GetErrorString()
             => GetBaseErrorString() +
             $"Process: {Process.MainModule.ModuleName} ({Process.Id})\n" +
             $"Window title: {Title}\n" +

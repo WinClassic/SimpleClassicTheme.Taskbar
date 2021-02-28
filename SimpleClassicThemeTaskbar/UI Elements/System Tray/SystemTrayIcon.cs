@@ -196,8 +196,8 @@ namespace SimpleClassicThemeTaskbar.UIElements.SystemTray
             }
             catch { }
             Invalidate();
-            Refresh();
-            Update();
+            //Refresh();
+            //Update();
 
             //Update tooltip
             if (TBUTTONINFO_Struct.toolTip != button.toolTip)

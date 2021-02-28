@@ -6,12 +6,13 @@ namespace SimpleClassicThemeTaskbar
 {
 	namespace Unmanaged
 	{
-		class ClassicComponentRenderer : ComponentRenderer
+		class ClassicComponentRenderer : public ComponentRenderer
 		{
+		public:
 			void Initialize();
-			void DrawStartButton(StartWindow window);
-			void DrawTaskbar(Taskbar taskbar);
-			void DrawTaskList(TaskListWindow window);
+			void DrawTaskbar(HWND hWnd);
+			void DrawStartButton(StartWindow* window, PDRAWITEMSTRUCT drawStruct);
+			void DrawTaskList(TaskListWindow* window, PDRAWITEMSTRUCT drawStruct);
 			void Destroy();
 		};
 	}

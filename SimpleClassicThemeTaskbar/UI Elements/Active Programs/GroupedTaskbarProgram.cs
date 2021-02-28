@@ -40,6 +40,7 @@ namespace SimpleClassicThemeTaskbar
 		public override string Title { get => ProgramWindows[0].Title; set => ProgramWindows[0].Title = value; }
 		public override Icon Icon { get => ProgramWindows[0].Icon; set => ProgramWindows[0].Icon = value; }
 		public override Image IconImage { get { try { return new Icon(Icon, 16, 16).ToBitmap(); } catch { return null; } } }
+		public override int MinimumWidth => 42;
 
 		public override string GetErrorString()
 			=> GetBaseErrorString() +

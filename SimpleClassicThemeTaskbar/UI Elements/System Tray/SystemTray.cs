@@ -155,6 +155,10 @@ namespace SimpleClassicThemeTaskbar.UIElements.SystemTray
             int virtualWidth = 16 + Config.SpaceBetweenTrayIcons;
             int x = 3;
             Width = 63 + (finalIconList.Count * virtualWidth);
+			
+			betterBorderPanel1.Invalidate();
+            //betterBorderPanel1.Refresh();
+            //betterBorderPanel1.Update();
 
             int startX = x;
             int iconWidth = 16;

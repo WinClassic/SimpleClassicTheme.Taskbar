@@ -58,8 +58,8 @@ namespace SimpleClassicThemeTaskbar
 				return;
 			Controls.Clear();
 			StartPosition = FormStartPosition.Manual;
-			Location = new Point(buttonScreenCoordinates.X - 4, buttonScreenCoordinates.Y - 6 - ((parent.ProgramWindows.Count - 1) * 24));
-			Size = new Size(168, 6 + ((parent.ProgramWindows.Count - 1) * 24));
+			Size = new Size(Config.TaskbarProgramWidth + 8, ((parent.ProgramWindows.Count - 1) * 24) + 6);
+			Location = new Point(buttonScreenCoordinates.X + (parent.Width / 2) - (Width / 2), buttonScreenCoordinates.Y - Height);
 			for (int i = 1; i < parent.ProgramWindows.Count; i++)
 			{
 				SingleTaskbarProgram program = parent.ProgramWindows[i];
@@ -68,7 +68,7 @@ namespace SimpleClassicThemeTaskbar
 				int y = ((i - 1) * 24);
 				program.Parent = this;
 				program.Location = new Point(x, y);
-				program.Width = parent.Width;
+				program.Width = Config.TaskbarProgramWidth;
 				program.Visible = true;
 				//program.MouseClick += delegate (object sender, MouseEventArgs e) {  };
 			}

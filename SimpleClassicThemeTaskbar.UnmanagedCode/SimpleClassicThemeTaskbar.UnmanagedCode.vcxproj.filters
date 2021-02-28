@@ -33,9 +33,6 @@
     <ClCompile Include="Taskbar.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="BackgroundThread.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="ApplicationWindow.cpp">
       <Filter>Source Files\UI Components</Filter>
     </ClCompile>
@@ -54,9 +51,6 @@
     <ClCompile Include="Win32Window.cpp">
       <Filter>Source Files\UI Components</Filter>
     </ClCompile>
-    <ClCompile Include="BaseComponentRenderer.cpp">
-      <Filter>Source Files\Renderers</Filter>
-    </ClCompile>
     <ClCompile Include="ClassicComponentRenderer.cpp">
       <Filter>Source Files\Renderers</Filter>
     </ClCompile>
@@ -69,9 +63,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Taskbar.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="BackgroundThread.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ApplicationWindow.h">

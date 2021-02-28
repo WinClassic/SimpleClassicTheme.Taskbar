@@ -13,8 +13,9 @@ namespace SimpleClassicThemeTaskbar
 			~TaskListWindow();
 
 			int GetItemCount();
-			void GetItem(int index, LPTCITEM item);
+			BOOL GetItem(int index, LPTCITEM item);
 			HIMAGELIST GetImageList();
+			int GetCurSel();
 
 			void InsertItem(LPTCITEM item);
 			void DeleteItem(int index);

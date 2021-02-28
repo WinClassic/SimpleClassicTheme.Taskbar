@@ -56,6 +56,7 @@ namespace SimpleClassicThemeTaskbar
         public abstract Icon Icon { get; set; }
         public abstract Image IconImage { get; }
         public abstract string Title { get; set; }
+        public abstract int MinimumWidth { get; }
 
         public bool ActiveWindow
         {
@@ -197,7 +198,8 @@ namespace SimpleClassicThemeTaskbar
 
                 e.Graphics.DrawImage(IconImage, textIndent ? new Rectangle(5, 8, 16, 16) : new Rectangle(4, 7, 16, 16));
 
-                e.Graphics.DrawString(Title, textFont, SystemBrushes.ControlText, textIndent ? new Rectangle(21, 11, Width - 21 - 3 - SpaceNeededNextToText, 10) : new Rectangle(20, 10, Width - 20 - 3 - SpaceNeededNextToText, 11), format);
+                if (Width >= 60)
+                    e.Graphics.DrawString(Title, textFont, SystemBrushes.ControlText, textIndent ? new Rectangle(21, 11, Width - 21 - 3 - SpaceNeededNextToText, 10) : new Rectangle(20, 10, Width - 20 - 3 - SpaceNeededNextToText, 11), format);
             }
             else
             {

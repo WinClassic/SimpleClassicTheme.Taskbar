@@ -1,8 +1,8 @@
 #pragma once
-#include "BaseWindow.h"
-#include "ApplicationWindow.h"
-#include "StartWindow.h"
-#include "TaskListWindow.h"
+
+#include "BaseComponentRenderer.h"
+#include "UIComponents.h"
+
 #include <vector>
 #include <unordered_map>
 
@@ -28,6 +28,7 @@ namespace SimpleClassicThemeTaskbar
 
 			StartWindow* startWindow;
 			TaskListWindow* taskListWindow;
+			ComponentRenderer* renderer;
 
 			static bool windowClassRegistered;
 			static bool secondaryWindowClassRegistered;

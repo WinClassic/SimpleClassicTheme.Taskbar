@@ -8,6 +8,7 @@ namespace SimpleClassicThemeTaskbar
 		{
 			createParams.lpszClass = WC_TABCONTROL;
 			createParams.style = WS_VISIBLE | WS_CHILD | WS_CLIPCHILDREN | WS_CLIPSIBLINGS | TCS_BUTTONS | TCS_FIXEDWIDTH | TCS_MULTILINE | TCS_FOCUSNEVER;
+			createParams.style = WS_VISIBLE | WS_CHILD | WS_CLIPCHILDREN | WS_CLIPSIBLINGS /*| TCS_BUTTONS*/ | TCS_FIXEDWIDTH | TCS_MULTILINE | TCS_FOCUSNEVER | TCS_OWNERDRAWFIXED;
 			createParams.hMenu = (HMENU)IDC_TASKLIST;
 		}
 		
@@ -21,14 +22,19 @@ namespace SimpleClassicThemeTaskbar
 			return TabCtrl_GetItemCount(WindowHandle);
 		}
 
-		void TaskListWindow::GetItem(int index, LPTCITEM item)
+		BOOL TaskListWindow::GetItem(int index, LPTCITEM item)
 		{
-			TabCtrl_GetItem(WindowHandle, index, item);
+			return TabCtrl_GetItem(WindowHandle, index, item);
 		}
 
 		HIMAGELIST TaskListWindow::GetImageList()
 		{
 			return TabCtrl_GetImageList(WindowHandle);
+		}
+
+		int TaskListWindow::GetCurSel()
+		{
+			return TabCtrl_GetCurSel(WindowHandle);
 		}
 
 		BOOL TaskListWindow::SetItem(int index, LPTCITEM item)

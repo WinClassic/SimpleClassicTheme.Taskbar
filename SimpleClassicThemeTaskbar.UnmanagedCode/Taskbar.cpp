@@ -1,4 +1,5 @@
 #include "Taskbar.h"
+
 #include <VersionHelpers.h>
 #include <dwmapi.h>
 #pragma comment (lib, "dwmapi.lib")
@@ -7,10 +8,12 @@
 using namespace Gdiplus;
 #pragma comment (lib,"Gdiplus.lib")
 
+#include "ClassicComponentRenderer.h"
+
 #define WM_UPDATETASKBAR		WM_USER
 #define WM_REPOSITIONTASKBAR	WM_USER + 1
 #define DEBUG_DRAWBG false
-#define DEBUG_USETAB true
+#define DEBUG_USETAB false
 
 namespace SimpleClassicThemeTaskbar
 {
@@ -61,11 +64,13 @@ namespace SimpleClassicThemeTaskbar
 
 			startWindow = new StartWindow();
 			taskListWindow = new TaskListWindow();
-			
+			renderer = (ComponentRenderer*)new ClassicComponentRenderer();
+
 			CreateWindowHandle();
 
-			if (IsPrimary)
+			//if (IsPrimary)
 				SetTimer(WindowHandle, 0, 200, NULL);
+			//SendMessage(WindowHandle, WM_TIMER, 0, 0);
 		}
 
 		//Destructor
@@ -83,32 +88,44 @@ namespace SimpleClassicThemeTaskbar
 		//Check if the specified HWND is a window to be displayed
 		bool Taskbar::IsAltTabWindow(HWND hwnd, TCHAR* className)
 		{
+			TCHAR szText[128];
+
 			// Check if the OS is Windows 10
 			if (IsWindows10OrGreater())
 				// Check if the window is on the current Desktop
 				if (!cppCode.WindowIsOnCurrentDesktop(hwnd))
 					return false;
 
-			HWND root = GetAncestor(hwnd, 3);
+			//HWND root = GetAncestor(hwnd, 3);
 
-			// If the last active popup of the root owner is NOT this window: don't show it
-			// This method is described by Raymond Chen in this blogpost:
-			// https://devblogs.microsoft.com/oldnewthing/20071008-00/?p=24863
-			// Start at the root owner
-			HWND hwndWalk = GetAncestor(hwnd, GA_ROOTOWNER);
-			// See if we are the last active visible popup
-			HWND hwndTry;
-			while ((hwndTry = GetLastActivePopup(hwndWalk)) != hwndTry) {
-				if (IsWindowVisible(hwndTry)) break;
-				hwndWalk = hwndTry;
-			}
-			if (hwndWalk != hwnd)
-				return false;
+			//// If the last active popup of the root owner is NOT this window: don't show it
+			//// This method is described by Raymond Chen in this blogpost:
+			//// https://devblogs.microsoft.com/oldnewthing/20071008-00/?p=24863
+			//// Start at the root owner
+			//HWND hwndWalk = GetAncestor(hwnd, GA_ROOTOWNER);
+			//// See if we are the last active visible popup
+			//HWND hwndTry;
+			//while ((hwndTry = GetLastActivePopup(hwndWalk)) != hwndTry) {
+			//	if (IsWindowVisible(hwndTry)) break;
+			//	hwndWalk = hwndTry;
+			//}
+			//if (hwndWalk != hwnd)
+			//	return false;
 
 			// Get WINDOWINFO
 			WINDOWINFO wi = { 0 };
 			wi.cbSize = sizeof(WINDOWINFO);
 			GetWindowInfo(hwnd, &wi);
+
+			GetWindowTextW(hwnd, szText, 128); /* Get the window text */
+			if ((wcslen(szText) <= 0) ||
+				!IsWindowVisible(hwnd) ||
+				(::GetParent(hwnd) != NULL) ||
+				(GetWindow(hwnd, GW_OWNER) != NULL) ||
+				(GetWindowLongPtrW(hwnd, GWL_EXSTYLE) & WS_EX_TOOLWINDOW))
+			{
+				return false; /* Skip this window */
+			}
 
 			// If it's a tool window: don't show it
 			if ((wi.dwExStyle & WS_EX_TOOLWINDOW) > 0)
@@ -189,6 +206,9 @@ namespace SimpleClassicThemeTaskbar
 			PAINTSTRUCT ps;
 			HDC hdc;
 			RECT rc;
+
+			ApplicationWindow* button;
+			bool isPushed;
 			
 			HWND foregroundWindow;
 			MONITORINFO monitorInfo;
@@ -207,7 +227,7 @@ namespace SimpleClassicThemeTaskbar
 
 				// Initialize components
 				startWindow->SetParent(WindowHandle);
-				taskListWindow->SetParent(WindowHandle);
+				//taskListWindow->SetParent(WindowHandle);
 				//startWindow->SetText(L"Start");
 			case WM_REPOSITIONTASKBAR:
 			case WM_SYSCOLORCHANGE:
@@ -251,9 +271,9 @@ namespace SimpleClassicThemeTaskbar
 				startWindow->SetSize(startWindowSize);
 				startWindow->SetPosition(POINT{ 2, 4 });
 
-				taskListWindow->SetFont(font);
-				taskListWindow->SetSize(GetSize().cx - 2 - startWindowSize.cx - 4, startWindowSize.cy );
-				taskListWindow->SetPosition(POINT{ 2 + startWindowSize.cx + 4, 4 });
+				//taskListWindow->SetFont(font);
+				//taskListWindow->SetSize(GetSize().cx - 2 - startWindowSize.cx - 4, startWindowSize.cy );
+				//taskListWindow->SetPosition(POINT{ 2 + startWindowSize.cx + 4, 4 });
 
 				// Resize taskbar and TODO work area
 				monitorInfo = { 0 };
@@ -402,7 +422,7 @@ namespace SimpleClassicThemeTaskbar
 					{
 					case IDC_APPLICATION_WINDOW:
 						ApplicationWindow* button = applicationWindowHandleMap[(HWND)lParam];
-						button->ClickHandler();
+						//button->ClickHandler();
 						break;
 					}
 					break;
@@ -420,7 +440,7 @@ namespace SimpleClassicThemeTaskbar
 					HFONT oldFont;
 					SIZE buttonSize;
 					RECT textRect;
-					ApplicationWindow* button = applicationWindowHandleMap[dis->hwndItem];
+					button = applicationWindowHandleMap[dis->hwndItem];
 					if (!button)
 						return DefWindowProc(hwnd, msg, wParam, lParam);
 
@@ -428,7 +448,7 @@ namespace SimpleClassicThemeTaskbar
 
 					// Draw button frame
 					//if (dis->itemAction == ODA_DRAWENTIRE)
-					bool isPushed = dis->itemState & ODS_SELECTED;
+					isPushed = dis->itemState & ODS_SELECTED;
 					DrawFrameControl(hdc, &rc, DFC_BUTTON, DFCS_BUTTONPUSH | (isPushed ? DFCS_PUSHED : NULL));
 					
 					// Draw the icon
@@ -447,6 +467,10 @@ namespace SimpleClassicThemeTaskbar
 					DrawTextEx(hdc, button->GetText(), -1, &textRect, DT_VCENTER | DT_SINGLELINE | DT_END_ELLIPSIS | DT_LEFT, NULL);
 					SelectObject(hdc, oldFont);
 					
+					break;
+				case IDC_TASKLIST:
+					renderer->DrawTaskList(taskListWindow, dis);
+
 					break;
 				}
 

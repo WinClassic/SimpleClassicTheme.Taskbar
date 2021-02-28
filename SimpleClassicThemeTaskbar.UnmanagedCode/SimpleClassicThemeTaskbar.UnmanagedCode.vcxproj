@@ -141,10 +141,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="ApplicationWindow.cpp" />
-    <ClCompile Include="BackgroundThread.cpp" />
     <ClCompile Include="BaseWindow.cpp" />
     <ClCompile Include="ButtonWindow.cpp" />
-    <ClCompile Include="BaseComponentRenderer.cpp" />
     <ClCompile Include="ClassicComponentRenderer.cpp" />
     <ClCompile Include="StartWindow.cpp" />
     <ClCompile Include="Taskbar.cpp" />
@@ -154,7 +152,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ApplicationWindow.h" />
-    <ClInclude Include="BackgroundThread.h" />
     <ClInclude Include="BaseWindow.h" />
     <ClInclude Include="ButtonWindow.h" />
     <ClInclude Include="BaseComponentRenderer.h" />
