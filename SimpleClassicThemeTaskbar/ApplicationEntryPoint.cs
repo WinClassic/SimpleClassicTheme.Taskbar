@@ -36,13 +36,13 @@ namespace SimpleClassicThemeTaskbar
         static void Main(string[] args)
         {
             if (args.Contains("--dutch"))
-			{
+            {
                 System.Globalization.CultureInfo ci = new System.Globalization.CultureInfo("nl-NL");
                 System.Threading.Thread.CurrentThread.CurrentCulture = ci;
                 System.Threading.Thread.CurrentThread.CurrentUICulture = ci;
             }
             if (args.Contains("--exit"))
-            { 
+            {
                 static List<IntPtr> EnumerateProcessWindowHandles(int processId, string name)
                 {
                     List<IntPtr> handles = new List<IntPtr>();
@@ -77,7 +77,7 @@ namespace SimpleClassicThemeTaskbar
                     }
                 });
             }
-            if (args.Contains("--gui-test")) 
+            if (args.Contains("--gui-test"))
             {
                 Application.SetCompatibleTextRenderingDefault(false);
                 Application.Run(new Forms.GraphicsTest());
@@ -101,7 +101,7 @@ namespace SimpleClassicThemeTaskbar
 
 #if DEBUG
 #else
-            else 
+            else
             {
                 MessageBox.Show("SCT Taskbar does not currently work without SCT. Please install SCTT via the Options menu in SCT 1.2.0 or higher", "SCT required");
                 //MessageBox.Show("This version of SCTT is part of the SCT Private Alpha.\nPlease use the latest public build instead.", "SCT Private alpha");
@@ -113,7 +113,7 @@ namespace SimpleClassicThemeTaskbar
             //Setup crash reports
 #if DEBUG
 #else
-            Application.ThreadException += (sender, arg) => 
+            Application.ThreadException += (sender, arg) =>
             {
                 foreach (Taskbar bar in t)
                 {
@@ -129,7 +129,7 @@ namespace SimpleClassicThemeTaskbar
                                 arg.Exception.StackTrace,
                                 arg.Exception.Message,
                                 arg.Exception.Source
-                            }); 
+                            });
                 }
                 Application.Exit();
             };
@@ -179,6 +179,27 @@ namespace SimpleClassicThemeTaskbar
                 if (!Config.ShowTaskbarOnAllDesktops && !screen.Primary)
                     taskbar.NeverShow = true;
             }
+        }
+
+        internal static void ExitSCTT()
+        {
+            Config.SaveToRegistry();
+            List<Taskbar> activeBars = new List<Taskbar>();
+            foreach (Form form in Application.OpenForms)
+                if (form is Taskbar bar)
+                    activeBars.Add(bar);
+            foreach (Taskbar bar in activeBars)
+            {
+                foreach (Control d in bar.Controls)
+                    d.Dispose();
+                bar.selfClose = true;
+                bar.Close();
+                bar.Dispose();
+            }
+            Taskbar randomBar = activeBars.FirstOrDefault();
+
+           
+            Environment.Exit(0);
         }
     }
 }

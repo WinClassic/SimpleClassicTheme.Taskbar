@@ -46,9 +46,7 @@ namespace SimpleClassicThemeTaskbar
         { 
             if (m.Msg == WM_ENDSESSION)
             {
-                selfClose = true; 
-                Config.SaveToRegistry();
-                Environment.Exit(0);
+                ApplicationEntryPoint.ExitSCTT();
             }
             if (m.Msg == WM_QUERYENDSESSION)
             {
@@ -61,9 +59,7 @@ namespace SimpleClassicThemeTaskbar
                     case SCTWP_EXIT:
                         if (ApplicationEntryPoint.SCTCompatMode || m.LParam.ToInt32() == SCTLP_FORCE)
                         {
-                            selfClose = true;
-                            Close();
-                            Application.Exit();
+                            ApplicationEntryPoint.ExitSCTT();
                         }
                         break;
                     case SCTWP_ISMANAGED:
@@ -86,6 +82,20 @@ namespace SimpleClassicThemeTaskbar
                 //Console.WriteLine($"{screen.X},{screen.Y} {screen.Width}x{screen.Height}");
 			}
             base.WndProc(ref m);
+        }
+
+        public void RestoreExplorer()
+		{
+            //Show explorer's taskbar(s)
+            windows.Clear();
+            LookingForTray = true;
+            EnumWindowsCallback callback = EnumWind;
+            EnumWindows(callback, 0);
+            LookingForTray = false;
+
+            foreach (Window w in windows)
+                if ((w.WindowInfo.dwStyle & 0x10000000L) > 0)
+                    ShowWindow(w.Handle, 5 /* SW_SHOW */);
         }
 
         //Constructor
@@ -311,7 +321,7 @@ namespace SimpleClassicThemeTaskbar
                     taskManager.Click += delegate { Process.Start("taskmgr"); };
                     settings.Click += delegate { new Settings().Show(); };
                     showDesktop.Click += delegate { Keyboard.KeyDown(Keys.LWin); Keyboard.KeyDown(Keys.D); Keyboard.KeyUp(Keys.D); Keyboard.KeyUp(Keys.LWin); };
-                    exit.Click += delegate { selfClose = true; Close(); Application.Exit(); };
+                    exit.Click += delegate { ApplicationEntryPoint.ExitSCTT(); };
 
                     //Add all menu items
                     d.Items.Add(toolbars);
@@ -463,7 +473,7 @@ namespace SimpleClassicThemeTaskbar
             IntPtr ForegroundWindow = GetForegroundWindow();
             Window wnd = new Window(ForegroundWindow);
 
-            //Hide explorer's taskbar
+            //Hide explorer's taskbar(s)
             waitBeforeShow = false;
             windows.Clear();
             LookingForTray = true;
