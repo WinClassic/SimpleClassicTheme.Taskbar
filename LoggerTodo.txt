@@ -1,0 +1,14 @@
+Basic logging system:
+
+0: None = no logging
+1: Basic = log errors only
+2: Detailed = log basic program flow
+4: Verbose = log everything possible
+
+[X] Entry point
+[X] Taskbar Manager
+[ ] Taskbar
+[ ] Quick launch
+[ ] Active programs
+[ ] System tray
+[ ] Start button

@@ -28,21 +28,29 @@ namespace SimpleClassicThemeTaskbar
         public const int SCTLP_FORCE = 0x0001;
 
         public static bool SCTCompatMode = false;
-        internal static CodeBridge d = new CodeBridge();
+        internal static CodeBridge d = new();
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
         [STAThread]
         static void Main(string[] args)
         {
+            Logger.Initialize(LoggerVerbosity.Verbose);
+            foreach (var arg in args)
+			{
+                if (arg.StartsWith("-v="))
+                    Logger.SetVerbosity((LoggerVerbosity)Int32.Parse(arg.Substring(3)));
+			}
+            Logger.Log(LoggerVerbosity.Detailed, "EntryPoint", "Parsing arguments");
             if (args.Contains("--dutch"))
             {
-                System.Globalization.CultureInfo ci = new System.Globalization.CultureInfo("nl-NL");
+                System.Globalization.CultureInfo ci = new("nl-NL");
                 System.Threading.Thread.CurrentThread.CurrentCulture = ci;
                 System.Threading.Thread.CurrentThread.CurrentUICulture = ci;
             }
             if (args.Contains("--exit"))
             {
+                Logger.Log(LoggerVerbosity.Detailed, "EntryPoint", "Killing all SCTT instances");
                 static List<IntPtr> EnumerateProcessWindowHandles(int processId, string name)
                 {
                     List<IntPtr> handles = new List<IntPtr>();
@@ -92,10 +100,12 @@ namespace SimpleClassicThemeTaskbar
             }
             if (args.Contains("--unmanaged"))
             {
+                Logger.Log(LoggerVerbosity.Detailed, "EntryPoint", "Starting unmanaged SCTT. From here on nothing will be logged");
                 Environment.Exit(d.UnmanagedSCTT());
             }
             if (args.Contains("--sct"))
             {
+                Logger.Log(LoggerVerbosity.Detailed, "EntryPoint", "Current instance is an SCT managed instance");
                 SCTCompatMode = true;
             }
 
@@ -105,7 +115,7 @@ namespace SimpleClassicThemeTaskbar
             {
                 MessageBox.Show("SCT Taskbar does not currently work without SCT. Please install SCTT via the Options menu in SCT 1.2.0 or higher", "SCT required");
                 //MessageBox.Show("This version of SCTT is part of the SCT Private Alpha.\nPlease use the latest public build instead.", "SCT Private alpha");
-                return;
+                ExitSCTT();
             }
 #endif
 
@@ -113,6 +123,7 @@ namespace SimpleClassicThemeTaskbar
             //Setup crash reports
 #if DEBUG
 #else
+            Logger.Log(LoggerVerbosity.Detailed, "EntryPoint", "Non-debug instance, enabling error handler");
             Application.ThreadException += (sender, arg) =>
             {
                 foreach (Taskbar bar in t)
@@ -144,7 +155,10 @@ namespace SimpleClassicThemeTaskbar
 #else
                 return;
 #endif
+                Logger.Log(LoggerVerbosity.Detailed, "EntryPoint", "Debug instance, ignoring architecture");
             }
+            Logger.Log(LoggerVerbosity.Detailed, "EntryPoint", "Main initialization done, passing execution to TaskbarManager");
+            
             //Application.EnableVisualStyles();
             Application.VisualStyleState = System.Windows.Forms.VisualStyles.VisualStyleState.NoneEnabled;
             Application.SetCompatibleTextRenderingDefault(false);
@@ -154,11 +168,12 @@ namespace SimpleClassicThemeTaskbar
             };
             NewTaskbars();
             Application.Run();
-            Config.SaveToRegistry();
+            ExitSCTT();
         }
 
         internal static void NewTaskbars()
         {
+            Logger.Log(LoggerVerbosity.Detailed, "TaskbarManager", "Generating new taskbars");
             List<Taskbar> activeBars = new List<Taskbar>();
             foreach (Form form in Application.OpenForms)
                 if (form is Taskbar bar)
@@ -171,18 +186,23 @@ namespace SimpleClassicThemeTaskbar
                 bar.Close();
                 bar.Dispose();
             }
+            int taskbars = 0;
             foreach (Screen screen in Screen.AllScreens)
             {
+                taskbars++;
                 Rectangle rect = screen.Bounds;
                 Taskbar taskbar = new Taskbar(screen.Primary);
                 taskbar.ShowOnScreen(screen);
+                Logger.Log(LoggerVerbosity.Detailed, "TaskbarManager", $"Created taskbar in working area: {screen.Bounds}");
                 if (!Config.ShowTaskbarOnAllDesktops && !screen.Primary)
                     taskbar.NeverShow = true;
             }
+            Logger.Log(LoggerVerbosity.Detailed, "TaskbarManager", $"Created {taskbars} taskbars in total");
         }
 
         internal static void ExitSCTT()
         {
+            Logger.Log(LoggerVerbosity.Detailed, "TaskbarManager", $"Exit requested");
             Config.SaveToRegistry();
             List<Taskbar> activeBars = new List<Taskbar>();
             foreach (Form form in Application.OpenForms)
@@ -197,8 +217,9 @@ namespace SimpleClassicThemeTaskbar
                 bar.Dispose();
             }
             Taskbar randomBar = activeBars.FirstOrDefault();
+            Logger.Log(LoggerVerbosity.Detailed, "TaskbarManager", $"Killed all taskbars, exiting");
+            Logger.Uninitialize();
 
-           
             Environment.Exit(0);
         }
     }
