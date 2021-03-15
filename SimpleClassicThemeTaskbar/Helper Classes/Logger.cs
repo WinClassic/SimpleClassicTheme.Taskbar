@@ -1,5 +1,7 @@
 ﻿using System;
 using System.IO;
+using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Text;
 
 namespace SimpleClassicThemeTaskbar
@@ -20,8 +22,14 @@ namespace SimpleClassicThemeTaskbar
 		public static void Initialize(LoggerVerbosity verbosity)
 		{
 			SetVerbosity(verbosity);
-			fs = File.OpenWrite("./logs/" + DateTime.Now.ToString("yyyy-dd-M--HH-mm-ss"));
+			Directory.CreateDirectory("./logs");
+			fs = File.OpenWrite("./logs/log_" + DateTime.Now.ToString("yyyy-dd-M--HH-mm-ss") + ".txt");
 			Log(LoggerVerbosity.Basic, "Logger", "Succesfully initialized logger");
+
+			Log(LoggerVerbosity.Detailed, "SystemDump", "Performing quick system dump");
+			Log(LoggerVerbosity.Detailed, "SystemDump", $"OS: {RuntimeInformation.OSDescription} {RuntimeInformation.OSArchitecture}");
+			if (ApplicationEntryPoint.SCTCompatMode) Log(LoggerVerbosity.Detailed, "SystemDump", $"SCT version: {Assembly.LoadFrom("C:\\SCT\\SCT.exe").GetName().Version}");
+			Log(LoggerVerbosity.Detailed, "SystemDump", $"SCT Taskbar version: {Assembly.GetExecutingAssembly().GetName().Version}");
 		}
 
 		public static void SetVerbosity(LoggerVerbosity verbosity)
@@ -35,7 +43,7 @@ namespace SimpleClassicThemeTaskbar
 			if (loggerOff) return;
 			if (verbosity <= verb)
 			{
-				string toWrite = $"[{verbosity,-8}][{source,-16}]:[{text}]";
+				string toWrite = $"[{verbosity,8}][{source,-16}]: {text}\n";
 				byte[] bytes = Encoding.UTF8.GetBytes(toWrite);
 				fs.Write(bytes, 0, bytes.Length);
 			}
