@@ -1,0 +1,52 @@
+name: .NET Core Desktop
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v2
+    
+    - name: Restore packages
+      run: dotnet restore
+      working-directory: ./SimpleClassicThemeTaskbar/
+    
+    - name: Setup MSBuild
+      uses: microsoft/setup-msbuild@v1
+
+    - name: Build UnmanagedCode
+      run: msbuild -noLogo -p:Configuration=Release
+      working-directory: ./SimpleClassicThemeTaskbar.UnmanagedCode/
+      
+    - name: Build SCTT
+      run: msbuild -noLogo -p:Configuration=Release
+      working-directory: ./SimpleClassicThemeTaskbar/
+
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v2.2.3
+      with:
+        name: binaries
+        path: './SimpleClassicThemeTaskbar/bin/Release/net5.0-windows'
+
+  release:
+    runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'push' }}
+    steps:
+    - name: Download build artifact
+      uses: actions/download-artifact@v2.0.9
+      with:
+        name: binaries
+
+    - name: Publish release
+      uses: "marvinpinto/action-automatic-releases@latest"
+      with:
+        repo_token: "${{ secrets.GITHUB_TOKEN }}"
+        automatic_release_tag: "latest"
+        prerelease: true
+        title: "Development Build"
+        files: '*'
