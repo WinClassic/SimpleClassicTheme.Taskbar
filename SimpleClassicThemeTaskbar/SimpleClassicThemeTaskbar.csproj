@@ -32,6 +32,11 @@
   <ItemGroup>
     <ProjectReference Include="..\SimpleClassicThemeTaskbar.CodeBridge\SimpleClassicThemeTaskbar.CodeBridge.vcxproj" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Update="Theme Engine\Themes\Luna.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
   <PropertyGroup>
     <PostBuildEvent></PostBuildEvent>
   </PropertyGroup>

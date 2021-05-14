@@ -543,6 +543,7 @@ namespace SimpleClassicThemeTaskbar
                         Title = z.Title
                     };
                     button.MouseDown += Taskbar_IconDown;
+                    button.Height = Height;
 
                     User32.GetWindowThreadProcessId(button.Window.Handle, out uint pid);
                     Process p = Process.GetProcessById((int)pid);
@@ -630,6 +631,7 @@ namespace SimpleClassicThemeTaskbar
                                 Window = group.ProgramWindows[0].Window
                             };
                             button.MouseDown += Taskbar_IconDown;
+                            button.Height = Height;
 
                             User32.GetWindowThreadProcessId(button.Window.Handle, out uint pid);
                             Process p = Process.GetProcessById((int)pid);
