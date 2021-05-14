@@ -33,7 +33,7 @@ namespace SimpleClassicThemeTaskbar
 
         public override Image IconImage { get { try { return new Icon(Icon, 16, 16).ToBitmap(); } catch { return null; } } }
 
-        public override int MinimumWidth => 42;
+        public override int MinimumWidth => Config.Renderer.TaskButtonMinimalWidth + 18;
 
         public override Process Process { get => ProgramWindows[0].Process; set => ProgramWindows[0].Process = value; }
 

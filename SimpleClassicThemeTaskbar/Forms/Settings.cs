@@ -251,7 +251,10 @@ namespace SimpleClassicThemeTaskbar
 				{
                     string[] files = { "settings.txt", "startbutton.png", "systemtrayborder.png", "systemtraytexture.png", "taskbartexture.png", "taskbuttongroupwindowborder.png", "taskbuttonnormal.png", "taskbuttonnormalhover.png", "taskbuttonpressed.png", "taskbuttonpressedhover.png" };
                     string[] filesInDirectory = Directory.GetFiles(fbd.SelectedPath);
-                    if (files.SequenceEqual(filesInDirectory))
+                    string[] filesInDirectoryLower = new string[filesInDirectory.Length];
+                    for (int i = 0; i < filesInDirectory.Length; i++)
+                        filesInDirectoryLower[i] = Path.GetFileName(filesInDirectory[i]).ToLower();
+                    if (files.SequenceEqual(filesInDirectoryLower))
                     {
                         comboBox1.Items.Clear();
                         comboBox1.Items.Add(Resources.GetString("comboBox1.Items"));

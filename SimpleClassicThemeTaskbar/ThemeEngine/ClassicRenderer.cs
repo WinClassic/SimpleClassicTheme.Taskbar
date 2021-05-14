@@ -44,6 +44,7 @@ namespace SimpleClassicThemeTaskbar.ThemeEngine
         public override Font SystemTrayTimeFont => SystemFonts.DefaultFont;
         public override Point SystemTrayTimeLocation => new(-52, 9);
         public override int TaskbarHeight => 28;
+        public override int TaskButtonMinimalWidth => 24;
 
         public override void DrawQuickLaunch(QuickLaunch systemTray, Graphics g)
         {

@@ -76,7 +76,7 @@ namespace SimpleClassicThemeTaskbar.Helpers
                     Renderer = new ClassicRenderer();
                     break;
                 case "Internal/Luna":
-                    Renderer = new ImageRenderer(new ResourceManager("SimpleClassicThemeTaskbar.Theme_Engine.Themes.Luna", typeof(Config).Assembly));
+                    Renderer = new ImageRenderer(new ResourceManager("SimpleClassicThemeTaskbar.ThemeEngine.Themes.Luna", typeof(Config).Assembly));
                     break;
                 default:
                     Renderer = new ImageRenderer(RendererPath);
