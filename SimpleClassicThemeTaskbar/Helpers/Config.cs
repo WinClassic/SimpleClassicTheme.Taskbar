@@ -1,6 +1,6 @@
 ﻿using Microsoft.Win32;
 
-using SimpleClassicThemeTaskbar.Theme_Engine;
+using SimpleClassicThemeTaskbar.ThemeEngine;
 
 namespace SimpleClassicThemeTaskbar.Helpers
 {
