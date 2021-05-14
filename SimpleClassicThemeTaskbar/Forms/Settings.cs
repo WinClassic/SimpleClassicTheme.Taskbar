@@ -47,7 +47,7 @@ namespace SimpleClassicThemeTaskbar
 
             if ((string)comboBox1.SelectedItem == Resources.GetString("comboBox1.Items"))
                 Config.RendererPath = "Internal/Classic";
-            else if ((string)comboBox1.SelectedItem == Resources.GetString("comboBox1.Items2"))
+            else if ((string)comboBox1.SelectedItem == Resources.GetString("comboBox1.Items1"))
                 Config.RendererPath = "Internal/Luna";
             else
                 Config.RendererPath = (string)comboBox1.SelectedItem;
