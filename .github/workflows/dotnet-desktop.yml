@@ -1,0 +1,26 @@
+name: .NET Core Desktop
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v2
+    
+    - name: Setup MSBuild
+      uses: microsoft/setup-msbuild@v1
+
+    - name: Build
+      run: msbuild -noLogo -p:Configuration=Release
+      working-directory: ./SimpleClassicThemeTaskbar/
+
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v2.2.3
+      with:
+        name: binaries
+        path: './SimpleClassicThemeTaskbar/bin/x64/Release/net5.0-windows/'
