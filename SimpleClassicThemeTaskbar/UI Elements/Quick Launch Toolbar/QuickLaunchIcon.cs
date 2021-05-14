@@ -26,12 +26,12 @@ namespace SimpleClassicThemeTaskbar.UIElements.QuickLaunch
         {
             InitializeComponent();
 
-            base.MouseDown += delegate (object sender, MouseEventArgs e) { MouseDown?.DynamicInvoke(this, e); };
-            pictureBox1.MouseDown += delegate (object sender, MouseEventArgs e) { MouseDown?.DynamicInvoke(this, e); };
-            base.MouseUp += delegate (object sender, MouseEventArgs e) { MouseUp?.DynamicInvoke(this, e); };
-            pictureBox1.MouseUp += delegate (object sender, MouseEventArgs e) { MouseUp?.DynamicInvoke(this, e); };
-            base.MouseMove += delegate (object sender, MouseEventArgs e) { MouseMove?.DynamicInvoke(this, e); };
-            pictureBox1.MouseMove += delegate (object sender, MouseEventArgs e) { MouseMove?.DynamicInvoke(this, e); };
+            base.MouseDown += delegate (object sender, MouseEventArgs e) { _ = (MouseDown?.DynamicInvoke(this, e)); };
+            pictureBox1.MouseDown += delegate (object sender, MouseEventArgs e) { _ = (MouseDown?.DynamicInvoke(this, e)); };
+            base.MouseUp += delegate (object sender, MouseEventArgs e) { _ = (MouseUp?.DynamicInvoke(this, e)); };
+            pictureBox1.MouseUp += delegate (object sender, MouseEventArgs e) { _ = (MouseUp?.DynamicInvoke(this, e)); };
+            base.MouseMove += delegate (object sender, MouseEventArgs e) { _ = (MouseMove?.DynamicInvoke(this, e)); };
+            pictureBox1.MouseMove += delegate (object sender, MouseEventArgs e) { _ = (MouseMove?.DynamicInvoke(this, e)); };
 
             DragEnter += QuickLaunchIcon_DragEnter;
             pictureBox1.DragEnter += QuickLaunchIcon_DragEnter;
@@ -52,7 +52,7 @@ namespace SimpleClassicThemeTaskbar.UIElements.QuickLaunch
         private void QuickLaunchIcon_DragDrop(object sender, DragEventArgs e)
         {
             string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
-            foreach (string file in files) Process.Start(FileName, $"\"{file}\"");
+            foreach (string file in files) _ = Process.Start(FileName, $"\"{file}\"");
         }
 
         private void QuickLaunchIcon_Load(object sender, EventArgs e)

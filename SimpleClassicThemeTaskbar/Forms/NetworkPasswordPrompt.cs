@@ -33,7 +33,7 @@ namespace SimpleClassicThemeTaskbar.Forms
             label1.Text = label1.Text.Replace("SSID", ssid);
             textBox1.Text = "WPA2 - Private";
             textBox1.Enabled = false;
-            ShowDialog();
+            _ = ShowDialog();
         }
         private void NetworkPasswordPrompt_FormClosing(object sender, FormClosingEventArgs e)
         {

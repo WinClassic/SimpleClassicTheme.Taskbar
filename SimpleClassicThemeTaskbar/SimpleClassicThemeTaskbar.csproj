@@ -5,10 +5,10 @@
     <TargetFramework>net5.0-windows</TargetFramework>
     <UseWindowsForms>true</UseWindowsForms>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-	  <RootNamespace>SimpleClassicThemeTaskbar</RootNamespace>
+    <RootNamespace>SimpleClassicThemeTaskbar</RootNamespace>
     <AssemblyName>SimpleClassicThemeTaskbar</AssemblyName>
     <Deterministic>false</Deterministic>
-	  <Platforms>x86;x64</Platforms>
+    <Platforms>x86;x64</Platforms>
   </PropertyGroup>
 
   <ItemGroup>
@@ -23,7 +23,7 @@
       <PackagePath></PackagePath>
     </None>
   </ItemGroup>
-  
+
   <ItemGroup>
     <Reference Include="ManagedWifi">
       <HintPath>..\libraries\ManagedWifi.dll</HintPath>
@@ -37,17 +37,15 @@
       <Generator>ResXFileCodeGenerator</Generator>
     </EmbeddedResource>
   </ItemGroup>
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-  </Target>
   <PropertyGroup>
     <PostBuildEvent></PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
-   <LangVersion>preview</LangVersion>
-   <StartupObject>SimpleClassicThemeTaskbar.ApplicationEntryPoint</StartupObject>
-   <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
-   <PackageIcon>SimpleClassicTheme.ico</PackageIcon>
-   <ApplicationIcon>SimpleClassicTheme.ico</ApplicationIcon>
+    <LangVersion>preview</LangVersion>
+    <StartupObject>SimpleClassicThemeTaskbar.ApplicationEntryPoint</StartupObject>
+    <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
+    <PackageIcon>SimpleClassicTheme.ico</PackageIcon>
+    <ApplicationIcon>SimpleClassicTheme.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -61,6 +59,4 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
-
-
 </Project>

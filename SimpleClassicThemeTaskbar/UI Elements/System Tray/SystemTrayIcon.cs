@@ -1,57 +1,28 @@
-﻿using System;
+﻿using SimpleClassicThemeTaskbar.Helpers;
+using SimpleClassicThemeTaskbar.Helpers.NativeMethods;
+
+using System;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
-using HWND = System.IntPtr;
-
 namespace SimpleClassicThemeTaskbar.UIElements.SystemTray
 {
     public class SystemTrayIcon : PictureBox
     {
-        //[DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = false)]
-        //public static extern IntPtr SendMessage(IntPtr hWnd, int Msg, int wParam, int lParam);s
+        public new IntPtr Handle;
 
-        [DllImport("User32.dll")]
-        private static extern uint GetWindowThreadProcessId(IntPtr hWnd, out uint lpdwProcessId);
-
-        [DllImport("user32.dll", SetLastError = true)]
-        private static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int X, int Y, int cx, int cy, uint uFlags);
-
-        [DllImport("user32.dll", CharSet = CharSet.Unicode)]
-        public static extern HWND FindWindowW(string a, string b);
-
-        [DllImport("user32.dll")]
-        private static extern bool ShowWindow(HWND hWnd, int nCmdShow);
-
-        [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Auto)]
-        private static extern bool SendNotifyMessage(IntPtr hWnd, uint Msg, uint wParam, uint lParam);
-
-        public HWND BaseHandle
-        {
-            get => base.Handle;
-        }
-        public CodeBridge.TBUTTONINFO TBUTTONINFO_Struct;
-        public new HWND Handle;
-        public new string Text;
-        public uint PID;
-        public Misc.BetterToolTip toolTip;
         public bool IsMoving = false;
-        public Icon Icon
-        {
-            get => Icon.FromHandle(((Bitmap) Image).GetHicon());
-            set
-            {
-                try
-                {
-                    Image = value.ToBitmap();
-                }
-                catch { }    
-                value.Dispose();
-            }
-        }
+
+        public uint PID;
+
+        public CodeBridge.TBUTTONINFO TBUTTONINFO_Struct;
+
+        public new string Text;
+
+        public Misc.BetterToolTip toolTip;
 
         public SystemTrayIcon(CodeBridge.TBUTTONINFO button)
         {
@@ -71,60 +42,50 @@ namespace SimpleClassicThemeTaskbar.UIElements.SystemTray
                 MouseLeave += delegate { BackColor = Color.Transparent; };
             }
 
-           
-            toolTip = new Misc.BetterToolTip();
-            toolTip.ShowAlways = true;
+            toolTip = new Misc.BetterToolTip
+            {
+                ShowAlways = true
+            };
 
-            GetWindowThreadProcessId(Handle, out PID);
+            _ = User32.GetWindowThreadProcessId(Handle, out PID);
             string Pname = Process.GetProcessById(checked((int)PID)).ProcessName;
 
             string tempText = Text.Replace("\r\n", "\n");
-            string text = tempText.Contains("\n") ? tempText.Substring(tempText.IndexOf('\n') + 1) : "";
+            string text = tempText.Contains("\n") ? tempText[(tempText.IndexOf('\n') + 1)..] : "";
             string tooltip = $"{text}";
             //string tooltip = $"{text}\r\n\r\n{Pname} - {PID}\r\n{Handle}";
             toolTip.SetToolTip(this, tooltip);
             toolTip.ToolTipTitle = tempText.Contains("\n") ? tempText.Substring(0, tempText.IndexOf("\n")) : tempText;
 
-			MouseClick += SystemTrayIcon_MouseClick;
+            MouseClick += SystemTrayIcon_MouseClick;
             UpdateTrayIcon(TBUTTONINFO_Struct, true);
         }
 
-		private void SystemTrayIcon_MouseClick(object sender, MouseEventArgs e)
+        public IntPtr BaseHandle
         {
-            const uint WM_CONTEXTMENU = 0x007B;
-            const uint WM_LBUTTONDOWN = 0x0201;
-            const uint WM_LBUTTONUP = 0x0202;
-            const uint WM_RBUTTONDOWN = 0x0204;
-            const uint WM_RBUTTONUP = 0x0205;
-            const uint NIN_SELECT = 0x0400;
-
-            if (e.Button == MouseButtons.Right)
-			{
-                MessageBox.Show($"{Process.GetProcessById(checked((int)PID)).ProcessName}\n" + TBUTTONINFO_Struct.callbackMessage.ToString());
-                return;
-			}
-            if (IsMoving)
-            {
-                IsMoving = false;
-                return;
-            }
-
-            HWND Shell_TrayWnd = FindWindowW("Shell_TrayWnd", "");
-            GetWindowThreadProcessId(Shell_TrayWnd, out uint pidExplorer);
-
-            uint mouse = ((uint)Cursor.Position.Y << 16) | (uint)Cursor.Position.X;
-
-            SendNotifyMessage(TBUTTONINFO_Struct.hwnd, TBUTTONINFO_Struct.callbackMessage, mouse,
-                (e.Button == MouseButtons.Left ? WM_LBUTTONDOWN : WM_RBUTTONDOWN) | (TBUTTONINFO_Struct.id << 16));
-            SendNotifyMessage(TBUTTONINFO_Struct.hwnd, TBUTTONINFO_Struct.callbackMessage, mouse,
-                (e.Button == MouseButtons.Left ? WM_LBUTTONUP : WM_RBUTTONUP) | (TBUTTONINFO_Struct.id << 16));
-            SendNotifyMessage(TBUTTONINFO_Struct.hwnd, TBUTTONINFO_Struct.callbackMessage, mouse, 
-                (e.Button == MouseButtons.Left ? NIN_SELECT : WM_CONTEXTMENU) | (TBUTTONINFO_Struct.id << 16));
-
-            return;
+            get => base.Handle;
         }
 
-		public unsafe void UpdateTrayIcon(CodeBridge.TBUTTONINFO button, bool firstTime = false)
+        public Icon Icon
+        {
+            get => Icon.FromHandle(((Bitmap)Image).GetHicon());
+            set
+            {
+                try
+                {
+                    Image = value.ToBitmap();
+                }
+                catch { }
+                value.Dispose();
+            }
+        }
+
+        public override string ToString()
+        {
+            return Text;
+        }
+
+        public unsafe void UpdateTrayIcon(CodeBridge.TBUTTONINFO button, bool firstTime = false)
         {
             if (TBUTTONINFO_Struct.icon != button.icon || firstTime)
             {
@@ -134,8 +95,8 @@ namespace SimpleClassicThemeTaskbar.UIElements.SystemTray
                 {
                     string pName = Process.GetProcessById((int)PID).ProcessName.ToLower();
                     //20 lines of code just to get the explorer tray icons looking right
-                    if (Config.EnableSystemTrayColorChange && 
-                        Environment.OSVersion.Version.Major == 10 && 
+                    if (Config.EnableSystemTrayColorChange &&
+                        Environment.OSVersion.Version.Major == 10 &&
                         (pName == "explorer" ||
                         pName == "onedrive") &&
                         (button.callbackMessage == 1120 || //Volume icon callback
@@ -202,9 +163,39 @@ namespace SimpleClassicThemeTaskbar.UIElements.SystemTray
             TBUTTONINFO_Struct = button;
         }
 
-        public override string ToString()
+        private void SystemTrayIcon_MouseClick(object sender, MouseEventArgs e)
         {
-            return Text;
+            const uint WM_CONTEXTMENU = 0x007B;
+            const uint WM_LBUTTONDOWN = 0x0201;
+            const uint WM_LBUTTONUP = 0x0202;
+            const uint WM_RBUTTONDOWN = 0x0204;
+            const uint WM_RBUTTONUP = 0x0205;
+            const uint NIN_SELECT = 0x0400;
+
+            if (e.Button == MouseButtons.Right)
+            {
+                _ = MessageBox.Show($"{Process.GetProcessById(checked((int)PID)).ProcessName}\n" + TBUTTONINFO_Struct.callbackMessage.ToString());
+                return;
+            }
+            if (IsMoving)
+            {
+                IsMoving = false;
+                return;
+            }
+
+            // IntPtr Shell_TrayWnd = User32.FindWindowW("Shell_TrayWnd", "");
+            // _ = User32.GetWindowThreadProcessId(Shell_TrayWnd, out uint pidExplorer);
+
+            uint mouse = ((uint)Cursor.Position.Y << 16) | (uint)Cursor.Position.X;
+
+            _ = User32.SendNotifyMessage(TBUTTONINFO_Struct.hwnd, TBUTTONINFO_Struct.callbackMessage, mouse,
+                (e.Button == MouseButtons.Left ? WM_LBUTTONDOWN : WM_RBUTTONDOWN) | (TBUTTONINFO_Struct.id << 16));
+            _ = User32.SendNotifyMessage(TBUTTONINFO_Struct.hwnd, TBUTTONINFO_Struct.callbackMessage, mouse,
+                (e.Button == MouseButtons.Left ? WM_LBUTTONUP : WM_RBUTTONUP) | (TBUTTONINFO_Struct.id << 16));
+            _ = User32.SendNotifyMessage(TBUTTONINFO_Struct.hwnd, TBUTTONINFO_Struct.callbackMessage, mouse,
+                (e.Button == MouseButtons.Left ? NIN_SELECT : WM_CONTEXTMENU) | (TBUTTONINFO_Struct.id << 16));
+
+            return;
         }
     }
 }

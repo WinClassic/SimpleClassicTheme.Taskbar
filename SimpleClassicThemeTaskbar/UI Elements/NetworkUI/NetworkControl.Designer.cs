@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
+            this.statusLabel = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -47,14 +47,14 @@
             // 
             // label2
             // 
-            this.label2.AutoSize = true;
-            this.label2.ForeColor = System.Drawing.SystemColors.GrayText;
-            this.label2.Location = new System.Drawing.Point(58, 31);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(59, 13);
-            this.label2.TabIndex = 2;
-            this.label2.Text = "Connected";
-            this.label2.Click += new System.EventHandler(this.NetworkControl_Click);
+            this.statusLabel.AutoSize = true;
+            this.statusLabel.ForeColor = System.Drawing.SystemColors.GrayText;
+            this.statusLabel.Location = new System.Drawing.Point(58, 31);
+            this.statusLabel.Name = "label2";
+            this.statusLabel.Size = new System.Drawing.Size(59, 13);
+            this.statusLabel.TabIndex = 2;
+            this.statusLabel.Text = "Connected";
+            this.statusLabel.Click += new System.EventHandler(this.NetworkControl_Click);
             // 
             // button1
             // 
@@ -84,7 +84,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.Controls.Add(this.button1);
-            this.Controls.Add(this.label2);
+            this.Controls.Add(this.statusLabel);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.pictureBox1);
             this.Name = "NetworkControl";
@@ -100,7 +100,6 @@
 
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button button1;
     }
 }

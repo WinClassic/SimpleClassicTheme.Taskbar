@@ -1,55 +1,39 @@
-﻿using System;
+﻿using SimpleClassicThemeTaskbar.Helpers;
+using SimpleClassicThemeTaskbar.Helpers.NativeMethods;
+
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
 using System.Runtime.InteropServices;
+using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 
-using HWND = System.IntPtr;
+using static SimpleClassicThemeTaskbar.CodeBridge;
 
 namespace SimpleClassicThemeTaskbar.UIElements.SystemTray
 {
     public partial class SystemTray : UserControlEx
     {
-        [DllImport("user32.dll", CharSet = CharSet.Unicode)]
-        public static extern HWND FindWindowW(string lpszClass, string lpszWindow);
-
-        [DllImport("user32.dll", CharSet = CharSet.Unicode)]
-        public static extern HWND FindWindowExW(HWND hWndParent, HWND hWndChildAfter, string lpszClass, string lpszWindow);
-
-        public List<SystemTrayIcon> icons = new List<SystemTrayIcon>();
-        private CodeBridge d = new CodeBridge();
-        private object culprit;
         public SystemTrayIcon heldDownIcon = null;
         public int heldDownOriginalX = 0;
+        public List<SystemTrayIcon> icons = new();
         public int mouseOriginalX = 0;
+        public List<(string, TimeSpan)> times = new();
+        public bool watchTray = true;
+        private readonly CodeBridge d = new();
+        private readonly Stopwatch sw = new();
+        private object culprit;
 
-        private void SystemTray_IconDown(object sender, MouseEventArgs e)
+        public SystemTray()
         {
-            heldDownIcon = (SystemTrayIcon)sender;
-            heldDownOriginalX = heldDownIcon.Location.X;
-            mouseOriginalX = Cursor.Position.X;
-        }
-
-        static HWND GetSystemTrayHandle()
-        {
-            HWND hWndTray = FindWindowW("Shell_TrayWnd", null);
-            if (hWndTray != HWND.Zero)
-            {
-                hWndTray = FindWindowExW(hWndTray, HWND.Zero, "TrayNotifyWnd", null);
-                if (hWndTray != HWND.Zero)
-                {
-                    hWndTray = FindWindowExW(hWndTray, HWND.Zero, "SysPager", null);
-                    if (hWndTray != HWND.Zero)
-                    {
-                        hWndTray = FindWindowExW(hWndTray, HWND.Zero, "ToolbarWindow32", null);
-                        return hWndTray;
-                    }
-                }
-            }
-            return HWND.Zero;
+            InitializeComponent();
+            Point p = Config.Renderer.SystemTrayTimeLocation;
+            labelTime.Location = new Point(Width + p.X, p.Y);
+            labelTime.Font = Config.Renderer.SystemTrayTimeFont;
+            labelTime.ForeColor = Config.Renderer.SystemTrayTimeColor;
         }
 
         public void ClearButtons()
@@ -66,9 +50,34 @@ namespace SimpleClassicThemeTaskbar.UIElements.SystemTray
             }
         }
 
-        Stopwatch sw = new();
-        public bool watchTray = true;
-        public List<(string, TimeSpan)> times = new();
+        public override string GetErrorString()
+        {
+            var sb = new StringBuilder();
+
+            sb.AppendLine(GetBaseErrorString());
+            sb.AppendLine("Unexpected error occured while " + controlState);
+
+            var buttonInfo = GetCulpritButtonInfo();
+            if (buttonInfo != null)
+            {
+                var process = GetProcessFromIcon(buttonInfo).MainModule.ModuleName;
+
+                var windowHwnd = buttonInfo.hwnd;
+                var isWindowHwndValid = User32.IsWindow(windowHwnd);
+
+                var iconHwnd = buttonInfo.icon;
+                var isIconHwndValid = User32.IsWindow(iconHwnd);
+
+                sb.AppendLine($"Process: {process} ({buttonInfo.pid})");
+                sb.AppendLine($"Corresponding Window HWND: {windowHwnd} ({(isWindowHwndValid ? "Valid" : "Invalid")})");
+                sb.AppendLine($"Icon HWND: {iconHwnd} ({(isIconHwndValid ? "Valid" : "Invalid")})");
+                sb.AppendLine($"Icon Caption: {buttonInfo.toolTip}");
+                sb.AppendLine($"Icon ID: {buttonInfo.id}");
+            }
+
+            return sb.ToString();
+        }
+
         public void UpdateIcons()
         {
             if (!watchTray)
@@ -81,9 +90,9 @@ namespace SimpleClassicThemeTaskbar.UIElements.SystemTray
             int count = d.GetTrayButtonCount(GetSystemTrayHandle());
 
             //Lists that will receive all button information
-            List<CodeBridge.TBUTTONINFO> existingButtons = new List<CodeBridge.TBUTTONINFO>();
-            List<HWND> existingHWNDs = new List<HWND>();
-            HWND tray = GetSystemTrayHandle();
+            List<CodeBridge.TBUTTONINFO> existingButtons = new();
+            List<IntPtr> existingHWNDs = new();
+            IntPtr tray = GetSystemTrayHandle();
 
             //Loop through all buttons
             CodeBridge.TBUTTONINFO[] bInfos = d.GetTrayButtons(tray, count);
@@ -105,7 +114,7 @@ namespace SimpleClassicThemeTaskbar.UIElements.SystemTray
             }
 
             //Remove any icons that are now invalid or hidden
-            List<SystemTrayIcon> newIconList = new List<SystemTrayIcon>();
+            List<SystemTrayIcon> newIconList = new();
             SystemTrayIcon[] enumerator = new SystemTrayIcon[icons.Count];
             icons.CopyTo(enumerator);
             foreach (SystemTrayIcon existingIco in enumerator)
@@ -114,7 +123,7 @@ namespace SimpleClassicThemeTaskbar.UIElements.SystemTray
                         newIconList.Add(existingIcon);
                     else
                     {
-                        icons.Remove(existingIcon);
+                        _ = icons.Remove(existingIcon);
                         Controls.Remove(existingIcon);
                         existingIcon.Dispose();
                     }
@@ -150,7 +159,7 @@ namespace SimpleClassicThemeTaskbar.UIElements.SystemTray
                 {
                     controlState = "creating new tray icon";
                     culprit = info;
-                    SystemTrayIcon trayIcon = new SystemTrayIcon(info);
+                    SystemTrayIcon trayIcon = new(info);
                     trayIcon.MouseDown += SystemTray_IconDown;
                     newIconList.Add(trayIcon);
                 }
@@ -164,8 +173,8 @@ namespace SimpleClassicThemeTaskbar.UIElements.SystemTray
             }
 
             //De-dupe all controls
-            List<SystemTrayIcon> finalIconList = new List<SystemTrayIcon>();
-            List<HWND> pointers = new List<HWND>();
+            List<SystemTrayIcon> finalIconList = new();
+            List<IntPtr> pointers = new();
             foreach (SystemTrayIcon icon in newIconList)
             {
                 if (!pointers.Contains(icon.Handle))
@@ -187,8 +196,8 @@ namespace SimpleClassicThemeTaskbar.UIElements.SystemTray
 
             //Display all controls
             int virtualWidth = 16 + Config.SpaceBetweenTrayIcons;
-			
-			Invalidate();
+
+            Invalidate();
             //betterBorderPanel1.Refresh();
             //betterBorderPanel1.Update();
 
@@ -203,20 +212,20 @@ namespace SimpleClassicThemeTaskbar.UIElements.SystemTray
                     heldDownIcon.IsMoving = true;
                 if ((MouseButtons & MouseButtons.Left) != 0)
                 {
-                    Point p = new Point(heldDownOriginalX + (Cursor.Position.X - mouseOriginalX), heldDownIcon.Location.Y);
+                    Point p = new(heldDownOriginalX + (Cursor.Position.X - mouseOriginalX), heldDownIcon.Location.Y);
                     int newIndex = (startX - p.X - ((iconWidth + iconSpacing) / 2)) / (iconWidth + iconSpacing) * -1;
                     if (newIndex < 0) newIndex = 0;
-                    finalIconList.Remove(heldDownIcon);
+                    _ = finalIconList.Remove(heldDownIcon);
                     finalIconList.Insert(Math.Min(finalIconList.Count, newIndex), heldDownIcon);
                 }
                 else
                 {
-                    Point p = new Point(heldDownOriginalX + (Cursor.Position.X - mouseOriginalX), heldDownIcon.Location.Y);
+                    Point p = new(heldDownOriginalX + (Cursor.Position.X - mouseOriginalX), heldDownIcon.Location.Y);
                     int newIndex = (startX - p.X - ((iconWidth + iconSpacing) / 2)) / (iconWidth + iconSpacing) * -1;
                     if (newIndex < 0) newIndex = 0;
-                    finalIconList.Remove(heldDownIcon);
+                    _ = finalIconList.Remove(heldDownIcon);
                     finalIconList.Insert(Math.Min(finalIconList.Count, newIndex), heldDownIcon);
-                    icons.Remove(heldDownIcon);
+                    _ = icons.Remove(heldDownIcon);
                     icons.Insert(Math.Max(Math.Min(icons.Count, finalIconList.Count - newIndex - 1), 0), heldDownIcon);
                     heldDownIcon = null;
                 }
@@ -252,7 +261,7 @@ namespace SimpleClassicThemeTaskbar.UIElements.SystemTray
                 foreach ((string, TimeSpan) ts in times)
                     f += $"{ts.Item2}\t{ts.Item1}\n";
                 f += $"{sw.Elapsed}\tFinal bit";
-                MessageBox.Show(f);
+                _ = MessageBox.Show(f);
             }
 
             //Move to the left
@@ -262,23 +271,50 @@ namespace SimpleClassicThemeTaskbar.UIElements.SystemTray
             Location = new Point(X, Y);
         }
 
-        public SystemTray()
-        {
-            InitializeComponent();
-            Point p = Config.Renderer.SystemTrayTimeLocation;
-            labelTime.Location = new Point(Width + p.X, p.Y);
-            labelTime.Font = Config.Renderer.SystemTrayTimeFont;
-            labelTime.ForeColor = Config.Renderer.SystemTrayTimeColor;
-        }
-
-        private void SystemTray_Paint(object sender, System.Windows.Forms.PaintEventArgs e)
-        {
-            Config.Renderer.DrawSystemTray(this, e.Graphics);
-        }
-
         public void UpdateTime()
         {
             labelTime.Text = DateTime.Now.ToString(CultureInfo.CurrentCulture.DateTimeFormat.ShortTimePattern);
+        }
+
+        private static Process GetProcessFromIcon(CodeBridge.TBUTTONINFO TBUTTONINFO_Struct)
+        {
+            _ = User32.GetWindowThreadProcessId(TBUTTONINFO_Struct.hwnd, out uint pid);
+            return Process.GetProcessById((int)pid);
+        }
+
+        private static IntPtr GetSystemTrayHandle()
+        {
+            IntPtr hWndTray = User32.FindWindowW("Shell_TrayWnd", null);
+            if (hWndTray != IntPtr.Zero)
+            {
+                hWndTray = User32.FindWindowExW(hWndTray, IntPtr.Zero, "TrayNotifyWnd", null);
+                if (hWndTray != IntPtr.Zero)
+                {
+                    hWndTray = User32.FindWindowExW(hWndTray, IntPtr.Zero, "SysPager", null);
+                    if (hWndTray != IntPtr.Zero)
+                    {
+                        hWndTray = User32.FindWindowExW(hWndTray, IntPtr.Zero, "ToolbarWindow32", null);
+                        return hWndTray;
+                    }
+                }
+            }
+            return IntPtr.Zero;
+        }
+
+        private CodeBridge.TBUTTONINFO GetCulpritButtonInfo()
+        {
+            if (culprit is SystemTrayIcon trayIcon)
+            {
+                return trayIcon.TBUTTONINFO_Struct;
+            }
+            else if (culprit is CodeBridge.TBUTTONINFO @struct)
+            {
+                return @struct;
+            }
+            else
+            {
+                return null;
+            }
         }
 
         private void labelTime_MouseHover(object sender, EventArgs e)
@@ -286,25 +322,16 @@ namespace SimpleClassicThemeTaskbar.UIElements.SystemTray
             toolTip1.SetToolTip(labelTime, DateTime.Now.ToShortDateString());
         }
 
-        public override string GetErrorString()
-            => GetBaseErrorString() +
-            $"Unexpected error occured while {controlState}\n" +
-            (culprit is SystemTrayIcon trayIcon ?
-                $"Process: {GetProcessFromIcon(trayIcon.TBUTTONINFO_Struct).MainModule.ModuleName} ({trayIcon.TBUTTONINFO_Struct.pid})\n" +
-                $"Corresponding Window HWND: {trayIcon.TBUTTONINFO_Struct.hwnd} (Valid: {IsWindow(trayIcon.TBUTTONINFO_Struct.hwnd)})\n" +
-                $"Icon HWND: {trayIcon.TBUTTONINFO_Struct.icon} (Valid: {IsWindow(trayIcon.TBUTTONINFO_Struct.icon)})\n" +
-                $"Icon caption: \n({trayIcon.TBUTTONINFO_Struct.toolTip})\n" +
-                $"Icon ID: {trayIcon.TBUTTONINFO_Struct.id}\n" : String.Empty) +
-            (culprit is CodeBridge.TBUTTONINFO TBUTTONINFO_Struct ?
-                $"Process: {GetProcessFromIcon(TBUTTONINFO_Struct).MainModule.ModuleName} ({TBUTTONINFO_Struct.pid})\n" +
-                $"Corresponding Window HWND: {TBUTTONINFO_Struct.hwnd} (Valid: {IsWindow(TBUTTONINFO_Struct.hwnd)})\n" +
-                $"Icon HWND: {TBUTTONINFO_Struct.icon} (Valid: {IsWindow(TBUTTONINFO_Struct.icon)})\n" +
-                $"Icon caption: \n({TBUTTONINFO_Struct.toolTip})\n" +
-                $"Icon ID: {TBUTTONINFO_Struct.id}\n" : String.Empty);
-        private Process GetProcessFromIcon(CodeBridge.TBUTTONINFO TBUTTONINFO_Struct)
+        private void SystemTray_IconDown(object sender, MouseEventArgs e)
         {
-            GetWindowThreadProcessId(TBUTTONINFO_Struct.hwnd, out uint pid);
-            return Process.GetProcessById((int)pid);
+            heldDownIcon = (SystemTrayIcon)sender;
+            heldDownOriginalX = heldDownIcon.Location.X;
+            mouseOriginalX = Cursor.Position.X;
+        }
+
+        private void SystemTray_Paint(object sender, System.Windows.Forms.PaintEventArgs e)
+        {
+            Config.Renderer.DrawSystemTray(this, e.Graphics);
         }
     }
 }

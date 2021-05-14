@@ -1,11 +1,13 @@
-﻿using System;
+﻿using SimpleClassicThemeTaskbar.Helpers.NativeMethods;
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SimpleClassicThemeTaskbar.Helper_Classes
+namespace SimpleClassicThemeTaskbar.Helpers
 {
     [ComImport()]
     [Guid("46EB5926-582E-4017-9FDF-E8998DAA0950")]
@@ -66,58 +68,50 @@ namespace SimpleClassicThemeTaskbar.Helper_Classes
         public RECT rcImage;
     }
 
+    public struct IMAGELISTDRAWPARAMS
+    {
+        public int cbSize;
+        public int crEffect;
+        public int cx;
+        public int cy;
+        public int dwRop;
+        public int Frame;
+        public int fState;
+        public int fStyle;
+        public IntPtr hdcDst;
+        public IntPtr himl;
+        public int i;
+        public int rgbBk;
+        public int rgbFg;
+        public int x;
+        public int xBitmap;
+        public int y;
+        public int yBitmap;
+    }
+
     public struct SHFILEINFO
     {
+        public uint dwAttributes;
         public IntPtr hIcon;
         public int iIcon;
-        public uint dwAttributes;
+
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 254)]
         public string szDisplayName;
+
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 260)]
         public string szTypeName;
     };
 
-    public struct IMAGELISTDRAWPARAMS
-    {
-        public int cbSize;
-        public IntPtr himl;
-        public int i;
-        public IntPtr hdcDst;
-        public int x;
-        public int y;
-        public int cx;
-        public int cy;
-        public int xBitmap;
-        public int yBitmap;
-        public int rgbBk;
-        public int rgbFg;
-        public int fStyle;
-        public int dwRop;
-        public int fState;
-        public int Frame;
-        public int crEffect;
-    }
-
     public class Win32Icon
-	{
-        [DllImport("shell32.dll")]
-        private static extern int SHGetImageList(
-            int iImageList,
-            ref Guid riid,
-            out IImageList ppv);
-
-        [DllImport("Shell32.dll")]
-        public static extern int SHGetFileInfo(
-            string pszPath,
-            int dwFileAttributes,
-            ref SHFILEINFO psfi,
-            int cbFileInfo,
-            uint uFlags);
+    {
+        private const int SHGFI_LARGEICON = 0x0;
 
         private const int SHGFI_SMALLICON = 0x1;
-        private const int SHGFI_LARGEICON = 0x0;
-        private const int SHIL_JUMBO = 0x4;
+
         private const int SHIL_EXTRALARGE = 0x2;
+
+        private const int SHIL_JUMBO = 0x4;
+
         private const int WM_CLOSE = 0x0010;
 
         public enum IconSizeEnum
@@ -142,14 +136,13 @@ namespace SimpleClassicThemeTaskbar.Helper_Classes
             ref SHFILEINFO shinfo, int fileAttributeFlag, uint flags)
         {
             const int ILD_TRANSPARENT = 1;
-            var retval = SHGetFileInfo(filepath, fileAttributeFlag, ref shinfo, Marshal.SizeOf(shinfo), flags);
-            if (retval == 0) throw (new System.IO.FileNotFoundException());
+            var retval = Shell32.SHGetFileInfo(filepath, fileAttributeFlag, ref shinfo, Marshal.SizeOf(shinfo), flags);
+            if (retval == 0) throw new System.IO.FileNotFoundException();
             var iconIndex = shinfo.iIcon;
             var iImageListGuid = new Guid("46EB5926-582E-4017-9FDF-E8998DAA0950");
-            IImageList iml;
-            var hres = SHGetImageList((int)iconsize, ref iImageListGuid, out iml);
+            _ = Shell32.SHGetImageList((int)iconsize, ref iImageListGuid, out IImageList iml);
             var hIcon = IntPtr.Zero;
-            hres = iml.GetIcon(iconIndex, ILD_TRANSPARENT, ref hIcon);
+            _ = iml.GetIcon(iconIndex, ILD_TRANSPARENT, ref hIcon);
             return hIcon;
         }
     }

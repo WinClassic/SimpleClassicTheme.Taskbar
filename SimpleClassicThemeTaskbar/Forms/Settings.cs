@@ -1,4 +1,7 @@
-﻿using System;
+﻿using SimpleClassicThemeTaskbar.Helpers;
+using SimpleClassicThemeTaskbar.Helpers.NativeMethods;
+
+using System;
 using System.Diagnostics;
 using System.Drawing;
 using System.Reflection;
@@ -9,9 +12,6 @@ namespace SimpleClassicThemeTaskbar
 {
     public partial class Settings : Form
     {
-        [DllImport("uxtheme.dll", SetLastError = true, ExactSpelling = true, CharSet = CharSet.Unicode)]
-        public static extern int SetWindowTheme(IntPtr hWnd, string pszSubAppName, string pszSubIdList);
-
         public Settings()
         {
             InitializeComponent();
@@ -19,14 +19,115 @@ namespace SimpleClassicThemeTaskbar
             labelCopyrightSCT.Location = new Point(tabAbout.Width - labelCopyrightSCT.Width, labelCopyrightSCT.Location.Y);
         }
 
+        public void Save()
+        {
+            Config.EnableSystemTrayHover = enableSysTrayHover.Checked;
+            Config.EnableSystemTrayColorChange = enableSysTrayColorChange.Checked;
+            Config.ShowTaskbarOnAllDesktops = showTaskbarOnAllDesktops.Checked;
+            Config.EnableQuickLaunch = enableQuickLaunch.Checked;
+            Config.TaskbarProgramWidth = (int)taskbarProgramWidth.Value;
+            Config.SpaceBetweenTrayIcons = (int)spaceBetweenTrayIcons.Value;
+            Config.SpaceBetweenTaskbarIcons = (int)spaceBetweenTaskbarIcons.Value;
+            Config.SpaceBetweenQuickLaunchIcons = (int)spaceBetweenQuickLaunchIcons.Value;
+            Config.StartButtonImage = textStartLocation.Text;
+            Config.StartButtonCustomIcon = radioStartIcon.Checked;
+            Config.StartButtonCustomButton = radioStartButton.Checked;
+            Config.ProgramGroupCheck = (ProgramGroupCheck)comboBoxGroupingMethod.SelectedIndex;
+            string taskbarFilter = "";
+            foreach (object f in listBox1.Items)
+            {
+                string filter = f.ToString();
+                taskbarFilter += filter + "*";
+            }
+            Config.TaskbarProgramFilter = taskbarFilter;
+
+            Config.ConfigChanged = true;
+            Config.SaveToRegistry();
+            ApplicationEntryPoint.NewTaskbars();
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            openFileDialog1.Filter = "Compatible image files|*.jpg;*.jpeg;*.png;*.bmp";
+            if (openFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                Image temp;
+                try
+                {
+                    temp = Image.FromFile(openFileDialog1.FileName);
+                }
+                catch
+                {
+                    _ = MessageBox.Show(this, "Invalid image!");
+                    return;
+                }
+                if (radioStartIcon.Checked && (temp.Width != 16 || temp.Height != 16))
+                {
+                    _ = MessageBox.Show(this, "Image is not 16x16!");
+                    return;
+                }
+                if (radioStartButton.Checked && (temp.Height != 66))
+                {
+                    _ = MessageBox.Show(this, "Image is not 66px high! (3 * 22px)");
+                    return;
+                }
+                textStartLocation.Text = openFileDialog1.FileName;
+                temp.Dispose();
+                startButton1.DummySettings(textStartLocation.Text, radioStartIcon.Checked, radioStartButton.Checked);
+            }
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            SettingsAddProgramFilter dialog = new();
+            _ = dialog.ShowDialog(this);
+            _ = listBox1.Items.Add(dialog.result);
+            dialog.Dispose();
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            if (listBox1.SelectedIndex != -1)
+            {
+                listBox1.Items.RemoveAt(listBox1.SelectedIndex);
+            }
+        }
+
+        private void buttonApply_Click(object sender, EventArgs e)
+        {
+            Save();
+        }
+
+        private void buttonCancel_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
+
+        private void buttonOK_Click(object sender, EventArgs e)
+        {
+            Save();
+            Close();
+        }
+
+        private void label3_Click(object sender, EventArgs e)
+        {
+            _ = Process.Start(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\AppData\\Roaming\\Microsoft\\Internet Explorer\\Quick Launch\\");
+        }
+
+        private void RadioStart_CheckedChanged(object sender, EventArgs e)
+        {
+            if ((sender as RadioButton).Checked)
+                startButton1.DummySettings(textStartLocation.Text, radioStartIcon.Checked, radioStartButton.Checked);
+        }
+
         private void Settings_Load(object sender, EventArgs e)
         {
             labelCopyrightSCTT.Text = labelCopyrightSCTT.Text.Replace("{sctt_ver}", Assembly.GetExecutingAssembly().GetName().Version.ToString());
             if (ApplicationEntryPoint.SCTCompatMode)
-			{
+            {
                 labelCopyrightSCT.Show();
                 labelCopyrightSCT.Text = labelCopyrightSCT.Text.Replace("{sct_ver}", Assembly.LoadFrom("C:\\SCT\\SCT.exe").GetName().Version.ToString());
-			}
+            }
 
             comboBoxGroupingMethod.SelectedIndex = (int)Config.ProgramGroupCheck;
 
@@ -68,10 +169,10 @@ namespace SimpleClassicThemeTaskbar
             string taskbarFilter = Config.TaskbarProgramFilter;
             foreach (string filter in taskbarFilter.Split('*'))
                 if (filter != "")
-                    listBox1.Items.Add(filter);
+                    _ = listBox1.Items.Add(filter);
 
             Image original = ApplicationEntryPoint.SCTCompatMode ? Properties.Resources.logo_sct_t : Properties.Resources.logo_sctt;
-            Bitmap newImage = new Bitmap(original);
+            Bitmap newImage = new(original);
             //for (int x = 0; x < newImage.Width; x++)
             //    for (int y = 0; y < newImage.Height; y++)
             //    {
@@ -89,7 +190,7 @@ namespace SimpleClassicThemeTaskbar
 
             Color A = SystemColors.ActiveCaption;
             Color B = SystemColors.GradientActiveCaption;
-            Bitmap bitmap = new Bitmap(696, 5);
+            Bitmap bitmap = new(696, 5);
             for (int i = 0; i < 348; i++)
             {
                 int r = A.R + ((B.R - A.R) * i / 348);
@@ -106,113 +207,12 @@ namespace SimpleClassicThemeTaskbar
                 pictureBox2.Location = new Point(pictureBox2.Location.X + 3, pictureBox2.Location.Y);
             pictureBox2.Image = bitmap;
 
-            SetWindowTheme(Handle, " ", " ");
+            _ = UXTheme.SetWindowTheme(Handle, " ", " ");
         }
 
-		private void RadioStart_CheckedChanged(object sender, EventArgs e)
-		{
-			if ((sender as RadioButton).Checked)
-                    startButton1.DummySettings(textStartLocation.Text, radioStartIcon.Checked, radioStartButton.Checked);
-        }
-
-		public void Save()
+        private void startButton1_SizeChanged(object sender, EventArgs e)
         {
-            Config.EnableSystemTrayHover = enableSysTrayHover.Checked;
-            Config.EnableSystemTrayColorChange = enableSysTrayColorChange.Checked;
-            Config.ShowTaskbarOnAllDesktops = showTaskbarOnAllDesktops.Checked;
-            Config.EnableQuickLaunch = enableQuickLaunch.Checked;
-            Config.TaskbarProgramWidth = (int)taskbarProgramWidth.Value;
-            Config.SpaceBetweenTrayIcons = (int)spaceBetweenTrayIcons.Value;
-            Config.SpaceBetweenTaskbarIcons = (int)spaceBetweenTaskbarIcons.Value;
-            Config.SpaceBetweenQuickLaunchIcons = (int)spaceBetweenQuickLaunchIcons.Value;
-            Config.StartButtonImage = textStartLocation.Text;
-            Config.StartButtonCustomIcon = radioStartIcon.Checked;
-            Config.StartButtonCustomButton = radioStartButton.Checked;
-            Config.ProgramGroupCheck = (ProgramGroupCheck)comboBoxGroupingMethod.SelectedIndex;
-            string taskbarFilter = "";
-            foreach (object f in listBox1.Items)
-            {
-                string filter = f.ToString();
-                taskbarFilter += filter + "*";
-            }
-            Config.TaskbarProgramFilter = taskbarFilter;
-
-            Config.configChanged = true;
-            Config.SaveToRegistry();
-            ApplicationEntryPoint.NewTaskbars();
-        }
-
-        private void buttonCancel_Click(object sender, EventArgs e)
-        {
-            Close();
-        }
-
-        private void buttonOK_Click(object sender, EventArgs e)
-        {
-            Save();
-            Close();
-        }
-
-        private void buttonApply_Click(object sender, EventArgs e)
-        {
-            Save();
-        }
-
-        private void label3_Click(object sender, EventArgs e)
-        {
-            Process.Start(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\AppData\\Roaming\\Microsoft\\Internet Explorer\\Quick Launch\\");
-        }
-
-		private void button1_Click(object sender, EventArgs e)
-		{
-            openFileDialog1.Filter = "Compatible image files|*.jpg;*.jpeg;*.png;*.bmp";
-            if (openFileDialog1.ShowDialog() == DialogResult.OK)
-			{
-                Image temp;
-                try
-				{
-                    temp = Image.FromFile(openFileDialog1.FileName);
-				}
-				catch
-				{
-                    MessageBox.Show(this, "Invalid image!");
-                    return;
-				}
-                if (radioStartIcon.Checked && (temp.Width != 16 || temp.Height != 16))
-				{
-                    MessageBox.Show(this, "Image is not 16x16!");
-                    return;
-				}
-                if (radioStartButton.Checked && (temp.Height != 66))
-                {
-                    MessageBox.Show(this, "Image is not 66px high! (3 * 22px)");
-                    return;
-                }
-                textStartLocation.Text = openFileDialog1.FileName;
-                temp.Dispose();
-                startButton1.DummySettings(textStartLocation.Text, radioStartIcon.Checked, radioStartButton.Checked);
-            }
-		}
-
-		private void startButton1_SizeChanged(object sender, EventArgs e)
-		{
             startButton1.Location = new Point(groupBox1.Width - 7 - startButton1.Width, startButton1.Location.Y);
-		}
-
-        private void button2_Click(object sender, EventArgs e)
-        {
-            SettingsAddProgramFilter dialog = new SettingsAddProgramFilter();
-            dialog.ShowDialog(this);
-            listBox1.Items.Add(dialog.result);
-            dialog.Dispose();
-        }
-
-        private void button3_Click(object sender, EventArgs e)
-        {
-            if (listBox1.SelectedIndex != -1)
-            {
-                listBox1.Items.RemoveAt(listBox1.SelectedIndex);
-            }
         }
     }
 }

@@ -152,9 +152,6 @@
   <ItemGroup>
     <ResourceCompile Include="SimpleClassicThemeTaskbar.CodeBridge.rc" />
   </ItemGroup>
-  <ItemGroup>
-    <Image Include="..\..\..\..\..\Desktop\Simple Classic Theme Family Artwork\Icons\SimpleClassicTheme.ico" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

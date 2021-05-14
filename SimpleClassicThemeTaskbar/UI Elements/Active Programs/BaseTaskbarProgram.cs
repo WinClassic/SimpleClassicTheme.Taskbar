@@ -1,4 +1,6 @@
-﻿using System;
+﻿using SimpleClassicThemeTaskbar.Helpers;
+
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -12,62 +14,25 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace SimpleClassicThemeTaskbar
-{ 
-	public abstract partial class BaseTaskbarProgram : UserControlEx
-	{
-        //Win32
-		[DllImport("user32.dll")]
-        public static extern bool SetForegroundWindow(IntPtr hWnd);
-
-		[DllImport("user32.dll")]
-        public static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
-
-		[DllImport("user32.dll")]
-		public static extern int DrawFrameControl(IntPtr hdc, ref RECT lpRect, uint un1, uint un2);
-
-		public const uint DFC_BUTTON = 4;
-		public const uint DFCS_BUTTONPUSH = 0x10;
-		public const uint DFCS_PUSHED = 512;
-
-        //Drawing information
-        private Font textFont;
-        private bool textIndent = false;
-        private bool drawBackground = false;
-        private Border3DStyle style;
-        private bool activeWindow = false;
+{
+    public abstract partial class BaseTaskbarProgram : UserControlEx
+    {
+        public const uint DFC_BUTTON = 4;
+        public const uint DFCS_BUTTONPUSH = 0x10;
+        public const uint DFCS_PUSHED = 512;
 
         //Movemement and events
         public bool IsMoving = false;
+
         public new MouseEventHandler MouseDown;
-        public new MouseEventHandler MouseUp;
+
         public new MouseEventHandler MouseMove;
 
-        //Abstract functions
-        public abstract bool IsActiveWindow(IntPtr activeWindow);
-        public abstract void OnClick(object sender, MouseEventArgs e);
-        public abstract void FinishOnPaint(PaintEventArgs e);
-        protected abstract bool CancelMouseDown(MouseEventArgs e);
+        public new MouseEventHandler MouseUp;
 
-        //Abstract properties
-        public abstract Process Process { get; set; }
-        public abstract Window Window { get; set; }
-        public abstract Icon Icon { get; set; }
-        public abstract Image IconImage { get; }
-        public abstract string Title { get; set; }
-        public abstract int MinimumWidth { get; }
-
-        /// <summary>
-        /// This value is true if the task is selected
-        /// </summary>
-        public bool IsPushed { get => style != Border3DStyle.Raised; }
-        /// <summary>
-        /// This value is true if the user is holding down the mouse on the button
-        /// </summary>
-        public bool IsPressed { get => drawBackground; }
-        /// <summary>
-        /// This value indicates how much space in needed for extra drawing
-        /// </summary>
-        public int SpaceNeededNextToText { get; protected internal set; }
+        private bool activeWindow = false;
+        private Border3DStyle style;
+        private bool textIndent = false;
 
         public bool ActiveWindow
         {
@@ -95,39 +60,70 @@ namespace SimpleClassicThemeTaskbar
                 if (activeWindow)
                 {
                     style = Border3DStyle.Sunken;
-                    drawBackground = true;
-                    textFont = new Font(textFont.FontFamily, textFont.Size, FontStyle.Bold, GraphicsUnit.Point);
+                    IsPressed = true;
+                    GetFont = new Font(GetFont.FontFamily, GetFont.Size, FontStyle.Bold, GraphicsUnit.Point);
                 }
                 else
                 {
                     style = Border3DStyle.Raised;
-                    drawBackground = false;
-                    textFont = new Font(textFont.FontFamily, textFont.Size, FontStyle.Regular, GraphicsUnit.Point);
+                    IsPressed = false;
+                    GetFont = new Font(GetFont.FontFamily, GetFont.Size, FontStyle.Regular, GraphicsUnit.Point);
                 }
 
                 Invalidate();
             }
         }
 
+        public Font GetFont { get; private set; }
+
+        public abstract Icon Icon { get; set; }
+
+        public abstract Image IconImage { get; }
+
+        /// <summary>
+        /// This value is true if the user is holding down the mouse on the button
+        /// </summary>
+        public bool IsPressed { get; private set; } = false;
+
+        /// <summary>
+        /// This value is true if the task is selected
+        /// </summary>
+        public bool IsPushed { get => style != Border3DStyle.Raised; }
+
+        public abstract int MinimumWidth { get; }
+
+        //Abstract properties
+        public abstract Process Process { get; set; }
+
+        /// <summary>
+        /// This value indicates how much space in needed for extra drawing
+        /// </summary>
+        public int SpaceNeededNextToText { get; protected internal set; }
+
+        public abstract string Title { get; set; }
+
+        public abstract Window Window { get; set; }
+
         public void Constructor()
-		{
+        {
             InitializeComponent();
             DoubleBuffered = true;
             Paint += OnPaint;
 
             BackColor = Color.Transparent;
-            textFont = new Font("Tahoma", 8F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            GetFont = new Font("Tahoma", 8F, FontStyle.Regular, GraphicsUnit.Point, 0);
 
-            base.MouseDown += delegate (object sender, MouseEventArgs e) { MouseDown?.DynamicInvoke(this, e); };
-            base.MouseUp += delegate (object sender, MouseEventArgs e) { MouseUp?.DynamicInvoke(this, e); };
-            base.MouseMove += delegate (object sender, MouseEventArgs e) { MouseMove?.DynamicInvoke(this, e); };
+            base.MouseDown += delegate (object sender, MouseEventArgs e) { _ = (MouseDown?.DynamicInvoke(this, e)); };
+            base.MouseUp += delegate (object sender, MouseEventArgs e) { _ = (MouseUp?.DynamicInvoke(this, e)); };
+            base.MouseMove += delegate (object sender, MouseEventArgs e) { _ = (MouseMove?.DynamicInvoke(this, e)); };
 
-            MouseDown += delegate (object sender, MouseEventArgs e) {
+            MouseDown += delegate (object sender, MouseEventArgs e)
+            {
                 if (CancelMouseDown(e))
                     return;
                 style = Border3DStyle.Sunken;
-                textFont = new Font(textFont.FontFamily, textFont.Size, FontStyle.Bold, GraphicsUnit.Point);
-                drawBackground = true;
+                GetFont = new Font(GetFont.FontFamily, GetFont.Size, FontStyle.Bold, GraphicsUnit.Point);
+                IsPressed = true;
                 textIndent = true;
                 Invalidate();
             };
@@ -139,19 +135,19 @@ namespace SimpleClassicThemeTaskbar
             MouseClick += OnClick;
         }
 
-        public Font GetFont => textFont;
+        public abstract void FinishOnPaint(PaintEventArgs e);
 
-		private void BaseTaskbarProgram_Load(object sender, EventArgs e)
-		{
-			
-		}
+        //Abstract functions
+        public abstract bool IsActiveWindow(IntPtr activeWindow);
+
+        public abstract void OnClick(object sender, MouseEventArgs e);
 
         public void OnPaint(object sender, PaintEventArgs e)
         {
             ApplicationEntryPoint.ErrorSource = this;
             controlState = "painting base window";
             if (Erroring)
-			{
+            {
                 DrawError(e.Graphics);
                 return;
             }
@@ -159,6 +155,12 @@ namespace SimpleClassicThemeTaskbar
             Config.Renderer.DrawTaskButton(this, e.Graphics);
 
             FinishOnPaint(e);
+        }
+
+        protected abstract bool CancelMouseDown(MouseEventArgs e);
+
+        private void BaseTaskbarProgram_Load(object sender, EventArgs e)
+        {
         }
     }
 }

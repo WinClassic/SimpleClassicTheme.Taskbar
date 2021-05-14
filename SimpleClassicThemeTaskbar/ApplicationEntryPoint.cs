@@ -1,4 +1,7 @@
-﻿using System;
+﻿using SimpleClassicThemeTaskbar.Helpers;
+using SimpleClassicThemeTaskbar.Helpers.NativeMethods;
+
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
@@ -10,37 +13,85 @@ using System.Windows.Forms;
 
 namespace SimpleClassicThemeTaskbar
 {
-    static class ApplicationEntryPoint
+    internal static class ApplicationEntryPoint
     {
+        public const int SCTLP_FORCE = 0x0001;
+        public const int SCTWP_EXIT = 0x0001;
+        public const int SCTWP_ISSCT = 0x0003;
+        public const int WM_SCT = 0x0420;
         public static int ErrorCount = 0;
         public static UserControlEx ErrorSource;
 
-        delegate bool EnumThreadDelegate(IntPtr hWnd, IntPtr lParam);
-        [DllImport("user32.dll")]
-        static extern bool EnumThreadWindows(int dwThreadId, EnumThreadDelegate lpfn, IntPtr lParam);
-        [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Auto)]
-        static extern int GetClassName(IntPtr hWnd, StringBuilder lpClassName, int nMaxCount);
-        [DllImport("user32.dll", CharSet = CharSet.Auto)]
-        public static extern IntPtr SendMessage(IntPtr hWnd, int Msg, IntPtr wParam, IntPtr lParam);
-        public const int WM_SCT = 0x0420;
-        public const int SCTWP_EXIT = 0x0001;
-        public const int SCTWP_ISSCT = 0x0003;
-        public const int SCTLP_FORCE = 0x0001;
-
         public static bool SCTCompatMode = false;
+
         internal static CodeBridge d = new();
+
+        internal static void ExitSCTT()
+        {
+            Logger.Log(LoggerVerbosity.Detailed, "TaskbarManager", $"Exit requested");
+            Config.SaveToRegistry();
+            List<Taskbar> activeBars = new();
+
+            foreach (Form form in Application.OpenForms)
+                if (form is Taskbar bar)
+                    activeBars.Add(bar);
+
+            foreach (Taskbar bar in activeBars)
+            {
+                foreach (Control d in bar.Controls)
+                    d.Dispose();
+                bar.selfClose = true;
+                bar.Close();
+                bar.Dispose();
+            }
+            // Taskbar randomBar = activeBars.FirstOrDefault();
+            Logger.Log(LoggerVerbosity.Detailed, "TaskbarManager", $"Killed all taskbars, exiting");
+            Logger.Uninitialize();
+
+            Environment.Exit(0);
+        }
+
+        internal static void NewTaskbars()
+        {
+            Logger.Log(LoggerVerbosity.Detailed, "TaskbarManager", "Generating new taskbars");
+            List<Taskbar> activeBars = new();
+            foreach (Form form in Application.OpenForms)
+                if (form is Taskbar bar)
+                    activeBars.Add(bar);
+            foreach (Taskbar bar in activeBars)
+            {
+                foreach (Control d in bar.Controls)
+                    d.Dispose();
+                bar.selfClose = true;
+                bar.Close();
+                bar.Dispose();
+            }
+            int taskbars = 0;
+            foreach (Screen screen in Screen.AllScreens)
+            {
+                taskbars++;
+                Rectangle rect = screen.Bounds;
+                Taskbar taskbar = new(screen.Primary);
+                taskbar.ShowOnScreen(screen);
+                Logger.Log(LoggerVerbosity.Detailed, "TaskbarManager", $"Created taskbar in working area: {screen.Bounds}");
+                if (!Config.ShowTaskbarOnAllDesktops && !screen.Primary)
+                    taskbar.NeverShow = true;
+            }
+            Logger.Log(LoggerVerbosity.Detailed, "TaskbarManager", $"Created {taskbars} taskbars in total");
+        }
+
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
         [STAThread]
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             Logger.Initialize(LoggerVerbosity.Verbose);
             foreach (var arg in args)
-			{
+            {
                 if (arg.StartsWith("-v="))
-                    Logger.SetVerbosity((LoggerVerbosity)Int32.Parse(arg.Substring(3)));
-			}
+                    Logger.SetVerbosity((LoggerVerbosity)Int32.Parse(arg[3..]));
+            }
             Logger.Log(LoggerVerbosity.Detailed, "EntryPoint", "Parsing arguments");
             if (args.Contains("--dutch"))
             {
@@ -56,11 +107,11 @@ namespace SimpleClassicThemeTaskbar
                 Logger.Log(LoggerVerbosity.Detailed, "EntryPoint", "Killing all SCTT instances");
                 static List<IntPtr> EnumerateProcessWindowHandles(int processId, string name)
                 {
-                    List<IntPtr> handles = new List<IntPtr>();
+                    List<IntPtr> handles = new();
 
                     foreach (ProcessThread thread in Process.GetProcessById(processId).Threads)
                     {
-                        EnumThreadWindows(thread.Id, (hWnd, lParam) =>
+                        User32.EnumThreadWindows(thread.Id, (hWnd, lParam) =>
                         {
                             handles.Add(hWnd);
                             return true;
@@ -76,14 +127,14 @@ namespace SimpleClassicThemeTaskbar
                     string s = "";
                     foreach (IntPtr handle in handles)
                     {
-                        StringBuilder builder = new StringBuilder(1000);
-                        GetClassName(handle, builder, 1000);
+                        StringBuilder builder = new(1000);
+                        User32.GetClassName(handle, builder, 1000);
                         if (builder.Length > 0)
                             s = s + builder.ToString() + "\n";
-                        IntPtr returnValue = SendMessage(handle, WM_SCT, new IntPtr(SCTWP_ISSCT), IntPtr.Zero);
+                        IntPtr returnValue = User32.SendMessage(handle, WM_SCT, new IntPtr(SCTWP_ISSCT), IntPtr.Zero);
                         if (returnValue != IntPtr.Zero)
                         {
-                            SendMessage(handle, WM_SCT, new IntPtr(SCTWP_EXIT), IntPtr.Zero);
+                            User32.SendMessage(handle, WM_SCT, new IntPtr(SCTWP_EXIT), IntPtr.Zero);
                         }
                     }
                 });
@@ -122,7 +173,7 @@ namespace SimpleClassicThemeTaskbar
             }
 #endif
 
-            List<Taskbar> t = new List<Taskbar>();
+            List<Taskbar> t = new();
             //Setup crash reports
 #if DEBUG
 #else
@@ -161,7 +212,7 @@ namespace SimpleClassicThemeTaskbar
                 Logger.Log(LoggerVerbosity.Detailed, "EntryPoint", "Debug instance, ignoring architecture");
             }
             Logger.Log(LoggerVerbosity.Detailed, "EntryPoint", "Main initialization done, passing execution to TaskbarManager");
-            
+
             //Application.EnableVisualStyles();
             Application.VisualStyleState = System.Windows.Forms.VisualStyles.VisualStyleState.NoneEnabled;
             Application.SetCompatibleTextRenderingDefault(false);
@@ -172,58 +223,6 @@ namespace SimpleClassicThemeTaskbar
             NewTaskbars();
             Application.Run();
             ExitSCTT();
-        }
-
-        internal static void NewTaskbars()
-        {
-            Logger.Log(LoggerVerbosity.Detailed, "TaskbarManager", "Generating new taskbars");
-            List<Taskbar> activeBars = new List<Taskbar>();
-            foreach (Form form in Application.OpenForms)
-                if (form is Taskbar bar)
-                    activeBars.Add(bar);
-            foreach (Taskbar bar in activeBars)
-            {
-                foreach (Control d in bar.Controls)
-                    d.Dispose();
-                bar.selfClose = true;
-                bar.Close();
-                bar.Dispose();
-            }
-            int taskbars = 0;
-            foreach (Screen screen in Screen.AllScreens)
-            {
-                taskbars++;
-                Rectangle rect = screen.Bounds;
-                Taskbar taskbar = new Taskbar(screen.Primary);
-                taskbar.ShowOnScreen(screen);
-                Logger.Log(LoggerVerbosity.Detailed, "TaskbarManager", $"Created taskbar in working area: {screen.Bounds}");
-                if (!Config.ShowTaskbarOnAllDesktops && !screen.Primary)
-                    taskbar.NeverShow = true;
-            }
-            Logger.Log(LoggerVerbosity.Detailed, "TaskbarManager", $"Created {taskbars} taskbars in total");
-        }
-
-        internal static void ExitSCTT()
-        {
-            Logger.Log(LoggerVerbosity.Detailed, "TaskbarManager", $"Exit requested");
-            Config.SaveToRegistry();
-            List<Taskbar> activeBars = new List<Taskbar>();
-            foreach (Form form in Application.OpenForms)
-                if (form is Taskbar bar)
-                    activeBars.Add(bar);
-            foreach (Taskbar bar in activeBars)
-            {
-                foreach (Control d in bar.Controls)
-                    d.Dispose();
-                bar.selfClose = true;
-                bar.Close();
-                bar.Dispose();
-            }
-            Taskbar randomBar = activeBars.FirstOrDefault();
-            Logger.Log(LoggerVerbosity.Detailed, "TaskbarManager", $"Killed all taskbars, exiting");
-            Logger.Uninitialize();
-
-            Environment.Exit(0);
         }
     }
 }
