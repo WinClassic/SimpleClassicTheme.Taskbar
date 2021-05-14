@@ -59,31 +59,31 @@ namespace SimpleClassicThemeTaskbar.Theme_Engine
 				if (ttS != "File" && !ParseColor(tH, out ttSc))
 					throw new FileFormatException("[INI] TaskBar/TextureSource must be either a valid hex color value (with #) or the string 'File'");
 				
-				string ttL = settings.IniReadValue("Taskbutton", "TextureLocation");
+				string ttL = settings.IniReadValue("TaskButton", "TextureLocation");
 				if (!Int32.TryParse(ttL.Split(',')[0], out taskbuttonTextureLocation.Item1) ||
 					!Int32.TryParse(ttL.Split(',')[1], out taskbuttonTextureLocation.Item2))
-					throw new FileFormatException("[INI] Taskbutton/TextureLocation must consist of two valid 32-bit integers seperated by a comma (',')");
+					throw new FileFormatException("[INI] TaskButton/TextureLocation must consist of two valid 32-bit integers seperated by a comma (',')");
 
-				string tlbL = settings.IniReadValue("Taskbutton", "LeftBorderLocation");
+				string tlbL = settings.IniReadValue("TaskButton", "LeftBorderLocation");
 				if (!Int32.TryParse(tlbL.Split(',')[0], out taskbuttonLeftBorderLocation.Item1) ||
 					!Int32.TryParse(tlbL.Split(',')[1], out taskbuttonLeftBorderLocation.Item2))
-					throw new FileFormatException("[INI] Taskbutton/LeftBorderLocation must consist of two valid 32-bit integers seperated by a comma (',')");
+					throw new FileFormatException("[INI] TaskButton/LeftBorderLocation must consist of two valid 32-bit integers seperated by a comma (',')");
 
-				string trbL = settings.IniReadValue("Taskbutton", "RightBorderLocation");
+				string trbL = settings.IniReadValue("TaskButton", "RightBorderLocation");
 				if (!Int32.TryParse(trbL.Split(',')[0], out taskbuttonRightBorderLocation.Item1) ||
 					!Int32.TryParse(trbL.Split(',')[1], out taskbuttonRightBorderLocation.Item2))
-					throw new FileFormatException("[INI] Taskbutton/RightBorderLocation must consist of two valid 32-bit integers seperated by a comma (',')");
+					throw new FileFormatException("[INI] TaskButton/RightBorderLocation must consist of two valid 32-bit integers seperated by a comma (',')");
 
-				string tgwbS = settings.IniReadValue("TaskbuttonGroupWindow", "BorderSize");
+				string tgwbS = settings.IniReadValue("TaskButtonGroupWindow", "BorderSize");
 				if (!Int32.TryParse(tgwbS, out taskbuttonGroupWindowBorderSize))
-					throw new FileFormatException("[INI] TaskbuttonGroupWindow/BorderSize must be a valid 32-bit integer");
+					throw new FileFormatException("[INI] TaskButtonGroupWindow/BorderSize must be a valid 32-bit integer");
 
-				string tgwtrS = settings.IniReadValue("TaskbuttonGroupWindow", "TaskbuttonRealSize");
+				string tgwtrS = settings.IniReadValue("TaskButtonGroupWindow", "TaskButtonRealSize");
 				if (!Int32.TryParse(tgwtrS.Split(',')[0], out taskbuttonGroupWindowTaskbuttonRealSize.Left) ||
 					!Int32.TryParse(tgwtrS.Split(',')[1], out taskbuttonGroupWindowTaskbuttonRealSize.Top) ||
 					!Int32.TryParse(tgwtrS.Split(',')[2], out taskbuttonGroupWindowTaskbuttonRealSize.Right) ||
 					!Int32.TryParse(tgwtrS.Split(',')[3], out taskbuttonGroupWindowTaskbuttonRealSize.Bottom))
-					throw new FileFormatException("[INI] TaskbuttonGroupWindow/TaskbuttonRealSize must consist of four valid 32-bit integers seperated by a comma (',')");
+					throw new FileFormatException("[INI] TaskButtonGroupWindow/TaskButtonRealSize must consist of four valid 32-bit integers seperated by a comma (',')");
 
 				string sbW = settings.IniReadValue("StartButton", "Width");
 				if (!Int32.TryParse(sbW, out startButtonWidth))
@@ -152,31 +152,31 @@ namespace SimpleClassicThemeTaskbar.Theme_Engine
 			if (ttS != "File" && !ParseColor(tH, out ttSc))
 				throw new FileFormatException("[RESX] TaskBar/TextureSource must be either a valid hex color value (with #) or the string 'File'");
 
-			string ttL = resources.GetString("Taskbutton.TextureLocation");
+			string ttL = resources.GetString("TaskButton.TextureLocation");
 			if (!Int32.TryParse(ttL.Split(',')[0], out taskbuttonTextureLocation.Item1) ||
 				!Int32.TryParse(ttL.Split(',')[1], out taskbuttonTextureLocation.Item2))
-				throw new FileFormatException("[RESX] Taskbutton/TextureLocation must consist of two valid 32-bit integers seperated by a comma (',')");
+				throw new FileFormatException("[RESX] TaskButton/TextureLocation must consist of two valid 32-bit integers seperated by a comma (',')");
 
-			string tlbL = resources.GetString("Taskbutton.LeftBorderLocation");
+			string tlbL = resources.GetString("TaskButton.LeftBorderLocation");
 			if (!Int32.TryParse(tlbL.Split(',')[0], out taskbuttonLeftBorderLocation.Item1) ||
 				!Int32.TryParse(tlbL.Split(',')[1], out taskbuttonLeftBorderLocation.Item2))
-				throw new FileFormatException("[RESX] Taskbutton/LeftBorderLocation must consist of two valid 32-bit integers seperated by a comma (',')");
+				throw new FileFormatException("[RESX] TaskButton/LeftBorderLocation must consist of two valid 32-bit integers seperated by a comma (',')");
 
-			string trbL = resources.GetString("Taskbutton.RightBorderLocation");
+			string trbL = resources.GetString("TaskButton.RightBorderLocation");
 			if (!Int32.TryParse(trbL.Split(',')[0], out taskbuttonRightBorderLocation.Item1) ||
 				!Int32.TryParse(trbL.Split(',')[1], out taskbuttonRightBorderLocation.Item2))
-				throw new FileFormatException("[RESX] Taskbutton/RightBorderLocation must consist of two valid 32-bit integers seperated by a comma (',')");
+				throw new FileFormatException("[RESX] TaskButton/RightBorderLocation must consist of two valid 32-bit integers seperated by a comma (',')");
 
-			string tgwbS = resources.GetString("TaskbuttonGroupWindow.BorderSize");
+			string tgwbS = resources.GetString("TaskButtonGroupWindow.BorderSize");
 			if (!Int32.TryParse(tgwbS, out taskbuttonGroupWindowBorderSize))
-				throw new FileFormatException("[RESX] TaskbuttonGroupWindow/BorderSize must be a valid 32-bit integer");
+				throw new FileFormatException("[RESX] TaskButtonGroupWindow/BorderSize must be a valid 32-bit integer");
 
-			string tgwtrS = resources.GetString("TaskbuttonGroupWindow.TaskbuttonRealSize");
+			string tgwtrS = resources.GetString("TaskButtonGroupWindow.TaskButtonRealSize");
 			if (!Int32.TryParse(tgwtrS.Split(',')[0], out taskbuttonGroupWindowTaskbuttonRealSize.Left) ||
 				!Int32.TryParse(tgwtrS.Split(',')[1], out taskbuttonGroupWindowTaskbuttonRealSize.Top) ||
 				!Int32.TryParse(tgwtrS.Split(',')[2], out taskbuttonGroupWindowTaskbuttonRealSize.Right) ||
 				!Int32.TryParse(tgwtrS.Split(',')[3], out taskbuttonGroupWindowTaskbuttonRealSize.Bottom))
-				throw new FileFormatException("[RESX] TaskbuttonGroupWindow/TaskbuttonRealSize must consist of four valid 32-bit integers seperated by a comma (',')");
+				throw new FileFormatException("[RESX] TaskButtonGroupWindow/TaskButtonRealSize must consist of four valid 32-bit integers seperated by a comma (',')");
 
 			string sbW = resources.GetString("StartButton.Width");
 			if (!Int32.TryParse(sbW, out startButtonWidth))

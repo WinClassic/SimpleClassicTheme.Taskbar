@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Resources;
 using System.Text;
 using Microsoft.Win32;
 using SimpleClassicThemeTaskbar.Theme_Engine;
@@ -13,7 +14,7 @@ namespace SimpleClassicThemeTaskbar
     public static class Config
     {
         //public static BaseRenderer Renderer = new ClassicRenderer();
-        public static BaseRenderer Renderer = new ImageRenderer("D:\\Classic Theme\\Resources\\Windows Basic");
+        public static BaseRenderer Renderer = new ImageRenderer(new ResourceManager("SimpleClassicThemeTaskbar.Theme_Engine.Themes.Luna", typeof(Config).Assembly));
 
         public static bool EnableSystemTrayHover = true;
         public static bool EnableSystemTrayColorChange = true;

@@ -117,9 +117,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="FirstIconPosition" xml:space="preserve">
-    <value> 11,7</value>
-  </data>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="Settings" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>luna\settings.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
@@ -128,10 +125,13 @@
     <value>luna\startbutton.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="StartButton.Width" xml:space="preserve">
-    <value> 98</value>
+    <value>98</value>
   </data>
   <data name="SystemTray.BaseWidth" xml:space="preserve">
-    <value> 71</value>
+    <value>71</value>
+  </data>
+  <data name="SystemTray.FirstIconPosition" xml:space="preserve">
+    <value>11,7</value>
   </data>
   <data name="SystemTrayBorder" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>luna\systemtrayborder.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -139,29 +139,29 @@
   <data name="SystemTrayTexture" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>luna\systemtraytexture.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Taskbar.Height" xml:space="preserve">
+  <data name="TaskBar.Height" xml:space="preserve">
     <value>30</value>
   </data>
-  <data name="Taskbar.TextureSource" xml:space="preserve">
-    <value> File</value>
+  <data name="TaskBar.TextureSource" xml:space="preserve">
+    <value>File</value>
   </data>
   <data name="TaskbarTexture" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>luna\taskbartexture.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="TaskButton.LeftBorderLocation" xml:space="preserve">
-    <value> 0,3</value>
+    <value>0,3</value>
   </data>
   <data name="TaskButton.RightBorderLocation" xml:space="preserve">
-    <value> 157,3</value>
+    <value>157,3</value>
   </data>
   <data name="TaskButton.TextureLocation" xml:space="preserve">
-    <value> 3,154</value>
+    <value>3,154</value>
   </data>
   <data name="TaskButtonGroupWindow.BorderSize" xml:space="preserve">
-    <value> 2</value>
+    <value>2</value>
   </data>
   <data name="TaskButtonGroupWindow.TaskButtonRealSize" xml:space="preserve">
-    <value> 0,3,0,-2</value>
+    <value>0,3,0,-2</value>
   </data>
   <data name="TaskButtonGroupWindowBorder" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>luna\taskbuttongroupwindowborder.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
