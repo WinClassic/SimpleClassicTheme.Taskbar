@@ -39,12 +39,17 @@ namespace SimpleClassicThemeTaskbar.ThemeEngine
 		private (int, int) taskbuttonRightBorderLocation;
 		private readonly int taskbuttonGroupWindowBorderSize;
 		private RECT taskbuttonGroupWindowTaskbuttonRealSize;
+		private (int, int) taskbuttonIconLocation;
+		private (int, int) taskbuttonIconSize;
+		private (int, int) taskbuttonTextLocation;
+		private readonly int taskbuttonMinimalWidth;
 		private readonly int startButtonWidth;
 		private readonly int systemTrayBaseWidth;
 		private (int, int) systemTrayFirstIconPosition;
 
 		public override int StartButtonWidth => startButtonWidth;
 		public override int TaskbarHeight => taskbarHeight;
+		public override int TaskButtonMinimalWidth => taskbuttonMinimalWidth;
 
 		public ImageRenderer(string resourceDirectory)
 		{
@@ -61,7 +66,11 @@ namespace SimpleClassicThemeTaskbar.ThemeEngine
 				string ttS = settings.IniReadValue("TaskBar", "TextureSource");
 				if (ttS != "File" && !ParseColor(tH, out ttSc))
 					throw new FileFormatException("[INI] TaskBar/TextureSource must be either a valid hex color value (with #) or the string 'File'");
-				
+
+				string tmW = settings.IniReadValue("TaskButton", "MinimalWidth");
+				if (!Int32.TryParse(tmW, out taskbuttonMinimalWidth))
+					throw new FileFormatException("[INI] TaskButton/MinimalWidth must be a valid 32-bit integer");
+
 				string ttL = settings.IniReadValue("TaskButton", "TextureLocation");
 				if (!Int32.TryParse(ttL.Split(',')[0], out taskbuttonTextureLocation.Item1) ||
 					!Int32.TryParse(ttL.Split(',')[1], out taskbuttonTextureLocation.Item2))
@@ -154,6 +163,10 @@ namespace SimpleClassicThemeTaskbar.ThemeEngine
 			string ttS = resources.GetString("TaskBar.TextureSource");
 			if (ttS != "File" && !ParseColor(tH, out ttSc))
 				throw new FileFormatException("[RESX] TaskBar/TextureSource must be either a valid hex color value (with #) or the string 'File'");
+
+			string tmW = resources.GetString("TaskButton.MinimalWidth");
+			if (!Int32.TryParse(tmW, out taskbuttonMinimalWidth))
+				throw new FileFormatException("[RESX] TaskButton/MinimalWidth must be a valid 32-bit integer");
 
 			string ttL = resources.GetString("TaskButton.TextureLocation");
 			if (!Int32.TryParse(ttL.Split(',')[0], out taskbuttonTextureLocation.Item1) ||

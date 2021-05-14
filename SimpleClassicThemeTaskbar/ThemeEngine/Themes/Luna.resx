@@ -148,6 +148,9 @@
   <data name="TaskButton.LeftBorderLocation" xml:space="preserve">
     <value>0,3</value>
   </data>
+  <data name="TaskButton.MinimalWidth" xml:space="preserve">
+    <value>160</value>
+  </data>
   <data name="TaskButton.RightBorderLocation" xml:space="preserve">
     <value>157,3</value>
   </data>

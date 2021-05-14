@@ -55,7 +55,6 @@
 			this.label7 = new System.Windows.Forms.Label();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
 			this.label4 = new System.Windows.Forms.Label();
-			this.startButton1 = new SimpleClassicThemeTaskbar.UIElements.StartButton.StartButton();
 			this.button1 = new System.Windows.Forms.Button();
 			this.textStartLocation = new System.Windows.Forms.TextBox();
 			this.radioStartButton = new System.Windows.Forms.RadioButton();
@@ -76,6 +75,11 @@
 			this.labelCopyrightSCT = new System.Windows.Forms.Label();
 			this.labelCopyrightSCTT = new System.Windows.Forms.Label();
 			this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
+			this.tabGeneral = new System.Windows.Forms.TabPage();
+			this.label12 = new System.Windows.Forms.Label();
+			this.comboBox1 = new System.Windows.Forms.ComboBox();
+			this.comboBox2 = new System.Windows.Forms.ComboBox();
+			this.label13 = new System.Windows.Forms.Label();
 			this.settingsTabs.SuspendLayout();
 			this.tabTaskviewAppearance.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.spaceBetweenTaskbarIcons)).BeginInit();
@@ -90,6 +94,7 @@
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
+			this.tabGeneral.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// buttonApply
@@ -118,6 +123,7 @@
 			this.settingsTabs.Controls.Add(this.tabTaskviewAppearance);
 			this.settingsTabs.Controls.Add(this.tabStartButtonAppearance);
 			this.settingsTabs.Controls.Add(this.tabSysTrayAppearance);
+			this.settingsTabs.Controls.Add(this.tabGeneral);
 			this.settingsTabs.Controls.Add(this.tabAbout);
 			resources.ApplyResources(this.settingsTabs, "settingsTabs");
 			this.settingsTabs.Name = "settingsTabs";
@@ -296,7 +302,6 @@
 			// groupBox1
 			// 
 			this.groupBox1.Controls.Add(this.label4);
-			this.groupBox1.Controls.Add(this.startButton1);
 			this.groupBox1.Controls.Add(this.button1);
 			this.groupBox1.Controls.Add(this.textStartLocation);
 			this.groupBox1.Controls.Add(this.radioStartButton);
@@ -310,14 +315,6 @@
 			// 
 			resources.ApplyResources(this.label4, "label4");
 			this.label4.Name = "label4";
-			// 
-			// startButton1
-			// 
-			this.startButton1.BorderStyle = System.Windows.Forms.Border3DStyle.Raised;
-			this.startButton1.Dummy = true;
-			resources.ApplyResources(this.startButton1, "startButton1");
-			this.startButton1.Name = "startButton1";
-			this.startButton1.Pressed = false;
 			// 
 			// button1
 			// 
@@ -417,7 +414,7 @@
 			// pictureBox1
 			// 
 			this.pictureBox1.BackColor = System.Drawing.Color.White;
-			this.pictureBox1.Image = SimpleClassicThemeTaskbar.Properties.Resources.win98scttbanner;
+			this.pictureBox1.Image = global::SimpleClassicThemeTaskbar.Properties.Resources.win98scttbanner;
 			resources.ApplyResources(this.pictureBox1, "pictureBox1");
 			this.pictureBox1.Name = "pictureBox1";
 			this.pictureBox1.TabStop = false;
@@ -453,6 +450,48 @@
 			// 
 			this.openFileDialog1.FileName = "openFileDialog1";
 			// 
+			// tabGeneral
+			// 
+			this.tabGeneral.BackColor = System.Drawing.SystemColors.Control;
+			this.tabGeneral.Controls.Add(this.comboBox2);
+			this.tabGeneral.Controls.Add(this.label13);
+			this.tabGeneral.Controls.Add(this.comboBox1);
+			this.tabGeneral.Controls.Add(this.label12);
+			resources.ApplyResources(this.tabGeneral, "tabGeneral");
+			this.tabGeneral.Name = "tabGeneral";
+			// 
+			// label12
+			// 
+			resources.ApplyResources(this.label12, "label12");
+			this.label12.Name = "label12";
+			// 
+			// comboBox1
+			// 
+			this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboBox1.FormattingEnabled = true;
+			this.comboBox1.Items.AddRange(new object[] {
+            resources.GetString("comboBox1.Items"),
+            resources.GetString("comboBox1.Items1"),
+            resources.GetString("comboBox1.Items2")});
+			resources.ApplyResources(this.comboBox1, "comboBox1");
+			this.comboBox1.Name = "comboBox1";
+			this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
+			// 
+			// comboBox2
+			// 
+			this.comboBox2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboBox2.FormattingEnabled = true;
+			this.comboBox2.Items.AddRange(new object[] {
+            resources.GetString("comboBox2.Items"),
+            resources.GetString("comboBox2.Items1")});
+			resources.ApplyResources(this.comboBox2, "comboBox2");
+			this.comboBox2.Name = "comboBox2";
+			// 
+			// label13
+			// 
+			resources.ApplyResources(this.label13, "label13");
+			this.label13.Name = "label13";
+			// 
 			// Settings
 			// 
 			resources.ApplyResources(this, "$this");
@@ -485,6 +524,8 @@
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).EndInit();
+			this.tabGeneral.ResumeLayout(false);
+			this.tabGeneral.PerformLayout();
 			this.ResumeLayout(false);
 
         }
@@ -537,5 +578,10 @@
 		private System.Windows.Forms.Button button2;
 		private System.Windows.Forms.Label label11;
 		private System.Windows.Forms.ListBox listBox1;
+		private System.Windows.Forms.TabPage tabGeneral;
+		private System.Windows.Forms.ComboBox comboBox1;
+		private System.Windows.Forms.Label label12;
+		private System.Windows.Forms.ComboBox comboBox2;
+		private System.Windows.Forms.Label label13;
 	}
 }

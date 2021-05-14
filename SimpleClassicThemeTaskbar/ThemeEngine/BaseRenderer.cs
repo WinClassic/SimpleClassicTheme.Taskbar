@@ -12,6 +12,7 @@ namespace SimpleClassicThemeTaskbar.ThemeEngine
         public abstract Font SystemTrayTimeFont { get; }
         public abstract Point SystemTrayTimeLocation { get; }
         public abstract int TaskbarHeight { get; }
+        public abstract int TaskButtonMinimalWidth { get; }
 
         public abstract void DrawQuickLaunch(QuickLaunch quickLaunch, Graphics g);
 

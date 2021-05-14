@@ -4,14 +4,17 @@ using SimpleClassicThemeTaskbar.Helpers.NativeMethods;
 using System;
 using System.Diagnostics;
 using System.Drawing;
+using System.IO;
+using System.Linq;
 using System.Reflection;
-using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 namespace SimpleClassicThemeTaskbar
 {
     public partial class Settings : Form
     {
+        System.ComponentModel.ComponentResourceManager Resources = new(typeof(Settings));
+
         public Settings()
         {
             InitializeComponent();
@@ -40,6 +43,14 @@ namespace SimpleClassicThemeTaskbar
                 taskbarFilter += filter + "*";
             }
             Config.TaskbarProgramFilter = taskbarFilter;
+            Config.Language = (string)comboBox2.SelectedItem;
+
+            if ((string)comboBox1.SelectedItem == Resources.GetString("comboBox1.Items"))
+                Config.RendererPath = "Internal/Classic";
+            else if ((string)comboBox1.SelectedItem == Resources.GetString("comboBox1.Items1"))
+                Config.RendererPath = "Internal/Luna";
+            else
+                Config.RendererPath = (string)comboBox1.SelectedItem;
 
             Config.ConfigChanged = true;
             Config.SaveToRegistry();
@@ -165,11 +176,27 @@ namespace SimpleClassicThemeTaskbar
                 spaceBetweenQuickLaunchIcons.Value = spaceBetweenQuickLaunchIcons.Maximum;
 
             taskbarProgramWidth.Maximum = Screen.PrimaryScreen.Bounds.Width;
+            comboBox2.SelectedItem = Config.Language;
 
             string taskbarFilter = Config.TaskbarProgramFilter;
             foreach (string filter in taskbarFilter.Split('*'))
                 if (filter != "")
                     _ = listBox1.Items.Add(filter);
+
+            // Detect renderer correctly
+            switch (Config.RendererPath)
+            {
+                case "Internal/Classic":
+                    comboBox1.SelectedItem = "Classic";
+                    break;
+                case "Internal/Luna":
+                    comboBox1.SelectedItem = "Luna";
+                    break;
+                default:
+                    comboBox1.Items.Add(Config.RendererPath);
+                    comboBox1.SelectedItem = Config.RendererPath;
+                    break;
+            }
 
             Image original = ApplicationEntryPoint.SCTCompatMode ? Properties.Resources.logo_sct_t : Properties.Resources.logo_sctt;
             Bitmap newImage = new(original);
@@ -214,5 +241,45 @@ namespace SimpleClassicThemeTaskbar
         {
             startButton1.Location = new Point(groupBox1.Width - 7 - startButton1.Width, startButton1.Location.Y);
         }
-    }
+
+		private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+		{
+            if ((string)comboBox1.SelectedItem == Resources.GetString("comboBox1.Items2"))
+			{
+                FolderBrowserDialog fbd = new();
+                if (fbd.ShowDialog() == DialogResult.OK)
+				{
+                    string[] files = { "settings.txt", "startbutton.png", "systemtrayborder.png", "systemtraytexture.png", "taskbartexture.png", "taskbuttongroupwindowborder.png", "taskbuttonnormal.png", "taskbuttonnormalhover.png", "taskbuttonpressed.png", "taskbuttonpressedhover.png" };
+                    string[] filesInDirectory = Directory.GetFiles(fbd.SelectedPath);
+                    string[] filesInDirectoryLower = new string[filesInDirectory.Length];
+                    for (int i = 0; i < filesInDirectory.Length; i++)
+                        filesInDirectoryLower[i] = Path.GetFileName(filesInDirectory[i]).ToLower();
+                    if (files.SequenceEqual(filesInDirectoryLower))
+                    {
+                        comboBox1.Items.Clear();
+                        comboBox1.Items.Add(Resources.GetString("comboBox1.Items"));
+                        comboBox1.Items.Add(Resources.GetString("comboBox1.Items1"));
+                        comboBox1.Items.Add(Resources.GetString("comboBox1.Items2"));
+                        comboBox1.Items.Add(fbd.SelectedPath);
+                        comboBox1.SelectedItem = fbd.SelectedPath;
+                        return;
+                    }
+                }
+                // Detect renderer correctly
+                switch (Config.RendererPath)
+                {
+                    case "Internal/Classic":
+                        comboBox1.SelectedItem = "Classic";
+                        break;
+                    case "Internal/Luna":
+                        comboBox1.SelectedItem = "Luna";
+                        break;
+                    default:
+                        comboBox1.Items.Add(Config.RendererPath);
+                        comboBox1.SelectedItem = Config.RendererPath;
+                        break;
+                }
+            }
+        }
+	}
 }

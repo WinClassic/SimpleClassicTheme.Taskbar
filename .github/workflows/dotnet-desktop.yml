@@ -31,4 +31,27 @@ jobs:
       uses: actions/upload-artifact@v2.2.3
       with:
         name: binaries
-        path: './SimpleClassicThemeTaskbar/bin/x64/Release/net5.0-windows/'
+        path: './SimpleClassicThemeTaskbar/bin/Release/net5.0-windows'
+
+  release:
+    runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'push' }}
+    needs: [build]
+    steps:
+    - name: Download build artifact
+      uses: actions/download-artifact@v2.0.9
+      with:
+        name: binaries
+        path: binaries
+        
+    - name: Zip files
+      run: zip -r binaries.zip binaries
+        
+    - name: Publish release
+      uses: "marvinpinto/action-automatic-releases@latest"
+      with:
+        repo_token: "${{ secrets.GITHUB_TOKEN }}"
+        automatic_release_tag: "latest"
+        prerelease: true
+        title: "Development Build"
+        files: 'binaries.zip'
