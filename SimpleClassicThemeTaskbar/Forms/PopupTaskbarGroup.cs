@@ -1,4 +1,7 @@
-﻿using System;
+﻿using SimpleClassicThemeTaskbar.Helpers;
+using SimpleClassicThemeTaskbar.Helpers.NativeMethods;
+
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -11,11 +14,8 @@ using System.Windows.Forms;
 
 namespace SimpleClassicThemeTaskbar
 {
-	public partial class PopupTaskbarGroup : Form
+    public partial class PopupTaskbarGroup : Form
 	{
-		[DllImport("user32.dll")]
-		public static extern int DrawFrameControl(IntPtr hdc, ref RECT lpRect, uint un1, uint un2);
-
 		public const uint DFC_BUTTON = 4;
 		public const uint DFCS_BUTTONPUSH = 0x10;
 		public const uint DFCS_PUSHED = 512;
@@ -81,7 +81,7 @@ namespace SimpleClassicThemeTaskbar
 			Rectangle newRect = ClientRectangle;
 			RECT rect = new RECT(newRect);
 			uint buttonStyle = DFCS_BUTTONPUSH;
-			DrawFrameControl(e.Graphics.GetHdc(), ref rect, DFC_BUTTON, buttonStyle);
+			User32.DrawFrameControl(e.Graphics.GetHdc(), ref rect, DFC_BUTTON, buttonStyle);
 			e.Graphics.ReleaseHdc();
 			e.Graphics.ResetTransform();
 		}

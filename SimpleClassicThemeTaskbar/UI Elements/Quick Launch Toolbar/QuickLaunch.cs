@@ -10,7 +10,8 @@ using System.Windows.Forms;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Diagnostics;
-using SimpleClassicThemeTaskbar.Helper_Classes;
+using SimpleClassicThemeTaskbar.Helpers;
+using SimpleClassicThemeTaskbar.Helpers;
 
 namespace SimpleClassicThemeTaskbar.UIElements.QuickLaunch
 {

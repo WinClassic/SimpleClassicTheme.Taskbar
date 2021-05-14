@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using SimpleClassicThemeTaskbar.Helpers.NativeMethods;
+
+using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -71,16 +73,7 @@ namespace System.Windows.Forms
 
 	public class SystemContextMenu
 	{
-		[DllImport("user32.dll")]
-		static extern IntPtr CreatePopupMenu();
-		[DllImport("user32.dll", CharSet = CharSet.Auto)]
-		static extern bool AppendMenu(IntPtr hMenu, SystemContextMenuItemFlags uFlags, int uIDNewItem, string lpNewItem);
-		[DllImport("user32.dll", CharSet = CharSet.Auto)]
-		static extern bool AppendMenu(IntPtr hMenu, SystemContextMenuItemFlags uFlags, int uIDNewItem, IntPtr lpNewItem);
-		[DllImport("user32.dll")]
-		static extern bool DeleteMenu(IntPtr hMenu, int uPosition, uint uFlags);
-		[DllImport("user32.dll")]
-		static extern int TrackPopupMenuEx(IntPtr hmenu, SystemContextMenuTrackPopupMenuFlags fuFlags, int x, int y, IntPtr hwnd, IntPtr lptpm);
+		
 
 		public IntPtr MenuHandle;
 		public List<SystemContextMenuItem> Items = new();
@@ -89,7 +82,7 @@ namespace System.Windows.Forms
 
 		public SystemContextMenu()
 		{
-			MenuHandle = CreatePopupMenu();
+			MenuHandle = User32.CreatePopupMenu();
 		}
 
 		public void AddItem(SystemContextMenuItem item)
@@ -97,9 +90,9 @@ namespace System.Windows.Forms
 			Items.Add(item);
 			item.ID = nextItemId;
 			if (item.MenuItemFlags.HasFlag(SystemContextMenuItemFlags.Bitmap))
-				AppendMenu(MenuHandle, item.MenuItemFlags, nextItemId++, item.Image.GetHbitmap());
+				User32.AppendMenu(MenuHandle, item.MenuItemFlags, nextItemId++, item.Image.GetHbitmap());
 			else
-				AppendMenu(MenuHandle, item.MenuItemFlags, nextItemId++, item.Text);
+				User32.AppendMenu(MenuHandle, item.MenuItemFlags, nextItemId++, item.Text);
 		}
 
 		public void RemoveItem(SystemContextMenuItem item)
@@ -107,13 +100,13 @@ namespace System.Windows.Forms
 			if (Items.Contains(item))
 			{
 				Items.Remove(item);
-				DeleteMenu(MenuHandle, item.ID, 0x0000);
+				User32.DeleteMenu(MenuHandle, item.ID, 0x0000);
 			}
 		}
 
 		public void Show(IntPtr windowHandle, int x, int y)
 		{
-			int id = TrackPopupMenuEx(MenuHandle, SystemContextMenuTrackPopupMenuFlags.ReturnResult, x, y, windowHandle, IntPtr.Zero);
+			int id = User32.TrackPopupMenuEx(MenuHandle, SystemContextMenuTrackPopupMenuFlags.ReturnResult, x, y, windowHandle, IntPtr.Zero);
 			PerformAction(id);
 		}
 

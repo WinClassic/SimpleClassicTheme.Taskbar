@@ -6,19 +6,12 @@ using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using System.Collections.Generic;
 using System.Diagnostics;
+using SimpleClassicThemeTaskbar.Helpers.NativeMethods;
 
 namespace SimpleClassicThemeTaskbar
 {
     public partial class TaskbarProgram : UserControl
     {
-        [DllImport("user32.dll")]
-        static extern bool SetForegroundWindow(IntPtr hWnd);
-
-        [DllImport("user32.dll")]
-        static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
-
-        [DllImport("user32.dll")]
-        public static extern int DrawFrameControl(IntPtr hdc, ref RECT lpRect, uint un1, uint un2);
 
         public const uint DFC_BUTTON = 4;
         public const uint DFCS_BUTTONPUSH = 0x10;
@@ -135,13 +128,13 @@ namespace SimpleClassicThemeTaskbar
             }
             else if (ActiveWindow)
             {
-                ShowWindow(Window.Handle, 6);
+                User32.ShowWindow(Window.Handle, 6);
             }
             else
             {
                 if ((Window.WindowInfo.dwStyle & 0x20000000) > 0)
-                    ShowWindow(Window.Handle, 9);
-                SetForegroundWindow(Window.Handle);
+                    User32.ShowWindow(Window.Handle, 9);
+                User32.SetForegroundWindow(Window.Handle);
 
                 foreach (Control d in Parent.Controls)
                 {
@@ -165,7 +158,7 @@ namespace SimpleClassicThemeTaskbar
             //ControlPaint.DrawBorder3D(e.Graphics, newRect, style);
             RECT rect = new RECT(newRect);
             uint buttonStyle = style == Border3DStyle.Raised ? DFCS_BUTTONPUSH : DFCS_BUTTONPUSH | DFCS_PUSHED;
-            DrawFrameControl(e.Graphics.GetHdc(), ref rect, DFC_BUTTON, buttonStyle);
+            User32.DrawFrameControl(e.Graphics.GetHdc(), ref rect, DFC_BUTTON, buttonStyle);
             e.Graphics.ReleaseHdc();
             e.Graphics.ResetTransform();
 

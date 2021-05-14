@@ -11,14 +11,6 @@ namespace SimpleClassicThemeTaskbar
 {
 	public abstract class UserControlEx : UserControl
 	{
-		[DllImport("user32.dll", SetLastError = true)]
-		[return: MarshalAs(UnmanagedType.Bool)]
-		protected static extern bool IsWindow(IntPtr hWnd);
-
-		[DllImport("user32.dll", SetLastError = true)]
-		[return: MarshalAs(UnmanagedType.SysInt)]
-		protected static extern int GetWindowThreadProcessId(IntPtr hWnd, out uint processId);
-
 		public bool Erroring = false;
 		public abstract string GetErrorString();
 

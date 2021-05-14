@@ -9,6 +9,7 @@ using System.Linq;
 
 using SimpleClassicThemeTaskbar.UIElements.NetworkUI;
 using System.Threading;
+using SimpleClassicThemeTaskbar.Helpers.NativeMethods;
 
 namespace SimpleClassicThemeTaskbar.Forms
 {
@@ -19,9 +20,6 @@ namespace SimpleClassicThemeTaskbar.Forms
         private List<Wlan.WlanConnectionAttributes> currentConnections = new List<Wlan.WlanConnectionAttributes>();
         private List<(WlanClient.WlanInterface, List<Wlan.WlanAvailableNetwork>)> allNetworks = new List<(WlanClient.WlanInterface, List<Wlan.WlanAvailableNetwork>)>();
 
-        [DllImport("user32.dll")]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        private static extern bool ShowScrollBar(IntPtr hWnd, int wBar, bool bShow);
 
         private enum ScrollBarDirection
         {
@@ -46,7 +44,7 @@ namespace SimpleClassicThemeTaskbar.Forms
 
         private void NetworkUI_Load(object sender, EventArgs e)
         {
-            ShowScrollBar(panel1.Handle, (int)ScrollBarDirection.SB_VERT, true);
+            User32.ShowScrollBar(panel1.Handle, (int)ScrollBarDirection.SB_VERT, true);
         }
 
         private void button1_Click(object sender, EventArgs e)

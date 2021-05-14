@@ -1,6 +1,8 @@
-﻿using SimpleClassicThemeTaskbar.UIElements.QuickLaunch;
+﻿using SimpleClassicThemeTaskbar.Helpers;
+using SimpleClassicThemeTaskbar.UIElements.QuickLaunch;
 using SimpleClassicThemeTaskbar.UIElements.StartButton;
 using SimpleClassicThemeTaskbar.UIElements.SystemTray;
+
 using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
@@ -11,7 +13,7 @@ using System.Windows.Forms;
 
 namespace SimpleClassicThemeTaskbar.Theme_Engine
 {
-	class ImageRenderer : BaseRenderer
+    class ImageRenderer : BaseRenderer
 	{
 		ClassicRenderer r = new ClassicRenderer();
 

@@ -13,8 +13,6 @@ namespace SimpleClassicThemeTaskbar.UIElements.Misc
 {
     public partial class BetterBorderPanel : Panel
     {
-        [DllImport("user32.dll")]
-        public static extern int DrawFrameControl(IntPtr hdc, ref RECT lpRect, uint un1, uint un2);
 
         public const uint DFC_BUTTON = 4;
         public const uint DFCS_BUTTONPUSH = 0x10;

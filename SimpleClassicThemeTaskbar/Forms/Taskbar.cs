@@ -1,4 +1,7 @@
-﻿using System;
+﻿using SimpleClassicThemeTaskbar.Helpers;
+using SimpleClassicThemeTaskbar.Helpers.NativeMethods;
+
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
@@ -14,89 +17,52 @@ namespace SimpleClassicThemeTaskbar
 {
     public partial class Taskbar : Form
     {
-        //TODO: Clean this shitty mess like wth
-        private ContextMenuStrip d;
+        public static IntPtr lastOpenWindow;
+
+        public static bool waitBeforeShow = false;
+
+        public bool busy = false;
+
+        public bool CanInvoke = false;
+
+        public BaseTaskbarProgram heldDownButton;
+
+        public int heldDownOriginalX = 0;
+
+        public int mouseOriginalX = 0;
+
+        public bool NeverShow = false;
+
+        public bool Primary = true;
+
+        public bool selfClose = false;
+
+        private static CodeBridge cppCode = new CodeBridge();
 
         //Window handle list
         private readonly List<Window> windows = new List<Window>();
-        private bool LookingForTray = false;
-        public bool selfClose = false;
 
-        private List<BaseTaskbarProgram> icons = new List<BaseTaskbarProgram>();
+        private List<string> BlacklistedClassNames = new List<string>();
+
+        private List<string> BlacklistedProcessNames = new List<string>();
+
+        private List<string> BlacklistedWindowNames = new List<string>();
+
         //private Thread BackgroundThread;
         private IntPtr CrossThreadHandle;
 
-        public BaseTaskbarProgram heldDownButton;
-        public int heldDownOriginalX = 0;
-        public int mouseOriginalX = 0;
+        //TODO: Clean this shitty mess like wth
+        private ContextMenuStrip d;
 
-        public bool CanInvoke = false;
-        public static bool waitBeforeShow = false;
-        public static IntPtr lastOpenWindow;
+        private List<BaseTaskbarProgram> icons = new List<BaseTaskbarProgram>();
+        private bool LookingForTray = false;
+        private Stopwatch sw = new Stopwatch();
 
-        List<string> BlacklistedClassNames = new List<string>();
-        List<string> BlacklistedWindowNames = new List<string>();
-        List<string> BlacklistedProcessNames = new List<string>();
+        private List<(string, TimeSpan)> times = new List<(string, TimeSpan)>();
 
-        public bool busy = false;
-        public bool Primary = true;
-        public bool NeverShow = false;
+        private bool watchLogic = true;
 
-        protected override void WndProc(ref Message m)
-        { 
-            if (m.Msg == WM_ENDSESSION)
-            {
-                ApplicationEntryPoint.ExitSCTT();
-            }
-            if (m.Msg == WM_QUERYENDSESSION)
-            {
-                m.Result = new IntPtr(1);
-            }
-            if (m.Msg == WM_SCT)
-            {
-                switch (m.WParam.ToInt32())
-                {
-                    case SCTWP_EXIT:
-                        if (ApplicationEntryPoint.SCTCompatMode || m.LParam.ToInt32() == SCTLP_FORCE)
-                        {
-                            ApplicationEntryPoint.ExitSCTT();
-                        }
-                        break;
-                    case SCTWP_ISMANAGED:
-                        m.Result = new IntPtr(1);
-                        return;
-                    case SCTWP_ISSCT:
-                        m.Result = new IntPtr(ApplicationEntryPoint.SCTCompatMode ? 1 : 0);
-                        return;
-                }
-            }
-            if (m.Msg == 0x15/*WM_SYSCOLORCHANGE*/)
-            {
-                //SuspendLayout();
-                //Font = SystemFonts.MessageBoxFont;
-                //ResumeLayout();
-            }
-            if (m.Msg == 0x1a/*WM_SETTINGCHANGE*/)
-			{
-                //Rectangle screen = Screen.FromControl(this).WorkingArea;
-                //Console.WriteLine($"{screen.X},{screen.Y} {screen.Width}x{screen.Height}");
-			}
-            base.WndProc(ref m);
-        }
-
-        public void RestoreExplorer()
-		{
-            //Show explorer's taskbar(s)
-            windows.Clear();
-            LookingForTray = true;
-            EnumWindowsCallback callback = EnumWind;
-            EnumWindows(callback, 0);
-            LookingForTray = false;
-
-            foreach (Window w in windows)
-                if ((w.WindowInfo.dwStyle & 0x10000000L) > 0)
-                    ShowWindow(w.Handle, 5 /* SW_SHOW */);
-        }
+        private bool watchUI = true;
 
         //Constructor
         public Taskbar(bool isPrimary)
@@ -144,11 +110,11 @@ namespace SimpleClassicThemeTaskbar
             {
                 windows.Clear();
                 EnumWindowsCallback callback = EnumWind;
-                EnumWindows(callback, 0);
+                User32.EnumWindows(callback, 0);
                 foreach (Window w in windows)
                 {
                     //WM_WININICHANGE - SPI_SETWORKAREA
-                    PostMessage(w.Handle, 0x001A, 0x002F, 0);
+                    User32.PostMessage(w.Handle, 0x001A, 0x002F, 0);
                 }
             }
         }
@@ -165,7 +131,19 @@ namespace SimpleClassicThemeTaskbar
             }
         }
 
-        private static CodeBridge cppCode = new CodeBridge();
+        public void RestoreExplorer()
+        {
+            //Show explorer's taskbar(s)
+            windows.Clear();
+            LookingForTray = true;
+            EnumWindowsCallback callback = EnumWind;
+            User32.EnumWindows(callback, 0);
+            LookingForTray = false;
+
+            foreach (Window w in windows)
+                if ((w.WindowInfo.dwStyle & 0x10000000L) > 0)
+                    User32.ShowWindow(w.Handle, 5 /* SW_SHOW */);
+        }
 
         //Function that displays the taskbar on the specified screen
         public void ShowOnScreen(Screen screen)
@@ -173,68 +151,53 @@ namespace SimpleClassicThemeTaskbar
             StartPosition = FormStartPosition.Manual;
             Location = new Point(screen.WorkingArea.Left, screen.Bounds.Bottom - Config.Renderer.TaskbarHeight);
             Size = new Size(screen.Bounds.Width, Config.Renderer.TaskbarHeight);
-			Show();
+            Show();
         }
 
-        //Function to determine which windows to add to the window list
-        private bool IsAltTabWindow(IntPtr hwnd)
+        protected override void OnPaint(PaintEventArgs e) => Config.Renderer.DrawTaskBar(this, e.Graphics);
+
+        protected override void WndProc(ref Message m)
         {
-            //If window isn't visible it can't possibly be on the taskbar
-            if (!IsWindowVisible(hwnd))
-                return false;
-
-            //Check if the OS is Windows 10
-            if (Environment.OSVersion.Version.Major == 10)
-                //Check if the window is on the current Desktop
-                if (!cppCode.WindowIsOnCurrentDesktop(hwnd))
-                    return false;
-
-            //Get the root owner of the window
-            IntPtr root = GetAncestor(hwnd, 3);
-
-            //If the last active popup of the root owner is NOT this window: don't show it
-            //This method is described by Raymond Chen in this blogpost:
-            //https://devblogs.microsoft.com/oldnewthing/20071008-00/?p=24863
-            if (GetLastActivePopupOfWindow(root) != hwnd)
-                return false;
-
-            //Create a Window object
-            Window wi = new Window(hwnd);
-
-            //If it's a tool window: don't show it
-            if ((wi.WindowInfo.dwExStyle & 0x00000080L) > 0)
-                return false;
-
-            //If it's any of these odd cases: don't show it
-            if (wi.ClassName == "Shell_TrayWnd" ||                          //Windows taskbar
-                wi.ClassName == "WorkerW" ||                                //Random Windows thing
-                wi.ClassName == "Progman" ||                                //The program manager
-                wi.ClassName == "ThumbnailDeviceHelperWnd" ||               //UWP
-                wi.ClassName == "Windows.UI.Core.CoreWindow" ||             //Empty UWP apps
-                wi.ClassName == "DV2ControlHost" ||                         //Windows startmenu, if open
-                (wi.ClassName == "Button" && wi.Title == "Start") ||        //Windows startmenu-button.
-                wi.ClassName == "MsgrIMEWindowClass" ||                     //Live messenger's notifybox i think
-                wi.ClassName == "SysShadow" ||                              //Live messenger's shadow-hack
-                wi.ClassName.StartsWith("WMP9MediaBarFlyout") ||            //WMP's "now playing" taskbar-toolbar
-                wi.Title.Length == 0)                                       //Window without a name
-                return false;
-
-            //UWP app
-            if (wi.ClassName == "ApplicationFrameWindow")
+            if (m.Msg == WM_ENDSESSION)
             {
-                //Do an API call to see if app isn't cloaked
-                int d;
-                DwmGetWindowAttribute(wi.Handle, DWMWINDOWATTRIBUTE.Cloaked, out d, Marshal.SizeOf(0));
-
-                //If returned value is not 0, the window is cloaked
-                if (d > 0)
+                ApplicationEntryPoint.ExitSCTT();
+            }
+            if (m.Msg == WM_QUERYENDSESSION)
+            {
+                m.Result = new IntPtr(1);
+            }
+            if (m.Msg == WM_SCT)
+            {
+                switch (m.WParam.ToInt32())
                 {
-                    return false;
+                    case SCTWP_EXIT:
+                        if (ApplicationEntryPoint.SCTCompatMode || m.LParam.ToInt32() == SCTLP_FORCE)
+                        {
+                            ApplicationEntryPoint.ExitSCTT();
+                        }
+                        break;
+
+                    case SCTWP_ISMANAGED:
+                        m.Result = new IntPtr(1);
+                        return;
+
+                    case SCTWP_ISSCT:
+                        m.Result = new IntPtr(ApplicationEntryPoint.SCTCompatMode ? 1 : 0);
+                        return;
                 }
             }
-
-            //If none of those things failed: Yay, we have a window we should display!
-            return true;
+            if (m.Msg == 0x15/*WM_SYSCOLORCHANGE*/)
+            {
+                //SuspendLayout();
+                //Font = SystemFonts.MessageBoxFont;
+                //ResumeLayout();
+            }
+            if (m.Msg == 0x1a/*WM_SETTINGCHANGE*/)
+            {
+                //Rectangle screen = Screen.FromControl(this).WorkingArea;
+                //Console.WriteLine($"{screen.X},{screen.Y} {screen.Width}x{screen.Height}");
+            }
+            base.WndProc(ref m);
         }
 
         private bool EnumWind(IntPtr hWnd, int lParam)
@@ -276,48 +239,135 @@ namespace SimpleClassicThemeTaskbar
             timerUpdateUI.Start();
         }
 
-		protected override void OnPaint(PaintEventArgs e) => Config.Renderer.DrawTaskBar(this, e.Graphics);
+        //Function to determine which windows to add to the window list
+        private bool IsAltTabWindow(IntPtr hwnd)
+        {
+            //If window isn't visible it can't possibly be on the taskbar
+            if (!User32.IsWindowVisible(hwnd))
+                return false;
 
-		private void Taskbar_FormClosing(object sender, FormClosingEventArgs e)
+            //Check if the OS is Windows 10
+            if (Environment.OSVersion.Version.Major == 10)
+                //Check if the window is on the current Desktop
+                if (!cppCode.WindowIsOnCurrentDesktop(hwnd))
+                    return false;
+
+            //Get the root owner of the window
+            IntPtr root = User32.GetAncestor(hwnd, 3);
+
+            //If the last active popup of the root owner is NOT this window: don't show it
+            //This method is described by Raymond Chen in this blogpost:
+            //https://devblogs.microsoft.com/oldnewthing/20071008-00/?p=24863
+            if (GetLastActivePopupOfWindow(root) != hwnd)
+                return false;
+
+            //Create a Window object
+            Window wi = new Window(hwnd);
+
+            //If it's a tool window: don't show it
+            if ((wi.WindowInfo.dwExStyle & 0x00000080L) > 0)
+                return false;
+
+            //If it's any of these odd cases: don't show it
+            if (wi.ClassName == "Shell_TrayWnd" ||                          //Windows taskbar
+                wi.ClassName == "WorkerW" ||                                //Random Windows thing
+                wi.ClassName == "Progman" ||                                //The program manager
+                wi.ClassName == "ThumbnailDeviceHelperWnd" ||               //UWP
+                wi.ClassName == "Windows.UI.Core.CoreWindow" ||             //Empty UWP apps
+                wi.ClassName == "DV2ControlHost" ||                         //Windows startmenu, if open
+                (wi.ClassName == "Button" && wi.Title == "Start") ||        //Windows startmenu-button.
+                wi.ClassName == "MsgrIMEWindowClass" ||                     //Live messenger's notifybox i think
+                wi.ClassName == "SysShadow" ||                              //Live messenger's shadow-hack
+                wi.ClassName.StartsWith("WMP9MediaBarFlyout") ||            //WMP's "now playing" taskbar-toolbar
+                wi.Title.Length == 0)                                       //Window without a name
+                return false;
+
+            //UWP app
+            if (wi.ClassName == "ApplicationFrameWindow")
+            {
+                //Do an API call to see if app isn't cloaked
+                int d;
+                DwmApi.DwmGetWindowAttribute(wi.Handle, DWMWINDOWATTRIBUTE.Cloaked, out d, Marshal.SizeOf(0));
+
+                //If returned value is not 0, the window is cloaked
+                if (d > 0)
+                {
+                    return false;
+                }
+            }
+
+            //If none of those things failed: Yay, we have a window we should display!
+            return true;
+        }
+
+        private void StartButtonPanel_MouseClick(object sender, System.Windows.Forms.MouseEventArgs e)
+        {
+            startButton1.OnMouseClick(startButton1, e);
+        }
+
+        private void StartButtonPanel_MouseDown(object sender, System.Windows.Forms.MouseEventArgs e)
+        {
+            startButton1.OnMouseDown(startButton1, e);
+        }
+
+        private void StartButtonPanel_MouseUp(object sender, System.Windows.Forms.MouseEventArgs e)
+        {
+            startButton1.OnMouseUp(startButton1, e);
+        }
+
+        private void Taskbar_FormClosing(object sender, FormClosingEventArgs e)
         {
             if (!selfClose)
             {
                 //If we don't close ourselves, show the shutdown dialog
-                PostMessage(FindWindowW("Shell_TrayWnd", ""), (int)WIN32.WM_KEYDOWN, (int)WIN32.VK_MENU, 0);
-                PostMessage(FindWindowW("Shell_TrayWnd", ""), (int)WIN32.WM_KEYDOWN, (int)WIN32.VK_F4, 0);
-                SendMessage(FindWindowW("Shell_TrayWnd", ""), (int)WIN32.WM_KEYUP, (int)WIN32.VK_F4, 0);
-                SendMessage(FindWindowW("Shell_TrayWnd", ""), (int)WIN32.WM_KEYUP, (int)WIN32.VK_MENU, 0);
+                User32.PostMessage(User32.FindWindowW("Shell_TrayWnd", ""), (int)WIN32.WM_KEYDOWN, (int)WIN32.VK_MENU, 0);
+                User32.PostMessage(User32.FindWindowW("Shell_TrayWnd", ""), (int)WIN32.WM_KEYDOWN, (int)WIN32.VK_F4, 0);
+                User32.SendMessage(User32.FindWindowW("Shell_TrayWnd", ""), (int)WIN32.WM_KEYUP, (int)WIN32.VK_F4, 0);
+                User32.SendMessage(User32.FindWindowW("Shell_TrayWnd", ""), (int)WIN32.WM_KEYUP, (int)WIN32.VK_MENU, 0);
                 e.Cancel = true;
             }
             else
             {
                 //Kill background thread and show taskbar
-                ShowWindow(FindWindowW("Shell_TrayWnd", ""), 5);
+                _ = User32.ShowWindow(User32.FindWindowW("Shell_TrayWnd", ""), 5);
+            }
+        }
+
+        private void Taskbar_IconDown(object sender, MouseEventArgs e)
+        {
+            if (((Control)sender).Parent == this)
+            {
+                heldDownButton = (BaseTaskbarProgram)sender;
+                heldDownOriginalX = heldDownButton.Location.X;
+                mouseOriginalX = Cursor.Position.X;
             }
         }
 
         private void Taskbar_MouseClick(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Middle)
-			{
+            {
                 times.Clear();
                 systemTray1.times.Clear();
-                switch(Microsoft.VisualBasic.Interaction.InputBox(""))
-				{
+                switch (Microsoft.VisualBasic.Interaction.InputBox(""))
+                {
                     case "1":
                         watchUI = false;
                         break;
+
                     case "2":
                         watchLogic = false;
                         break;
+
                     case "3":
                         systemTray1.watchTray = false;
                         break;
+
                     default:
                         break;
-				}
+                }
                 return;
-			}
+            }
 
             //Open context menu
             if (e.Button == MouseButtons.Right)
@@ -346,9 +396,9 @@ namespace SimpleClassicThemeTaskbar
                     ToolStripMenuItem settings = new ToolStripMenuItem("Configu&re SCT Taskbar");
                     ToolStripMenuItem exit = new ToolStripMenuItem("&Exit SCT Taskbar");
 
-                    cascadeWindows.Click += delegate { CascadeWindows(IntPtr.Zero, MDITILE_ZORDER, IntPtr.Zero, 0, IntPtr.Zero); };
-                    showWindowsStacked.Click += delegate { TileWindows(IntPtr.Zero, MDITILE_HORIZONTAL, IntPtr.Zero, 0, IntPtr.Zero); };
-                    showWindowsSideBySide.Click += delegate { TileWindows(IntPtr.Zero, MDITILE_VERTICAL, IntPtr.Zero, 0, IntPtr.Zero); };
+                    cascadeWindows.Click += delegate { User32.CascadeWindows(IntPtr.Zero, MDITILE_ZORDER, IntPtr.Zero, 0, IntPtr.Zero); };
+                    showWindowsStacked.Click += delegate { User32.TileWindows(IntPtr.Zero, MDITILE_HORIZONTAL, IntPtr.Zero, 0, IntPtr.Zero); };
+                    showWindowsSideBySide.Click += delegate { User32.TileWindows(IntPtr.Zero, MDITILE_VERTICAL, IntPtr.Zero, 0, IntPtr.Zero); };
                     taskManager.Click += delegate { Process.Start("taskmgr"); };
                     settings.Click += delegate { new Settings().Show(); };
                     showDesktop.Click += delegate { Keyboard.KeyDown(Keys.LWin); Keyboard.KeyDown(Keys.D); Keyboard.KeyUp(Keys.D); Keyboard.KeyUp(Keys.LWin); };
@@ -382,150 +432,20 @@ namespace SimpleClassicThemeTaskbar
             }
         }
 
-        private void Taskbar_IconDown(object sender, MouseEventArgs e)
-        {
-            if (((Control)sender).Parent == this)
-            {
-                heldDownButton = (BaseTaskbarProgram)sender;
-                heldDownOriginalX = heldDownButton.Location.X;
-                mouseOriginalX = Cursor.Position.X;
-            }
-        }
-
         private void Taskbar_MouseMove(object sender, MouseEventArgs e)
         {
-
         }
 
-        private void StartButtonPanel_MouseClick(object sender, System.Windows.Forms.MouseEventArgs e)
+        private void timerUpdateInformation_Tick(object sender, EventArgs e)
         {
-            startButton1.OnMouseClick(startButton1, e);
-        }
-
-        private void StartButtonPanel_MouseDown(object sender, System.Windows.Forms.MouseEventArgs e)
-        {
-            startButton1.OnMouseDown(startButton1, e);
-        }
-
-        private void StartButtonPanel_MouseUp(object sender, System.Windows.Forms.MouseEventArgs e)
-        {
-            startButton1.OnMouseUp(startButton1, e);
-        }
-
-        Stopwatch sw = new Stopwatch();
-        bool watchUI = true; bool watchLogic = true;
-        List<(string, TimeSpan)> times = new List<(string, TimeSpan)>();
-        private void timerUpdateUI_Tick(object sender, EventArgs e)
-		{
-            if (!watchUI)
-            {
-                sw.Reset();
-                sw.Start();
-            }
-            //Get the forground window to check some stuff
-            IntPtr ForegroundWindow = GetForegroundWindow();
-            Window wnd = new Window(ForegroundWindow);
-
-            //Check if the foreground window was the start menu
-            startButton1.UpdateState(wnd);
-
-            //Put left side controls in the correct place
-            startButtonPanel.Width = startButton1.Width + 2;
-            quickLaunch1.Location = new Point(startButton1.Location.X + startButton1.Width + 2, 1);
-
-            //Calculate availabe space in taskbar and then divide that space over all programs
-            int startX = quickLaunch1.Location.X + quickLaunch1.Width + 4;
-            int programWidth = Primary ? Config.TaskbarProgramWidth + Config.SpaceBetweenTaskbarIcons : 24;
-
-            int availableSpace = verticalDivider3.Location.X - startX - 6;
-            availableSpace += Config.SpaceBetweenTaskbarIcons;
-            if (icons.Count > 0 && availableSpace / icons.Count > programWidth)
-                availableSpace = icons.Count * programWidth;
-            int x = startX;
-            int iconWidth = icons.Count > 0 ? (int)Math.Floor((double)availableSpace / icons.Count) - Config.SpaceBetweenTaskbarIcons : 01;
-            int maxX = verticalDivider3.Location.X - iconWidth;
-
-            
-            //See if we're moving, if so calculate new position, if we finished calculate new position
-            if (heldDownButton != null)
-            {
-                if (Math.Abs(mouseOriginalX - Cursor.Position.X) > 5)
-                    heldDownButton.IsMoving = true;
-
-                Point p = new Point(heldDownOriginalX + (Cursor.Position.X - mouseOriginalX), heldDownButton.Location.Y);
-                heldDownButton.Location = new Point(Math.Max(startX, Math.Min(p.X, maxX)), p.Y);
-                int newIndex = (startX - heldDownButton.Location.X - ((iconWidth + Config.SpaceBetweenTaskbarIcons) / 2)) / (iconWidth + Config.SpaceBetweenTaskbarIcons) * -1;
-                if (newIndex < 0) newIndex = 0;
-                if (newIndex != icons.IndexOf(heldDownButton))
-                {
-                    icons.Remove(heldDownButton);
-                    icons.Insert(Math.Min(icons.Count, newIndex), heldDownButton);
-                }
-
-                if ((MouseButtons & MouseButtons.Left) == 0)
-                    heldDownButton = null;
-
-                goto displayWindows;
-            }
-
-            if (sender is Boolean a && a == true)
-                goto displayWindows;
-            else
-
-                if (!watchUI)
-			{
-                watchUI = true;
-                sw.Stop();
-                MessageBox.Show($"Watch UI: {sw.Elapsed}");
-			}
-                return;
-
-        //Re-display all windows (except heldDownButton)
-        displayWindows:
-            foreach (BaseTaskbarProgram icon in icons)
-            {
-                icon.Width = Math.Max(icon.MinimumWidth, iconWidth);
-                if (icon == heldDownButton)
-                {
-                    x += icon.Width + Config.SpaceBetweenTaskbarIcons;
-                    continue;
-                }
-                icon.IsActiveWindow(ForegroundWindow);
-                icon.Location = new Point(x, 0);
-                icon.Title = icon.Window.Title;
-                icon.Icon = GetAppIcon(icon.Window);
-                if (!Controls.Contains(icon))
-                {
-                    Controls.Add(icon);
-                    icon.Width = iconWidth;
-                    verticalDivider3.BringToFront();
-                }
-                x += icon.Width + Config.SpaceBetweenTaskbarIcons;
-                icon.Visible = true;
-            }
-            if (heldDownButton != null)
-            {
-                heldDownButton.BringToFront();
-                verticalDivider3.BringToFront();
-            }
-            if (!watchUI)
-            {
-                watchUI = true;
-                sw.Stop();
-                MessageBox.Show($"Watch UI+: {sw.Elapsed}");
-            }
-        }
-
-		private void timerUpdateInformation_Tick(object sender, EventArgs e)
-		{
             if (!watchLogic)
-			{
+            {
                 sw.Reset();
                 sw.Start();
-			}
+            }
 
             //Get the forground window to check some stuff
-            IntPtr ForegroundWindow = GetForegroundWindow();
+            IntPtr ForegroundWindow = User32.GetForegroundWindow();
             Window wnd = new Window(ForegroundWindow);
 
             //Hide explorer's taskbar(s)
@@ -533,12 +453,12 @@ namespace SimpleClassicThemeTaskbar
             windows.Clear();
             LookingForTray = true;
             EnumWindowsCallback callback = EnumWind;
-            EnumWindows(callback, 0);
+            User32.EnumWindows(callback, 0);
             LookingForTray = false;
 
             foreach (Window w in windows)
                 if ((w.WindowInfo.dwStyle & 0x10000000L) > 0)
-                    ShowWindow(w.Handle, 0);
+                    User32.ShowWindow(w.Handle, 0);
 
             if (!watchLogic)
             {
@@ -571,7 +491,7 @@ namespace SimpleClassicThemeTaskbar
             //Obtain task list
             windows.Clear();
             EnumWindowsCallback d = EnumWind;
-            EnumWindows(d, 0);
+            User32.EnumWindows(d, 0);
 
             if (!watchLogic)
             {
@@ -624,7 +544,7 @@ namespace SimpleClassicThemeTaskbar
                     button.MouseDown += Taskbar_IconDown;
 
                     uint pid;
-                    GetWindowThreadProcessId(button.Window.Handle, out pid);
+                    User32.GetWindowThreadProcessId(button.Window.Handle, out pid);
                     Process p = Process.GetProcessById((int)pid);
                     button.Process = p;
 
@@ -710,7 +630,7 @@ namespace SimpleClassicThemeTaskbar
                             button.MouseDown += Taskbar_IconDown;
 
                             uint pid;
-                            GetWindowThreadProcessId(button.Window.Handle, out pid);
+                            User32.GetWindowThreadProcessId(button.Window.Handle, out pid);
                             Process p = Process.GetProcessById((int)pid);
                             button.Process = p;
 
@@ -841,7 +761,7 @@ namespace SimpleClassicThemeTaskbar
             icons.Clear();
             foreach (BaseTaskbarProgram taskbarProgram in newIcons)
             {
-                icons.Add(taskbarProgram); 
+                icons.Add(taskbarProgram);
             }
 
         //Re-display all windows (except heldDownButton)
@@ -889,6 +809,105 @@ namespace SimpleClassicThemeTaskbar
             //Update UI
             timerUpdateUI_Tick(true, null);
         }
-	}
-}
 
+        private void timerUpdateUI_Tick(object sender, EventArgs e)
+        {
+            if (!watchUI)
+            {
+                sw.Reset();
+                sw.Start();
+            }
+            //Get the forground window to check some stuff
+            IntPtr ForegroundWindow = User32.GetForegroundWindow();
+            Window wnd = new Window(ForegroundWindow);
+
+            //Check if the foreground window was the start menu
+            startButton1.UpdateState(wnd);
+
+            //Put left side controls in the correct place
+            startButtonPanel.Width = startButton1.Width + 2;
+            quickLaunch1.Location = new Point(startButton1.Location.X + startButton1.Width + 2, 1);
+
+            //Calculate availabe space in taskbar and then divide that space over all programs
+            int startX = quickLaunch1.Location.X + quickLaunch1.Width + 4;
+            int programWidth = Primary ? Config.TaskbarProgramWidth + Config.SpaceBetweenTaskbarIcons : 24;
+
+            int availableSpace = verticalDivider3.Location.X - startX - 6;
+            availableSpace += Config.SpaceBetweenTaskbarIcons;
+            if (icons.Count > 0 && availableSpace / icons.Count > programWidth)
+                availableSpace = icons.Count * programWidth;
+            int x = startX;
+            int iconWidth = icons.Count > 0 ? (int)Math.Floor((double)availableSpace / icons.Count) - Config.SpaceBetweenTaskbarIcons : 01;
+            int maxX = verticalDivider3.Location.X - iconWidth;
+
+            //See if we're moving, if so calculate new position, if we finished calculate new position
+            if (heldDownButton != null)
+            {
+                if (Math.Abs(mouseOriginalX - Cursor.Position.X) > 5)
+                    heldDownButton.IsMoving = true;
+
+                Point p = new Point(heldDownOriginalX + (Cursor.Position.X - mouseOriginalX), heldDownButton.Location.Y);
+                heldDownButton.Location = new Point(Math.Max(startX, Math.Min(p.X, maxX)), p.Y);
+                int newIndex = (startX - heldDownButton.Location.X - ((iconWidth + Config.SpaceBetweenTaskbarIcons) / 2)) / (iconWidth + Config.SpaceBetweenTaskbarIcons) * -1;
+                if (newIndex < 0) newIndex = 0;
+                if (newIndex != icons.IndexOf(heldDownButton))
+                {
+                    icons.Remove(heldDownButton);
+                    icons.Insert(Math.Min(icons.Count, newIndex), heldDownButton);
+                }
+
+                if ((MouseButtons & MouseButtons.Left) == 0)
+                    heldDownButton = null;
+
+                goto displayWindows;
+            }
+
+            if (sender is Boolean a && a == true)
+                goto displayWindows;
+            else
+
+                if (!watchUI)
+            {
+                watchUI = true;
+                sw.Stop();
+                MessageBox.Show($"Watch UI: {sw.Elapsed}");
+            }
+            return;
+
+        //Re-display all windows (except heldDownButton)
+        displayWindows:
+            foreach (BaseTaskbarProgram icon in icons)
+            {
+                icon.Width = Math.Max(icon.MinimumWidth, iconWidth);
+                if (icon == heldDownButton)
+                {
+                    x += icon.Width + Config.SpaceBetweenTaskbarIcons;
+                    continue;
+                }
+                icon.IsActiveWindow(ForegroundWindow);
+                icon.Location = new Point(x, 0);
+                icon.Title = icon.Window.Title;
+                icon.Icon = GetAppIcon(icon.Window);
+                if (!Controls.Contains(icon))
+                {
+                    Controls.Add(icon);
+                    icon.Width = iconWidth;
+                    verticalDivider3.BringToFront();
+                }
+                x += icon.Width + Config.SpaceBetweenTaskbarIcons;
+                icon.Visible = true;
+            }
+            if (heldDownButton != null)
+            {
+                heldDownButton.BringToFront();
+                verticalDivider3.BringToFront();
+            }
+            if (!watchUI)
+            {
+                watchUI = true;
+                sw.Stop();
+                MessageBox.Show($"Watch UI+: {sw.Elapsed}");
+            }
+        }
+    }
+}

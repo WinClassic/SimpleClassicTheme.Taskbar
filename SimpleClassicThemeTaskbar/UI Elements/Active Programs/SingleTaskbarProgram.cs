@@ -1,4 +1,6 @@
 ﻿using SimpleClassicThemeTaskbar.Forms;
+using SimpleClassicThemeTaskbar.Helpers.NativeMethods;
+
 using System;
 using System.Diagnostics;
 using System.Drawing;
@@ -8,52 +10,24 @@ using System.Windows.Forms;
 
 namespace SimpleClassicThemeTaskbar
 {
-	public class SingleTaskbarProgram : BaseTaskbarProgram
-	{
-        [DllImport("user32.dll")]
-        static extern bool GetIconInfo(IntPtr hIcon, out ICONINFO piconinfo);
-        [StructLayout(LayoutKind.Sequential)]
-        struct ICONINFO
-        {
-            /// <summary>
-            /// Specifies whether this structure defines an icon or a cursor.
-            /// A value of TRUE specifies an icon; FALSE specifies a cursor
-            /// </summary>
-            public bool fIcon;
-            /// <summary>
-            /// The x-coordinate of a cursor's hot spot
-            /// </summary>
-            public Int32 xHotspot;
-            /// <summary>
-            /// The y-coordinate of a cursor's hot spot
-            /// </summary>
-            public Int32 yHotspot;
-            /// <summary>
-            /// The icon bitmask bitmap
-            /// </summary>
-            public IntPtr hbmMask;
-            /// <summary>
-            /// A handle to the icon color bitmap.
-            /// </summary>
-            public IntPtr hbmColor;
-        }
+    public class SingleTaskbarProgram : BaseTaskbarProgram
+    {
+        private Icon icon;
+
+        private Bitmap iconImage;
+
+        private Process process;
+
+        private Window window;
 
         public SingleTaskbarProgram()
-		{
+        {
             Constructor();
         }
 
-        private Process process;
-        private Window window;
-        private Icon icon;
-        private Bitmap iconImage;
-
-        public override Process Process { get => process; set { process = value; /*MessageBox.Show(ApplicationEntryPoint.d.GetAppUserModelId(Process.Id));*/ } }
-		public override Window Window { get => window; set => window = value; }
-        public override string Title { get => window.Title; set => window.Title = value; }
-        public override Icon Icon 
-        { 
-            get => icon; 
+        public override Icon Icon
+        {
+            get => icon;
             set
             {
                 icon = value;
@@ -74,33 +48,39 @@ namespace SimpleClassicThemeTaskbar
                 iconImage = bmpAlpha;*/
             }
         }
+
         public override Image IconImage { get => iconImage;/* { try { return new Icon(Icon, 16, 16).ToBitmap(); } catch { return null; } } */}
         public override int MinimumWidth => 24;
+        public override Process Process { get => process; set { process = value; /*MessageBox.Show(ApplicationEntryPoint.d.GetAppUserModelId(Process.Id));*/ } }
+        public override string Title { get => window.Title; set => window.Title = value; }
+        public override Window Window { get => window; set => window = value; }
 
-		public override string GetErrorString()
-            => GetBaseErrorString() +
+        public override void FinishOnPaint(PaintEventArgs e)
+        {
+        }
+
+        public override string GetErrorString()
+                    => GetBaseErrorString() +
             $"Process: {Process.MainModule.ModuleName} ({Process.Id})\n" +
             $"Window title: {Title}\n" +
             $"Window class: {Window.ClassName}\n" +
-            $"Window HWND: {Window.Handle:X8} {(IsWindow(Window.Handle) ? "Valid" : "Invalid")}\n" +
-            $"Icon HWND: {Icon.Handle:X8} ({(IsWindow(Icon.Handle) ? "Valid" : "Invalid")})";
+            $"Window HWND: {Window.Handle:X8} {(User32.IsWindow(Window.Handle) ? "Valid" : "Invalid")}\n" +
+            $"Icon HWND: {Icon.Handle:X8} ({(User32.IsWindow(Icon.Handle) ? "Valid" : "Invalid")})";
 
-		public override bool IsActiveWindow(IntPtr activeWindow)
+        public override bool IsActiveWindow(IntPtr activeWindow)
         {
             bool result = activeWindow == Window.Handle;
             ActiveWindow = result;
             return result;
         }
 
-        public override void FinishOnPaint(PaintEventArgs e) { }
-
         public override void OnClick(object sender, MouseEventArgs e)
-		{
+        {
             if (e.Button == MouseButtons.Right)
-			{
+            {
                 new IconTest(Window).Show();
                 return;
-			}
+            }
 
             ApplicationEntryPoint.ErrorSource = this;
             controlState = "handling mouse click";
@@ -110,13 +90,14 @@ namespace SimpleClassicThemeTaskbar
             }
             else if (ActiveWindow)
             {
-                ShowWindow(Window.Handle, 6);
+                User32.ShowWindow(Window.Handle, 6);
             }
             else
             {
                 if ((Window.WindowInfo.dwStyle & 0x20000000) > 0)
-                    ShowWindow(Window.Handle, 9);
-                SetForegroundWindow(Window.Handle);
+                    User32.ShowWindow(Window.Handle, 9);
+
+                User32.SetForegroundWindow(Window.Handle);
 
                 if (Parent != null && Parent is Taskbar)
                 {
@@ -133,7 +114,8 @@ namespace SimpleClassicThemeTaskbar
             }
         }
 
-        protected override bool CancelMouseDown(MouseEventArgs e) => false;
         public override string ToString() => $"Handle: {Window.Handle}, Title: {Title}";
+
+        protected override bool CancelMouseDown(MouseEventArgs e) => false;
     }
 }

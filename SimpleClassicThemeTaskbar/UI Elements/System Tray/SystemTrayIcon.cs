@@ -1,40 +1,24 @@
-﻿using System;
+﻿using SimpleClassicThemeTaskbar.Helpers;
+using SimpleClassicThemeTaskbar.Helpers.NativeMethods;
+
+using System;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
-using HWND = System.IntPtr;
-
 namespace SimpleClassicThemeTaskbar.UIElements.SystemTray
 {
     public class SystemTrayIcon : PictureBox
     {
-        //[DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = false)]
-        //public static extern IntPtr SendMessage(IntPtr hWnd, int Msg, int wParam, int lParam);s
 
-        [DllImport("User32.dll")]
-        private static extern uint GetWindowThreadProcessId(IntPtr hWnd, out uint lpdwProcessId);
-
-        [DllImport("user32.dll", SetLastError = true)]
-        private static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int X, int Y, int cx, int cy, uint uFlags);
-
-        [DllImport("user32.dll", CharSet = CharSet.Unicode)]
-        public static extern HWND FindWindowW(string a, string b);
-
-        [DllImport("user32.dll")]
-        private static extern bool ShowWindow(HWND hWnd, int nCmdShow);
-
-        [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Auto)]
-        private static extern bool SendNotifyMessage(IntPtr hWnd, uint Msg, uint wParam, uint lParam);
-
-        public HWND BaseHandle
+        public IntPtr BaseHandle
         {
             get => base.Handle;
         }
         public CodeBridge.TBUTTONINFO TBUTTONINFO_Struct;
-        public new HWND Handle;
+        public new IntPtr Handle;
         public new string Text;
         public uint PID;
         public Misc.BetterToolTip toolTip;
@@ -75,7 +59,7 @@ namespace SimpleClassicThemeTaskbar.UIElements.SystemTray
             toolTip = new Misc.BetterToolTip();
             toolTip.ShowAlways = true;
 
-            GetWindowThreadProcessId(Handle, out PID);
+            User32.GetWindowThreadProcessId(Handle, out PID);
             string Pname = Process.GetProcessById(checked((int)PID)).ProcessName;
 
             string tempText = Text.Replace("\r\n", "\n");
@@ -109,16 +93,16 @@ namespace SimpleClassicThemeTaskbar.UIElements.SystemTray
                 return;
             }
 
-            HWND Shell_TrayWnd = FindWindowW("Shell_TrayWnd", "");
-            GetWindowThreadProcessId(Shell_TrayWnd, out uint pidExplorer);
+            IntPtr Shell_TrayWnd = User32.FindWindowW("Shell_TrayWnd", "");
+            User32.GetWindowThreadProcessId(Shell_TrayWnd, out uint pidExplorer);
 
             uint mouse = ((uint)Cursor.Position.Y << 16) | (uint)Cursor.Position.X;
 
-            SendNotifyMessage(TBUTTONINFO_Struct.hwnd, TBUTTONINFO_Struct.callbackMessage, mouse,
+            User32.SendNotifyMessage(TBUTTONINFO_Struct.hwnd, TBUTTONINFO_Struct.callbackMessage, mouse,
                 (e.Button == MouseButtons.Left ? WM_LBUTTONDOWN : WM_RBUTTONDOWN) | (TBUTTONINFO_Struct.id << 16));
-            SendNotifyMessage(TBUTTONINFO_Struct.hwnd, TBUTTONINFO_Struct.callbackMessage, mouse,
+            User32.SendNotifyMessage(TBUTTONINFO_Struct.hwnd, TBUTTONINFO_Struct.callbackMessage, mouse,
                 (e.Button == MouseButtons.Left ? WM_LBUTTONUP : WM_RBUTTONUP) | (TBUTTONINFO_Struct.id << 16));
-            SendNotifyMessage(TBUTTONINFO_Struct.hwnd, TBUTTONINFO_Struct.callbackMessage, mouse, 
+            User32.SendNotifyMessage(TBUTTONINFO_Struct.hwnd, TBUTTONINFO_Struct.callbackMessage, mouse, 
                 (e.Button == MouseButtons.Left ? NIN_SELECT : WM_CONTEXTMENU) | (TBUTTONINFO_Struct.id << 16));
 
             return;

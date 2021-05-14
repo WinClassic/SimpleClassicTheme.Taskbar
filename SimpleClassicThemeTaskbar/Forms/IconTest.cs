@@ -1,4 +1,6 @@
-﻿using System;
+﻿using SimpleClassicThemeTaskbar.Helpers.NativeMethods;
+
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -14,33 +16,6 @@ namespace SimpleClassicThemeTaskbar.Forms
 {
 	public partial class IconTest : Form
 	{
-		[DllImport("user32.dll")]
-		static extern bool GetIconInfo(IntPtr hIcon, out ICONINFO piconinfo);
-		[StructLayout(LayoutKind.Sequential)]
-		struct ICONINFO
-		{
-			/// <summary>
-			/// Specifies whether this structure defines an icon or a cursor.
-			/// A value of TRUE specifies an icon; FALSE specifies a cursor
-			/// </summary>
-			public bool fIcon;
-			/// <summary>
-			/// The x-coordinate of a cursor's hot spot
-			/// </summary>
-			public Int32 xHotspot;
-			/// <summary>
-			/// The y-coordinate of a cursor's hot spot
-			/// </summary>
-			public Int32 yHotspot;
-			/// <summary>
-			/// The icon bitmask bitmap
-			/// </summary>
-			public IntPtr hbmMask;
-			/// <summary>
-			/// A handle to the icon color bitmap.
-			/// </summary>
-			public IntPtr hbmColor;
-		}
 		public static IntPtr GetAppIcon(Window wnd, int index)
 		{
 			IntPtr hwnd = wnd.Handle;
@@ -74,10 +49,9 @@ namespace SimpleClassicThemeTaskbar.Forms
 				IntPtr iconHandle = GetAppIcon(wnd, i);
 				if (iconHandle == IntPtr.Zero)
 					continue;
-				//Bitmap bmp = Bitmap.FromHicon(c);
-				ICONINFO ii;
-				GetIconInfo(iconHandle, out ii);
-				Bitmap bmpIcon = Bitmap.FromHbitmap(ii.hbmColor);
+                //Bitmap bmp = Bitmap.FromHicon(c);
+                User32.GetIconInfo(iconHandle, out User32.ICONINFO ii);
+                Bitmap bmpIcon = Bitmap.FromHbitmap(ii.hbmColor);
 				Rectangle rectBounds = new Rectangle(0, 0, bmpIcon.Width, bmpIcon.Height);
 				BitmapData bmData = new BitmapData();
 				bmpIcon.LockBits(rectBounds, ImageLockMode.ReadOnly, bmpIcon.PixelFormat, bmData);

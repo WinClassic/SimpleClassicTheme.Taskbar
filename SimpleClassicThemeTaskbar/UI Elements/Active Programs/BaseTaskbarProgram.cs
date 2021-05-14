@@ -1,4 +1,6 @@
-﻿using System;
+﻿using SimpleClassicThemeTaskbar.Helpers;
+
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -12,19 +14,9 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace SimpleClassicThemeTaskbar
-{ 
-	public abstract partial class BaseTaskbarProgram : UserControlEx
+{
+    public abstract partial class BaseTaskbarProgram : UserControlEx
 	{
-        //Win32
-		[DllImport("user32.dll")]
-        public static extern bool SetForegroundWindow(IntPtr hWnd);
-
-		[DllImport("user32.dll")]
-        public static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
-
-		[DllImport("user32.dll")]
-		public static extern int DrawFrameControl(IntPtr hdc, ref RECT lpRect, uint un1, uint un2);
-
 		public const uint DFC_BUTTON = 4;
 		public const uint DFCS_BUTTONPUSH = 0x10;
 		public const uint DFCS_PUSHED = 512;
