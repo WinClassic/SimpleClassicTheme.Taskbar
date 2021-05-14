@@ -137,7 +137,7 @@ namespace SimpleClassicThemeTaskbar
             }
             Config.TaskbarProgramFilter = taskbarFilter;
 
-            Config.configChanged = true;
+            Config.ConfigChanged = true;
             Config.SaveToRegistry();
             ApplicationEntryPoint.NewTaskbars();
         }
