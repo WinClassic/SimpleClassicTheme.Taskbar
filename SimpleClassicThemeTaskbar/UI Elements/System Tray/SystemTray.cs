@@ -7,8 +7,11 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
 using System.Runtime.InteropServices;
+using System.Text;
 using System.Threading;
 using System.Windows.Forms;
+
+using static SimpleClassicThemeTaskbar.CodeBridge;
 
 namespace SimpleClassicThemeTaskbar.UIElements.SystemTray
 {
@@ -48,20 +51,34 @@ namespace SimpleClassicThemeTaskbar.UIElements.SystemTray
         }
 
         public override string GetErrorString()
-            => GetBaseErrorString() +
-            $"Unexpected error occured while {controlState}\n" +
-            (culprit is SystemTrayIcon trayIcon ?
-                $"Process: {SimpleClassicThemeTaskbar.UIElements.SystemTray.SystemTray.GetProcessFromIcon(trayIcon.TBUTTONINFO_Struct).MainModule.ModuleName} ({trayIcon.TBUTTONINFO_Struct.pid})\n" +
-                $"Corresponding Window HWND: {trayIcon.TBUTTONINFO_Struct.hwnd} (Valid: {User32.IsWindow(trayIcon.TBUTTONINFO_Struct.hwnd)})\n" +
-                $"Icon HWND: {trayIcon.TBUTTONINFO_Struct.icon} (Valid: {User32.IsWindow(trayIcon.TBUTTONINFO_Struct.icon)})\n" +
-                $"Icon caption: \n({trayIcon.TBUTTONINFO_Struct.toolTip})\n" +
-                $"Icon ID: {trayIcon.TBUTTONINFO_Struct.id}\n" : String.Empty) +
-            (culprit is CodeBridge.TBUTTONINFO TBUTTONINFO_Struct ?
-                $"Process: {SimpleClassicThemeTaskbar.UIElements.SystemTray.SystemTray.GetProcessFromIcon(TBUTTONINFO_Struct).MainModule.ModuleName} ({TBUTTONINFO_Struct.pid})\n" +
-                $"Corresponding Window HWND: {TBUTTONINFO_Struct.hwnd} (Valid: {User32.IsWindow(TBUTTONINFO_Struct.hwnd)})\n" +
-                $"Icon HWND: {TBUTTONINFO_Struct.icon} (Valid: {User32.IsWindow(TBUTTONINFO_Struct.icon)})\n" +
-                $"Icon caption: \n({TBUTTONINFO_Struct.toolTip})\n" +
-                $"Icon ID: {TBUTTONINFO_Struct.id}\n" : String.Empty);
+        {
+            var sb = new StringBuilder();
+
+            sb.AppendLine(GetBaseErrorString());
+
+            sb.AppendLine("Unexpected error occured while " + controlState);
+
+            var buttonInfo = GetCulpritButtonInfo();
+
+            if (buttonInfo != null)
+            {
+                var process = GetProcessFromIcon(buttonInfo).MainModule.ModuleName;
+
+                var windowHwnd = buttonInfo.hwnd;
+                var isWindowHwndValid = User32.IsWindow(windowHwnd);
+
+                var iconHwnd = buttonInfo.icon;
+                var isIconHwndValid = User32.IsWindow(iconHwnd);
+
+                sb.AppendLine($"Process: {process} ({buttonInfo.pid})");
+                sb.AppendLine($"Corresponding Window HWND: {windowHwnd} ({(isWindowHwndValid ? "Valid" : "Invalid")})");
+                sb.AppendLine($"Icon HWND: {iconHwnd} ({(isIconHwndValid ? "Valid" : "Invalid")})");
+                sb.AppendLine($"Icon Caption: {buttonInfo.toolTip}");
+                sb.AppendLine($"Icon ID: {buttonInfo.id}");
+            }
+
+            return sb.ToString();
+        }
 
         public void UpdateIcons()
         {
@@ -284,6 +301,22 @@ namespace SimpleClassicThemeTaskbar.UIElements.SystemTray
                 }
             }
             return IntPtr.Zero;
+        }
+
+        private CodeBridge.TBUTTONINFO GetCulpritButtonInfo()
+        {
+            if (culprit is SystemTrayIcon trayIcon)
+            {
+                return trayIcon.TBUTTONINFO_Struct;
+            }
+            else if (culprit is CodeBridge.TBUTTONINFO @struct)
+            {
+                return @struct;
+            }
+            else
+            {
+                return null;
+            }
         }
 
         private void labelTime_MouseHover(object sender, EventArgs e)
