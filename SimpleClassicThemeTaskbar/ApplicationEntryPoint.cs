@@ -30,11 +30,8 @@ namespace SimpleClassicThemeTaskbar
         {
             Logger.Log(LoggerVerbosity.Detailed, "TaskbarManager", $"Exit requested");
             Config.SaveToRegistry();
-            List<Taskbar> activeBars = new();
 
-            foreach (Form form in Application.OpenForms)
-                if (form is Taskbar bar)
-                    activeBars.Add(bar);
+            var activeBars = Helpers.Helpers.GetOpenTaskbars();
 
             foreach (Taskbar bar in activeBars)
             {
@@ -54,10 +51,9 @@ namespace SimpleClassicThemeTaskbar
         internal static void NewTaskbars()
         {
             Logger.Log(LoggerVerbosity.Detailed, "TaskbarManager", "Generating new taskbars");
-            List<Taskbar> activeBars = new();
-            foreach (Form form in Application.OpenForms)
-                if (form is Taskbar bar)
-                    activeBars.Add(bar);
+
+            var activeBars = Helpers.Helpers.GetOpenTaskbars();
+
             foreach (Taskbar bar in activeBars)
             {
                 foreach (Control d in bar.Controls)
