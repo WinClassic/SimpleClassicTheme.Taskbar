@@ -4,6 +4,7 @@ using System.Linq;
 using System.Resources;
 using System.Text;
 using Microsoft.Win32;
+using SimpleClassicThemeTaskbar.Helpers;
 using SimpleClassicThemeTaskbar.Theme_Engine;
 
 namespace SimpleClassicThemeTaskbar
