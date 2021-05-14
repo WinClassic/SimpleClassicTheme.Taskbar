@@ -42,7 +42,11 @@ jobs:
       uses: actions/download-artifact@v2.0.9
       with:
         name: binaries
-
+        path: binaries
+        
+    - name: Zip files
+      run: zip -r binaries.zip binaries
+        
     - name: Publish release
       uses: "marvinpinto/action-automatic-releases@latest"
       with:
@@ -50,4 +54,4 @@ jobs:
         automatic_release_tag: "latest"
         prerelease: true
         title: "Development Build"
-        files: '*'
+        files: 'binaries.zip'
