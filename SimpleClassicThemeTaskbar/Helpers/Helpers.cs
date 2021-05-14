@@ -7,8 +7,10 @@ namespace SimpleClassicThemeTaskbar.Helpers
     {
         public static IEnumerable<Taskbar> GetOpenTaskbars()
         {
-            foreach (Form form in Application.OpenForms)
+            // We're using a for loop because apparently Application.OpenForm can be modified while iterating
+            for (int i = 0; i < Application.OpenForms.Count; i++)
             {
+                var form = Application.OpenForms[i];
                 if (form is Taskbar taskbar)
                 {
                     yield return taskbar;

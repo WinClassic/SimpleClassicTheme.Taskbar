@@ -33,6 +33,11 @@
             this.buttonCancel = new System.Windows.Forms.Button();
             this.buttonOK = new System.Windows.Forms.Button();
             this.settingsTabs = new System.Windows.Forms.TabControl();
+            this.tabGeneral = new System.Windows.Forms.TabPage();
+            this.themeComboBox = new System.Windows.Forms.ComboBox();
+            this.themeLabel = new System.Windows.Forms.Label();
+            this.languageComboBox = new System.Windows.Forms.ComboBox();
+            this.languageLabel = new System.Windows.Forms.Label();
             this.tabStartButton = new System.Windows.Forms.TabPage();
             this.customIconBrowseButton = new System.Windows.Forms.Button();
             this.customIconTextBox = new System.Windows.Forms.TextBox();
@@ -77,6 +82,7 @@
             this.startButton = new SimpleClassicThemeTaskbar.UIElements.StartButton.StartButton();
             this.label4 = new System.Windows.Forms.Label();
             this.settingsTabs.SuspendLayout();
+            this.tabGeneral.SuspendLayout();
             this.tabStartButton.SuspendLayout();
             this.tabQuickLaunch.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.quickLaunchSpacingNumBox)).BeginInit();
@@ -115,6 +121,7 @@
             // 
             // settingsTabs
             // 
+            this.settingsTabs.Controls.Add(this.tabGeneral);
             this.settingsTabs.Controls.Add(this.tabStartButton);
             this.settingsTabs.Controls.Add(this.tabQuickLaunch);
             this.settingsTabs.Controls.Add(this.tabTaskView);
@@ -127,6 +134,48 @@
             this.settingsTabs.SizeMode = System.Windows.Forms.TabSizeMode.FillToRight;
             this.settingsTabs.SelectedIndexChanged += new System.EventHandler(this.settingsTabs_SelectedIndexChanged);
             this.settingsTabs.TabIndexChanged += new System.EventHandler(this.settingsTabs_TabIndexChanged);
+            // 
+            // tabGeneral
+            // 
+            this.tabGeneral.Controls.Add(this.themeComboBox);
+            this.tabGeneral.Controls.Add(this.themeLabel);
+            this.tabGeneral.Controls.Add(this.languageComboBox);
+            this.tabGeneral.Controls.Add(this.languageLabel);
+            resources.ApplyResources(this.tabGeneral, "tabGeneral");
+            this.tabGeneral.Name = "tabGeneral";
+            this.tabGeneral.UseVisualStyleBackColor = true;
+            // 
+            // themeComboBox
+            // 
+            this.themeComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.themeComboBox.FormattingEnabled = true;
+            this.themeComboBox.Items.AddRange(new object[] {
+            resources.GetString("themeComboBox.Items"),
+            resources.GetString("themeComboBox.Items1"),
+            resources.GetString("themeComboBox.Items2")});
+            resources.ApplyResources(this.themeComboBox, "themeComboBox");
+            this.themeComboBox.Name = "themeComboBox";
+            this.themeComboBox.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
+            // 
+            // themeLabel
+            // 
+            resources.ApplyResources(this.themeLabel, "themeLabel");
+            this.themeLabel.Name = "themeLabel";
+            // 
+            // languageComboBox
+            // 
+            this.languageComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.languageComboBox.FormattingEnabled = true;
+            this.languageComboBox.Items.AddRange(new object[] {
+            resources.GetString("languageComboBox.Items"),
+            resources.GetString("languageComboBox.Items1")});
+            resources.ApplyResources(this.languageComboBox, "languageComboBox");
+            this.languageComboBox.Name = "languageComboBox";
+            // 
+            // languageLabel
+            // 
+            resources.ApplyResources(this.languageLabel, "languageLabel");
+            this.languageLabel.Name = "languageLabel";
             // 
             // tabStartButton
             // 
@@ -478,6 +527,8 @@
             this.Name = "Settings";
             this.Load += new System.EventHandler(this.Settings_Load);
             this.settingsTabs.ResumeLayout(false);
+            this.tabGeneral.ResumeLayout(false);
+            this.tabGeneral.PerformLayout();
             this.tabStartButton.ResumeLayout(false);
             this.tabStartButton.PerformLayout();
             this.tabQuickLaunch.ResumeLayout(false);
@@ -549,5 +600,10 @@
         private System.Windows.Forms.TextBox customIconTextBox;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.TabPage tabGeneral;
+        private System.Windows.Forms.ComboBox languageComboBox;
+        private System.Windows.Forms.Label languageLabel;
+        private System.Windows.Forms.ComboBox themeComboBox;
+        private System.Windows.Forms.Label themeLabel;
     }
 }
