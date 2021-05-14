@@ -1,6 +1,8 @@
 ﻿using Microsoft.Win32;
 
 using SimpleClassicThemeTaskbar.Theme_Engine;
+using System.Globalization;
+using System.Resources;
 
 namespace SimpleClassicThemeTaskbar.Helpers
 {
@@ -23,6 +25,8 @@ namespace SimpleClassicThemeTaskbar.Helpers
 
         public static BaseRenderer Renderer = new ClassicRenderer(); // new ImageRenderer("D:\\Classic Theme\\Resources");
 
+        public static string RendererPath = "Internal/Classic";
+        public static string Language;
         public static bool ShowTaskbarOnAllDesktops = true;
         public static int SpaceBetweenQuickLaunchIcons = 2;
         public static int SpaceBetweenTaskbarIcons = 2;
@@ -35,6 +39,10 @@ namespace SimpleClassicThemeTaskbar.Helpers
 
         public static void LoadFromRegistry()
         {
+            Language = System.Threading.Thread.CurrentThread.CurrentUICulture.Name;
+            if (Language != "en-US" && Language != "nl-NL")
+                Language = "en-US";
+
             using (var scttSubKey = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\1337ftw\SimpleClassicThemeTaskbar"))
             {
                 // Boolean values
@@ -55,10 +63,28 @@ namespace SimpleClassicThemeTaskbar.Helpers
                 StartButtonImage = (string)scttSubKey.GetValue("StartButtonImage", "");
                 QuickLaunchOrder = (string)scttSubKey.GetValue("QuickLaunchOrder", "");
                 TaskbarProgramFilter = (string)scttSubKey.GetValue("TaskbarProgramFilter", "");
+                RendererPath = (string)scttSubKey.GetValue("RendererPath", "Internal/Classic");
 
                 // Enum values
                 ProgramGroupCheck = (ProgramGroupCheck)scttSubKey.GetValue("ProgramGroupCheck", ProgramGroupCheck.FileNameAndPath);
             }
+
+            // Setup renderer
+            switch (RendererPath)
+			{
+                case "Internal/Classic":
+                    Renderer = new ClassicRenderer();
+                    break;
+                case "Internal/Luna":
+                    Renderer = new ImageRenderer(new ResourceManager("SimpleClassicThemeTaskbar.Theme_Engine.Themes.Luna", typeof(Config).Assembly));
+                    break;
+                default:
+                    Renderer = new ImageRenderer(RendererPath);
+                    break;
+			}
+
+            System.Threading.Thread.CurrentThread.CurrentCulture = new CultureInfo(Language);
+            System.Threading.Thread.CurrentThread.CurrentUICulture = new CultureInfo(Language);
         }
 
         public static void SaveToRegistry()
@@ -82,6 +108,7 @@ namespace SimpleClassicThemeTaskbar.Helpers
                 scttSubKey.SetValue("StartButtonImage", StartButtonImage);
                 scttSubKey.SetValue("QuickLaunchOrder", QuickLaunchOrder);
                 scttSubKey.SetValue("TaskbarProgramFilter", TaskbarProgramFilter);
+                scttSubKey.SetValue("RendererPath", RendererPath);
             }
         }
     }
