@@ -44,7 +44,7 @@ namespace SimpleClassicThemeTaskbar
                 bar.Close();
                 bar.Dispose();
             }
-            Taskbar randomBar = activeBars.FirstOrDefault();
+            // Taskbar randomBar = activeBars.FirstOrDefault();
             Logger.Log(LoggerVerbosity.Detailed, "TaskbarManager", $"Killed all taskbars, exiting");
             Logger.Uninitialize();
 

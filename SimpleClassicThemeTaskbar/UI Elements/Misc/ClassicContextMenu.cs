@@ -140,7 +140,7 @@ namespace System.Windows.Forms
         public SystemContextMenuItem(string text, Action onClick, SystemContextMenuItemFlags flags, Image image)
         {
             if (!flags.HasFlag(SystemContextMenuItemFlags.Bitmap))
-                flags = flags | SystemContextMenuItemFlags.Bitmap;
+                flags |= SystemContextMenuItemFlags.Bitmap;
 
             Text = text;
             OnClick = onClick;

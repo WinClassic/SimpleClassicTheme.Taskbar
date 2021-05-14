@@ -87,7 +87,7 @@ namespace SimpleClassicThemeTaskbar.Forms
                     {
                         for (int ey = 0; ey < scaleFactor; ey++)
                         {
-                            b.SetPixel(x * scaleFactor + ex, y * scaleFactor + ey, image.GetPixel(x, y));
+                            b.SetPixel((x * scaleFactor) + ex, (y * scaleFactor) + ey, image.GetPixel(x, y));
                         }
                     }
                 }

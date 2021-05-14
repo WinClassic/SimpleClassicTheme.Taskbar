@@ -55,11 +55,9 @@ namespace SimpleClassicThemeTaskbar.UIElements.SystemTray
             var sb = new StringBuilder();
 
             sb.AppendLine(GetBaseErrorString());
-
             sb.AppendLine("Unexpected error occured while " + controlState);
 
             var buttonInfo = GetCulpritButtonInfo();
-
             if (buttonInfo != null)
             {
                 var process = GetProcessFromIcon(buttonInfo).MainModule.ModuleName;

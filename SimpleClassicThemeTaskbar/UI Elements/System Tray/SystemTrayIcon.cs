@@ -183,8 +183,8 @@ namespace SimpleClassicThemeTaskbar.UIElements.SystemTray
                 return;
             }
 
-            IntPtr Shell_TrayWnd = User32.FindWindowW("Shell_TrayWnd", "");
-            _ = User32.GetWindowThreadProcessId(Shell_TrayWnd, out uint pidExplorer);
+            // IntPtr Shell_TrayWnd = User32.FindWindowW("Shell_TrayWnd", "");
+            // _ = User32.GetWindowThreadProcessId(Shell_TrayWnd, out uint pidExplorer);
 
             uint mouse = ((uint)Cursor.Position.Y << 16) | (uint)Cursor.Position.X;
 
