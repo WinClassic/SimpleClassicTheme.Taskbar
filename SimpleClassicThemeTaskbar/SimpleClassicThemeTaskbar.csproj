@@ -32,9 +32,6 @@
   <ItemGroup>
     <ProjectReference Include="..\SimpleClassicThemeTaskbar.CodeBridge\SimpleClassicThemeTaskbar.CodeBridge.vcxproj" />
   </ItemGroup>
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="&quot;$(ProjectDir)tools\package.bat&quot; &quot;$(TargetPath)&quot; &quot;$(ProjectDir)&quot; &quot;$(PlatformName)&quot; &quot;$(ConfigurationName)&quot; &quot;$(TargetDir)&quot;" />
-  </Target>
   <PropertyGroup>
     <PostBuildEvent></PostBuildEvent>
   </PropertyGroup>
