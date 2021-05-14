@@ -262,20 +262,20 @@ namespace SimpleClassicThemeTaskbar
                         return;
                     }
                 }
-			}
-            // Detect renderer correctly
-            switch (Config.RendererPath)
-            {
-                case "Internal/Classic":
-                    comboBox1.SelectedItem = "Classic";
-                    break;
-                case "Internal/Luna":
-                    comboBox1.SelectedItem = "Luna";
-                    break;
-                default:
-                    comboBox1.Items.Add(Config.RendererPath);
-                    comboBox1.SelectedItem = Config.RendererPath;
-                    break;
+                // Detect renderer correctly
+                switch (Config.RendererPath)
+                {
+                    case "Internal/Classic":
+                        comboBox1.SelectedItem = "Classic";
+                        break;
+                    case "Internal/Luna":
+                        comboBox1.SelectedItem = "Luna";
+                        break;
+                    default:
+                        comboBox1.Items.Add(Config.RendererPath);
+                        comboBox1.SelectedItem = Config.RendererPath;
+                        break;
+                }
             }
         }
 	}
