@@ -29,22 +29,9 @@
         private void InitializeComponent()
         {
 			this.components = new System.ComponentModel.Container();
-			this.betterBorderPanel1 = new SimpleClassicThemeTaskbar.UIElements.Misc.BetterBorderPanel();
 			this.labelTime = new System.Windows.Forms.Label();
 			this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-			this.betterBorderPanel1.SuspendLayout();
 			this.SuspendLayout();
-			// 
-			// betterBorderPanel1
-			// 
-			this.betterBorderPanel1.BorderStyle = System.Windows.Forms.Border3DStyle.SunkenOuter;
-			this.betterBorderPanel1.Controls.Add(this.labelTime);
-			this.betterBorderPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.betterBorderPanel1.IsButton = false;
-			this.betterBorderPanel1.Location = new System.Drawing.Point(0, 0);
-			this.betterBorderPanel1.Name = "betterBorderPanel1";
-			this.betterBorderPanel1.Size = new System.Drawing.Size(98, 22);
-			this.betterBorderPanel1.TabIndex = 0;
 			// 
 			// labelTime
 			// 
@@ -62,18 +49,17 @@
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.Controls.Add(this.betterBorderPanel1);
+            this.Controls.Add(labelTime);
+            this.DoubleBuffered = true;
 			this.Name = "SystemTray";
+			this.Paint += SystemTray_Paint;
 			this.Size = new System.Drawing.Size(98, 22);
-			this.betterBorderPanel1.ResumeLayout(false);
-			this.betterBorderPanel1.PerformLayout();
 			this.ResumeLayout(false);
 
         }
 
-        #endregion
+		#endregion
 
-        private SimpleClassicThemeTaskbar.UIElements.Misc.BetterBorderPanel betterBorderPanel1;
         private System.Windows.Forms.Label labelTime;
 		private System.Windows.Forms.ToolTip toolTip1;
 	}

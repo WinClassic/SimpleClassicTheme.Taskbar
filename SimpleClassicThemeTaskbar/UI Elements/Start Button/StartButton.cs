@@ -147,6 +147,9 @@ namespace SimpleClassicThemeTaskbar.UIElements.StartButton
 
         private void OnPaint(object sender, PaintEventArgs e)
         {
+            Config.Renderer.DrawStartButton(this, e.Graphics);
+            return;
+
             e.Graphics.TextRenderingHint = TextRenderingHint.SingleBitPerPixelGridFit;
 
             Image temp = null;

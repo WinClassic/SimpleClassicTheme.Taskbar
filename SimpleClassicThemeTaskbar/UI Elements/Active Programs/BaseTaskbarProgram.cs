@@ -34,9 +34,7 @@ namespace SimpleClassicThemeTaskbar
         private bool textIndent = false;
         private bool drawBackground = false;
         private Border3DStyle style;
-        private Bitmap d;
         private bool activeWindow = false;
-        protected internal int SpaceNeededNextToText = 0;
 
         //Movemement and events
         public bool IsMoving = false;
@@ -57,6 +55,19 @@ namespace SimpleClassicThemeTaskbar
         public abstract Image IconImage { get; }
         public abstract string Title { get; set; }
         public abstract int MinimumWidth { get; }
+
+        /// <summary>
+        /// This value is true if the task is selected
+        /// </summary>
+        public bool IsPushed { get => style != Border3DStyle.Raised; }
+        /// <summary>
+        /// This value is true if the user is holding down the mouse on the button
+        /// </summary>
+        public bool IsPressed { get => drawBackground; }
+        /// <summary>
+        /// This value indicates how much space in needed for extra drawing
+        /// </summary>
+        public int SpaceNeededNextToText { get; protected internal set; }
 
         public bool ActiveWindow
         {
@@ -104,12 +115,6 @@ namespace SimpleClassicThemeTaskbar
             DoubleBuffered = true;
             Paint += OnPaint;
 
-            d = new Bitmap(2, 2);
-            d.SetPixel(0, 0, SystemColors.Control);
-            d.SetPixel(0, 1, SystemColors.ControlLightLight);
-            d.SetPixel(1, 1, SystemColors.Control);
-            d.SetPixel(1, 0, SystemColors.ControlLightLight);
-
             BackColor = Color.Transparent;
             textFont = new Font("Tahoma", 8F, FontStyle.Regular, GraphicsUnit.Point, 0);
 
@@ -121,10 +126,6 @@ namespace SimpleClassicThemeTaskbar
                 if (CancelMouseDown(e))
                     return;
                 style = Border3DStyle.Sunken;
-                d.SetPixel(0, 0, SystemColors.Control);
-                d.SetPixel(0, 1, SystemColors.ControlLightLight);
-                d.SetPixel(1, 1, SystemColors.Control);
-                d.SetPixel(1, 0, SystemColors.ControlLightLight);
                 textFont = new Font(textFont.FontFamily, textFont.Size, FontStyle.Bold, GraphicsUnit.Point);
                 drawBackground = true;
                 textIndent = true;
@@ -139,11 +140,10 @@ namespace SimpleClassicThemeTaskbar
         }
 
         public Font GetFont => textFont;
-        public Label GetLine => line;
 
 		private void BaseTaskbarProgram_Load(object sender, EventArgs e)
 		{
-			line.Width = Width;
+			
 		}
 
         public void OnPaint(object sender, PaintEventArgs e)
@@ -156,55 +156,7 @@ namespace SimpleClassicThemeTaskbar
                 return;
             }
 
-            e.Graphics.TextRenderingHint = TextRenderingHint.SingleBitPerPixelGridFit;
-
-            Rectangle newRect = ClientRectangle;
-            newRect.Y += 4;
-            newRect.Height -= 6;
-            RECT rect = new RECT(newRect);
-            uint buttonStyle = style == Border3DStyle.Raised ? DFCS_BUTTONPUSH : DFCS_BUTTONPUSH | DFCS_PUSHED;
-            DrawFrameControl(e.Graphics.GetHdc(), ref rect, DFC_BUTTON, buttonStyle);
-            e.Graphics.ReleaseHdc();
-            e.Graphics.ResetTransform();
-
-            if (drawBackground && d != null)
-            {
-                using (TextureBrush brush = new TextureBrush(d, WrapMode.Tile))
-                {
-                    e.Graphics.FillRectangle(brush, Rectangle.Inflate(newRect, -2, -2));
-                }
-            }
-
-            StringFormat format = new StringFormat();
-            format.HotkeyPrefix = HotkeyPrefix.None;
-            format.Alignment = StringAlignment.Near;
-            format.LineAlignment = StringAlignment.Center;
-            format.Trimming = StringTrimming.EllipsisCharacter;
-            if (IconImage != null)
-            {
-                //const int DI_NORMAL = 0x0003;
-                //const int DI_IMAGE = 0x0002;
-                //const int DI_NOMIRROR = 0x0010;
-                //[DllImport("user32.dll", SetLastError = true)]
-                //static extern bool DrawIconEx(IntPtr hdc, int xLeft, int yTop, IntPtr hIcon, int cxWidth, int cyHeight, int istepIfAniCur, int hbrFlickerFreeDraw, int diFlags);
-                
-                //Rectangle dest = textIndent ? new Rectangle(5, 8, 16, 16) : new Rectangle(4, 7, 16, 16);
-                //DrawIconEx(e.Graphics.GetHdc(), dest.X, dest.Y, Icon.Handle, dest.Width, dest.Height, 0, 0, DI_NORMAL);
-                //MessageBox.Show(GetLastError().ToString());
-                //e.Graphics.ReleaseHdc();
-
-                //e.Graphics.DrawImage(IconImage, textIndent ? new Rectangle(5, 8, 16, 16) : new Rectangle(4, 7, 16, 16));
-                //e.Graphics.DrawImage(Bitmap.FromHicon(Icon.Handle), textIndent ? new Rectangle(5, 8, 16, 16) : new Rectangle(4, 7, 16, 16));
-
-                e.Graphics.DrawImage(IconImage, textIndent ? new Rectangle(5, 8, 16, 16) : new Rectangle(4, 7, 16, 16));
-
-                if (Width >= 60)
-                    e.Graphics.DrawString(Title, textFont, SystemBrushes.ControlText, textIndent ? new Rectangle(21, 11, Width - 21 - 3 - SpaceNeededNextToText, 10) : new Rectangle(20, 10, Width - 20 - 3 - SpaceNeededNextToText, 11), format);
-            }
-            else
-            {
-                e.Graphics.DrawString(Title, textFont, SystemBrushes.ControlText, textIndent ? new Rectangle(5, 11, Width - 5 - 3 - SpaceNeededNextToText, 10) : new Rectangle(4, 10, Width - 4 - 3 - SpaceNeededNextToText, 11), format);
-            }
+            Config.Renderer.DrawTaskButton(this, e.Graphics);
 
             FinishOnPaint(e);
         }

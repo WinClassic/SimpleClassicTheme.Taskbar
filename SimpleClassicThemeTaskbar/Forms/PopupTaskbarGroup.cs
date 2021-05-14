@@ -58,16 +58,14 @@ namespace SimpleClassicThemeTaskbar
 				return;
 			Controls.Clear();
 			StartPosition = FormStartPosition.Manual;
-			Size = new Size(Config.TaskbarProgramWidth + 8, ((parent.ProgramWindows.Count - 1) * 24) + 6);
+			//Size = new Size(Config.TaskbarProgramWidth + 8, ((parent.ProgramWindows.Count - 1) * 24) + 6);
+			Size = Config.Renderer.GetTaskButtonGroupWindowSize(parent.ProgramWindows.Count);
 			Location = new Point(buttonScreenCoordinates.X + (parent.Width / 2) - (Width / 2), buttonScreenCoordinates.Y - Height);
 			for (int i = 1; i < parent.ProgramWindows.Count; i++)
 			{
 				SingleTaskbarProgram program = parent.ProgramWindows[i];
-				program.GetLine.Hide();
-				int x = 4;
-				int y = ((i - 1) * 24);
 				program.Parent = this;
-				program.Location = new Point(x, y);
+				program.Location = Config.Renderer.GetTaskButtonGroupWindowButtonLocation(i);
 				program.Width = Config.TaskbarProgramWidth;
 				program.Visible = true;
 				//program.MouseClick += delegate (object sender, MouseEventArgs e) {  };
@@ -77,6 +75,9 @@ namespace SimpleClassicThemeTaskbar
 
 		private void PopupTaskbarGroup_Paint(object sender, PaintEventArgs e)
 		{
+			Config.Renderer.DrawTaskButtonGroupWindow(this, e.Graphics);
+			return;
+
 			Rectangle newRect = ClientRectangle;
 			RECT rect = new RECT(newRect);
 			uint buttonStyle = DFCS_BUTTONPUSH;

@@ -417,6 +417,8 @@ namespace SimpleClassicThemeTaskbar
 			case WM_COMMAND:
 				switch (HIWORD(wParam))
 				{
+				case BN_PUSHED:
+					InvalidateRect(WindowHandle, NULL, FALSE);
 				case BN_CLICKED:
 					switch (LOWORD(wParam))
 					{

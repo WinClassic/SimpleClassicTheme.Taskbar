@@ -189,10 +189,10 @@ namespace SimpleClassicThemeTaskbar.UIElements.QuickLaunch
             if (heldDownIcon != null)
                 heldDownIcon.BringToFront();
 
-            Point verticalDividerLocation = new Point(Width - verticalDivider2.Width, verticalDivider2.Location.Y);
+            //Point verticalDividerLocation = new Point(Width - verticalDivider2.Width, verticalDivider2.Location.Y);
             //Point verticalDividerLocation = new Point(icons.Count > 0 ? icons[icons.Count - 1].Location.X + 16 + Config.SpaceBetweenQuickLaunchIcons : 3, verticalDivider2.Location.Y);
-            if (verticalDivider2.Location != verticalDividerLocation)
-                verticalDivider2.Location = verticalDividerLocation;
+            //if (verticalDivider2.Location != verticalDividerLocation)
+            //    verticalDivider2.Location = verticalDividerLocation;
 
 
             Invalidate();

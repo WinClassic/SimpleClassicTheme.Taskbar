@@ -15,11 +15,16 @@ namespace SimpleClassicThemeTaskbar
 			RECT rc;
 			hDC = GetDC(hWnd);
 			GetClientRect(hWnd, &rc);
+			Rect rect(rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top);
+			Graphics graphics(hDC);
+
+			// Fill background
+			SolidBrush brush(Color(GetSysColor(COLOR_MENU) + 0xFF000000));
+			graphics.FillRectangle(&brush, rect);
 
 			// Paint line
-			Graphics graphics(hDC);
 			Pen pen(Color(GetSysColor(COLOR_BTNHIGHLIGHT) + 0xFF000000));
-			graphics.DrawLine(&pen, 0, 1, 1280, 1);
+			graphics.DrawLine(&pen, 0, 1, rect.Width, 1);
 
 			SwapBuffers(hDC);
 			ReleaseDC(hWnd, hDC);

@@ -229,3 +229,67 @@ SimpleClassicThemeTaskbar::UnmanagedCode::TRAYBUTTONINFO SimpleClassicThemeTaskb
 	//Return the info struct
 	return tbinfo;
 }
+
+SimpleClassicThemeTaskbar::UnmanagedCode::TRAYBUTTONINFO* SimpleClassicThemeTaskbar::UnmanagedCode::GetTrayButtons(HWND sysTray, int count)
+{
+	//Get explorer.exe PID
+	DWORD sysTrayPid;
+	GetWindowThreadProcessId(sysTray, &sysTrayPid);
+
+	//Allocate memory
+	CProcessData<TBBUTTON> data(sysTrayPid);
+	TRAYBUTTONINFO* buttons = (TRAYBUTTONINFO*)malloc((sizeof(TRAYBUTTONINFO) * count));
+
+	for (int i = 0; i < count; i++)
+	{
+		//Initialize fields
+		TBBUTTON tb = { 0 };
+		TRAYDATA tray = { 0 };
+		TRAYBUTTONINFO tbinfo = { 0 };
+
+		//Get the button info
+		::SendMessage(sysTray, TB_GETBUTTON, i, (LPARAM)data.GetData());
+		data.ReadData(&tb);
+		data.ReadData<TRAYDATA>(&tray, (LPCVOID)tb.dwData);
+
+		//Get the tray icon process pid
+		DWORD dwIconPid = 0;
+		GetWindowThreadProcessId(tray.hwnd, &dwIconPid);
+
+		//Get the tooltip
+		wchar_t TipChar;
+		wchar_t sTip[1024] = { 0 };
+		wchar_t* pTip = (wchar_t*)tb.iString;
+		if (!(tb.fsState & TBSTATE_HIDDEN))
+		{
+			int x = 0;
+			do
+			{
+				if (x == 1023)
+				{
+					wcscpy(sTip, L"[ToolTip was either too long or not set]");
+					break;
+				}
+				data.ReadData<wchar_t>(&TipChar, (LPCVOID)pTip++);
+			} while (sTip[x++] = TipChar);
+		}
+		else
+			wcscpy(sTip, L"[Hidden Icon]");
+
+		//Save the info into the struct
+		tbinfo.toolTip = sTip;
+		tbinfo.hwnd = tray.hwnd;
+		tbinfo.visible = !(tb.fsState & TBSTATE_HIDDEN);
+		tbinfo.icon = tray.hIcon;
+		tbinfo.callbackMessage = tray.uCallbackMessage;
+		tbinfo.id = tray.uID;
+
+		buttons[i] = tbinfo;
+	}
+
+	//Free process data handle
+	data.~CProcessData();
+
+	//Return the info struct
+	return buttons;
+}

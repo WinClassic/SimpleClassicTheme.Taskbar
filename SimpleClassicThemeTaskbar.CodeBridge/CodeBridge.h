@@ -26,6 +26,7 @@ namespace SimpleClassicThemeTaskbar
 				unsigned int id;
 			};
 			bool GetTrayButton(System::IntPtr sysTray, int i, TBUTTONINFO^% button);
+			array<TBUTTONINFO^>^ GetTrayButtons(System::IntPtr sysTray, int count);
 			System::String^ GetAppUserModelId(int pid);
 			void SetWorkingArea(int left, int right, int top, int bottom, bool sendChange, array<System::IntPtr>^ windows);
 			void Destroy();

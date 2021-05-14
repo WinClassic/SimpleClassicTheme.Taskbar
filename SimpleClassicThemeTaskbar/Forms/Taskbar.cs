@@ -132,6 +132,13 @@ namespace SimpleClassicThemeTaskbar
             TopLevel = true;
             cppCode.InitCom();
 
+            //Fix height according to renderers preferences
+            Height = Config.Renderer.TaskbarHeight;
+            startButton1.Height = Height;
+            startButtonPanel.Height = Height;
+            systemTray1.Height = Height;
+            quickLaunch1.Height = Height;
+
             //Make sure programs are aware of the new work area
             if (isPrimary)
             {
@@ -164,8 +171,8 @@ namespace SimpleClassicThemeTaskbar
         public void ShowOnScreen(Screen screen)
         {
             StartPosition = FormStartPosition.Manual;
-            Location = new Point(screen.WorkingArea.Left, screen.Bounds.Bottom - 28);
-            Size = new Size(screen.Bounds.Width, 28);
+            Location = new Point(screen.WorkingArea.Left, screen.Bounds.Bottom - Config.Renderer.TaskbarHeight);
+            Size = new Size(screen.Bounds.Width, Config.Renderer.TaskbarHeight);
 			Show();
         }
 
@@ -259,8 +266,6 @@ namespace SimpleClassicThemeTaskbar
             //    File.WriteAllText("C:\\SCT\\Taskbar\\MainWindow.txt", Handle.ToString());
 
             //TODO: Add an option to registry tweak classic alt+tab
-            line.Width = Width + 2;
-            line.Anchor = AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Right;
             windows.Clear();
             quickLaunch1.Disabled = (!Primary) || (!Config.EnableQuickLaunch);
             quickLaunch1.UpdateIcons();
@@ -271,8 +276,9 @@ namespace SimpleClassicThemeTaskbar
             timerUpdateUI.Start();
         }
 
-        
-        private void Taskbar_FormClosing(object sender, FormClosingEventArgs e)
+		protected override void OnPaint(PaintEventArgs e) => Config.Renderer.DrawTaskBar(this, e.Graphics);
+
+		private void Taskbar_FormClosing(object sender, FormClosingEventArgs e)
         {
             if (!selfClose)
             {
@@ -292,9 +298,34 @@ namespace SimpleClassicThemeTaskbar
 
         private void Taskbar_MouseClick(object sender, MouseEventArgs e)
         {
+            if (e.Button == MouseButtons.Middle)
+			{
+                times.Clear();
+                systemTray1.times.Clear();
+                switch(Microsoft.VisualBasic.Interaction.InputBox(""))
+				{
+                    case "1":
+                        watchUI = false;
+                        break;
+                    case "2":
+                        watchLogic = false;
+                        break;
+                    case "3":
+                        systemTray1.watchTray = false;
+                        break;
+                    default:
+                        break;
+				}
+                return;
+			}
+
             //Open context menu
             if (e.Button == MouseButtons.Right)
             {
+                //systemTray1.watchTray = false;
+                //systemTray1.times.Clear();
+                //return;
+
                 //Check if the context menu is initialized
                 if (d == null)
                 {
@@ -381,8 +412,16 @@ namespace SimpleClassicThemeTaskbar
             startButton1.OnMouseUp(startButton1, e);
         }
 
-		private void timerUpdateUI_Tick(object sender, EventArgs e)
+        Stopwatch sw = new Stopwatch();
+        bool watchUI = true; bool watchLogic = true;
+        List<(string, TimeSpan)> times = new List<(string, TimeSpan)>();
+        private void timerUpdateUI_Tick(object sender, EventArgs e)
 		{
+            if (!watchUI)
+            {
+                sw.Reset();
+                sw.Start();
+            }
             //Get the forground window to check some stuff
             IntPtr ForegroundWindow = GetForegroundWindow();
             Window wnd = new Window(ForegroundWindow);
@@ -391,13 +430,13 @@ namespace SimpleClassicThemeTaskbar
             startButton1.UpdateState(wnd);
 
             //Put left side controls in the correct place
-            startButton1.Location = new Point(2, 4);
             startButtonPanel.Width = startButton1.Width + 2;
             quickLaunch1.Location = new Point(startButton1.Location.X + startButton1.Width + 2, 1);
 
             //Calculate availabe space in taskbar and then divide that space over all programs
             int startX = quickLaunch1.Location.X + quickLaunch1.Width + 4;
             int programWidth = Primary ? Config.TaskbarProgramWidth + Config.SpaceBetweenTaskbarIcons : 24;
+
             int availableSpace = verticalDivider3.Location.X - startX - 6;
             availableSpace += Config.SpaceBetweenTaskbarIcons;
             if (icons.Count > 0 && availableSpace / icons.Count > programWidth)
@@ -406,37 +445,43 @@ namespace SimpleClassicThemeTaskbar
             int iconWidth = icons.Count > 0 ? (int)Math.Floor((double)availableSpace / icons.Count) - Config.SpaceBetweenTaskbarIcons : 01;
             int maxX = verticalDivider3.Location.X - iconWidth;
 
+            
             //See if we're moving, if so calculate new position, if we finished calculate new position
             if (heldDownButton != null)
             {
                 if (Math.Abs(mouseOriginalX - Cursor.Position.X) > 5)
                     heldDownButton.IsMoving = true;
-                if ((MouseButtons & MouseButtons.Left) != 0)
+
+                Point p = new Point(heldDownOriginalX + (Cursor.Position.X - mouseOriginalX), heldDownButton.Location.Y);
+                heldDownButton.Location = new Point(Math.Max(startX, Math.Min(p.X, maxX)), p.Y);
+                int newIndex = (startX - heldDownButton.Location.X - ((iconWidth + Config.SpaceBetweenTaskbarIcons) / 2)) / (iconWidth + Config.SpaceBetweenTaskbarIcons) * -1;
+                if (newIndex < 0) newIndex = 0;
+                if (newIndex != icons.IndexOf(heldDownButton))
                 {
-                    Point p = new Point(heldDownOriginalX + (Cursor.Position.X - mouseOriginalX), heldDownButton.Location.Y);
-                    heldDownButton.Location = new Point(Math.Max(startX, Math.Min(p.X, maxX)), p.Y);
-                    int newIndex = (startX - heldDownButton.Location.X - ((iconWidth + Config.SpaceBetweenTaskbarIcons) / 2)) / (iconWidth + Config.SpaceBetweenTaskbarIcons) * -1;
-                    if (newIndex < 0) newIndex = 0;
-                    icons.Remove(heldDownButton);
-                    icons.Insert(Math.Min(icons.Count, newIndex), heldDownButton);
                     icons.Remove(heldDownButton);
                     icons.Insert(Math.Min(icons.Count, newIndex), heldDownButton);
                 }
-                else
-                {
-                    Point p = new Point(heldDownOriginalX + (Cursor.Position.X - mouseOriginalX), heldDownButton.Location.Y);
-                    heldDownButton.Location = new Point(Math.Max(startX, Math.Min(p.X, maxX)), p.Y);
-                    int newIndex = (startX - heldDownButton.Location.X - ((iconWidth + Config.SpaceBetweenTaskbarIcons) / 2)) / (iconWidth + Config.SpaceBetweenTaskbarIcons) * -1;
-                    if (newIndex < 0) newIndex = 0;
-                    icons.Remove(heldDownButton);
-                    icons.Insert(Math.Min(icons.Count, newIndex), heldDownButton);
-                    icons.Remove(heldDownButton);
-                    icons.Insert(Math.Min(icons.Count, newIndex), heldDownButton);
+
+                if ((MouseButtons & MouseButtons.Left) == 0)
                     heldDownButton = null;
-                }
+
+                goto displayWindows;
             }
 
-            //Re-display all windows (except heldDownButton)
+            if (sender is Boolean a && a == true)
+                goto displayWindows;
+            else
+
+                if (!watchUI)
+			{
+                watchUI = true;
+                sw.Stop();
+                MessageBox.Show($"Watch UI: {sw.Elapsed}");
+			}
+                return;
+
+        //Re-display all windows (except heldDownButton)
+        displayWindows:
             foreach (BaseTaskbarProgram icon in icons)
             {
                 icon.Width = Math.Max(icon.MinimumWidth, iconWidth);
@@ -454,7 +499,6 @@ namespace SimpleClassicThemeTaskbar
                     Controls.Add(icon);
                     icon.Width = iconWidth;
                     verticalDivider3.BringToFront();
-                    line.BringToFront();
                 }
                 x += icon.Width + Config.SpaceBetweenTaskbarIcons;
                 icon.Visible = true;
@@ -463,12 +507,23 @@ namespace SimpleClassicThemeTaskbar
             {
                 heldDownButton.BringToFront();
                 verticalDivider3.BringToFront();
-                line.BringToFront();
+            }
+            if (!watchUI)
+            {
+                watchUI = true;
+                sw.Stop();
+                MessageBox.Show($"Watch UI+: {sw.Elapsed}");
             }
         }
 
 		private void timerUpdateInformation_Tick(object sender, EventArgs e)
 		{
+            if (!watchLogic)
+			{
+                sw.Reset();
+                sw.Start();
+			}
+
             //Get the forground window to check some stuff
             IntPtr ForegroundWindow = GetForegroundWindow();
             Window wnd = new Window(ForegroundWindow);
@@ -485,6 +540,13 @@ namespace SimpleClassicThemeTaskbar
                 if ((w.WindowInfo.dwStyle & 0x10000000L) > 0)
                     ShowWindow(w.Handle, 0);
 
+            if (!watchLogic)
+            {
+                times.Add(("Hide Shell_TrayWnd and Shell_SecondaryTrayWnd", sw.Elapsed));
+                sw.Reset();
+                sw.Start();
+            }
+
             //The window should only be visible if the active window is not fullscreen (with the exception of the desktop window)
             Screen scr = Screen.FromHandle(wnd.Handle);
             int xy = cppCode.GetSize(wnd.Handle);
@@ -499,10 +561,24 @@ namespace SimpleClassicThemeTaskbar
             if (!Visible)
                 return;
 
+            if (!watchLogic)
+            {
+                times.Add(("Hide if ForegroundWindow is fullscreen", sw.Elapsed));
+                sw.Reset();
+                sw.Start();
+            }
+
             //Obtain task list
             windows.Clear();
             EnumWindowsCallback d = EnumWind;
             EnumWindows(d, 0);
+
+            if (!watchLogic)
+            {
+                times.Add(("Get the task list", sw.Elapsed));
+                sw.Reset();
+                sw.Start();
+            }
 
             //Resize work area
             Screen screen = Screen.FromHandle(CrossThreadHandle);
@@ -513,6 +589,16 @@ namespace SimpleClassicThemeTaskbar
                 cppCode.SetWorkingArea(rct.Left, rct.Right, rct.Top, rct.Bottom, Environment.OSVersion.Version.Major < 10, windows.Select(a => a.Handle).ToArray());
             if (Location.ToString() != desiredLocation.ToString())
                 Location = desiredLocation;
+
+            if (!watchLogic)
+            {
+                times.Add(("Resize work area", sw.Elapsed));
+                sw.Reset();
+                sw.Start();
+            }
+
+            List<BaseTaskbarProgram> oldList = new();
+            oldList.AddRange(icons);
 
             //Check if any new window exists, if so: add it
             foreach (Window z in windows)
@@ -578,6 +664,9 @@ namespace SimpleClassicThemeTaskbar
                 }
             }
 
+            if (oldList.SequenceEqual(newIcons))
+                goto displayWindows;
+
             //Remove controls of the windows that were removed from the list
             foreach (Control dd in Controls)
             {
@@ -597,6 +686,13 @@ namespace SimpleClassicThemeTaskbar
             List<BaseTaskbarProgram> programs = new List<BaseTaskbarProgram>();
             if (Config.ProgramGroupCheck == ProgramGroupCheck.None)
                 goto addAllWindows;
+
+            if (!watchLogic)
+            {
+                times.Add(("Create controls for all tasks", sw.Elapsed));
+                sw.Reset();
+                sw.Start();
+            }
 
             //Check for grouping and finalize position values
             foreach (BaseTaskbarProgram taskbarProgram in newIcons)
@@ -732,23 +828,46 @@ namespace SimpleClassicThemeTaskbar
                     goto addAllWindows;
                 }
             }
+            if (!watchLogic)
+            {
+                times.Add(("Do grouping", sw.Elapsed));
+                sw.Reset();
+                sw.Start();
+            }
+            icons = programs;
             goto displayWindows;
 
-            addAllWindows:
+        addAllWindows:
+            icons.Clear();
             foreach (BaseTaskbarProgram taskbarProgram in newIcons)
-                programs.Add(taskbarProgram);
+            {
+                icons.Add(taskbarProgram); 
+            }
 
-            //Re-display all windows (except heldDownButton)
-            displayWindows:
-            icons = programs;
+        //Re-display all windows (except heldDownButton)
+        displayWindows:
 
             //Update systray
             if (Primary)
                 systemTray1.UpdateIcons();
 
+            if (!watchLogic)
+            {
+                times.Add(("Systray", sw.Elapsed));
+                sw.Reset();
+                sw.Start();
+            }
+
             //Update quick-launch
             if (Primary)
                 quickLaunch1.UpdateIcons();
+
+            if (!watchLogic)
+            {
+                times.Add(("Quicklaunch", sw.Elapsed));
+                sw.Reset();
+                sw.Start();
+            }
 
             //Put divider in correct place
             verticalDivider3.Location = new Point(systemTray1.Location.X - 9, verticalDivider3.Location.Y);
@@ -756,8 +875,19 @@ namespace SimpleClassicThemeTaskbar
             //Update clock
             systemTray1.UpdateTime();
 
+            if (!watchLogic)
+            {
+                watchLogic = true;
+                sw.Stop();
+                string f = "Watch Logic: \n";
+                foreach ((string, TimeSpan) ts in times)
+                    f += $"{ts.Item2}\t{ts.Item1}\n";
+                f += $"{sw.Elapsed}\tFinal bit";
+                MessageBox.Show(f);
+            }
+
             //Update UI
-            timerUpdateUI_Tick(null, null);
+            timerUpdateUI_Tick(true, null);
         }
 	}
 }

@@ -81,6 +81,26 @@ bool SimpleClassicThemeTaskbar::CodeBridge::GetTrayButton(System::IntPtr sysTray
 	return true;
 }
 
+array<SimpleClassicThemeTaskbar::CodeBridge::TBUTTONINFO^>^ SimpleClassicThemeTaskbar::CodeBridge::GetTrayButtons(System::IntPtr sysTray, int count)
+{
+	array< TBUTTONINFO^>^ arr = gcnew array<TBUTTONINFO^>(count);
+	UnmanagedCode::TRAYBUTTONINFO* buttons = _impl->GetTrayButtons(HWND(sysTray.ToPointer()), count);
+	for (int i = 0; i < count; i++)
+	{
+		TBUTTONINFO^ button = gcnew TBUTTONINFO;
+		UnmanagedCode::TRAYBUTTONINFO q = buttons[i];
+		button->hwnd = System::IntPtr(q.hwnd);
+		button->icon = System::IntPtr(q.icon);
+		button->pid = q.pid;
+		button->toolTip = gcnew System::String(q.toolTip);
+		button->visible = q.visible;
+		button->callbackMessage = q.callbackMessage;
+		button->id = q.id;
+		arr[i] = button;
+	}
+	return arr;
+}
+
 void SimpleClassicThemeTaskbar::CodeBridge::Destroy()
 {
 	if (_impl != nullptr)

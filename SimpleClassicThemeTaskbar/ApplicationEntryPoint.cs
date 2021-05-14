@@ -48,6 +48,9 @@ namespace SimpleClassicThemeTaskbar
                 System.Threading.Thread.CurrentThread.CurrentCulture = ci;
                 System.Threading.Thread.CurrentThread.CurrentUICulture = ci;
             }
+            System.Globalization.CultureInfo cii = new("en-US");
+            System.Threading.Thread.CurrentThread.CurrentCulture = cii;
+            System.Threading.Thread.CurrentThread.CurrentUICulture = cii;
             if (args.Contains("--exit"))
             {
                 Logger.Log(LoggerVerbosity.Detailed, "EntryPoint", "Killing all SCTT instances");

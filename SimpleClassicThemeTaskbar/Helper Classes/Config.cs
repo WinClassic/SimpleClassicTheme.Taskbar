@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.Win32;
+using SimpleClassicThemeTaskbar.Theme_Engine;
 
 namespace SimpleClassicThemeTaskbar
 {
@@ -11,6 +12,9 @@ namespace SimpleClassicThemeTaskbar
     //TODO: Make config menu
     public static class Config
     {
+        //public static BaseRenderer Renderer = new ClassicRenderer();
+        public static BaseRenderer Renderer = new ImageRenderer("D:\\Classic Theme\\Resources");
+
         public static bool EnableSystemTrayHover = true;
         public static bool EnableSystemTrayColorChange = true;
         public static bool ShowTaskbarOnAllDesktops = true;

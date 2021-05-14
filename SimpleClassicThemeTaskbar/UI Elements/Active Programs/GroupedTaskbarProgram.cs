@@ -79,37 +79,8 @@ namespace SimpleClassicThemeTaskbar
 		{
 			ApplicationEntryPoint.ErrorSource = this;
 			controlState = "painting grouped window extension";
-			if (line)
-			{
-				//Seperator instead of border
-				Rectangle newRect = ClientRectangle;
-				newRect.X += Width - 22;
-				newRect.Width = 2;
-				newRect.Y += 7;
-				newRect.Height -= 12;
-				ControlPaint.DrawBorder3D(e.Graphics, newRect, Border3DStyle.Raised);
-			}
-			else
-			{
-				//Border
-				Rectangle newRect = ClientRectangle;
-				newRect.X += Width - 19;
-				newRect.Width -= Width - 19 + 3;
-				newRect.Y += 7;
-				newRect.Height -= 12;
-				RECT rect = new RECT(newRect);
-				uint buttonStyle = !GroupWindow.Visible ? DFCS_BUTTONPUSH : DFCS_BUTTONPUSH | DFCS_PUSHED;
-				DrawFrameControl(e.Graphics.GetHdc(), ref rect, DFC_BUTTON, buttonStyle);
-				e.Graphics.ReleaseHdc();
-				e.Graphics.ResetTransform();
-			}
 
-			StringFormat format = new StringFormat();
-			format.HotkeyPrefix = HotkeyPrefix.None;
-			format.Alignment = StringAlignment.Near;
-			format.LineAlignment = StringAlignment.Center;
-			format.Trimming = StringTrimming.EllipsisCharacter;
-			e.Graphics.DrawString(ProgramWindows.Count.ToString(), new Font(GetFont, FontStyle.Regular), SystemBrushes.ControlText, GroupWindow.Visible ? new Rectangle(Width - 15, 11, 7, 10) : new Rectangle(Width - 16, 10, 7, 11), format);
+			Config.Renderer.DrawTaskButtonGroupButton(this, e.Graphics);
 		}
 
 		public override void OnClick(object sender, MouseEventArgs e)

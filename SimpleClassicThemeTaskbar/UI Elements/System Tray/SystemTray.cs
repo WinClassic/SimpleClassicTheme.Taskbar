@@ -54,41 +54,54 @@ namespace SimpleClassicThemeTaskbar.UIElements.SystemTray
 
         public void ClearButtons()
         {
-            Control[] controls = new Control[betterBorderPanel1.Controls.Count];
-            betterBorderPanel1.Controls.CopyTo(controls, 0);
+            Control[] controls = new Control[Controls.Count];
+            Controls.CopyTo(controls, 0);
             foreach (Control d in controls)
             {
                 if (d is SystemTrayIcon)
                 {
-                    betterBorderPanel1.Controls.Remove(d);
+                    Controls.Remove(d);
                     d.Dispose();
                 }
             }
         }
 
-        //TODO: Make tray icons moveable
+        Stopwatch sw = new();
+        public bool watchTray = true;
+        public List<(string, TimeSpan)> times = new();
         public void UpdateIcons()
         {
+            if (!watchTray)
+            {
+                sw.Reset();
+                sw.Start();
+            }
+
             //Get button count
             int count = d.GetTrayButtonCount(GetSystemTrayHandle());
 
             //Lists that will receive all button information
             List<CodeBridge.TBUTTONINFO> existingButtons = new List<CodeBridge.TBUTTONINFO>();
             List<HWND> existingHWNDs = new List<HWND>();
+            HWND tray = GetSystemTrayHandle();
 
             //Loop through all buttons
-            for (int i = 0; i < count; i++)
+            CodeBridge.TBUTTONINFO[] bInfos = d.GetTrayButtons(tray, count);
+            foreach (CodeBridge.TBUTTONINFO bInfo in bInfos)
             {
-                //Get the button info
-                CodeBridge.TBUTTONINFO bInfo = new CodeBridge.TBUTTONINFO();
-                d.GetTrayButton(GetSystemTrayHandle(), i, ref bInfo);
-
                 //Save it
                 if (bInfo.visible)
                 {
                     existingButtons.Add(bInfo);
                     existingHWNDs.Add(bInfo.hwnd);
                 }
+            }
+
+            if (!watchTray)
+            {
+                times.Add(("Get all TBUTTONINFO's", sw.Elapsed));
+                sw.Reset();
+                sw.Start();
             }
 
             //Remove any icons that are now invalid or hidden
@@ -102,9 +115,16 @@ namespace SimpleClassicThemeTaskbar.UIElements.SystemTray
                     else
                     {
                         icons.Remove(existingIcon);
-                        betterBorderPanel1.Controls.Remove(existingIcon);
+                        Controls.Remove(existingIcon);
                         existingIcon.Dispose();
                     }
+
+            if (!watchTray)
+            {
+                times.Add(("Remove icons that are invalid", sw.Elapsed));
+                sw.Reset();
+                sw.Start();
+            }
 
             //Add icons that didn't display before
             foreach (CodeBridge.TBUTTONINFO info in existingButtons)
@@ -136,6 +156,13 @@ namespace SimpleClassicThemeTaskbar.UIElements.SystemTray
                 }
             }
 
+            if (!watchTray)
+            {
+                times.Add(("Add icons that didn't display", sw.Elapsed));
+                sw.Reset();
+                sw.Start();
+            }
+
             //De-dupe all controls
             List<SystemTrayIcon> finalIconList = new List<SystemTrayIcon>();
             List<HWND> pointers = new List<HWND>();
@@ -151,16 +178,21 @@ namespace SimpleClassicThemeTaskbar.UIElements.SystemTray
             //Icons are drawn from right to left so we reverse it so we can draw left to right (probably as easy)
             finalIconList.Reverse();
 
+            if (!watchTray)
+            {
+                times.Add(("De-dupe and display everything", sw.Elapsed));
+                sw.Reset();
+                sw.Start();
+            }
+
             //Display all controls
             int virtualWidth = 16 + Config.SpaceBetweenTrayIcons;
-            int x = 3;
-            Width = 63 + (finalIconList.Count * virtualWidth);
 			
-			betterBorderPanel1.Invalidate();
+			Invalidate();
             //betterBorderPanel1.Refresh();
             //betterBorderPanel1.Update();
 
-            int startX = x;
+            int startX = 3;
             int iconWidth = 16;
             int iconSpacing = Config.SpaceBetweenTrayIcons;
 
@@ -185,28 +217,46 @@ namespace SimpleClassicThemeTaskbar.UIElements.SystemTray
                     finalIconList.Remove(heldDownIcon);
                     finalIconList.Insert(Math.Min(finalIconList.Count, newIndex), heldDownIcon);
                     icons.Remove(heldDownIcon);
-                    icons.Insert(Math.Min(icons.Count, finalIconList.Count - newIndex - 1), heldDownIcon);
+                    icons.Insert(Math.Max(Math.Min(icons.Count, finalIconList.Count - newIndex - 1), 0), heldDownIcon);
                     heldDownIcon = null;
                 }
             }
 
-            
+            if (!watchTray)
+            {
+                times.Add(("Check moving", sw.Elapsed));
+                sw.Reset();
+                sw.Start();
+            }
+
+            Width = Config.Renderer.GetSystemTrayWidth(finalIconList.Count);
+
             foreach (SystemTrayIcon icon in finalIconList)
             {
                 //Add the control
-                if (icon.Parent != betterBorderPanel1)
+                if (icon.Parent != this)
                 {
                     icons.Add(icon);
-                    betterBorderPanel1.Controls.Add(icon);
+                    Controls.Add(icon);
                 }
 
                 //Put the control at the correct position
-                icon.Location = new Point(x, 3);
-                x += virtualWidth; 
+                icon.Location = Config.Renderer.GetSystemTrayIconLocation(finalIconList.IndexOf(icon));
+            }
+
+            if (!watchTray)
+            {
+                watchTray = true;
+                sw.Stop();
+                string f = "Watch SystemTray: \n";
+                foreach ((string, TimeSpan) ts in times)
+                    f += $"{ts.Item2}\t{ts.Item1}\n";
+                f += $"{sw.Elapsed}\tFinal bit";
+                MessageBox.Show(f);
             }
 
             //Move to the left
-            int X = Parent.Size.Width - Width - 2;
+            int X = Parent.Size.Width - Width;
             int Y = Location.Y;
 
             Location = new Point(X, Y);
@@ -215,6 +265,15 @@ namespace SimpleClassicThemeTaskbar.UIElements.SystemTray
         public SystemTray()
         {
             InitializeComponent();
+            Point p = Config.Renderer.SystemTrayTimeLocation;
+            labelTime.Location = new Point(Width + p.X, p.Y);
+            labelTime.Font = Config.Renderer.SystemTrayTimeFont;
+            labelTime.ForeColor = Config.Renderer.SystemTrayTimeColor;
+        }
+
+        private void SystemTray_Paint(object sender, System.Windows.Forms.PaintEventArgs e)
+        {
+            Config.Renderer.DrawSystemTray(this, e.Graphics);
         }
 
         public void UpdateTime()

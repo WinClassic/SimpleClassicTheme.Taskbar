@@ -34,5 +34,6 @@ namespace SimpleClassicThemeTaskbar
 			unsigned int id;
 		};
 		TRAYBUTTONINFO GetTrayButton(HWND sysTray, int i);
+		TRAYBUTTONINFO* GetTrayButtons(HWND sysTray, int count);
     };
 }
