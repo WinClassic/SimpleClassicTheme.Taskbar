@@ -85,7 +85,7 @@ namespace SimpleClassicThemeTaskbar.UIElements.SystemTray
             return Text;
         }
 
-        public unsafe void UpdateTrayIcon(CodeBridge.TBUTTONINFO button, bool firstTime = false)
+        public void UpdateTrayIcon(CodeBridge.TBUTTONINFO button, bool firstTime = false)
         {
             if (TBUTTONINFO_Struct.icon != button.icon || firstTime)
             {
