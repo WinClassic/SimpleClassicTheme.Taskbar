@@ -13,7 +13,7 @@ namespace SimpleClassicThemeTaskbar
     public static class Config
     {
         //public static BaseRenderer Renderer = new ClassicRenderer();
-        public static BaseRenderer Renderer = new ImageRenderer("D:\\Classic Theme\\Resources");
+        public static BaseRenderer Renderer = new ImageRenderer("D:\\Classic Theme\\Resources\\Windows Basic");
 
         public static bool EnableSystemTrayHover = true;
         public static bool EnableSystemTrayColorChange = true;

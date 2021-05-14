@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Text;
 using System.IO;
+using System.Resources;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
@@ -133,20 +134,102 @@ namespace SimpleClassicThemeTaskbar.Theme_Engine
 				taskButtonGroupWindowBorderTexture.Item7 = taskButtonGroupWindowBorder.Clone(new Rectangle(cx - bs, bs, bs, cy - (2 * bs)), taskButtonGroupWindowBorder.PixelFormat); // Right side texture
 				taskButtonGroupWindowBorderTexture.Item8 = taskButtonGroupWindowBorder.Clone(new Rectangle(bs, cy - bs, cx - (2* bs), bs), taskButtonGroupWindowBorder.PixelFormat); // Bottom side texture
 
-				//taskButtonGroupWindowBorderTexture.Item1.Save(Path.Combine(resourceDirectory, "Item1.png"));
-				//taskButtonGroupWindowBorderTexture.Item2.Save(Path.Combine(resourceDirectory, "Item2.png"));
-				//taskButtonGroupWindowBorderTexture.Item3.Save(Path.Combine(resourceDirectory, "Item3.png"));
-				//taskButtonGroupWindowBorderTexture.Item4.Save(Path.Combine(resourceDirectory, "Item4.png"));
-				//taskButtonGroupWindowBorderTexture.Item5.Save(Path.Combine(resourceDirectory, "Item5.png"));
-				//taskButtonGroupWindowBorderTexture.Item6.Save(Path.Combine(resourceDirectory, "Item6.png"));
-				//taskButtonGroupWindowBorderTexture.Item7.Save(Path.Combine(resourceDirectory, "Item7.png"));
-				//taskButtonGroupWindowBorderTexture.Item8.Save(Path.Combine(resourceDirectory, "Item8.png"));
-
 				systemTrayTexture = new Bitmap(Path.Combine(resourceDirectory, "SystemTrayTexture.png"));
 				systemTrayBorder = new Bitmap(Path.Combine(resourceDirectory, "SystemTrayBorder.png"));
 				startButton = new Bitmap(Path.Combine(resourceDirectory, "StartButton.png"));
 			}
 			//catch { }
+		}
+
+		public ImageRenderer(ResourceManager resources)
+		{
+			string tH = resources.GetString("TaskBar.Height");
+			if (!Int32.TryParse(tH, out taskbarHeight))
+				throw new FileFormatException("[RESX] TaskBar/Height must be a valid 32-bit integer");
+
+			Color ttSc = Color.Transparent;
+			string ttS = resources.GetString("TaskBar.TextureSource");
+			if (ttS != "File" && !ParseColor(tH, out ttSc))
+				throw new FileFormatException("[RESX] TaskBar/TextureSource must be either a valid hex color value (with #) or the string 'File'");
+
+			string ttL = resources.GetString("Taskbutton.TextureLocation");
+			if (!Int32.TryParse(ttL.Split(',')[0], out taskbuttonTextureLocation.Item1) ||
+				!Int32.TryParse(ttL.Split(',')[1], out taskbuttonTextureLocation.Item2))
+				throw new FileFormatException("[RESX] Taskbutton/TextureLocation must consist of two valid 32-bit integers seperated by a comma (',')");
+
+			string tlbL = resources.GetString("Taskbutton.LeftBorderLocation");
+			if (!Int32.TryParse(tlbL.Split(',')[0], out taskbuttonLeftBorderLocation.Item1) ||
+				!Int32.TryParse(tlbL.Split(',')[1], out taskbuttonLeftBorderLocation.Item2))
+				throw new FileFormatException("[RESX] Taskbutton/LeftBorderLocation must consist of two valid 32-bit integers seperated by a comma (',')");
+
+			string trbL = resources.GetString("Taskbutton.RightBorderLocation");
+			if (!Int32.TryParse(trbL.Split(',')[0], out taskbuttonRightBorderLocation.Item1) ||
+				!Int32.TryParse(trbL.Split(',')[1], out taskbuttonRightBorderLocation.Item2))
+				throw new FileFormatException("[RESX] Taskbutton/RightBorderLocation must consist of two valid 32-bit integers seperated by a comma (',')");
+
+			string tgwbS = resources.GetString("TaskbuttonGroupWindow.BorderSize");
+			if (!Int32.TryParse(tgwbS, out taskbuttonGroupWindowBorderSize))
+				throw new FileFormatException("[RESX] TaskbuttonGroupWindow/BorderSize must be a valid 32-bit integer");
+
+			string tgwtrS = resources.GetString("TaskbuttonGroupWindow.TaskbuttonRealSize");
+			if (!Int32.TryParse(tgwtrS.Split(',')[0], out taskbuttonGroupWindowTaskbuttonRealSize.Left) ||
+				!Int32.TryParse(tgwtrS.Split(',')[1], out taskbuttonGroupWindowTaskbuttonRealSize.Top) ||
+				!Int32.TryParse(tgwtrS.Split(',')[2], out taskbuttonGroupWindowTaskbuttonRealSize.Right) ||
+				!Int32.TryParse(tgwtrS.Split(',')[3], out taskbuttonGroupWindowTaskbuttonRealSize.Bottom))
+				throw new FileFormatException("[RESX] TaskbuttonGroupWindow/TaskbuttonRealSize must consist of four valid 32-bit integers seperated by a comma (',')");
+
+			string sbW = resources.GetString("StartButton.Width");
+			if (!Int32.TryParse(sbW, out startButtonWidth))
+				throw new FileFormatException("[RESX] StartButton/Width must be a valid 32-bit integer");
+
+			string stbW = resources.GetString("SystemTray.BaseWidth");
+			if (!Int32.TryParse(stbW, out systemTrayBaseWidth))
+				throw new FileFormatException("[RESX] SystemTray/BaseWidth must be a valid 32-bit integer");
+
+			string stfiP = resources.GetString("SystemTray.FirstIconPosition");
+			if (!Int32.TryParse(stfiP.Split(',')[0], out systemTrayFirstIconPosition.Item1) ||
+				!Int32.TryParse(stfiP.Split(',')[1], out systemTrayFirstIconPosition.Item2))
+				throw new FileFormatException("[RESX] SystemTray/FirstIconPosition must consist of two valid 32-bit integers seperated by a comma (',')");
+
+			if (ttS == "File")
+				taskbarTexture = (Bitmap)resources.GetObject("TaskbarTexture");
+			else
+				taskbarTexture = GetBitmapFromColor(ttSc);
+
+			taskButtonNormal = (Bitmap)resources.GetObject("TaskButtonNormal");
+			taskButtonNormalHover = (Bitmap)resources.GetObject("TaskButtonNormalHover");
+			taskButtonPressed = (Bitmap)resources.GetObject("TaskButtonPressed");
+			taskButtonPressedHover = (Bitmap)resources.GetObject("TaskButtonPressedHover");
+			taskButtonTexture = new (Bitmap, Bitmap, Bitmap)[4];
+			taskButtonTexture[0] = (taskButtonNormal.Clone(new Rectangle(taskbuttonTextureLocation.Item1, 0, taskbuttonTextureLocation.Item2, taskButtonNormal.Height), taskButtonNormal.PixelFormat),
+									taskButtonNormal.Clone(new Rectangle(taskbuttonLeftBorderLocation.Item1, 0, taskbuttonLeftBorderLocation.Item2, taskButtonNormal.Height), taskButtonNormal.PixelFormat),
+									taskButtonNormal.Clone(new Rectangle(taskbuttonRightBorderLocation.Item1, 0, taskbuttonRightBorderLocation.Item2, taskButtonNormal.Height), taskButtonNormal.PixelFormat));
+			taskButtonTexture[1] = (taskButtonNormalHover.Clone(new Rectangle(taskbuttonTextureLocation.Item1, 0, taskbuttonTextureLocation.Item2, taskButtonNormalHover.Height), taskButtonNormalHover.PixelFormat),
+									taskButtonNormalHover.Clone(new Rectangle(taskbuttonLeftBorderLocation.Item1, 0, taskbuttonLeftBorderLocation.Item2, taskButtonNormalHover.Height), taskButtonNormalHover.PixelFormat),
+									taskButtonNormalHover.Clone(new Rectangle(taskbuttonRightBorderLocation.Item1, 0, taskbuttonRightBorderLocation.Item2, taskButtonNormalHover.Height), taskButtonNormalHover.PixelFormat));
+			taskButtonTexture[2] = (taskButtonPressed.Clone(new Rectangle(taskbuttonTextureLocation.Item1, 0, taskbuttonTextureLocation.Item2, taskButtonPressed.Height), taskButtonPressed.PixelFormat),
+									taskButtonPressed.Clone(new Rectangle(taskbuttonLeftBorderLocation.Item1, 0, taskbuttonLeftBorderLocation.Item2, taskButtonPressed.Height), taskButtonPressed.PixelFormat),
+									taskButtonPressed.Clone(new Rectangle(taskbuttonRightBorderLocation.Item1, 0, taskbuttonRightBorderLocation.Item2, taskButtonPressed.Height), taskButtonPressed.PixelFormat));
+			taskButtonTexture[3] = (taskButtonPressedHover.Clone(new Rectangle(taskbuttonTextureLocation.Item1, 0, taskbuttonTextureLocation.Item2, taskButtonPressedHover.Height), taskButtonPressedHover.PixelFormat),
+									taskButtonPressedHover.Clone(new Rectangle(taskbuttonLeftBorderLocation.Item1, 0, taskbuttonLeftBorderLocation.Item2, taskButtonPressedHover.Height), taskButtonPressedHover.PixelFormat),
+									taskButtonPressedHover.Clone(new Rectangle(taskbuttonRightBorderLocation.Item1, 0, taskbuttonRightBorderLocation.Item2, taskButtonPressedHover.Height), taskButtonPressedHover.PixelFormat));
+
+			taskButtonGroupWindowBorder = (Bitmap)resources.GetObject("TaskButtonGroupWindowBorder");
+			int cx = taskButtonGroupWindowBorder.Width;
+			int cy = taskButtonGroupWindowBorder.Height;
+			int bs = taskbuttonGroupWindowBorderSize;
+			taskButtonGroupWindowBorderTexture.Item1 = taskButtonGroupWindowBorder.Clone(new Rectangle(0, 0, bs, bs), taskButtonGroupWindowBorder.PixelFormat); // Top left corner texture
+			taskButtonGroupWindowBorderTexture.Item2 = taskButtonGroupWindowBorder.Clone(new Rectangle(cx - bs, 0, bs, bs), taskButtonGroupWindowBorder.PixelFormat); // Top right corner texture
+			taskButtonGroupWindowBorderTexture.Item3 = taskButtonGroupWindowBorder.Clone(new Rectangle(0, cy - bs, bs, bs), taskButtonGroupWindowBorder.PixelFormat); // Bottom left corner texture
+			taskButtonGroupWindowBorderTexture.Item4 = taskButtonGroupWindowBorder.Clone(new Rectangle(cx - bs, cy - bs, bs, bs), taskButtonGroupWindowBorder.PixelFormat); // Bottom right corner texture
+			taskButtonGroupWindowBorderTexture.Item5 = taskButtonGroupWindowBorder.Clone(new Rectangle(0, bs, bs, cy - (2 * bs)), taskButtonGroupWindowBorder.PixelFormat); // Left side texture
+			taskButtonGroupWindowBorderTexture.Item6 = taskButtonGroupWindowBorder.Clone(new Rectangle(bs, 0, cx - (2 * bs), bs), taskButtonGroupWindowBorder.PixelFormat); // Top side texture
+			taskButtonGroupWindowBorderTexture.Item7 = taskButtonGroupWindowBorder.Clone(new Rectangle(cx - bs, bs, bs, cy - (2 * bs)), taskButtonGroupWindowBorder.PixelFormat); // Right side texture
+			taskButtonGroupWindowBorderTexture.Item8 = taskButtonGroupWindowBorder.Clone(new Rectangle(bs, cy - bs, cx - (2 * bs), bs), taskButtonGroupWindowBorder.PixelFormat); // Bottom side texture
+
+			systemTrayTexture = (Bitmap)resources.GetObject("SystemTrayTexture");
+			systemTrayBorder = (Bitmap)resources.GetObject("SystemTrayBorder");
+			startButton = (Bitmap)resources.GetObject("StartButton");
 		}
 
 		public override Size GetTaskButtonGroupWindowSize(int buttonCount) => new Size(Config.TaskbarProgramWidth + (taskbuttonGroupWindowBorderSize * 2), ((buttonCount - 1) * (TaskbarHeight - taskbuttonGroupWindowTaskbuttonRealSize.Top + taskbuttonGroupWindowTaskbuttonRealSize.Bottom)) + (taskbuttonGroupWindowBorderSize * 2));
