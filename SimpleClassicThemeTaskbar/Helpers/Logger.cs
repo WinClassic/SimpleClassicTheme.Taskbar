@@ -23,7 +23,7 @@ namespace SimpleClassicThemeTaskbar.Helpers
         public static void Initialize(LoggerVerbosity verbosity)
         {
             SetVerbosity(verbosity);
-            Directory.CreateDirectory("./logs");
+            _ = Directory.CreateDirectory("./logs");
             fs = File.OpenWrite("./logs/log_" + DateTime.Now.ToString("yyyy-dd-M--HH-mm-ss") + ".txt");
             Log(LoggerVerbosity.Basic, "Logger", "Succesfully initialized logger");
 

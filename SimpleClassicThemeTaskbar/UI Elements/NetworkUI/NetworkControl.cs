@@ -9,7 +9,7 @@ namespace SimpleClassicThemeTaskbar.UIElements.NetworkUI
 {
     public partial class NetworkControl : UserControl
     {
-        public Label statusLabel { get { return label2; } }
+        public Label statusLabel { get; private set; }
         public Wlan.WlanAvailableNetwork network;
         private bool isSelected = false;
 
@@ -35,7 +35,7 @@ namespace SimpleClassicThemeTaskbar.UIElements.NetworkUI
         public void SetNetwork(Wlan.WlanAvailableNetwork nw, bool isConnected)
         { 
             label1.Text = Encoding.UTF8.GetString(nw.dot11Ssid.SSID);
-            label2.Text = isConnected ? "Connected" : nw.securityEnabled ? "Secured" : "Public";
+            statusLabel.Text = isConnected ? "Connected" : nw.securityEnabled ? "Secured" : "Public";
             button1.Text = isConnected ? "Disconnect" : "Connect";
             
             IsConnected = isConnected;
@@ -49,7 +49,7 @@ namespace SimpleClassicThemeTaskbar.UIElements.NetworkUI
 
         public override string ToString()
         {
-            return $"{label1.Text} - {label2.Text} - {Handle}";
+            return $"{label1.Text} - {statusLabel.Text} - {Handle}";
         }
 
         private void NetworkControl_Click(object sender, EventArgs e)

@@ -15,30 +15,30 @@ namespace SimpleClassicThemeTaskbar.Theme_Engine
 {
     class ImageRenderer : BaseRenderer
 	{
-		ClassicRenderer r = new ClassicRenderer();
+        readonly ClassicRenderer r = new();
 
-		private Bitmap taskbarTexture;
-		private Bitmap taskButtonNormal;
-		private Bitmap taskButtonNormalHover;
-		private Bitmap taskButtonPressed;
-		private Bitmap taskButtonPressedHover;
+		private readonly Bitmap taskbarTexture;
+		private readonly Bitmap taskButtonNormal;
+		private readonly Bitmap taskButtonNormalHover;
+		private readonly Bitmap taskButtonPressed;
+		private readonly Bitmap taskButtonPressedHover;
 		private readonly (Bitmap, Bitmap, Bitmap)[] taskButtonTexture;
-		private Bitmap taskButtonGroupWindowBorder;
+		private readonly Bitmap taskButtonGroupWindowBorder;
 		private (Bitmap, Bitmap, Bitmap, Bitmap, Bitmap, Bitmap, Bitmap, Bitmap) taskButtonGroupWindowBorderTexture;
-		private Bitmap systemTrayTexture;
-		private Bitmap systemTrayBorder;
-		private Bitmap startButton;
+		private readonly Bitmap systemTrayTexture;
+		private readonly Bitmap systemTrayBorder;
+		private readonly Bitmap startButton;
 
-		private IniFile settings;
+		private readonly IniFile settings;
 
-		private int taskbarHeight;
+		private readonly int taskbarHeight;
 		private (int, int) taskbuttonTextureLocation;
 		private (int, int) taskbuttonLeftBorderLocation;
 		private (int, int) taskbuttonRightBorderLocation;
-		private int taskbuttonGroupWindowBorderSize;
+		private readonly int taskbuttonGroupWindowBorderSize;
 		private RECT taskbuttonGroupWindowTaskbuttonRealSize;
-		private int startButtonWidth;
-		private int systemTrayBaseWidth;
+		private readonly int startButtonWidth;
+		private readonly int systemTrayBaseWidth;
 		private (int, int) systemTrayFirstIconPosition;
 
 		public override int StartButtonWidth => startButtonWidth;
@@ -151,10 +151,10 @@ namespace SimpleClassicThemeTaskbar.Theme_Engine
 			//catch { }
 		}
 
-		public override Size GetTaskButtonGroupWindowSize(int buttonCount) => new Size(Config.TaskbarProgramWidth + (taskbuttonGroupWindowBorderSize * 2), ((buttonCount - 1) * (TaskbarHeight - taskbuttonGroupWindowTaskbuttonRealSize.Top + taskbuttonGroupWindowTaskbuttonRealSize.Bottom)) + (taskbuttonGroupWindowBorderSize * 2));
-		public override Point GetTaskButtonGroupWindowButtonLocation(int index) => new Point(taskbuttonGroupWindowBorderSize, ((index - 1) * (TaskbarHeight - taskbuttonGroupWindowTaskbuttonRealSize.Top + taskbuttonGroupWindowTaskbuttonRealSize.Bottom)) - taskbuttonGroupWindowTaskbuttonRealSize.Top + taskbuttonGroupWindowBorderSize);
+		public override Size GetTaskButtonGroupWindowSize(int buttonCount) => new(Config.TaskbarProgramWidth + (taskbuttonGroupWindowBorderSize * 2), ((buttonCount - 1) * (TaskbarHeight - taskbuttonGroupWindowTaskbuttonRealSize.Top + taskbuttonGroupWindowTaskbuttonRealSize.Bottom)) + (taskbuttonGroupWindowBorderSize * 2));
+		public override Point GetTaskButtonGroupWindowButtonLocation(int index) => new(taskbuttonGroupWindowBorderSize, ((index - 1) * (TaskbarHeight - taskbuttonGroupWindowTaskbuttonRealSize.Top + taskbuttonGroupWindowTaskbuttonRealSize.Bottom)) - taskbuttonGroupWindowTaskbuttonRealSize.Top + taskbuttonGroupWindowBorderSize);
 
-		public override Point GetSystemTrayIconLocation(int index) => new Point(systemTrayFirstIconPosition.Item1 + (index * (16 + Config.SpaceBetweenTrayIcons)), systemTrayFirstIconPosition.Item2);
+		public override Point GetSystemTrayIconLocation(int index) => new(systemTrayFirstIconPosition.Item1 + (index * (16 + Config.SpaceBetweenTrayIcons)), systemTrayFirstIconPosition.Item2);
 		public override int GetSystemTrayWidth(int iconCount) => systemTrayBaseWidth + (iconCount * 16) + (Config.SpaceBetweenTrayIcons * (iconCount - 1));
 		public override Point SystemTrayTimeLocation => r.SystemTrayTimeLocation;
 		public override Font SystemTrayTimeFont => r.SystemTrayTimeFont;
@@ -171,7 +171,7 @@ namespace SimpleClassicThemeTaskbar.Theme_Engine
 
 		public override void DrawTaskBar(Taskbar taskbar, Graphics g)
 		{
-			using (TextureBrush brush = new TextureBrush(taskbarTexture, WrapMode.Tile))
+			using (TextureBrush brush = new(taskbarTexture, WrapMode.Tile))
 				g.FillRectangle(brush, taskbar.ClientRectangle);
 		}
 
@@ -183,7 +183,7 @@ namespace SimpleClassicThemeTaskbar.Theme_Engine
 
 			// Draw texture
 			Bitmap tbTexture = taskButtonTexture[index].Item1;
-			using (TextureBrush brush = new TextureBrush(tbTexture, WrapMode.Tile))
+			using (TextureBrush brush = new(tbTexture, WrapMode.Tile))
 				g.FillRectangle(brush, taskbarProgram.ClientRectangle);
 
 			// Draw left border
@@ -200,7 +200,7 @@ namespace SimpleClassicThemeTaskbar.Theme_Engine
 				font = new Font(font, FontStyle.Bold);
 
 			// Draw text and icon
-			StringFormat format = new StringFormat();
+			StringFormat format = new();
 			format.HotkeyPrefix = HotkeyPrefix.None;
 			format.Alignment = StringAlignment.Near;
 			format.LineAlignment = StringAlignment.Center;
@@ -239,22 +239,22 @@ namespace SimpleClassicThemeTaskbar.Theme_Engine
 			g.DrawImageUnscaled(taskButtonGroupWindowBorderTexture.Item4, new Point(cxm, cym));
 
 			// Draw sides
-			using (TextureBrush brush = new TextureBrush(taskButtonGroupWindowBorderTexture.Item5, WrapMode.Tile))
+			using (TextureBrush brush = new(taskButtonGroupWindowBorderTexture.Item5, WrapMode.Tile))
 			{
 				brush.TranslateTransform(0, bs);
 				g.FillRectangle(brush, new Rectangle(0, bs, bs, cyb));
 			}
-			using (TextureBrush brush = new TextureBrush(taskButtonGroupWindowBorderTexture.Item6, WrapMode.Tile))
+			using (TextureBrush brush = new(taskButtonGroupWindowBorderTexture.Item6, WrapMode.Tile))
 			{
 				brush.TranslateTransform(bs, 0);
 				g.FillRectangle(brush, new Rectangle(bs, 0, cxb, bs));
 			}
-			using (TextureBrush brush = new TextureBrush(taskButtonGroupWindowBorderTexture.Item7, WrapMode.Tile))
+			using (TextureBrush brush = new(taskButtonGroupWindowBorderTexture.Item7, WrapMode.Tile))
 			{
 				brush.TranslateTransform(cxm, bs);
 				g.FillRectangle(brush, new Rectangle(cxm, bs, bs, cyb));
 			}
-			using (TextureBrush brush = new TextureBrush(taskButtonGroupWindowBorderTexture.Item8, WrapMode.Tile))
+			using (TextureBrush brush = new(taskButtonGroupWindowBorderTexture.Item8, WrapMode.Tile))
 			{
 				brush.TranslateTransform(bs, cym);
 				g.FillRectangle(brush, new Rectangle(bs, cym, cxb, bs));
@@ -274,7 +274,7 @@ namespace SimpleClassicThemeTaskbar.Theme_Engine
 
 		public override void DrawSystemTray(SystemTray systemTray, Graphics g)
 		{
-			using (TextureBrush brush = new TextureBrush(systemTrayTexture, WrapMode.Tile))
+			using (TextureBrush brush = new(systemTrayTexture, WrapMode.Tile))
 				g.FillRectangle(brush, systemTray.ClientRectangle);
 			g.DrawImageUnscaled(systemTrayBorder, new Point(0, 0));
 
@@ -286,7 +286,7 @@ namespace SimpleClassicThemeTaskbar.Theme_Engine
 			r.DrawQuickLaunch(quickLaunch, g);
 		}
 
-		private bool ParseColor(string text, out Color c)
+		private static bool ParseColor(string text, out Color c)
 		{
 			Match match = Regex.Match(text, "#[a-f0-9A-F]{6}");
 			if (match != null)
@@ -301,9 +301,9 @@ namespace SimpleClassicThemeTaskbar.Theme_Engine
 			return false;
 		}
 
-		private Bitmap GetBitmapFromColor(Color c)
+		private static Bitmap GetBitmapFromColor(Color c)
 		{
-			Bitmap b = new Bitmap(1, 1);
+			Bitmap b = new(1, 1);
 			b.SetPixel(0, 0, c);
 			return b;
 		}

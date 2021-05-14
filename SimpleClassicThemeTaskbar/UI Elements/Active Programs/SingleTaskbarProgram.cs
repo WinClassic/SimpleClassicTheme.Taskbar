@@ -90,14 +90,14 @@ namespace SimpleClassicThemeTaskbar
             }
             else if (ActiveWindow)
             {
-                User32.ShowWindow(Window.Handle, 6);
+                _ = User32.ShowWindow(Window.Handle, 6);
             }
             else
             {
                 if ((Window.WindowInfo.dwStyle & 0x20000000) > 0)
-                    User32.ShowWindow(Window.Handle, 9);
+                    _ = User32.ShowWindow(Window.Handle, 9);
 
-                User32.SetForegroundWindow(Window.Handle);
+                _ = User32.SetForegroundWindow(Window.Handle);
 
                 if (Parent != null && Parent is Taskbar)
                 {

@@ -57,11 +57,11 @@ namespace SimpleClassicThemeTaskbar
         {
             Handle = handle;
             WindowInfo = WINDOWINFO.FromHWND(handle);
-            StringBuilder cn = new StringBuilder(100);
-            User32.GetClassName(handle, cn, cn.Capacity - 1);
+            StringBuilder cn = new(100);
+            _ = User32.GetClassName(handle, cn, cn.Capacity - 1);
             ClassName = cn.ToString();
-            StringBuilder title = new StringBuilder(100);
-            User32.GetWindowTextW(handle, title, 100);
+            StringBuilder title = new(100);
+            _ = User32.GetWindowTextW(handle, title, 100);
             Title = title.ToString();
         }
     }
@@ -82,8 +82,7 @@ namespace SimpleClassicThemeTaskbar
 
         public static WINDOWINFO FromHWND(IntPtr handle)
         {
-            WINDOWINFO d;
-            User32.GetWindowInfo(handle, out d);
+            _ = User32.GetWindowInfo(handle, out WINDOWINFO d);
             return d;
         }
     }

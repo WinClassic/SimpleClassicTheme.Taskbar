@@ -14,7 +14,7 @@ namespace SimpleClassicThemeTaskbar.Theme_Engine
 {
     internal class ClassicRenderer : BaseRenderer
     {
-        private Bitmap checkerboardPattern;
+        private readonly Bitmap checkerboardPattern;
 
         public ClassicRenderer()
         {
@@ -41,7 +41,7 @@ namespace SimpleClassicThemeTaskbar.Theme_Engine
 
         public override Color SystemTrayTimeColor => SystemColors.ControlText;
         public override Font SystemTrayTimeFont => SystemFonts.DefaultFont;
-        public override Point SystemTrayTimeLocation => new Point(-52, 9);
+        public override Point SystemTrayTimeLocation => new(-52, 9);
         public override int TaskbarHeight => 28;
 
         public override void DrawQuickLaunch(QuickLaunch systemTray, Graphics g)
@@ -75,7 +75,7 @@ namespace SimpleClassicThemeTaskbar.Theme_Engine
                 }
                 if (startButton.Width != 57)
                     startButton.Width = 57;
-                RECT rect = new RECT(startButton.ClientRectangle);
+                RECT rect = new(startButton.ClientRectangle);
                 rect.Left += 2;
                 rect.Top += 4;
                 rect.Bottom -= 2;
@@ -84,7 +84,7 @@ namespace SimpleClassicThemeTaskbar.Theme_Engine
                 g.ReleaseHdc();
                 g.ResetTransform();
                 bool mouseIsDown = startButton.ClientRectangle.Contains(startButton.PointToClient(Control.MousePosition)) && (Control.MouseButtons & MouseButtons.Left) != 0;
-                g.DrawImage(icon != null ? icon : Properties.Resources.startIcon95, mouseIsDown ? new Point(7, 8) : new Point(6, 7));
+                g.DrawImage(icon ?? Properties.Resources.startIcon95, mouseIsDown ? new Point(7, 8) : new Point(6, 7));
                 g.DrawString("Start", new Font("Tahoma", 8F, FontStyle.Bold), SystemBrushes.ControlText, mouseIsDown ? new PointF(23F, 9F) : new PointF(22F, 8F));
                 icon.Dispose();
             }
@@ -131,14 +131,14 @@ namespace SimpleClassicThemeTaskbar.Theme_Engine
             newRect.Height -= 6;
             RECT rect = new(newRect);
             uint buttonStyle = taskbarProgram.IsPushed ? DFCS_BUTTONPUSH | DFCS_PUSHED : DFCS_BUTTONPUSH;
-            User32.DrawFrameControl(g.GetHdc(), ref rect, DFC_BUTTON, buttonStyle);
+            _ = User32.DrawFrameControl(g.GetHdc(), ref rect, DFC_BUTTON, buttonStyle);
             g.ReleaseHdc();
             g.ResetTransform();
 
             // Draw checkerboard pattern if the button is being held down
             if (isPressed && checkerboardPattern != null)
             {
-                using (TextureBrush brush = new TextureBrush(checkerboardPattern, WrapMode.Tile))
+                using (TextureBrush brush = new(checkerboardPattern, WrapMode.Tile))
                 {
                     g.FillRectangle(brush, Rectangle.Inflate(newRect, -2, -2));
                 }
@@ -150,7 +150,7 @@ namespace SimpleClassicThemeTaskbar.Theme_Engine
                 font = new Font(font, FontStyle.Bold);
 
             // Draw text and icon
-            StringFormat format = new StringFormat();
+            StringFormat format = new();
             format.HotkeyPrefix = HotkeyPrefix.None;
             format.Alignment = StringAlignment.Near;
             format.LineAlignment = StringAlignment.Center;
@@ -181,9 +181,9 @@ namespace SimpleClassicThemeTaskbar.Theme_Engine
             newRect.Width -= taskbarProgram.Width - 19 + 3;
             newRect.Y += 7;
             newRect.Height -= 12;
-            RECT rect = new RECT(newRect);
+            RECT rect = new(newRect);
             uint buttonStyle = !taskbarProgram.GroupWindow.Visible ? DFCS_BUTTONPUSH : DFCS_BUTTONPUSH | DFCS_PUSHED;
-            Shell32.DrawFrameControl(g.GetHdc(), ref rect, DFC_BUTTON, buttonStyle);
+            _ = Shell32.DrawFrameControl(g.GetHdc(), ref rect, DFC_BUTTON, buttonStyle);
             g.ReleaseHdc();
             g.ResetTransform();
 
@@ -191,7 +191,7 @@ namespace SimpleClassicThemeTaskbar.Theme_Engine
             Font font = SystemFonts.DefaultFont;
 
             // Draw number
-            StringFormat format = new StringFormat();
+            StringFormat format = new();
             format.HotkeyPrefix = HotkeyPrefix.None;
             format.Alignment = StringAlignment.Near;
             format.LineAlignment = StringAlignment.Center;
@@ -213,16 +213,16 @@ namespace SimpleClassicThemeTaskbar.Theme_Engine
             g.ResetTransform();
         }
 
-        public override Point GetQuickLaunchIconLocation(int index) => new Point(16 + (index * (16 + Config.SpaceBetweenQuickLaunchIcons)), 7);
+        public override Point GetQuickLaunchIconLocation(int index) => new(16 + (index * (16 + Config.SpaceBetweenQuickLaunchIcons)), 7);
 
         public override int GetQuickLaunchWidth(int iconCount) => (iconCount * 16) + (Config.SpaceBetweenQuickLaunchIcons * (iconCount - 1));
 
-        public override Point GetSystemTrayIconLocation(int index) => new Point(3 + (index * (16 + Config.SpaceBetweenTrayIcons)), 7);
+        public override Point GetSystemTrayIconLocation(int index) => new(3 + (index * (16 + Config.SpaceBetweenTrayIcons)), 7);
 
         public override int GetSystemTrayWidth(int iconCount) => 63 + (iconCount * (16 + Config.SpaceBetweenTrayIcons));
 
-        public override Point GetTaskButtonGroupWindowButtonLocation(int index) => new Point(4, ((index - 1) * 24));
+        public override Point GetTaskButtonGroupWindowButtonLocation(int index) => new(4, (index - 1) * 24);
 
-        public override Size GetTaskButtonGroupWindowSize(int buttonCount) => new Size(Config.TaskbarProgramWidth + 8, ((buttonCount - 1) * 24) + 6);
+        public override Size GetTaskButtonGroupWindowSize(int buttonCount) => new(Config.TaskbarProgramWidth + 8, ((buttonCount - 1) * 24) + 6);
     }
 }

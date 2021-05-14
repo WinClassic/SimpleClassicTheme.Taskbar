@@ -8,12 +8,12 @@ using System.Text;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
 using System.Drawing.Drawing2D;
+using SimpleClassicThemeTaskbar.Helpers.NativeMethods;
 
 namespace SimpleClassicThemeTaskbar.UIElements.Misc
 {
     public partial class BetterBorderPanel : Panel
     {
-
         public const uint DFC_BUTTON = 4;
         public const uint DFCS_BUTTONPUSH = 0x10;
         public const uint DFCS_PUSHED = 512;
@@ -21,25 +21,13 @@ namespace SimpleClassicThemeTaskbar.UIElements.Misc
         public bool Do3DBorder = true;
         public bool isButton = false;
 
+        public Border3DStyle style = Border3DStyle.Raised;
+
         public BetterBorderPanel()
         {
             InitializeComponent();
             DoubleBuffered = true;
             Paint += OnPaint;
-        }
-
-        public Border3DStyle style = Border3DStyle.Raised;
-
-        [Description("Specifies if the control should be rendered like a button")]
-        [Category("Appearance")]
-        public bool IsButton
-        {
-            get => isButton;
-            set
-            {
-                isButton = value;
-                Invalidate();
-            }
         }
 
         [Description("Defines the style to be used when drawing ")]
@@ -54,18 +42,30 @@ namespace SimpleClassicThemeTaskbar.UIElements.Misc
             }
         }
 
+        [Description("Specifies if the control should be rendered like a button")]
+        [Category("Appearance")]
+        public bool IsButton
+        {
+            get => isButton;
+            set
+            {
+                isButton = value;
+                Invalidate();
+            }
+        }
+
         private void OnPaint(object sender, PaintEventArgs e)
         {
             if (Do3DBorder)
             {
                 if (isButton)
                 {
-                    RECT rect = new RECT(ClientRectangle);
+                    RECT rect = new(ClientRectangle);
                     uint buttonStyle = style == Border3DStyle.Raised ? DFCS_BUTTONPUSH : DFCS_BUTTONPUSH | DFCS_PUSHED;
-                    DrawFrameControl(e.Graphics.GetHdc(), ref rect, DFC_BUTTON, buttonStyle);
+                    _ = User32.DrawFrameControl(e.Graphics.GetHdc(), ref rect, DFC_BUTTON, buttonStyle);
                     e.Graphics.ReleaseHdc();
                 }
-                else 
+                else
                 {
                     ControlPaint.DrawBorder3D(e.Graphics, ClientRectangle, style);
                 }
@@ -82,7 +82,7 @@ namespace SimpleClassicThemeTaskbar.UIElements.Misc
             }
             if (BackgroundImage != null)
             {
-                using (TextureBrush brush = new TextureBrush(BackgroundImage, WrapMode.Tile))
+                using (TextureBrush brush = new(BackgroundImage, WrapMode.Tile))
                 {
                     e.Graphics.FillRectangle(brush, Rectangle.Inflate(ClientRectangle, -2, -2));
                 }

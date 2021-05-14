@@ -33,16 +33,11 @@ namespace SimpleClassicThemeTaskbar.UIElements.StartButton
 
         public bool WasPressed = false;
 
+        // private readonly DateTime LastPress = DateTime.Now;
         private bool CustomButton = false;
 
         private bool CustomIcon = false;
-
-        private bool dummy = false;
-
         private string imageFile = "";
-
-        private DateTime LastPress = DateTime.Now;
-
         private bool OpeningStartMenu = false;
 
         public StartButton()
@@ -73,7 +68,7 @@ namespace SimpleClassicThemeTaskbar.UIElements.StartButton
         }
 
         [Browsable(true), EditorBrowsable(EditorBrowsableState.Always), Description("Indicates if the control is to be used for example only"), Category("Behavior")]
-        public bool Dummy { get { return dummy; } set { dummy = value; } }
+        public bool Dummy { get; set; } = false;
 
         public bool Pressed
         {
@@ -100,7 +95,7 @@ namespace SimpleClassicThemeTaskbar.UIElements.StartButton
 
         public void OnMouseClick(object sender, MouseEventArgs e)
         {
-            if (dummy)
+            if (Dummy)
             {
                 pressed = !pressed;
                 style = pressed ? Border3DStyle.Sunken : Border3DStyle.Raised;
@@ -115,7 +110,7 @@ namespace SimpleClassicThemeTaskbar.UIElements.StartButton
                 WasPressed = false;
                 return;
             }
-            HWND wnd = User32.FindWindowW("Shell_TrayWnd", "");
+            // HWND wnd = User32.FindWindowW("Shell_TrayWnd", "");
             if (e.Button == MouseButtons.Right)
             {
                 Keyboard.KeyDown(Keys.LWin);
@@ -127,7 +122,7 @@ namespace SimpleClassicThemeTaskbar.UIElements.StartButton
             }
             else
             {
-                Window d = new Window(Taskbar.lastOpenWindow);
+                Window d = new(Taskbar.lastOpenWindow);
                 if (d.ClassName == "OpenShell.CMenuContainer" || d.ClassName == "Windows.UI.Core.CoreWindow")
                 {
                     Taskbar.lastOpenWindow = Parent.Handle;
@@ -239,9 +234,9 @@ namespace SimpleClassicThemeTaskbar.UIElements.StartButton
             {
                 if (isButton)
                 {
-                    RECT rect = new RECT(ClientRectangle);
+                    RECT rect = new(ClientRectangle);
                     uint buttonStyle = style == Border3DStyle.Raised ? DFCS_BUTTONPUSH : DFCS_BUTTONPUSH | DFCS_PUSHED;
-                    User32.DrawFrameControl(e.Graphics.GetHdc(), ref rect, DFC_BUTTON, buttonStyle);
+                    _ = User32.DrawFrameControl(e.Graphics.GetHdc(), ref rect, DFC_BUTTON, buttonStyle);
                     e.Graphics.ReleaseHdc();
                 }
                 else
@@ -261,14 +256,14 @@ namespace SimpleClassicThemeTaskbar.UIElements.StartButton
             }
             if (BackgroundImage != null)
             {
-                using (TextureBrush brush = new TextureBrush(BackgroundImage, WrapMode.Tile))
+                using (TextureBrush brush = new(BackgroundImage, WrapMode.Tile))
                 {
                     e.Graphics.FillRectangle(brush, Rectangle.Inflate(ClientRectangle, -2, -2));
                 }
             }
 
             bool mouseIsDown = ClientRectangle.Contains(PointToClient(MousePosition)) && (MouseButtons & MouseButtons.Left) != 0;
-            e.Graphics.DrawImage(temp != null ? temp : Properties.Resources.startIcon95, mouseIsDown ? new Point(5, 4) : new Point(4, 3));
+            e.Graphics.DrawImage(temp ?? Properties.Resources.startIcon95, mouseIsDown ? new Point(5, 4) : new Point(4, 3));
             e.Graphics.DrawString("Start", new Font("Tahoma", 8F, FontStyle.Bold), SystemBrushes.ControlText, mouseIsDown ? new PointF(21F, 5F) : new PointF(20F, 4F));
 
             temp.Dispose();

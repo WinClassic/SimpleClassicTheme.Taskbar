@@ -44,7 +44,7 @@ namespace SimpleClassicThemeTaskbar
         private bool drawBackground = false;
         private Border3DStyle style;
 
-        private Bitmap d;
+        private readonly Bitmap d;
         private bool activeWindow = false;
         public bool ActiveWindow
         {
@@ -97,9 +97,9 @@ namespace SimpleClassicThemeTaskbar
             BackColor = Color.Transparent;
             textFont = new Font("Tahoma", 8F, FontStyle.Regular, GraphicsUnit.Point, 0);
 
-            base.MouseDown += delegate (object sender, MouseEventArgs e) { MouseDown?.DynamicInvoke(this, e); };
-            base.MouseUp += delegate (object sender, MouseEventArgs e) { MouseUp?.DynamicInvoke(this, e); };
-            base.MouseMove += delegate (object sender, MouseEventArgs e) { MouseMove?.DynamicInvoke(this, e); };
+            base.MouseDown += delegate (object sender, MouseEventArgs e) { _ = (MouseDown?.DynamicInvoke(this, e)); };
+            base.MouseUp += delegate (object sender, MouseEventArgs e) { _ = (MouseUp?.DynamicInvoke(this, e)); };
+            base.MouseMove += delegate (object sender, MouseEventArgs e) { _ = (MouseMove?.DynamicInvoke(this, e)); };
 
             MouseDown += delegate {
                 style = Border3DStyle.Sunken;
@@ -128,13 +128,13 @@ namespace SimpleClassicThemeTaskbar
             }
             else if (ActiveWindow)
             {
-                User32.ShowWindow(Window.Handle, 6);
+                _ = User32.ShowWindow(Window.Handle, 6);
             }
             else
             {
                 if ((Window.WindowInfo.dwStyle & 0x20000000) > 0)
-                    User32.ShowWindow(Window.Handle, 9);
-                User32.SetForegroundWindow(Window.Handle);
+                    _ = User32.ShowWindow(Window.Handle, 9);
+                _ = User32.SetForegroundWindow(Window.Handle);
 
                 foreach (Control d in Parent.Controls)
                 {
@@ -156,21 +156,21 @@ namespace SimpleClassicThemeTaskbar
             newRect.Y += 4;
             newRect.Height -= 6;
             //ControlPaint.DrawBorder3D(e.Graphics, newRect, style);
-            RECT rect = new RECT(newRect);
+            RECT rect = new(newRect);
             uint buttonStyle = style == Border3DStyle.Raised ? DFCS_BUTTONPUSH : DFCS_BUTTONPUSH | DFCS_PUSHED;
-            User32.DrawFrameControl(e.Graphics.GetHdc(), ref rect, DFC_BUTTON, buttonStyle);
+            _ = User32.DrawFrameControl(e.Graphics.GetHdc(), ref rect, DFC_BUTTON, buttonStyle);
             e.Graphics.ReleaseHdc();
             e.Graphics.ResetTransform();
 
             if (drawBackground && d != null)
             {
-                using (TextureBrush brush = new TextureBrush(d, WrapMode.Tile))
+                using (TextureBrush brush = new(d, WrapMode.Tile))
                 {
                     e.Graphics.FillRectangle(brush, Rectangle.Inflate(newRect, -2, -2));
                 }
             }
 
-            StringFormat format = new StringFormat();
+            StringFormat format = new();
             format.HotkeyPrefix = HotkeyPrefix.None;
             format.Alignment = StringAlignment.Near;
             format.LineAlignment = StringAlignment.Center;

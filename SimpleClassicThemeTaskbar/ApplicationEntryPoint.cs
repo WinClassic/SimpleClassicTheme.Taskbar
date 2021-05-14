@@ -30,7 +30,7 @@ namespace SimpleClassicThemeTaskbar
         {
             Logger.Log(LoggerVerbosity.Detailed, "TaskbarManager", $"Exit requested");
             Config.SaveToRegistry();
-            List<Taskbar> activeBars = new List<Taskbar>();
+            List<Taskbar> activeBars = new();
 
             foreach (Form form in Application.OpenForms)
                 if (form is Taskbar bar)
@@ -54,7 +54,7 @@ namespace SimpleClassicThemeTaskbar
         internal static void NewTaskbars()
         {
             Logger.Log(LoggerVerbosity.Detailed, "TaskbarManager", "Generating new taskbars");
-            List<Taskbar> activeBars = new List<Taskbar>();
+            List<Taskbar> activeBars = new();
             foreach (Form form in Application.OpenForms)
                 if (form is Taskbar bar)
                     activeBars.Add(bar);
@@ -71,7 +71,7 @@ namespace SimpleClassicThemeTaskbar
             {
                 taskbars++;
                 Rectangle rect = screen.Bounds;
-                Taskbar taskbar = new Taskbar(screen.Primary);
+                Taskbar taskbar = new(screen.Primary);
                 taskbar.ShowOnScreen(screen);
                 Logger.Log(LoggerVerbosity.Detailed, "TaskbarManager", $"Created taskbar in working area: {screen.Bounds}");
                 if (!Config.ShowTaskbarOnAllDesktops && !screen.Primary)
@@ -90,7 +90,7 @@ namespace SimpleClassicThemeTaskbar
             foreach (var arg in args)
             {
                 if (arg.StartsWith("-v="))
-                    Logger.SetVerbosity((LoggerVerbosity)Int32.Parse(arg.Substring(3)));
+                    Logger.SetVerbosity((LoggerVerbosity)Int32.Parse(arg[3..]));
             }
             Logger.Log(LoggerVerbosity.Detailed, "EntryPoint", "Parsing arguments");
             if (args.Contains("--dutch"))
@@ -107,7 +107,7 @@ namespace SimpleClassicThemeTaskbar
                 Logger.Log(LoggerVerbosity.Detailed, "EntryPoint", "Killing all SCTT instances");
                 static List<IntPtr> EnumerateProcessWindowHandles(int processId, string name)
                 {
-                    List<IntPtr> handles = new List<IntPtr>();
+                    List<IntPtr> handles = new();
 
                     foreach (ProcessThread thread in Process.GetProcessById(processId).Threads)
                     {
@@ -127,7 +127,7 @@ namespace SimpleClassicThemeTaskbar
                     string s = "";
                     foreach (IntPtr handle in handles)
                     {
-                        StringBuilder builder = new StringBuilder(1000);
+                        StringBuilder builder = new(1000);
                         User32.GetClassName(handle, builder, 1000);
                         if (builder.Length > 0)
                             s = s + builder.ToString() + "\n";
@@ -173,7 +173,7 @@ namespace SimpleClassicThemeTaskbar
             }
 #endif
 
-            List<Taskbar> t = new List<Taskbar>();
+            List<Taskbar> t = new();
             //Setup crash reports
 #if DEBUG
 #else

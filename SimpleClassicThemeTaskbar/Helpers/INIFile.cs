@@ -31,7 +31,7 @@ namespace SimpleClassicThemeTaskbar.Helpers
         /// <returns></returns>
         public string IniReadValue(string Section, string Key)
         {
-            StringBuilder temp = new StringBuilder(255);
+            StringBuilder temp = new(255);
             _ = Kernel32.GetPrivateProfileString(Section, Key, string.Empty, temp, 255, path);
             return temp.ToString();
         }
@@ -47,7 +47,7 @@ namespace SimpleClassicThemeTaskbar.Helpers
         /// Value Name
         public void IniWriteValue(string Section, string Key, string Value)
         {
-            Kernel32.WritePrivateProfileString(Section, Key, Value, path);
+            _ = Kernel32.WritePrivateProfileString(Section, Key, Value, path);
         }
     }
 }

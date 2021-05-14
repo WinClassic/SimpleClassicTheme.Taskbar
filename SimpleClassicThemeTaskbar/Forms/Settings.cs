@@ -58,17 +58,17 @@ namespace SimpleClassicThemeTaskbar
                 }
                 catch
                 {
-                    MessageBox.Show(this, "Invalid image!");
+                    _ = MessageBox.Show(this, "Invalid image!");
                     return;
                 }
                 if (radioStartIcon.Checked && (temp.Width != 16 || temp.Height != 16))
                 {
-                    MessageBox.Show(this, "Image is not 16x16!");
+                    _ = MessageBox.Show(this, "Image is not 16x16!");
                     return;
                 }
                 if (radioStartButton.Checked && (temp.Height != 66))
                 {
-                    MessageBox.Show(this, "Image is not 66px high! (3 * 22px)");
+                    _ = MessageBox.Show(this, "Image is not 66px high! (3 * 22px)");
                     return;
                 }
                 textStartLocation.Text = openFileDialog1.FileName;
@@ -79,9 +79,9 @@ namespace SimpleClassicThemeTaskbar
 
         private void button2_Click(object sender, EventArgs e)
         {
-            SettingsAddProgramFilter dialog = new SettingsAddProgramFilter();
-            dialog.ShowDialog(this);
-            listBox1.Items.Add(dialog.result);
+            SettingsAddProgramFilter dialog = new();
+            _ = dialog.ShowDialog(this);
+            _ = listBox1.Items.Add(dialog.result);
             dialog.Dispose();
         }
 
@@ -111,7 +111,7 @@ namespace SimpleClassicThemeTaskbar
 
         private void label3_Click(object sender, EventArgs e)
         {
-            Process.Start(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\AppData\\Roaming\\Microsoft\\Internet Explorer\\Quick Launch\\");
+            _ = Process.Start(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\AppData\\Roaming\\Microsoft\\Internet Explorer\\Quick Launch\\");
         }
 
         private void RadioStart_CheckedChanged(object sender, EventArgs e)
@@ -169,10 +169,10 @@ namespace SimpleClassicThemeTaskbar
             string taskbarFilter = Config.TaskbarProgramFilter;
             foreach (string filter in taskbarFilter.Split('*'))
                 if (filter != "")
-                    listBox1.Items.Add(filter);
+                    _ = listBox1.Items.Add(filter);
 
             Image original = ApplicationEntryPoint.SCTCompatMode ? Properties.Resources.logo_sct_t : Properties.Resources.logo_sctt;
-            Bitmap newImage = new Bitmap(original);
+            Bitmap newImage = new(original);
             //for (int x = 0; x < newImage.Width; x++)
             //    for (int y = 0; y < newImage.Height; y++)
             //    {
@@ -190,7 +190,7 @@ namespace SimpleClassicThemeTaskbar
 
             Color A = SystemColors.ActiveCaption;
             Color B = SystemColors.GradientActiveCaption;
-            Bitmap bitmap = new Bitmap(696, 5);
+            Bitmap bitmap = new(696, 5);
             for (int i = 0; i < 348; i++)
             {
                 int r = A.R + ((B.R - A.R) * i / 348);
@@ -207,7 +207,7 @@ namespace SimpleClassicThemeTaskbar
                 pictureBox2.Location = new Point(pictureBox2.Location.X + 3, pictureBox2.Location.Y);
             pictureBox2.Image = bitmap;
 
-            UXTheme.SetWindowTheme(Handle, " ", " ");
+            _ = UXTheme.SetWindowTheme(Handle, " ", " ");
         }
 
         private void startButton1_SizeChanged(object sender, EventArgs e)

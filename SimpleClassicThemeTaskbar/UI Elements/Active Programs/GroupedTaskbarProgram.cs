@@ -16,9 +16,9 @@ namespace SimpleClassicThemeTaskbar
     public class GroupedTaskbarProgram : BaseTaskbarProgram
     {
         public PopupTaskbarGroup GroupWindow;
-        public List<SingleTaskbarProgram> ProgramWindows = new List<SingleTaskbarProgram>();
+        public List<SingleTaskbarProgram> ProgramWindows = new();
         private const int MAX_PATH = 255;
-        private bool line = false;
+        private readonly bool line = false;
 
         public GroupedTaskbarProgram()
         {
@@ -77,7 +77,7 @@ namespace SimpleClassicThemeTaskbar
                     ActiveWindow = true;
                     window.ActiveWindow = true;
 
-                    ProgramWindows.Remove(window);
+                    _ = ProgramWindows.Remove(window);
                     ProgramWindows.Insert(0, window);
                     return true;
                 }
@@ -130,7 +130,7 @@ namespace SimpleClassicThemeTaskbar
         public bool UpdateWindowList(List<Window> windows)
         {
             //The new list of icons
-            List<SingleTaskbarProgram> newIcons = new List<SingleTaskbarProgram>();
+            List<SingleTaskbarProgram> newIcons = new();
 
             //Create a new list with only the windows that are still open
             foreach (SingleTaskbarProgram baseIcon in ProgramWindows)
@@ -160,7 +160,7 @@ namespace SimpleClassicThemeTaskbar
                     SingleTaskbarProgram icon = dd as SingleTaskbarProgram;
                     if (!newIcons.Contains(icon))
                     {
-                        ProgramWindows.Remove(icon);
+                        _ = ProgramWindows.Remove(icon);
                         icon.Dispose();
                     }
                 }
@@ -184,7 +184,7 @@ namespace SimpleClassicThemeTaskbar
         private static string GetShortPath(string path)
         {
             var shortPath = new StringBuilder(MAX_PATH);
-            Kernel32.GetShortPathName(path, shortPath, MAX_PATH);
+            _ = Kernel32.GetShortPathName(path, shortPath, MAX_PATH);
             return shortPath.ToString();
         }
     }

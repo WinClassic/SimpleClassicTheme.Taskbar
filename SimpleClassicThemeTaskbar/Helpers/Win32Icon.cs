@@ -137,7 +137,7 @@ namespace SimpleClassicThemeTaskbar.Helpers
         {
             const int ILD_TRANSPARENT = 1;
             var retval = Shell32.SHGetFileInfo(filepath, fileAttributeFlag, ref shinfo, Marshal.SizeOf(shinfo), flags);
-            if (retval == 0) throw (new System.IO.FileNotFoundException());
+            if (retval == 0) throw new System.IO.FileNotFoundException();
             var iconIndex = shinfo.iIcon;
             var iImageListGuid = new Guid("46EB5926-582E-4017-9FDF-E8998DAA0950");
             _ = Shell32.SHGetImageList((int)iconsize, ref iImageListGuid, out IImageList iml);
@@ -145,6 +145,5 @@ namespace SimpleClassicThemeTaskbar.Helpers
             _ = iml.GetIcon(iconIndex, ILD_TRANSPARENT, ref hIcon);
             return hIcon;
         }
-
     }
 }

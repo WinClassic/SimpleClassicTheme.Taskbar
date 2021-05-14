@@ -11,7 +11,7 @@ namespace SimpleClassicThemeTaskbar.Helpers.NativeMethods
     {
         internal delegate bool EnumThreadDelegate(IntPtr hWnd, IntPtr lParam);
 
-        [DllImport("user32.dll", CharSet = CharSet.Auto)]
+        [DllImport("user32.dll", CharSet = CharSet.Unicode)]
         internal static extern bool AppendMenu(IntPtr hMenu, SystemContextMenuItemFlags uFlags, int uIDNewItem, string lpNewItem);
 
         [DllImport("user32.dll", CharSet = CharSet.Auto)]
@@ -50,7 +50,7 @@ namespace SimpleClassicThemeTaskbar.Helpers.NativeMethods
         [DllImport("user32.dll", EntryPoint = "GetClassLongPtr")]
         internal static extern IntPtr GetClassLongPtr64(IntPtr hWnd, int nIndex);
 
-        [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Auto)]
+        [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
         internal static extern int GetClassName(IntPtr hWnd, StringBuilder lpClassName, int nMaxCount);
 
         [DllImport("user32.dll")]
