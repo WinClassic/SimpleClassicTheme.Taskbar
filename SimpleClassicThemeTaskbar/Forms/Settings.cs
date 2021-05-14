@@ -31,10 +31,10 @@ namespace SimpleClassicThemeTaskbar
             Config.TaskbarProgramWidth = (int)taskbarProgramWidth.Value;
             Config.SpaceBetweenTrayIcons = (int)spaceBetweenTrayIcons.Value;
             Config.SpaceBetweenTaskbarIcons = (int)spaceBetweenTaskbarIcons.Value;
-            Config.SpaceBetweenQuickLaunchIcons = (int)spaceBetweenQuickLaunchIcons.Value;
-            Config.StartButtonImage = textStartLocation.Text;
-            Config.StartButtonCustomIcon = radioStartIcon.Checked;
-            Config.StartButtonCustomButton = radioStartButton.Checked;
+            Config.SpaceBetweenQuickLaunchIcons = (int)quickLaunchSpacingNumBox.Value;
+            Config.StartButtonImage = customButtonTextBox.Text;
+            Config.StartButtonCustomIcon = customIconRadioButton.Checked;
+            Config.StartButtonCustomButton = customButtonRadioButton.Checked;
             Config.ProgramGroupCheck = (ProgramGroupCheck)comboBoxGroupingMethod.SelectedIndex;
             string taskbarFilter = "";
             foreach (object f in listBox1.Items)
@@ -59,32 +59,9 @@ namespace SimpleClassicThemeTaskbar
 
         private void button1_Click(object sender, EventArgs e)
         {
-            openFileDialog1.Filter = "Compatible image files|*.jpg;*.jpeg;*.png;*.bmp";
-            if (openFileDialog1.ShowDialog() == DialogResult.OK)
+            customButtonFileDialog.Filter = "";
+            if (customButtonFileDialog.ShowDialog() == DialogResult.OK)
             {
-                Image temp;
-                try
-                {
-                    temp = Image.FromFile(openFileDialog1.FileName);
-                }
-                catch
-                {
-                    _ = MessageBox.Show(this, "Invalid image!");
-                    return;
-                }
-                if (radioStartIcon.Checked && (temp.Width != 16 || temp.Height != 16))
-                {
-                    _ = MessageBox.Show(this, "Image is not 16x16!");
-                    return;
-                }
-                if (radioStartButton.Checked && (temp.Height != 66))
-                {
-                    _ = MessageBox.Show(this, "Image is not 66px high! (3 * 22px)");
-                    return;
-                }
-                textStartLocation.Text = openFileDialog1.FileName;
-                temp.Dispose();
-                startButton1.DummySettings(textStartLocation.Text, radioStartIcon.Checked, radioStartButton.Checked);
             }
         }
 
@@ -125,10 +102,43 @@ namespace SimpleClassicThemeTaskbar
             _ = Process.Start(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\AppData\\Roaming\\Microsoft\\Internet Explorer\\Quick Launch\\");
         }
 
+        private void openFileDialog_FileOk(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            Image temp;
+            try
+            {
+                temp = Image.FromFile(customButtonFileDialog.FileName);
+            }
+            catch
+            {
+                _ = MessageBox.Show(this, "Invalid image!");
+                e.Cancel = true;
+                return;
+            }
+
+            if (customIconRadioButton.Checked && (temp.Width != 16 || temp.Height != 16))
+            {
+                _ = MessageBox.Show(this, "Image is not 16x16!");
+                e.Cancel = true;
+                return;
+            }
+
+            if (customButtonRadioButton.Checked && (temp.Height != 66))
+            {
+                _ = MessageBox.Show(this, "Image is not 66px high! (3 * 22px)");
+                e.Cancel = true;
+                return;
+            }
+
+            customButtonTextBox.Text = customButtonFileDialog.FileName;
+            temp.Dispose();
+            //startButton1.DummySettings(textStartLocation.Text, radioStartIcon.Checked, //radioStartButton.Checked);
+        }
+
         private void RadioStart_CheckedChanged(object sender, EventArgs e)
         {
             if ((sender as RadioButton).Checked)
-                startButton1.DummySettings(textStartLocation.Text, radioStartIcon.Checked, radioStartButton.Checked);
+                startButton.DummySettings(customIconTextBox.Text, customIconRadioButton.Checked, customButtonRadioButton.Checked);
         }
 
         private void Settings_Load(object sender, EventArgs e)
@@ -146,13 +156,13 @@ namespace SimpleClassicThemeTaskbar
             enableSysTrayColorChange.Checked = Config.EnableSystemTrayColorChange;
             showTaskbarOnAllDesktops.Checked = Config.ShowTaskbarOnAllDesktops;
             enableQuickLaunch.Checked = Config.EnableQuickLaunch;
-            radioStartIcon.Checked = Config.StartButtonCustomIcon;
-            radioStartButton.Checked = Config.StartButtonCustomButton;
+            customIconRadioButton.Checked = Config.StartButtonCustomIcon;
+            customButtonRadioButton.Checked = Config.StartButtonCustomButton;
             radioStartDefault.Checked = !Config.StartButtonCustomIcon && !Config.StartButtonCustomButton;
-            textStartLocation.Text = Config.StartButtonImage;
+            customButtonTextBox.Text = Config.StartButtonImage;
 
-            radioStartIcon.CheckedChanged += RadioStart_CheckedChanged;
-            radioStartButton.CheckedChanged += RadioStart_CheckedChanged;
+            customIconRadioButton.CheckedChanged += RadioStart_CheckedChanged;
+            customButtonRadioButton.CheckedChanged += RadioStart_CheckedChanged;
             radioStartDefault.CheckedChanged += RadioStart_CheckedChanged;
 
             if (Config.TaskbarProgramWidth <= taskbarProgramWidth.Maximum)
@@ -170,10 +180,10 @@ namespace SimpleClassicThemeTaskbar
             else
                 spaceBetweenTaskbarIcons.Value = spaceBetweenTaskbarIcons.Maximum;
 
-            if (Config.SpaceBetweenQuickLaunchIcons <= spaceBetweenQuickLaunchIcons.Maximum)
-                spaceBetweenQuickLaunchIcons.Value = Config.SpaceBetweenQuickLaunchIcons;
+            if (Config.SpaceBetweenQuickLaunchIcons <= quickLaunchSpacingNumBox.Maximum)
+                quickLaunchSpacingNumBox.Value = Config.SpaceBetweenQuickLaunchIcons;
             else
-                spaceBetweenQuickLaunchIcons.Value = spaceBetweenQuickLaunchIcons.Maximum;
+                quickLaunchSpacingNumBox.Value = quickLaunchSpacingNumBox.Maximum;
 
             taskbarProgramWidth.Maximum = Screen.PrimaryScreen.Bounds.Width;
             comboBox2.SelectedItem = Config.Language;
@@ -208,38 +218,44 @@ namespace SimpleClassicThemeTaskbar
             //            newImage.SetPixel(x, y, SystemColors.ControlText);
             //    }
             pictureBox1.Image = newImage;
-            if (ApplicationEntryPoint.SCTCompatMode)
-            {
-                pictureBox1.Height = 106;
-                pictureBox3.Height = 121;
-                pictureBox2.Location = new Point(0, 124);
-            }
-
-            Color A = SystemColors.ActiveCaption;
-            Color B = SystemColors.GradientActiveCaption;
-            Bitmap bitmap = new(696, 5);
-            for (int i = 0; i < 348; i++)
-            {
-                int r = A.R + ((B.R - A.R) * i / 348);
-                int g = A.G + ((B.G - A.G) * i / 348);
-                int b = A.B + ((B.B - A.B) * i / 348);
-
-                for (int y = 0; y < 5; y++)
-                    bitmap.SetPixel(i, y, Color.FromArgb(r, g, b));
-
-                for (int y = 0; y < 5; y++)
-                    bitmap.SetPixel(695 - i, y, Color.FromArgb(r, g, b));
-            }
-            if (IntPtr.Size == 8)
-                pictureBox2.Location = new Point(pictureBox2.Location.X + 3, pictureBox2.Location.Y);
-            pictureBox2.Image = bitmap;
+            // if (ApplicationEntryPoint.SCTCompatMode)
+            // {
+            //     pictureBox1.Height = 106;
+            //     pictureBox3.Height = 121;
+            //     pictureBox2.Location = new Point(0, 124);
+            // }
+            //
+            // Color A = SystemColors.ActiveCaption;
+            // Color B = SystemColors.GradientActiveCaption;
+            // Bitmap bitmap = new(696, 5);
+            // for (int i = 0; i < 348; i++)
+            // {
+            //     int r = A.R + ((B.R - A.R) * i / 348);
+            //     int g = A.G + ((B.G - A.G) * i / 348);
+            //     int b = A.B + ((B.B - A.B) * i / 348);
+            //
+            //     for (int y = 0; y < 5; y++)
+            //         bitmap.SetPixel(i, y, Color.FromArgb(r, g, b));
+            //
+            //     for (int y = 0; y < 5; y++)
+            //         bitmap.SetPixel(695 - i, y, Color.FromArgb(r, g, b));
+            // }
+            // if (IntPtr.Size == 8)
+            //     pictureBox2.Location = new Point(pictureBox2.Location.X + 3, pictureBox2.Location.Y);
+            // pictureBox2.Image = bitmap;
 
             _ = UXTheme.SetWindowTheme(Handle, " ", " ");
         }
 
-        private void startButton1_SizeChanged(object sender, EventArgs e)
+        private void settingsTabs_SelectedIndexChanged(object sender, EventArgs e)
         {
-            startButton1.Location = new Point(groupBox1.Width - 7 - startButton1.Width, startButton1.Location.Y);
+            var aboutIndex = settingsTabs.TabPages.IndexOf(tabAbout);
+
+            panelPreview.Visible = settingsTabs.SelectedIndex != aboutIndex;
+        }
+
+        private void settingsTabs_TabIndexChanged(object sender, EventArgs e)
+        {
         }
 
 		private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
