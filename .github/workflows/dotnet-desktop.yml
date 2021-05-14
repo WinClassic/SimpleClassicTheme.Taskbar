@@ -31,4 +31,4 @@ jobs:
       uses: actions/upload-artifact@v2.2.3
       with:
         name: binaries
-        path: './SimpleClassicThemeTaskbar/bin/x64/Release/net5.0-windows/'
+        path: './SimpleClassicThemeTaskbar/bin/x64/Release/net5.0-windows'
