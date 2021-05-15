@@ -52,11 +52,6 @@ namespace SimpleClassicThemeTaskbar.ThemeEngine
 
         public override void DrawStartButton(StartButton startButton, Graphics g)
         {
-            // Define constants
-            const uint DFC_BUTTON = 4;
-            const uint DFCS_BUTTONPUSH = 0x10;
-            const uint DFCS_PUSHED = 512;
-
             try
             {
                 Image icon = Properties.Resources.startIcon95;
@@ -81,8 +76,14 @@ namespace SimpleClassicThemeTaskbar.ThemeEngine
                 rect.Left += 2;
                 rect.Top += 4;
                 rect.Bottom -= 2;
-                uint buttonStyle = !startButton.Pressed ? DFCS_BUTTONPUSH : DFCS_BUTTONPUSH | DFCS_PUSHED;
-                _ = User32.DrawFrameControl(g.GetHdc(), ref rect, DFC_BUTTON, buttonStyle);
+                uint buttonStyle = User32.DFCS_BUTTONPUSH;
+
+                if (startButton.Pressed)
+                {
+                    buttonStyle |= User32.DFCS_PUSHED;
+                }
+
+                _ = User32.DrawFrameControl(g.GetHdc(), ref rect, User32.DFC_BUTTON, buttonStyle);
                 g.ReleaseHdc();
                 g.ResetTransform();
                 bool mouseIsDown = startButton.ClientRectangle.Contains(startButton.PointToClient(Control.MousePosition)) && (Control.MouseButtons & MouseButtons.Left) != 0;
@@ -118,11 +119,6 @@ namespace SimpleClassicThemeTaskbar.ThemeEngine
 
         public override void DrawTaskButton(BaseTaskbarProgram taskbarProgram, Graphics g)
         {
-            // Define constants
-
-            const uint DFC_BUTTON = 4;
-            const uint DFCS_BUTTONPUSH = 0x10;
-            const uint DFCS_PUSHED = 512;
             bool isPushed = taskbarProgram.IsPushed;
             bool isPressed = taskbarProgram.IsPressed;
 
@@ -132,8 +128,14 @@ namespace SimpleClassicThemeTaskbar.ThemeEngine
             newRect.Y += 4;
             newRect.Height -= 6;
             RECT rect = new(newRect);
-            uint buttonStyle = taskbarProgram.IsPushed ? DFCS_BUTTONPUSH | DFCS_PUSHED : DFCS_BUTTONPUSH;
-            _ = User32.DrawFrameControl(g.GetHdc(), ref rect, DFC_BUTTON, buttonStyle);
+            uint buttonStyle = User32.DFCS_BUTTONPUSH;
+
+            if (taskbarProgram.IsPushed)
+            {
+                buttonStyle |= User32.DFCS_PUSHED;
+            }
+
+            _ = User32.DrawFrameControl(g.GetHdc(), ref rect, User32.DFC_BUTTON, buttonStyle);
             g.ReleaseHdc();
             g.ResetTransform();
 
@@ -172,11 +174,6 @@ namespace SimpleClassicThemeTaskbar.ThemeEngine
 
         public override void DrawTaskButtonGroupButton(GroupedTaskbarProgram taskbarProgram, Graphics g)
         {
-            // Define constants
-            const uint DFC_BUTTON = 4;
-            const uint DFCS_BUTTONPUSH = 0x10;
-            const uint DFCS_PUSHED = 512;
-
             // Draw button frame
             Rectangle newRect = taskbarProgram.ClientRectangle;
             newRect.X += taskbarProgram.Width - 19;
@@ -184,8 +181,15 @@ namespace SimpleClassicThemeTaskbar.ThemeEngine
             newRect.Y += 7;
             newRect.Height -= 12;
             RECT rect = new(newRect);
-            uint buttonStyle = !taskbarProgram.GroupWindow.Visible ? DFCS_BUTTONPUSH : DFCS_BUTTONPUSH | DFCS_PUSHED;
-            _ = Shell32.DrawFrameControl(g.GetHdc(), ref rect, DFC_BUTTON, buttonStyle);
+
+            uint buttonStyle = User32.DFCS_BUTTONPUSH;
+
+            if (taskbarProgram.GroupWindow.Visible)
+            {
+                buttonStyle |= User32.DFCS_PUSHED;
+            }
+
+            _ = Shell32.DrawFrameControl(g.GetHdc(), ref rect, User32.DFC_BUTTON, buttonStyle);
             g.ReleaseHdc();
             g.ResetTransform();
 

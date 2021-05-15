@@ -9,6 +9,9 @@ namespace SimpleClassicThemeTaskbar.Helpers.NativeMethods
 {
     internal static class User32
     {
+        internal const uint DFC_BUTTON = 4;
+        internal const uint DFCS_BUTTONPUSH = 0x10;
+        internal const uint DFCS_PUSHED = 512;
         internal const int KEYEVENTF_EXTENDEDKEY = 1;
         internal const int KEYEVENTF_KEYUP = 2;
         internal const uint MF_BITMAP = 0x00000004;
