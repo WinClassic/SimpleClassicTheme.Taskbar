@@ -48,8 +48,9 @@ namespace SimpleClassicThemeTaskbar.Helpers.NativeMethods
         internal const uint WM_RBUTTONDOWN = 0x0204;
         internal const uint WM_RBUTTONUP = 0x0205;
         internal const int WM_SYSCOMMAND = 0x0112;
+		internal const int SW_SHOW = 0x0005;
 
-        internal delegate bool EnumThreadDelegate(IntPtr hWnd, IntPtr lParam);
+		internal delegate bool EnumThreadDelegate(IntPtr hWnd, IntPtr lParam);
 
         internal enum ShellEvents : int
         {

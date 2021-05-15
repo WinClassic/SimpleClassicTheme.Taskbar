@@ -92,7 +92,7 @@ namespace SimpleClassicThemeTaskbar
 
                     if (systemMenu == IntPtr.Zero)
                     {
-                        Logger.Log(LoggerVerbosity.Verbose, "SingleTaskbarProgram", $"Got an empty system menu ({systemMenu.ToInt64()}:X8)");
+                        Logger.Log(LoggerVerbosity.Verbose, "SingleTaskbarProgram", $"Got an empty system menu ({systemMenu.ToInt64():X8})");
                         return;
                     }
 

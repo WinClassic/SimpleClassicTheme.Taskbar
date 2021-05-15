@@ -43,7 +43,7 @@ namespace SimpleClassicThemeTaskbar.Helpers
             if (loggerOff) return;
             if (verbosity <= verb)
             {
-                string toWrite = $"[{verbosity,8}][{source,-16}]: {text}\n";
+                string toWrite = $"[{verbosity,-8}][{source,-24}]: {text}\n";
                 byte[] bytes = Encoding.UTF8.GetBytes(toWrite);
                 fs.Write(bytes, 0, bytes.Length);
                 fs.Flush();
