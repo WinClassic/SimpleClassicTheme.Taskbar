@@ -11,6 +11,20 @@ namespace SimpleClassicThemeTaskbar.Helpers.NativeMethods
     {
         internal delegate bool EnumThreadDelegate(IntPtr hWnd, IntPtr lParam);
 
+        internal enum ShellEvents : int
+        {
+            HSHELL_WINDOWCREATED = 1,
+            HSHELL_WINDOWDESTROYED = 2,
+            HSHELL_ACTIVATESHELLWINDOW = 3,
+            HSHELL_WINDOWACTIVATED = 4,
+            HSHELL_GETMINRECT = 5,
+            HSHELL_REDRAW = 6,
+            HSHELL_TASKMAN = 7,
+            HSHELL_LANGUAGE = 8,
+            HSHELL_ACCESSIBILITYSTATE = 11,
+            HSHELL_APPCOMMAND = 12
+        }
+
         [DllImport("user32.dll", CharSet = CharSet.Unicode)]
         internal static extern bool AppendMenu(IntPtr hMenu, SystemContextMenuItemFlags uFlags, int uIDNewItem, string lpNewItem);
 
@@ -25,6 +39,9 @@ namespace SimpleClassicThemeTaskbar.Helpers.NativeMethods
 
         [DllImport("user32.dll")]
         internal static extern bool DeleteMenu(IntPtr hMenu, int uPosition, uint uFlags);
+
+        [DllImport("user32", CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true)]
+        internal static extern int DeregisterShellHookWindow(IntPtr hWnd);
 
         [DllImport("user32.dll")]
         internal static extern int DrawFrameControl(IntPtr hdc, ref RECT lpRect, uint un1, uint un2);
@@ -68,6 +85,12 @@ namespace SimpleClassicThemeTaskbar.Helpers.NativeMethods
         [DllImport("user32.dll")]
         internal static extern bool GetWindowInfo(IntPtr hWnd, out WINDOWINFO pwi);
 
+        [DllImport("user32", EntryPoint = "GetWindowTextA", CharSet = CharSet.Unicode, SetLastError = true, ExactSpelling = true)]
+        internal static extern int GetWindowText(IntPtr hwnd, System.Text.StringBuilder lpString, int cch);
+
+        [DllImport("user32", EntryPoint = "GetWindowTextLengthA", CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true)]
+        internal static extern int GetWindowTextLength(IntPtr hwnd);
+
         [DllImport("user32.dll", CharSet = CharSet.Unicode)]
         internal static extern bool GetWindowTextW(IntPtr hWnd, StringBuilder lpString, int nMaxCount);
 
@@ -86,6 +109,12 @@ namespace SimpleClassicThemeTaskbar.Helpers.NativeMethods
 
         [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Auto)]
         internal static extern bool PostMessage(IntPtr hWnd, uint Msg, uint wParam, uint lParam);
+
+        [DllImport("user32", CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true)]
+        internal static extern int RegisterShellHookWindow(IntPtr hWnd);
+
+        [DllImport("user32.dll", EntryPoint = "RegisterWindowMessageA", CharSet = CharSet.Unicode, SetLastError = true, ExactSpelling = true)]
+        internal static extern int RegisterWindowMessage(string lpString);
 
         [DllImport("user32.dll", CharSet = CharSet.Auto)]
         internal static extern IntPtr SendMessage(IntPtr hWnd, int Msg, IntPtr wParam, IntPtr lParam);
