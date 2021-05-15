@@ -1,4 +1,5 @@
 ﻿using SimpleClassicThemeTaskbar.Forms;
+using SimpleClassicThemeTaskbar.Helpers;
 using SimpleClassicThemeTaskbar.Helpers.NativeMethods;
 
 using System;
@@ -76,63 +77,73 @@ namespace SimpleClassicThemeTaskbar
 
         public override void OnClick(object sender, MouseEventArgs e)
         {
+            ApplicationEntryPoint.ErrorSource = this;
+            controlState = "handling mouse click";
+
             if (e.Button == MouseButtons.Right)
             {
                 if (ModifierKeys == (Keys.Control | Keys.Shift | Keys.Alt))
                 {
                     new IconTest(Window).Show();
-                    return;
                 }
+                else
+                {
+                    var systemMenu = User32.GetSystemMenu(Window.Handle, false);
 
-                var systemMenu = User32.GetSystemMenu(Window.Handle, false);
+                    if (systemMenu == IntPtr.Zero)
+                    {
+                        Logger.Log(LoggerVerbosity.Verbose, "SingleTaskbarProgram", $"Got an empty system menu ({systemMenu.ToInt64()}:X8)");
+                        return;
+                    }
 
-                // Inserting menu items is bugged sadly.
+                    // Inserting menu items is bugged sadly.
+                    // User32.AppendMenu(systemMenu, User32.MF_SEPARATOR, 0x0000, IntPtr.Zero);
+                    // User32.AppendMenu(systemMenu, User32.MF_STRING, 0x1337, "Icon Test");
 
-                // User32.AppendMenu(systemMenu, User32.MF_SEPARATOR, 0x0000, IntPtr.Zero);
-                // User32.AppendMenu(systemMenu, User32.MF_STRING, 0x1337, "Icon Test");
+                    // HACK: preserving the pressed down state when the menu is open
+                    ActiveWindow = true;
 
-                var screenLocation = PointToScreen(e.Location);
-                var cmd = User32.TrackPopupMenuEx(systemMenu, User32.TPM_RETURNCMD, screenLocation.X, screenLocation.Y, this.Handle, IntPtr.Zero);
+                    _ = User32.ShowWindow(Window.Handle, User32.SW_SHOW);
+                    _ = User32.SetForegroundWindow(Window.Handle);
 
-                // if (cmd == 0x1337)
-                // {
-                //
-                // }
-                // else
-                // {
-                User32.SendMessage(Window.Handle, User32.WM_SYSCOMMAND, cmd, 0);
-                // }
-            }
+                    var screenLocation = PointToScreen(e.Location);
+                    var cmd = User32.TrackPopupMenuEx(systemMenu, User32.TPM_RETURNCMD, screenLocation.X, screenLocation.Y, this.Handle, IntPtr.Zero);
 
-            ApplicationEntryPoint.ErrorSource = this;
-            controlState = "handling mouse click";
-            if (IsMoving)
-            {
-                IsMoving = false;
-            }
-            else if (ActiveWindow)
-            {
-                _ = User32.ShowWindow(Window.Handle, 6);
+                    ActiveWindow = false;
+
+                    User32.SendMessage(Window.Handle, User32.WM_SYSCOMMAND, cmd, 0);
+                }
             }
             else
             {
-                if ((Window.WindowInfo.dwStyle & 0x20000000) > 0)
-                    _ = User32.ShowWindow(Window.Handle, 9);
-
-                _ = User32.SetForegroundWindow(Window.Handle);
-
-                if (Parent is Taskbar)
+                if (IsMoving)
                 {
-                    foreach (Control control in Parent.Controls)
+                    IsMoving = false;
+                }
+                else if (ActiveWindow)
+                {
+                    _ = User32.ShowWindow(Window.Handle, 6);
+                }
+                else
+                {
+                    if ((Window.WindowInfo.dwStyle & 0x20000000) > 0)
+                        _ = User32.ShowWindow(Window.Handle, 9);
+
+                    _ = User32.SetForegroundWindow(Window.Handle);
+
+                    if (Parent is Taskbar)
                     {
-                        if (control is TaskbarProgram program)
+                        foreach (Control control in Parent.Controls)
                         {
-                            program.ActiveWindow = false;
+                            if (control is TaskbarProgram program)
+                            {
+                                program.ActiveWindow = false;
+                            }
                         }
                     }
-                }
 
-                ActiveWindow = true;
+                    ActiveWindow = true;
+                }
             }
         }
 
