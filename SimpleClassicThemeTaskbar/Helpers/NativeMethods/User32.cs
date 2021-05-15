@@ -143,6 +143,9 @@ namespace SimpleClassicThemeTaskbar.Helpers.NativeMethods
         [DllImport("user32.dll", SetLastError = true)]
         internal static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int X, int Y, int cx, int cy, uint uFlags);
 
+        [DllImport("user32.dll", SetLastError = true)]
+        internal static extern bool SetWindowTextW(IntPtr hWnd, string lpString);
+
         [DllImport("user32.dll")]
         [return: MarshalAs(UnmanagedType.Bool)]
         internal static extern bool ShowScrollBar(IntPtr hWnd, int wBar, bool bShow);

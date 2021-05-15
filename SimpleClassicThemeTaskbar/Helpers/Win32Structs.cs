@@ -28,8 +28,6 @@ namespace SimpleClassicThemeTaskbar
     {
         public IntPtr Handle;
         public WINDOWINFO WindowInfo;
-        private string className;
-        private string title;
 
         public Window(IntPtr handle) : this()
         {
@@ -41,14 +39,9 @@ namespace SimpleClassicThemeTaskbar
         {
             get
             {
-                if (className == null)
-                {
-                    var sb = new StringBuilder(100);
-                    _ = User32.GetClassName(Handle, sb, sb.Capacity - 1);
-                    className = sb.ToString();
-                }
-
-                return className;
+                var sb = new StringBuilder(100);
+                _ = User32.GetClassName(Handle, sb, sb.Capacity - 1);
+                return sb.ToString();
             }
         }
 
@@ -56,14 +49,13 @@ namespace SimpleClassicThemeTaskbar
         {
             get
             {
-                if (title == null)
-                {
-                    var sb = new StringBuilder(100);
-                    _ = User32.GetWindowTextW(Handle, sb, 100);
-                    title = sb.ToString();
-                }
-
-                return title;
+                var sb = new StringBuilder(100);
+                _ = User32.GetWindowTextW(Handle, sb, 100);
+                return sb.ToString();
+            }
+            set
+            {
+                User32.SetWindowTextW(Handle, value);
             }
         }
     }

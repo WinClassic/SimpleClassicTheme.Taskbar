@@ -539,8 +539,7 @@ namespace SimpleClassicThemeTaskbar
                     //Create the button
                     BaseTaskbarProgram button = new SingleTaskbarProgram
                     {
-                        Window = z,
-                        Title = z.Title
+                        Window = z
                     };
                     button.MouseDown += Taskbar_IconDown;
                     button.Height = Height;
@@ -889,7 +888,6 @@ namespace SimpleClassicThemeTaskbar
                 }
                 _ = icon.IsActiveWindow(ForegroundWindow);
                 icon.Location = new Point(x, 0);
-                icon.Title = icon.Window.Title;
                 icon.Icon = GetAppIcon(icon.Window);
                 if (!Controls.Contains(icon))
                 {
