@@ -31,26 +31,14 @@ namespace SimpleClassicThemeTaskbar
 
         public int mouseOriginalX = 0;
 
-        private Range taskArea;
-
-        private int taskIconWidth;
-
         public bool NeverShow = false;
-
         public bool Primary = true;
-
         public bool selfClose = false;
-
         private static readonly CodeBridge cppCode = new();
-
         private readonly List<string> BlacklistedClassNames = new();
-
         private readonly List<string> BlacklistedProcessNames = new();
-
         private readonly List<string> BlacklistedWindowNames = new();
-
         private readonly Stopwatch sw = new();
-
         private readonly List<(string, TimeSpan)> times = new();
 
         //Window handle list
@@ -64,6 +52,9 @@ namespace SimpleClassicThemeTaskbar
 
         private List<BaseTaskbarProgram> icons = new();
         private bool LookingForTray = false;
+        private Range taskArea;
+
+        private int taskIconWidth;
         private bool watchLogic = true;
 
         private bool watchUI = true;
@@ -335,6 +326,51 @@ namespace SimpleClassicThemeTaskbar
             }
         }
 
+        private void Taskbar_IconDown(object sender, MouseEventArgs e)
+        {
+            if (((Control)sender).Parent == this)
+            {
+                heldDownButton = (BaseTaskbarProgram)sender;
+                heldDownOriginalX = heldDownButton.Location.X;
+                mouseOriginalX = Cursor.Position.X;
+            }
+        }
+
+        private void Taskbar_IconMove(object sender, MouseEventArgs e)
+        {
+            //See if we're moving, if so calculate new position, if we finished calculate new position
+            if (heldDownButton != null)
+            {
+                if (Math.Abs(mouseOriginalX - Cursor.Position.X) > 5)
+                    heldDownButton.IsMoving = true;
+
+                Point p = new(heldDownOriginalX + (Cursor.Position.X - mouseOriginalX), heldDownButton.Location.Y);
+                heldDownButton.Location = new Point(Math.Max(taskArea.Start.Value, Math.Min(p.X, taskArea.End.Value)), p.Y);
+                int newIndex = (taskArea.Start.Value - heldDownButton.Location.X - ((taskIconWidth + Config.SpaceBetweenTaskbarIcons) / 2)) / (taskIconWidth + Config.SpaceBetweenTaskbarIcons) * -1;
+                if (newIndex < 0) newIndex = 0;
+                if (newIndex != icons.IndexOf(heldDownButton))
+                {
+                    _ = icons.Remove(heldDownButton);
+                    icons.Insert(Math.Min(icons.Count, newIndex), heldDownButton);
+                }
+
+                if ((MouseButtons & MouseButtons.Left) == 0)
+                    heldDownButton = null;
+
+                int x = taskArea.Start.Value;
+                foreach (BaseTaskbarProgram icon in icons)
+                {
+                    if (icon == heldDownButton)
+                    {
+                        x += icon.Width + Config.SpaceBetweenTaskbarIcons;
+                        continue;
+                    }
+                    icon.Location = new Point(x, 0);
+                    x += icon.Width + Config.SpaceBetweenTaskbarIcons;
+                }
+            }
+        }
+
         private void Taskbar_MouseClick(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Middle)
@@ -420,57 +456,12 @@ namespace SimpleClassicThemeTaskbar
             }
             else if (e.Button == MouseButtons.Left && e.Location.X == Width - 1)
             {
-            }
-        }
-
-        private void Taskbar_IconDown(object sender, MouseEventArgs e)
-        {
-            if (((Control)sender).Parent == this)
-            {
-                heldDownButton = (BaseTaskbarProgram)sender;
-                heldDownOriginalX = heldDownButton.Location.X;
-                mouseOriginalX = Cursor.Position.X;
-            }
-        }
-
-        private void Taskbar_IconMove(object sender, MouseEventArgs e)
-        {
-            //See if we're moving, if so calculate new position, if we finished calculate new position
-            if (heldDownButton != null)
-            {
-                if (Math.Abs(mouseOriginalX - Cursor.Position.X) > 5)
-                    heldDownButton.IsMoving = true;
-
-                Point p = new(heldDownOriginalX + (Cursor.Position.X - mouseOriginalX), heldDownButton.Location.Y);
-                heldDownButton.Location = new Point(Math.Max(taskArea.Start.Value, Math.Min(p.X, taskArea.End.Value)), p.Y);
-                int newIndex = (taskArea.Start.Value - heldDownButton.Location.X - ((taskIconWidth + Config.SpaceBetweenTaskbarIcons) / 2)) / (taskIconWidth + Config.SpaceBetweenTaskbarIcons) * -1;
-                if (newIndex < 0) newIndex = 0;
-                if (newIndex != icons.IndexOf(heldDownButton))
-                {
-                    _ = icons.Remove(heldDownButton);
-                    icons.Insert(Math.Min(icons.Count, newIndex), heldDownButton);
-                }
-
-                if ((MouseButtons & MouseButtons.Left) == 0)
-                    heldDownButton = null;
-
-                int x = taskArea.Start.Value;
-                foreach (BaseTaskbarProgram icon in icons)
-                {
-                    if (icon == heldDownButton)
-                    {
-                        x += icon.Width + Config.SpaceBetweenTaskbarIcons;
-                        continue;
-                    }
-                    icon.Location = new Point(x, 0);
-                    x += icon.Width + Config.SpaceBetweenTaskbarIcons;
-                }
                 Keyboard.KeyPress(Keys.LWin, Keys.D);
             }
         }
 
         private void Taskbar_MouseUp(object sender, MouseEventArgs e)
-		{
+        {
             heldDownButton = null;
         }
 
