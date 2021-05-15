@@ -224,17 +224,10 @@ namespace SimpleClassicThemeTaskbar
                 return false;
 
             //If it's any of these odd cases: don't show it
-            if (wi.ClassName == "Shell_TrayWnd" ||                          //Windows taskbar
-                wi.ClassName == "WorkerW" ||                                //Random Windows thing
-                wi.ClassName == "Progman" ||                                //The program manager
-                wi.ClassName == "ThumbnailDeviceHelperWnd" ||               //UWP
-                wi.ClassName == "Windows.UI.Core.CoreWindow" ||             //Empty UWP apps
-                wi.ClassName == "DV2ControlHost" ||                         //Windows startmenu, if open
-                (wi.ClassName == "Button" && wi.Title == "Start") ||        //Windows startmenu-button.
-                wi.ClassName == "MsgrIMEWindowClass" ||                     //Live messenger's notifybox i think
-                wi.ClassName == "SysShadow" ||                              //Live messenger's shadow-hack
-                wi.ClassName.StartsWith("WMP9MediaBarFlyout") ||            //WMP's "now playing" taskbar-toolbar
-                wi.Title.Length == 0)                                       //Window without a name
+            if (string.IsNullOrWhiteSpace(wi.Title) ||                  // Window without a name
+                Constants.HiddenClassNames.Contains(wi.ClassName) ||    // Other windows
+                (wi.ClassName == "Button" && wi.Title == "Start") ||    // Windows startmenu-button.
+                wi.ClassName.StartsWith("WMP9MediaBarFlyout"))          // WMP's "now playing" taskbar-toolbar
                 return false;
 
             //UWP app
