@@ -78,8 +78,30 @@ namespace SimpleClassicThemeTaskbar
         {
             if (e.Button == MouseButtons.Right)
             {
-                new IconTest(Window).Show();
-                return;
+                if (ModifierKeys == (Keys.Control | Keys.Shift | Keys.Alt))
+                {
+                    new IconTest(Window).Show();
+                    return;
+                }
+
+                var systemMenu = User32.GetSystemMenu(Window.Handle, false);
+
+                // Inserting menu items is bugged sadly.
+
+                // User32.AppendMenu(systemMenu, User32.MF_SEPARATOR, 0x0000, IntPtr.Zero);
+                // User32.AppendMenu(systemMenu, User32.MF_STRING, 0x1337, "Icon Test");
+
+                var screenLocation = PointToScreen(e.Location);
+                var cmd = User32.TrackPopupMenuEx(systemMenu, User32.TPM_RETURNCMD, screenLocation.X, screenLocation.Y, this.Handle, IntPtr.Zero);
+
+                // if (cmd == 0x1337)
+                // {
+                //
+                // }
+                // else
+                // {
+                User32.SendMessage(Window.Handle, User32.WM_SYSCOMMAND, cmd, 0);
+                // }
             }
 
             ApplicationEntryPoint.ErrorSource = this;
@@ -99,13 +121,13 @@ namespace SimpleClassicThemeTaskbar
 
                 _ = User32.SetForegroundWindow(Window.Handle);
 
-                if (Parent != null && Parent is Taskbar)
+                if (Parent is Taskbar)
                 {
-                    foreach (Control d in Parent.Controls)
+                    foreach (Control control in Parent.Controls)
                     {
-                        if (d is TaskbarProgram b)
+                        if (control is TaskbarProgram program)
                         {
-                            b.ActiveWindow = false;
+                            program.ActiveWindow = false;
                         }
                     }
                 }

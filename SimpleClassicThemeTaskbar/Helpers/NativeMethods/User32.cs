@@ -47,6 +47,7 @@ namespace SimpleClassicThemeTaskbar.Helpers.NativeMethods
         internal const uint WM_LBUTTONUP = 0x0202;
         internal const uint WM_RBUTTONDOWN = 0x0204;
         internal const uint WM_RBUTTONUP = 0x0205;
+        internal const int WM_SYSCOMMAND = 0x0112;
 
         internal delegate bool EnumThreadDelegate(IntPtr hWnd, IntPtr lParam);
 
@@ -117,6 +118,9 @@ namespace SimpleClassicThemeTaskbar.Helpers.NativeMethods
 
         [DllImport("user32.dll")]
         internal static extern IntPtr GetLastActivePopup(IntPtr hWnd);
+
+        [DllImport("user32.dll")]
+        internal static extern IntPtr GetSystemMenu(IntPtr hWnd, bool bRevert);
 
         [DllImport("user32.dll")]
         internal static extern IntPtr GetWindow(IntPtr hWnd, uint gwFlags);
