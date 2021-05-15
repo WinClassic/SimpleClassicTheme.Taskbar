@@ -33,11 +33,13 @@ namespace SimpleClassicThemeTaskbar.UIElements.StartButton
 
         public bool WasPressed = false;
 
+        private string buttonImageFile = "";
+
         // private readonly DateTime LastPress = DateTime.Now;
         private bool CustomButton = false;
 
         private bool CustomIcon = false;
-        private string imageFile = "";
+        private string iconImageFile = "";
         private bool OpeningStartMenu = false;
 
         public StartButton()
@@ -50,16 +52,16 @@ namespace SimpleClassicThemeTaskbar.UIElements.StartButton
 
             Do3DBorder = true;
 
-            imageFile = Config.StartButtonImage;
-            CustomIcon = Config.StartButtonCustomIcon;
-            CustomButton = Config.StartButtonCustomButton;
+            buttonImageFile = Config.StartButtonImage;
+            iconImageFile = Config.StartButtonIconImage;
+            Appearance = Config.StartButtonAppearance;
         }
 
         [Category("Appearance")]
         [DefaultValue(StartButtonAppearance.Default)]
         public StartButtonAppearance Appearance { get; set; } = StartButtonAppearance.Default;
 
-        [Description("Defines the style to be used when drawing ")]
+        [Description("Defines the style to be used when drawing")]
         [Category("Appearance")]
         public new Border3DStyle BorderStyle
         {
@@ -88,11 +90,11 @@ namespace SimpleClassicThemeTaskbar.UIElements.StartButton
             }
         }
 
-        public void DummySettings(string image, bool customIcon, bool customButton)
+        public void DummySettings(string buttonImagePath, string iconImagePath, StartButtonAppearance mode)
         {
-            imageFile = image;
-            CustomIcon = customIcon;
-            CustomButton = customButton;
+            buttonImageFile = buttonImagePath;
+            iconImageFile = iconImagePath;
+            Appearance = mode;
 
             Invalidate();
         }
@@ -114,6 +116,7 @@ namespace SimpleClassicThemeTaskbar.UIElements.StartButton
                 WasPressed = false;
                 return;
             }
+
             // HWND wnd = User32.FindWindowW("Shell_TrayWnd", "");
             if (e.Button == MouseButtons.Right)
             {
@@ -175,99 +178,101 @@ namespace SimpleClassicThemeTaskbar.UIElements.StartButton
             Config.Renderer.DrawStartButton(this, e.Graphics);
             return;
 
-            e.Graphics.TextRenderingHint = TextRenderingHint.SingleBitPerPixelGridFit;
-
-            Image temp = null;
-            if (!CustomIcon && !CustomButton)
-            {
-                temp = Properties.Resources.startIcon95;
-            }
-            else if (CustomIcon)
-            {
-                try
-                {
-                    temp = Image.FromFile(imageFile);
-                }
-                catch
-                {
-                    e.Graphics.DrawString("ERROR", new Font("Tahoma", 8F, FontStyle.Bold), Brushes.Black, new PointF(0F, 0F));
-                    return;
-                }
-                if (temp.Width != 16 || temp.Height != 16)
-                {
-                    temp.Dispose();
-                    temp = Properties.Resources.startIcon95;
-                }
-            }
-            else if (CustomButton)
-            {
-                try
-                {
-                    temp = Image.FromFile(imageFile);
-                }
-                catch
-                {
-                    e.Graphics.DrawString("ERROR", new Font("Tahoma", 8F, FontStyle.Bold), Brushes.Black, new PointF(0F, 0F));
-                    return;
-                }
-                if (temp.Height != 66)
-                {
-                    e.Graphics.DrawString("ERROR", new Font("Tahoma", 8F, FontStyle.Bold), Brushes.Black, new PointF(0F, 0F));
-                    temp.Dispose();
-                    return;
-                }
-                if (Width != temp.Width)
-                {
-                    Width = temp.Width;
-                    Invalidate();
-                }
-                e.Graphics.DrawImage(temp, new Rectangle(0, 0, temp.Width, 22), new Rectangle(0, pressed ? 44 : 0, temp.Width, 22), GraphicsUnit.Pixel);
-                return;
-            }
-
-            if (Width != 55)
-            {
-                Width = 55;
-                Invalidate();
-            }
-
-            if (Do3DBorder)
-            {
-                if (isButton)
-                {
-                    RECT rect = new(ClientRectangle);
-                    uint buttonStyle = style == Border3DStyle.Raised ? DFCS_BUTTONPUSH : DFCS_BUTTONPUSH | DFCS_PUSHED;
-                    _ = User32.DrawFrameControl(e.Graphics.GetHdc(), ref rect, DFC_BUTTON, buttonStyle);
-                    e.Graphics.ReleaseHdc();
-                }
-                else
-                {
-                    ControlPaint.DrawBorder3D(e.Graphics, ClientRectangle, style);
-                }
-            }
-            else
-            {
-                ButtonBorderStyle bStyle =
-                    style == Border3DStyle.Raised ? ButtonBorderStyle.Outset : ButtonBorderStyle.Inset;
-                ControlPaint.DrawBorder(e.Graphics, ClientRectangle,
-                    SystemColors.Control, 1, bStyle,
-                    SystemColors.Control, 1, bStyle,
-                    SystemColors.Control, 2, bStyle,
-                    SystemColors.Control, 2, bStyle);
-            }
-            if (BackgroundImage != null)
-            {
-                using (TextureBrush brush = new(BackgroundImage, WrapMode.Tile))
-                {
-                    e.Graphics.FillRectangle(brush, Rectangle.Inflate(ClientRectangle, -2, -2));
-                }
-            }
-
-            bool mouseIsDown = ClientRectangle.Contains(PointToClient(MousePosition)) && (MouseButtons & MouseButtons.Left) != 0;
-            e.Graphics.DrawImage(temp ?? Properties.Resources.startIcon95, mouseIsDown ? new Point(5, 4) : new Point(4, 3));
-            e.Graphics.DrawString("Start", new Font("Tahoma", 8F, FontStyle.Bold), SystemBrushes.ControlText, mouseIsDown ? new PointF(21F, 5F) : new PointF(20F, 4F));
-
-            temp.Dispose();
+            // e.Graphics.TextRenderingHint = TextRenderingHint.SingleBitPerPixelGridFit;
+            //
+            // Image temp = null;
+            //
+            // switch (Appearance)
+            // {
+            //     case StartButtonAppearance.Default:
+            //         temp = Properties.Resources.startIcon95;
+            //         break;
+            //
+            //     case StartButtonAppearance.CustomIcon:
+            //         try
+            //         {
+            //             temp = Image.FromFile(iconImageFile);
+            //         }
+            //         catch
+            //         {
+            //             e.Graphics.DrawString("ERROR", new Font("Tahoma", 8F, FontStyle.Bold), Brushes.Black, new PointF(0F, 0F));
+            //             return;
+            //         }
+            //         if (temp.Width != 16 || temp.Height != 16)
+            //         {
+            //             temp.Dispose();
+            //             temp = Properties.Resources.startIcon95;
+            //         }
+            //         break;
+            //
+            //     case StartButtonAppearance.CustomButton:
+            //         try
+            //         {
+            //             temp = Image.FromFile(imageFile);
+            //         }
+            //         catch
+            //         {
+            //             e.Graphics.DrawString("ERROR", new Font("Tahoma", 8F, FontStyle.Bold), Brushes.Black, new PointF(0F, 0F));
+            //             return;
+            //         }
+            //         if (temp.Height != 66)
+            //         {
+            //             e.Graphics.DrawString("ERROR", new Font("Tahoma", 8F, FontStyle.Bold), Brushes.Black, new PointF(0F, 0F));
+            //             temp.Dispose();
+            //             return;
+            //         }
+            //         if (Width != temp.Width)
+            //         {
+            //             Width = temp.Width;
+            //             Invalidate();
+            //         }
+            //         e.Graphics.DrawImage(temp, new Rectangle(0, 0, temp.Width, 22), new Rectangle(0, pressed ? 44 : 0, temp.Width, 22),  GraphicsUnit.Pixel);
+            //         return;
+            // }
+            //
+            // if (Width != 55)
+            // {
+            //     Width = 55;
+            //     Invalidate();
+            // }
+            //
+            // if (Do3DBorder)
+            // {
+            //     if (isButton)
+            //     {
+            //         RECT rect = new(ClientRectangle);
+            //         uint buttonStyle = style == Border3DStyle.Raised ? DFCS_BUTTONPUSH : DFCS_BUTTONPUSH | DFCS_PUSHED;
+            //         _ = User32.DrawFrameControl(e.Graphics.GetHdc(), ref rect, DFC_BUTTON, buttonStyle);
+            //         e.Graphics.ReleaseHdc();
+            //     }
+            //     else
+            //     {
+            //         ControlPaint.DrawBorder3D(e.Graphics, ClientRectangle, style);
+            //     }
+            // }
+            // else
+            // {
+            //     ButtonBorderStyle bStyle =
+            //         style == Border3DStyle.Raised ? ButtonBorderStyle.Outset : ButtonBorderStyle.Inset;
+            //     ControlPaint.DrawBorder(e.Graphics, ClientRectangle,
+            //         SystemColors.Control, 1, bStyle,
+            //         SystemColors.Control, 1, bStyle,
+            //         SystemColors.Control, 2, bStyle,
+            //         SystemColors.Control, 2, bStyle);
+            // }
+            // if (BackgroundImage != null)
+            // {
+            //     using (TextureBrush brush = new(BackgroundImage, WrapMode.Tile))
+            //     {
+            //         e.Graphics.FillRectangle(brush, Rectangle.Inflate(ClientRectangle, -2, -2));
+            //     }
+            // }
+            //
+            // bool mouseIsDown = ClientRectangle.Contains(PointToClient(MousePosition)) && (MouseButtons & MouseButtons.Left) != 0;
+            // e.Graphics.DrawImage(temp ?? Properties.Resources.startIcon95, mouseIsDown ? new Point(5, 4) : new Point(4, 3));
+            // e.Graphics.DrawString("Start", new Font("Tahoma", 8F, FontStyle.Bold), SystemBrushes.ControlText, mouseIsDown ? new PointF(21F, 5F) :  new PointF(20F, 4F));
+            //
+            // temp.Dispose();
         }
 
         private void StartButton_Click(object sender, EventArgs e)

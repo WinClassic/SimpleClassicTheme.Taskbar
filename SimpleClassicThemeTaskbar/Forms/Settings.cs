@@ -33,8 +33,10 @@ namespace SimpleClassicThemeTaskbar
             Config.SpaceBetweenTaskbarIcons = (int)spaceBetweenTaskbarIcons.Value;
             Config.SpaceBetweenQuickLaunchIcons = (int)quickLaunchSpacingNumBox.Value;
             Config.StartButtonImage = customButtonTextBox.Text;
-            Config.StartButtonCustomIcon = customIconRadioButton.Checked;
-            Config.StartButtonCustomButton = customButtonRadioButton.Checked;
+            Config.StartButtonIconImage = customIconTextBox.Text;
+
+            Config.StartButtonAppearance = GetCurrentStartButtonAppearance();
+
             Config.ProgramGroupCheck = (ProgramGroupCheck)comboBoxGroupingMethod.SelectedIndex;
             string taskbarFilter = "";
             foreach (object f in listBox1.Items)
@@ -136,12 +138,35 @@ namespace SimpleClassicThemeTaskbar
             }
         }
 
-        private void label3_Click(object sender, EventArgs e)
+        private void CustomButtonFileDialog_FileOk(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            _ = Process.Start(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\AppData\\Roaming\\Microsoft\\Internet Explorer\\Quick Launch\\");
+            Image temp;
+
+            try
+            {
+                temp = Image.FromFile(customButtonFileDialog.FileName);
+            }
+            catch
+            {
+                _ = MessageBox.Show(this, "Invalid image!");
+                e.Cancel = true;
+                return;
+            }
+
+            if (temp.Height != 66)
+            {
+                _ = MessageBox.Show(this, "Image is not 66px high! (3 * 22px)");
+                e.Cancel = true;
+                return;
+            }
+
+            customButtonTextBox.Text = customButtonFileDialog.FileName;
+            temp.Dispose();
+
+            UpdateStartButton();
         }
 
-        private void openFileDialog_FileOk(object sender, System.ComponentModel.CancelEventArgs e)
+        private void customIconFileDialog_FileOk(object sender, System.ComponentModel.CancelEventArgs e)
         {
             Image temp;
             try
@@ -155,23 +180,37 @@ namespace SimpleClassicThemeTaskbar
                 return;
             }
 
-            if (customIconRadioButton.Checked && (temp.Width != 16 || temp.Height != 16))
+            if (temp.Width != 16 || temp.Height != 16)
             {
                 _ = MessageBox.Show(this, "Image is not 16x16!");
                 e.Cancel = true;
                 return;
             }
+        }
 
-            if (customButtonRadioButton.Checked && (temp.Height != 66))
+        private void enableQuickLaunchCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            quickLaunchOptionsPanel.Enabled = enableQuickLaunchCheckBox.Checked;
+        }
+
+        private StartButtonAppearance GetCurrentStartButtonAppearance()
+        {
+            if (radioStartDefault.Checked)
             {
-                _ = MessageBox.Show(this, "Image is not 66px high! (3 * 22px)");
-                e.Cancel = true;
-                return;
+                return StartButtonAppearance.Default;
             }
-
-            customButtonTextBox.Text = customButtonFileDialog.FileName;
-            temp.Dispose();
-            //startButton1.DummySettings(textStartLocation.Text, radioStartIcon.Checked, //radioStartButton.Checked);
+            else if (customIconRadioButton.Checked)
+            {
+                return StartButtonAppearance.CustomIcon;
+            }
+            else if (customButtonRadioButton.Checked)
+            {
+                return StartButtonAppearance.CustomButton;
+            }
+            else
+            {
+                throw new InvalidOperationException();
+            }
         }
 
         private void QuickLaunchLinkLabel_Click(object sender, EventArgs e)
@@ -194,14 +233,12 @@ namespace SimpleClassicThemeTaskbar
             enableSysTrayColorChange.Checked = Config.EnableSystemTrayColorChange;
             showTaskbarOnAllDesktops.Checked = Config.ShowTaskbarOnAllDesktops;
             enableQuickLaunchCheckBox.Checked = Config.EnableQuickLaunch;
-            customIconRadioButton.Checked = Config.StartButtonCustomIcon;
-            customButtonRadioButton.Checked = Config.StartButtonCustomButton;
-            radioStartDefault.Checked = !Config.StartButtonCustomIcon && !Config.StartButtonCustomButton;
-            customButtonTextBox.Text = Config.StartButtonImage;
 
-            customIconRadioButton.CheckedChanged += RadioStart_CheckedChanged;
-            customButtonRadioButton.CheckedChanged += RadioStart_CheckedChanged;
-            radioStartDefault.CheckedChanged += RadioStart_CheckedChanged;
+            // Start button
+            customIconRadioButton.Checked = Config.StartButtonAppearance == StartButtonAppearance.CustomIcon;
+            customButtonRadioButton.Checked = Config.StartButtonAppearance == StartButtonAppearance.CustomButton;
+            radioStartDefault.Checked = Config.StartButtonAppearance == StartButtonAppearance.Default;
+            customButtonTextBox.Text = Config.StartButtonImage;
 
             if (Config.TaskbarProgramWidth <= taskbarProgramWidth.Maximum)
                 taskbarProgramWidth.Value = Config.TaskbarProgramWidth;
@@ -257,7 +294,7 @@ namespace SimpleClassicThemeTaskbar
             //        if (c.R == 0x00 && c.G == 0x00 && c.B == 0x00 && c.A != 0x00)
             //            newImage.SetPixel(x, y, SystemColors.ControlText);
             //    }
-            pictureBox1.Image = newImage;
+            bannerPictureBox.Image = newImage;
             // if (ApplicationEntryPoint.SCTCompatMode)
             // {
             //     pictureBox1.Height = 106;
@@ -289,13 +326,23 @@ namespace SimpleClassicThemeTaskbar
 
         private void settingsTabs_SelectedIndexChanged(object sender, EventArgs e)
         {
-            var aboutIndex = settingsTabs.TabPages.IndexOf(tabAbout);
+            var aboutIndex = tabControl.TabPages.IndexOf(tabAbout);
 
-            panelPreview.Visible = settingsTabs.SelectedIndex != aboutIndex;
+            panelPreview.Visible = tabControl.SelectedIndex != aboutIndex;
         }
 
-        private void settingsTabs_TabIndexChanged(object sender, EventArgs e)
+        private void StartButtonRadioButton_CheckedChanged(object sender, EventArgs e)
         {
+            customButtonTextBox.Enabled = customButtonBrowseButton.Enabled = customButtonRadioButton.Checked;
+            customIconTextBox.Enabled = customIconBrowseButton.Enabled = customIconRadioButton.Checked;
+
+            UpdateStartButton();
+        }
+
+        private void UpdateStartButton()
+        {
+            var appearance = GetCurrentStartButtonAppearance();
+            startButton.DummySettings(customButtonTextBox.Text, customIconTextBox.Text, appearance);
         }
     }
 }

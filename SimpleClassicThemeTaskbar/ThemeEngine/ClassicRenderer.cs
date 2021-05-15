@@ -30,7 +30,7 @@ namespace SimpleClassicThemeTaskbar.ThemeEngine
         {
             get
             {
-                if (Config.StartButtonCustomButton)
+                if (Config.StartButtonAppearance == StartButtonAppearance.CustomButton)
                     try
                     {
                         return Image.FromFile(Config.StartButtonImage).Width;
@@ -56,7 +56,7 @@ namespace SimpleClassicThemeTaskbar.ThemeEngine
             {
                 Image icon = Properties.Resources.startIcon95;
                 g.TextRenderingHint = TextRenderingHint.SingleBitPerPixelGridFit;
-                if (Config.StartButtonCustomButton)
+                if (Config.StartButtonAppearance == StartButtonAppearance.CustomButton)
                 {
                     Image image = Image.FromFile(Config.StartButtonImage);
                     if (image.Height != 66)
@@ -66,9 +66,9 @@ namespace SimpleClassicThemeTaskbar.ThemeEngine
                     g.DrawImage(image, new Rectangle(2, 4, image.Width, 22), new Rectangle(0, startButton.Pressed ? 44 : startButton.ClientRectangle.Contains(startButton.PointToClient(Control.MousePosition)) ? 22 : 0, image.Width, 22), GraphicsUnit.Pixel);
                     return;
                 }
-                else if (Config.StartButtonCustomIcon)
+                else if (Config.StartButtonAppearance == StartButtonAppearance.CustomIcon)
                 {
-                    icon = Image.FromFile(Config.StartButtonImage);
+                    icon = Image.FromFile(Config.StartButtonIconImage);
                 }
                 if (startButton.Width != 57)
                     startButton.Width = 57;

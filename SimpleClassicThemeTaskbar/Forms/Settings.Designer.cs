@@ -28,11 +28,12 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Settings));
             this.buttonApply = new System.Windows.Forms.Button();
             this.buttonCancel = new System.Windows.Forms.Button();
             this.buttonOK = new System.Windows.Forms.Button();
-            this.settingsTabs = new System.Windows.Forms.TabControl();
+            this.tabControl = new System.Windows.Forms.TabControl();
             this.tabGeneral = new System.Windows.Forms.TabPage();
             this.themeComboBox = new System.Windows.Forms.ComboBox();
             this.themeLabel = new System.Windows.Forms.Label();
@@ -47,10 +48,11 @@
             this.customButtonRadioButton = new System.Windows.Forms.RadioButton();
             this.customIconRadioButton = new System.Windows.Forms.RadioButton();
             this.tabQuickLaunch = new System.Windows.Forms.TabPage();
-            this.label3 = new System.Windows.Forms.Label();
-            this.quickLaunchSpacingNumBox = new System.Windows.Forms.NumericUpDown();
+            this.quickLaunchOptionsPanel = new System.Windows.Forms.Panel();
             this.quickLaunchSpacingLabel = new System.Windows.Forms.Label();
-            this.enableQuickLaunch = new System.Windows.Forms.CheckBox();
+            this.quickLaunchSpacingNumBox = new System.Windows.Forms.NumericUpDown();
+            this.quickLaunchLinkLabel = new System.Windows.Forms.Label();
+            this.enableQuickLaunchCheckBox = new System.Windows.Forms.CheckBox();
             this.tabTaskView = new System.Windows.Forms.TabPage();
             this.button3 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
@@ -74,17 +76,20 @@
             this.labelCopyrightWindows = new System.Windows.Forms.Label();
             this.labelCopyrightSCT = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.bannerPictureBox = new System.Windows.Forms.PictureBox();
             this.customButtonFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.aboutLabel = new System.Windows.Forms.LinkLabel();
             this.panelContent = new System.Windows.Forms.Panel();
             this.panelPreview = new System.Windows.Forms.Panel();
             this.startButton = new SimpleClassicThemeTaskbar.UIElements.StartButton.StartButton();
             this.label4 = new System.Windows.Forms.Label();
-            this.settingsTabs.SuspendLayout();
+            this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
+            this.customIconFileDialog = new System.Windows.Forms.OpenFileDialog();
+            this.tabControl.SuspendLayout();
             this.tabGeneral.SuspendLayout();
             this.tabStartButton.SuspendLayout();
             this.tabQuickLaunch.SuspendLayout();
+            this.quickLaunchOptionsPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.quickLaunchSpacingNumBox)).BeginInit();
             this.tabTaskView.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.spaceBetweenTaskbarIcons)).BeginInit();
@@ -93,7 +98,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.spaceBetweenTrayIcons)).BeginInit();
             this.tabAbout.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.bannerPictureBox)).BeginInit();
             this.panelContent.SuspendLayout();
             this.panelPreview.SuspendLayout();
             this.SuspendLayout();
@@ -119,21 +124,20 @@
             this.buttonOK.UseVisualStyleBackColor = true;
             this.buttonOK.Click += new System.EventHandler(this.buttonOK_Click);
             // 
-            // settingsTabs
+            // tabControl
             // 
-            this.settingsTabs.Controls.Add(this.tabGeneral);
-            this.settingsTabs.Controls.Add(this.tabStartButton);
-            this.settingsTabs.Controls.Add(this.tabQuickLaunch);
-            this.settingsTabs.Controls.Add(this.tabTaskView);
-            this.settingsTabs.Controls.Add(this.tabSystemTray);
-            this.settingsTabs.Controls.Add(this.tabAbout);
-            resources.ApplyResources(this.settingsTabs, "settingsTabs");
-            this.settingsTabs.Multiline = true;
-            this.settingsTabs.Name = "settingsTabs";
-            this.settingsTabs.SelectedIndex = 0;
-            this.settingsTabs.SizeMode = System.Windows.Forms.TabSizeMode.FillToRight;
-            this.settingsTabs.SelectedIndexChanged += new System.EventHandler(this.settingsTabs_SelectedIndexChanged);
-            this.settingsTabs.TabIndexChanged += new System.EventHandler(this.settingsTabs_TabIndexChanged);
+            this.tabControl.Controls.Add(this.tabGeneral);
+            this.tabControl.Controls.Add(this.tabStartButton);
+            this.tabControl.Controls.Add(this.tabQuickLaunch);
+            this.tabControl.Controls.Add(this.tabTaskView);
+            this.tabControl.Controls.Add(this.tabSystemTray);
+            this.tabControl.Controls.Add(this.tabAbout);
+            resources.ApplyResources(this.tabControl, "tabControl");
+            this.tabControl.Multiline = true;
+            this.tabControl.Name = "tabControl";
+            this.tabControl.SelectedIndex = 0;
+            this.tabControl.SizeMode = System.Windows.Forms.TabSizeMode.FillToRight;
+            this.tabControl.SelectedIndexChanged += new System.EventHandler(this.settingsTabs_SelectedIndexChanged);
             // 
             // tabGeneral
             // 
@@ -220,34 +224,42 @@
             resources.ApplyResources(this.radioStartDefault, "radioStartDefault");
             this.radioStartDefault.Name = "radioStartDefault";
             this.radioStartDefault.UseVisualStyleBackColor = true;
+            this.radioStartDefault.CheckedChanged += new System.EventHandler(this.StartButtonRadioButton_CheckedChanged);
             // 
             // customButtonRadioButton
             // 
             resources.ApplyResources(this.customButtonRadioButton, "customButtonRadioButton");
             this.customButtonRadioButton.Name = "customButtonRadioButton";
             this.customButtonRadioButton.UseVisualStyleBackColor = true;
+            this.customButtonRadioButton.CheckedChanged += new System.EventHandler(this.StartButtonRadioButton_CheckedChanged);
             // 
             // customIconRadioButton
             // 
             resources.ApplyResources(this.customIconRadioButton, "customIconRadioButton");
             this.customIconRadioButton.Name = "customIconRadioButton";
             this.customIconRadioButton.UseVisualStyleBackColor = true;
+            this.customIconRadioButton.CheckedChanged += new System.EventHandler(this.StartButtonRadioButton_CheckedChanged);
             // 
             // tabQuickLaunch
             // 
-            this.tabQuickLaunch.Controls.Add(this.label3);
-            this.tabQuickLaunch.Controls.Add(this.quickLaunchSpacingNumBox);
-            this.tabQuickLaunch.Controls.Add(this.quickLaunchSpacingLabel);
-            this.tabQuickLaunch.Controls.Add(this.enableQuickLaunch);
+            this.tabQuickLaunch.Controls.Add(this.quickLaunchOptionsPanel);
+            this.tabQuickLaunch.Controls.Add(this.quickLaunchLinkLabel);
+            this.tabQuickLaunch.Controls.Add(this.enableQuickLaunchCheckBox);
             resources.ApplyResources(this.tabQuickLaunch, "tabQuickLaunch");
             this.tabQuickLaunch.Name = "tabQuickLaunch";
             this.tabQuickLaunch.UseVisualStyleBackColor = true;
             // 
-            // label3
+            // quickLaunchOptionsPanel
             // 
-            resources.ApplyResources(this.label3, "label3");
-            this.label3.ForeColor = System.Drawing.SystemColors.Highlight;
-            this.label3.Name = "label3";
+            this.quickLaunchOptionsPanel.Controls.Add(this.quickLaunchSpacingLabel);
+            this.quickLaunchOptionsPanel.Controls.Add(this.quickLaunchSpacingNumBox);
+            resources.ApplyResources(this.quickLaunchOptionsPanel, "quickLaunchOptionsPanel");
+            this.quickLaunchOptionsPanel.Name = "quickLaunchOptionsPanel";
+            // 
+            // quickLaunchSpacingLabel
+            // 
+            resources.ApplyResources(this.quickLaunchSpacingLabel, "quickLaunchSpacingLabel");
+            this.quickLaunchSpacingLabel.Name = "quickLaunchSpacingLabel";
             // 
             // quickLaunchSpacingNumBox
             // 
@@ -264,16 +276,19 @@
             0,
             0});
             // 
-            // quickLaunchSpacingLabel
+            // quickLaunchLinkLabel
             // 
-            resources.ApplyResources(this.quickLaunchSpacingLabel, "quickLaunchSpacingLabel");
-            this.quickLaunchSpacingLabel.Name = "quickLaunchSpacingLabel";
+            resources.ApplyResources(this.quickLaunchLinkLabel, "quickLaunchLinkLabel");
+            this.quickLaunchLinkLabel.ForeColor = System.Drawing.SystemColors.Highlight;
+            this.quickLaunchLinkLabel.Name = "quickLaunchLinkLabel";
+            this.quickLaunchLinkLabel.Click += new System.EventHandler(this.QuickLaunchLinkLabel_Click);
             // 
-            // enableQuickLaunch
+            // enableQuickLaunchCheckBox
             // 
-            resources.ApplyResources(this.enableQuickLaunch, "enableQuickLaunch");
-            this.enableQuickLaunch.Name = "enableQuickLaunch";
-            this.enableQuickLaunch.UseVisualStyleBackColor = true;
+            resources.ApplyResources(this.enableQuickLaunchCheckBox, "enableQuickLaunchCheckBox");
+            this.enableQuickLaunchCheckBox.Name = "enableQuickLaunchCheckBox";
+            this.enableQuickLaunchCheckBox.UseVisualStyleBackColor = true;
+            this.enableQuickLaunchCheckBox.CheckedChanged += new System.EventHandler(this.enableQuickLaunchCheckBox_CheckedChanged);
             // 
             // tabTaskView
             // 
@@ -429,7 +444,7 @@
             // tabAbout
             // 
             this.tabAbout.Controls.Add(this.tableLayoutPanel1);
-            this.tabAbout.Controls.Add(this.pictureBox1);
+            this.tabAbout.Controls.Add(this.bannerPictureBox);
             resources.ApplyResources(this.tabAbout, "tabAbout");
             this.tabAbout.Name = "tabAbout";
             // 
@@ -462,18 +477,18 @@
             resources.ApplyResources(this.label7, "label7");
             this.label7.Name = "label7";
             // 
-            // pictureBox1
+            // bannerPictureBox
             // 
-            this.pictureBox1.BackColor = System.Drawing.Color.White;
-            resources.ApplyResources(this.pictureBox1, "pictureBox1");
-            this.pictureBox1.Image = global::SimpleClassicThemeTaskbar.Properties.Resources.win98scttbanner;
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.TabStop = false;
+            this.bannerPictureBox.BackColor = System.Drawing.Color.White;
+            resources.ApplyResources(this.bannerPictureBox, "bannerPictureBox");
+            this.bannerPictureBox.Image = global::SimpleClassicThemeTaskbar.Properties.Resources.win98scttbanner;
+            this.bannerPictureBox.Name = "bannerPictureBox";
+            this.bannerPictureBox.TabStop = false;
             // 
             // customButtonFileDialog
             // 
             resources.ApplyResources(this.customButtonFileDialog, "customButtonFileDialog");
-            this.customButtonFileDialog.FileOk += new System.ComponentModel.CancelEventHandler(this.openFileDialog_FileOk);
+            this.customButtonFileDialog.FileOk += new System.ComponentModel.CancelEventHandler(this.CustomButtonFileDialog_FileOk);
             // 
             // aboutLabel
             // 
@@ -484,7 +499,7 @@
             // 
             // panelContent
             // 
-            this.panelContent.Controls.Add(this.settingsTabs);
+            this.panelContent.Controls.Add(this.tabControl);
             this.panelContent.Controls.Add(this.panelPreview);
             resources.ApplyResources(this.panelContent, "panelContent");
             this.panelContent.Name = "panelContent";
@@ -512,6 +527,15 @@
             this.label4.ForeColor = System.Drawing.Color.White;
             this.label4.Name = "label4";
             // 
+            // notifyIcon1
+            // 
+            resources.ApplyResources(this.notifyIcon1, "notifyIcon1");
+            // 
+            // customIconFileDialog
+            // 
+            resources.ApplyResources(this.customIconFileDialog, "customIconFileDialog");
+            this.customIconFileDialog.FileOk += new System.ComponentModel.CancelEventHandler(this.customIconFileDialog_FileOk);
+            // 
             // Settings
             // 
             resources.ApplyResources(this, "$this");
@@ -526,13 +550,15 @@
             this.MinimizeBox = false;
             this.Name = "Settings";
             this.Load += new System.EventHandler(this.Settings_Load);
-            this.settingsTabs.ResumeLayout(false);
+            this.tabControl.ResumeLayout(false);
             this.tabGeneral.ResumeLayout(false);
             this.tabGeneral.PerformLayout();
             this.tabStartButton.ResumeLayout(false);
             this.tabStartButton.PerformLayout();
             this.tabQuickLaunch.ResumeLayout(false);
             this.tabQuickLaunch.PerformLayout();
+            this.quickLaunchOptionsPanel.ResumeLayout(false);
+            this.quickLaunchOptionsPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.quickLaunchSpacingNumBox)).EndInit();
             this.tabTaskView.ResumeLayout(false);
             this.tabTaskView.PerformLayout();
@@ -544,7 +570,7 @@
             this.tabAbout.ResumeLayout(false);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.bannerPictureBox)).EndInit();
             this.panelContent.ResumeLayout(false);
             this.panelPreview.ResumeLayout(false);
             this.ResumeLayout(false);
@@ -556,7 +582,7 @@
         private System.Windows.Forms.Button buttonApply;
         private System.Windows.Forms.Button buttonCancel;
         private System.Windows.Forms.Button buttonOK;
-        private System.Windows.Forms.TabControl settingsTabs;
+        private System.Windows.Forms.TabControl tabControl;
         private System.Windows.Forms.TabPage tabTaskView;
         private System.Windows.Forms.NumericUpDown taskbarProgramWidth;
         private System.Windows.Forms.Label label1;
@@ -566,7 +592,7 @@
 		private System.Windows.Forms.TabPage tabAbout;
 		private System.Windows.Forms.Label labelCopyrightSCT;
 		private System.Windows.Forms.Label labelCopyrightSCTT;
-		private System.Windows.Forms.PictureBox pictureBox1;
+		private System.Windows.Forms.PictureBox bannerPictureBox;
 		private System.Windows.Forms.Label labelCopyrightWindows;
 		private System.Windows.Forms.OpenFileDialog customButtonFileDialog;
 		private System.Windows.Forms.TabPage tabStartButton;
@@ -587,10 +613,10 @@
 		private System.Windows.Forms.Label label11;
 		private System.Windows.Forms.ListBox listBox1;
         private System.Windows.Forms.TabPage tabQuickLaunch;
-        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label quickLaunchLinkLabel;
         private System.Windows.Forms.NumericUpDown quickLaunchSpacingNumBox;
         private System.Windows.Forms.Label quickLaunchSpacingLabel;
-        private System.Windows.Forms.CheckBox enableQuickLaunch;
+        private System.Windows.Forms.CheckBox enableQuickLaunchCheckBox;
         private System.Windows.Forms.LinkLabel aboutLabel;
         private System.Windows.Forms.Panel panelContent;
         private System.Windows.Forms.Panel panelPreview;
@@ -605,5 +631,8 @@
         private System.Windows.Forms.Label languageLabel;
         private System.Windows.Forms.ComboBox themeComboBox;
         private System.Windows.Forms.Label themeLabel;
+        private System.Windows.Forms.Panel quickLaunchOptionsPanel;
+        private System.Windows.Forms.NotifyIcon notifyIcon1;
+        private System.Windows.Forms.OpenFileDialog customIconFileDialog;
     }
 }
