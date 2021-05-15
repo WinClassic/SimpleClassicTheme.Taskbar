@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
@@ -24,7 +25,9 @@ namespace SimpleClassicThemeTaskbar.Helpers
         {
             SetVerbosity(verbosity);
             _ = Directory.CreateDirectory("./logs");
-            fs = File.OpenWrite("./logs/log_" + DateTime.Now.ToString("yyyy-dd-M--HH-mm-ss") + ".txt");
+            var logPath = "./logs/log_" + DateTime.Now.ToString("yyyy-dd-M--HH-mm-ss") + ".txt";
+
+            fs = new FileStream(logPath, FileMode.Append, FileAccess.Write, FileShare.Read);
             Log(LoggerVerbosity.Basic, "Logger", "Succesfully initialized logger");
 
             Log(LoggerVerbosity.Detailed, "SystemDump", "Performing quick system dump");
@@ -35,12 +38,15 @@ namespace SimpleClassicThemeTaskbar.Helpers
 
         public static void Log(LoggerVerbosity verbosity, string source, string text)
         {
+            Debug.WriteLine(text, source);
+
             if (loggerOff) return;
             if (verbosity <= verb)
             {
                 string toWrite = $"[{verbosity,8}][{source,-16}]: {text}\n";
                 byte[] bytes = Encoding.UTF8.GetBytes(toWrite);
                 fs.Write(bytes, 0, bytes.Length);
+                fs.Flush();
             }
         }
 
