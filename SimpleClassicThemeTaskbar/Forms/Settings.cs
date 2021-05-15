@@ -22,7 +22,7 @@ namespace SimpleClassicThemeTaskbar
             labelCopyrightSCT.Location = new Point(tabAbout.Width - labelCopyrightSCT.Width, labelCopyrightSCT.Location.Y);
         }
 
-        public void Save()
+        public void SaveSettings()
         {
             Config.EnableSystemTrayHover = enableSysTrayHover.Checked;
             Config.EnableSystemTrayColorChange = enableSysTrayColorChange.Checked;
@@ -77,7 +77,7 @@ namespace SimpleClassicThemeTaskbar
 
         private void ButtonApply_Click(object sender, EventArgs e)
         {
-            Save();
+            SaveSettings();
         }
 
         private void ButtonCancel_Click(object sender, EventArgs e)
@@ -87,7 +87,7 @@ namespace SimpleClassicThemeTaskbar
 
         private void ButtonOK_Click(object sender, EventArgs e)
         {
-            Save();
+            SaveSettings();
             Close();
         }
 
@@ -218,20 +218,8 @@ namespace SimpleClassicThemeTaskbar
             }
         }
 
-        private void QuickLaunchLinkLabel_Click(object sender, EventArgs e)
+        private void LoadSettings()
         {
-            Helpers.Helpers.OpenQuickLaunchFolder();
-        }
-
-        private void Settings_Load(object sender, EventArgs e)
-        {
-            labelCopyrightSCTT.Text = labelCopyrightSCTT.Text.Replace("{sctt_ver}", Assembly.GetExecutingAssembly().GetName().Version.ToString());
-            if (ApplicationEntryPoint.SCTCompatMode)
-            {
-                labelCopyrightSCT.Show();
-                labelCopyrightSCT.Text = labelCopyrightSCT.Text.Replace("{sct_ver}", Assembly.LoadFrom("C:\\SCT\\SCT.exe").GetName().Version.ToString());
-            }
-
             comboBoxGroupingMethod.SelectedIndex = (int)Config.ProgramGroupCheck;
 
             enableSysTrayHover.Checked = Config.EnableSystemTrayHover;
@@ -289,6 +277,23 @@ namespace SimpleClassicThemeTaskbar
                     themeComboBox.SelectedItem = Config.RendererPath;
                     break;
             }
+        }
+
+        private void QuickLaunchLinkLabel_Click(object sender, EventArgs e)
+        {
+            Helpers.Helpers.OpenQuickLaunchFolder();
+        }
+
+        private void Settings_Load(object sender, EventArgs e)
+        {
+            labelCopyrightSCTT.Text = labelCopyrightSCTT.Text.Replace("{sctt_ver}", Assembly.GetExecutingAssembly().GetName().Version.ToString());
+            if (ApplicationEntryPoint.SCTCompatMode)
+            {
+                labelCopyrightSCT.Show();
+                labelCopyrightSCT.Text = labelCopyrightSCT.Text.Replace("{sct_ver}", Assembly.LoadFrom("C:\\SCT\\SCT.exe").GetName().Version.ToString());
+            }
+
+            LoadSettings();
 
             if (ApplicationEntryPoint.SCTCompatMode)
             {
