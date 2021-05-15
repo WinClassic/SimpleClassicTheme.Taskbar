@@ -1,8 +1,6 @@
 ﻿using SimpleClassicThemeTaskbar.Helpers.NativeMethods;
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 
@@ -28,22 +26,45 @@ namespace SimpleClassicThemeTaskbar
 
     public struct Window
     {
-        public string ClassName;
         public IntPtr Handle;
-        public string Title;
         public WINDOWINFO WindowInfo;
+        private string className;
+        private string title;
 
-        public Window(IntPtr handle)
-            : this()
+        public Window(IntPtr handle) : this()
         {
             Handle = handle;
             WindowInfo = WINDOWINFO.FromHWND(handle);
-            StringBuilder cn = new(100);
-            _ = User32.GetClassName(handle, cn, cn.Capacity - 1);
-            ClassName = cn.ToString();
-            StringBuilder title = new(100);
-            _ = User32.GetWindowTextW(handle, title, 100);
-            Title = title.ToString();
+        }
+
+        public string ClassName
+        {
+            get
+            {
+                if (className == null)
+                {
+                    var sb = new StringBuilder(100);
+                    _ = User32.GetClassName(Handle, sb, sb.Capacity - 1);
+                    className = sb.ToString();
+                }
+
+                return className;
+            }
+        }
+
+        public string Title
+        {
+            get
+            {
+                if (title == null)
+                {
+                    var sb = new StringBuilder(100);
+                    _ = User32.GetWindowTextW(Handle, sb, 100);
+                    title = sb.ToString();
+                }
+
+                return title;
+            }
         }
     }
 
