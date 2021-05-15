@@ -393,7 +393,7 @@ namespace SimpleClassicThemeTaskbar
                     showWindowsSideBySide.Click += delegate { _ = User32.TileWindows(IntPtr.Zero, MDITILE_VERTICAL, IntPtr.Zero, 0, IntPtr.Zero); };
                     taskManager.Click += delegate { _ = Process.Start("taskmgr"); };
                     settings.Click += delegate { new Settings().Show(); };
-                    showDesktop.Click += delegate { Keyboard.KeyDown(Keys.LWin); Keyboard.KeyDown(Keys.D); Keyboard.KeyUp(Keys.D); Keyboard.KeyUp(Keys.LWin); };
+                    showDesktop.Click += delegate { Keyboard.KeyPress(Keys.LWin, Keys.D); };
                     exit.Click += delegate { ApplicationEntryPoint.ExitSCTT(); };
 
                     //Add all menu items
@@ -420,7 +420,6 @@ namespace SimpleClassicThemeTaskbar
             }
             else if (e.Button == MouseButtons.Left && e.Location.X == Width - 1)
             {
-                Keyboard.KeyDown(Keys.LWin); Keyboard.KeyDown(Keys.D); Keyboard.KeyUp(Keys.D); Keyboard.KeyUp(Keys.LWin);
             }
         }
 
@@ -466,6 +465,7 @@ namespace SimpleClassicThemeTaskbar
                     icon.Location = new Point(x, 0);
                     x += icon.Width + Config.SpaceBetweenTaskbarIcons;
                 }
+                Keyboard.KeyPress(Keys.LWin, Keys.D);
             }
         }
 

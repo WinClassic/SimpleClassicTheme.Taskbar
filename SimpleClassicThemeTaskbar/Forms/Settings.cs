@@ -27,7 +27,7 @@ namespace SimpleClassicThemeTaskbar
             Config.EnableSystemTrayHover = enableSysTrayHover.Checked;
             Config.EnableSystemTrayColorChange = enableSysTrayColorChange.Checked;
             Config.ShowTaskbarOnAllDesktops = showTaskbarOnAllDesktops.Checked;
-            Config.EnableQuickLaunch = enableQuickLaunch.Checked;
+            Config.EnableQuickLaunch = enableQuickLaunchCheckBox.Checked;
             Config.TaskbarProgramWidth = (int)taskbarProgramWidth.Value;
             Config.SpaceBetweenTrayIcons = (int)spaceBetweenTrayIcons.Value;
             Config.SpaceBetweenTaskbarIcons = (int)spaceBetweenTaskbarIcons.Value;
@@ -174,10 +174,9 @@ namespace SimpleClassicThemeTaskbar
             //startButton1.DummySettings(textStartLocation.Text, radioStartIcon.Checked, //radioStartButton.Checked);
         }
 
-        private void RadioStart_CheckedChanged(object sender, EventArgs e)
+        private void QuickLaunchLinkLabel_Click(object sender, EventArgs e)
         {
-            if ((sender as RadioButton).Checked)
-                startButton.DummySettings(customIconTextBox.Text, customIconRadioButton.Checked, customButtonRadioButton.Checked);
+            Helpers.Helpers.OpenQuickLaunchFolder();
         }
 
         private void Settings_Load(object sender, EventArgs e)
@@ -194,7 +193,7 @@ namespace SimpleClassicThemeTaskbar
             enableSysTrayHover.Checked = Config.EnableSystemTrayHover;
             enableSysTrayColorChange.Checked = Config.EnableSystemTrayColorChange;
             showTaskbarOnAllDesktops.Checked = Config.ShowTaskbarOnAllDesktops;
-            enableQuickLaunch.Checked = Config.EnableQuickLaunch;
+            enableQuickLaunchCheckBox.Checked = Config.EnableQuickLaunch;
             customIconRadioButton.Checked = Config.StartButtonCustomIcon;
             customButtonRadioButton.Checked = Config.StartButtonCustomButton;
             radioStartDefault.Checked = !Config.StartButtonCustomIcon && !Config.StartButtonCustomButton;

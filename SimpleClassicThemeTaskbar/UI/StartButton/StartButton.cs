@@ -55,6 +55,10 @@ namespace SimpleClassicThemeTaskbar.UIElements.StartButton
             CustomButton = Config.StartButtonCustomButton;
         }
 
+        [Category("Appearance")]
+        [DefaultValue(StartButtonAppearance.Default)]
+        public StartButtonAppearance Appearance { get; set; } = StartButtonAppearance.Default;
+
         [Description("Defines the style to be used when drawing ")]
         [Category("Appearance")]
         public new Border3DStyle BorderStyle
@@ -113,10 +117,7 @@ namespace SimpleClassicThemeTaskbar.UIElements.StartButton
             // HWND wnd = User32.FindWindowW("Shell_TrayWnd", "");
             if (e.Button == MouseButtons.Right)
             {
-                Keyboard.KeyDown(Keys.LWin);
-                Keyboard.KeyDown(Keys.X);
-                Keyboard.KeyUp(Keys.X);
-                Keyboard.KeyUp(Keys.LWin);
+                Keyboard.KeyPress(Keys.LWin, Keys.X);
                 //SystemTrayIcon.PostMessage(wnd, WIN32.WM_RBUTTONDOWN, 0x0002, 0);
                 //SystemTrayIcon.SendMessage(wnd, WIN32.WM_RBUTTONUP, 0x0000, 0);
             }
@@ -132,8 +133,8 @@ namespace SimpleClassicThemeTaskbar.UIElements.StartButton
                 {
                     OpeningStartMenu = true;
                     Pressed = true;
-                    Keyboard.KeyDown(Keys.LWin);
-                    Keyboard.KeyUp(Keys.LWin);
+
+                    Keyboard.KeyPress(Keys.LWin);
                 }
             }
         }
