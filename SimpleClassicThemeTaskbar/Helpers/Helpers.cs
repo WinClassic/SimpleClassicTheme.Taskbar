@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Windows.Forms;
 
 namespace SimpleClassicThemeTaskbar.Helpers
@@ -16,6 +19,18 @@ namespace SimpleClassicThemeTaskbar.Helpers
                     yield return taskbar;
                 }
             }
+        }
+
+        public static void OpenQuickLaunchFolder()
+        {
+            var appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            var quickLaunchPath = Path.Combine(appDataPath, @"Microsoft\Internet Explorer\Quick Launch");
+
+            _ = Process.Start(new ProcessStartInfo
+            {
+                FileName = quickLaunchPath,
+                UseShellExecute = true,
+            });
         }
     }
 }
