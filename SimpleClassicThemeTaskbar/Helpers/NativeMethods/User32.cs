@@ -9,6 +9,18 @@ namespace SimpleClassicThemeTaskbar.Helpers.NativeMethods
 {
     internal static class User32
     {
+        internal const int KEYEVENTF_EXTENDEDKEY = 1;
+        internal const int KEYEVENTF_KEYUP = 2;
+        internal const uint VK_F4 = 0x73;
+        internal const uint VK_MENU = 0x12;
+        internal const uint WM_CLOSE = 0x0010;
+        internal const uint WM_KEYDOWN = 0x0100;
+        internal const uint WM_KEYUP = 0x0101;
+        internal const uint WM_LBUTTONDOWN = 0x0201;
+        internal const uint WM_LBUTTONUP = 0x0202;
+        internal const uint WM_RBUTTONDOWN = 0x0204;
+        internal const uint WM_RBUTTONUP = 0x0205;
+
         internal delegate bool EnumThreadDelegate(IntPtr hWnd, IntPtr lParam);
 
         internal enum ShellEvents : int

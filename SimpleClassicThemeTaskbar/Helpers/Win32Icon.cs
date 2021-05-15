@@ -104,22 +104,12 @@ namespace SimpleClassicThemeTaskbar.Helpers
 
     public class Win32Icon
     {
-        private const int SHGFI_LARGEICON = 0x0;
-
-        private const int SHGFI_SMALLICON = 0x1;
-
-        private const int SHIL_EXTRALARGE = 0x2;
-
-        private const int SHIL_JUMBO = 0x4;
-
-        private const int WM_CLOSE = 0x0010;
-
         public enum IconSizeEnum
         {
-            SmallIcon16 = SHGFI_SMALLICON,
-            MediumIcon32 = SHGFI_LARGEICON,
-            LargeIcon48 = SHIL_EXTRALARGE,
-            ExtraLargeIcon = SHIL_JUMBO
+            SmallIcon16 = Shell32.SHGFI_SMALLICON,
+            MediumIcon32 = Shell32.SHGFI_LARGEICON,
+            LargeIcon48 = Shell32.SHIL_EXTRALARGE,
+            ExtraLargeIcon = Shell32.SHIL_JUMBO
         }
 
         public static IntPtr GetIconHandleFromFilePath(string filepath, IconSizeEnum iconsize)

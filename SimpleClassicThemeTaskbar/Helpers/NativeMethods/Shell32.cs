@@ -5,6 +5,14 @@ namespace SimpleClassicThemeTaskbar.Helpers.NativeMethods
 {
     internal static class Shell32
     {
+        internal const int SHGFI_LARGEICON = 0x0;
+
+        internal const int SHGFI_SMALLICON = 0x1;
+
+        internal const int SHIL_EXTRALARGE = 0x2;
+
+        internal const int SHIL_JUMBO = 0x4;
+
         [DllImport("user32.dll")]
         internal static extern int DrawFrameControl(IntPtr hdc, ref RECT lpRect, uint un1, uint un2);
 

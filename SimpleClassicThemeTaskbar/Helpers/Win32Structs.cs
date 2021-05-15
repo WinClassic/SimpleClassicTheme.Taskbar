@@ -88,16 +88,4 @@ namespace SimpleClassicThemeTaskbar
             return d;
         }
     }
-
-    public static class WIN32
-    {
-        public const uint VK_F4 = 0x73;
-        public const uint VK_MENU = 0x12;
-        public const uint WM_KEYDOWN = 0x0100;
-        public const uint WM_KEYUP = 0x0101;
-        public const uint WM_LBUTTONDOWN = 0x0201;
-        public const uint WM_LBUTTONUP = 0x0202;
-        public const uint WM_RBUTTONDOWN = 0x0204;
-        public const uint WM_RBUTTONUP = 0x0205;
-    }
 }
