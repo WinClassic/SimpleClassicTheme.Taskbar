@@ -81,8 +81,7 @@
             this.aboutLabel = new System.Windows.Forms.LinkLabel();
             this.panelContent = new System.Windows.Forms.Panel();
             this.panelPreview = new System.Windows.Forms.Panel();
-            this.startButton = new SimpleClassicThemeTaskbar.UIElements.StartButton.StartButton();
-            this.label4 = new System.Windows.Forms.Label();
+            this.tbdLabel = new System.Windows.Forms.Label();
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
             this.customIconFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.tabControl.SuspendLayout();
@@ -108,21 +107,21 @@
             resources.ApplyResources(this.buttonApply, "buttonApply");
             this.buttonApply.Name = "buttonApply";
             this.buttonApply.UseVisualStyleBackColor = true;
-            this.buttonApply.Click += new System.EventHandler(this.buttonApply_Click);
+            this.buttonApply.Click += new System.EventHandler(this.ButtonApply_Click);
             // 
             // buttonCancel
             // 
             resources.ApplyResources(this.buttonCancel, "buttonCancel");
             this.buttonCancel.Name = "buttonCancel";
             this.buttonCancel.UseVisualStyleBackColor = true;
-            this.buttonCancel.Click += new System.EventHandler(this.buttonCancel_Click);
+            this.buttonCancel.Click += new System.EventHandler(this.ButtonCancel_Click);
             // 
             // buttonOK
             // 
             resources.ApplyResources(this.buttonOK, "buttonOK");
             this.buttonOK.Name = "buttonOK";
             this.buttonOK.UseVisualStyleBackColor = true;
-            this.buttonOK.Click += new System.EventHandler(this.buttonOK_Click);
+            this.buttonOK.Click += new System.EventHandler(this.ButtonOK_Click);
             // 
             // tabControl
             // 
@@ -199,6 +198,7 @@
             resources.ApplyResources(this.customIconBrowseButton, "customIconBrowseButton");
             this.customIconBrowseButton.Name = "customIconBrowseButton";
             this.customIconBrowseButton.UseVisualStyleBackColor = true;
+            this.customIconBrowseButton.Click += new System.EventHandler(this.CustomIconBrowseButton_Click);
             // 
             // customIconTextBox
             // 
@@ -211,7 +211,7 @@
             resources.ApplyResources(this.customButtonBrowseButton, "customButtonBrowseButton");
             this.customButtonBrowseButton.Name = "customButtonBrowseButton";
             this.customButtonBrowseButton.UseVisualStyleBackColor = true;
-            this.customButtonBrowseButton.Click += new System.EventHandler(this.button1_Click);
+            this.customButtonBrowseButton.Click += new System.EventHandler(this.CustomButtonBrowseButton_Click);
             // 
             // customButtonTextBox
             // 
@@ -288,7 +288,7 @@
             resources.ApplyResources(this.enableQuickLaunchCheckBox, "enableQuickLaunchCheckBox");
             this.enableQuickLaunchCheckBox.Name = "enableQuickLaunchCheckBox";
             this.enableQuickLaunchCheckBox.UseVisualStyleBackColor = true;
-            this.enableQuickLaunchCheckBox.CheckedChanged += new System.EventHandler(this.enableQuickLaunchCheckBox_CheckedChanged);
+            this.enableQuickLaunchCheckBox.CheckedChanged += new System.EventHandler(this.EnableQuickLaunchCheckBox_CheckedChanged);
             // 
             // tabTaskView
             // 
@@ -508,24 +508,15 @@
             // 
             this.panelPreview.BackColor = System.Drawing.SystemColors.Desktop;
             this.panelPreview.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.panelPreview.Controls.Add(this.startButton);
-            this.panelPreview.Controls.Add(this.label4);
+            this.panelPreview.Controls.Add(this.tbdLabel);
             resources.ApplyResources(this.panelPreview, "panelPreview");
             this.panelPreview.Name = "panelPreview";
             // 
-            // startButton
+            // tbdLabel
             // 
-            this.startButton.BorderStyle = System.Windows.Forms.Border3DStyle.Raised;
-            this.startButton.Dummy = true;
-            resources.ApplyResources(this.startButton, "startButton");
-            this.startButton.Name = "startButton";
-            this.startButton.Pressed = false;
-            // 
-            // label4
-            // 
-            resources.ApplyResources(this.label4, "label4");
-            this.label4.ForeColor = System.Drawing.Color.White;
-            this.label4.Name = "label4";
+            resources.ApplyResources(this.tbdLabel, "tbdLabel");
+            this.tbdLabel.ForeColor = System.Drawing.Color.White;
+            this.tbdLabel.Name = "tbdLabel";
             // 
             // notifyIcon1
             // 
@@ -534,7 +525,7 @@
             // customIconFileDialog
             // 
             resources.ApplyResources(this.customIconFileDialog, "customIconFileDialog");
-            this.customIconFileDialog.FileOk += new System.ComponentModel.CancelEventHandler(this.customIconFileDialog_FileOk);
+            this.customIconFileDialog.FileOk += new System.ComponentModel.CancelEventHandler(this.CustomIconFileDialog_FileOk);
             // 
             // Settings
             // 
@@ -620,8 +611,7 @@
         private System.Windows.Forms.LinkLabel aboutLabel;
         private System.Windows.Forms.Panel panelContent;
         private System.Windows.Forms.Panel panelPreview;
-        private System.Windows.Forms.Label label4;
-        private UIElements.StartButton.StartButton startButton;
+        private System.Windows.Forms.Label tbdLabel;
         private System.Windows.Forms.Button customIconBrowseButton;
         private System.Windows.Forms.TextBox customIconTextBox;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
@@ -634,5 +624,6 @@
         private System.Windows.Forms.Panel quickLaunchOptionsPanel;
         private System.Windows.Forms.NotifyIcon notifyIcon1;
         private System.Windows.Forms.OpenFileDialog customIconFileDialog;
+        private System.Windows.Forms.Label bel;
     }
 }

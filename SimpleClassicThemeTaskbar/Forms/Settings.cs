@@ -59,11 +59,6 @@ namespace SimpleClassicThemeTaskbar
             ApplicationEntryPoint.NewTaskbars();
         }
 
-        private void button1_Click(object sender, EventArgs e)
-        {
-            customButtonFileDialog.ShowDialog();
-        }
-
         private void button2_Click(object sender, EventArgs e)
         {
             SettingsAddProgramFilter dialog = new();
@@ -80,17 +75,17 @@ namespace SimpleClassicThemeTaskbar
             }
         }
 
-        private void buttonApply_Click(object sender, EventArgs e)
+        private void ButtonApply_Click(object sender, EventArgs e)
         {
             Save();
         }
 
-        private void buttonCancel_Click(object sender, EventArgs e)
+        private void ButtonCancel_Click(object sender, EventArgs e)
         {
             Close();
         }
 
-        private void buttonOK_Click(object sender, EventArgs e)
+        private void ButtonOK_Click(object sender, EventArgs e)
         {
             Save();
             Close();
@@ -138,6 +133,11 @@ namespace SimpleClassicThemeTaskbar
             }
         }
 
+        private void CustomButtonBrowseButton_Click(object sender, EventArgs e)
+        {
+            customButtonFileDialog.ShowDialog();
+        }
+
         private void CustomButtonFileDialog_FileOk(object sender, System.ComponentModel.CancelEventArgs e)
         {
             Image temp;
@@ -166,7 +166,12 @@ namespace SimpleClassicThemeTaskbar
             UpdateStartButton();
         }
 
-        private void customIconFileDialog_FileOk(object sender, System.ComponentModel.CancelEventArgs e)
+        private void CustomIconBrowseButton_Click(object sender, EventArgs e)
+        {
+            customIconFileDialog.ShowDialog();
+        }
+
+        private void CustomIconFileDialog_FileOk(object sender, System.ComponentModel.CancelEventArgs e)
         {
             Image temp;
             try
@@ -188,7 +193,7 @@ namespace SimpleClassicThemeTaskbar
             }
         }
 
-        private void enableQuickLaunchCheckBox_CheckedChanged(object sender, EventArgs e)
+        private void EnableQuickLaunchCheckBox_CheckedChanged(object sender, EventArgs e)
         {
             quickLaunchOptionsPanel.Enabled = enableQuickLaunchCheckBox.Checked;
         }
