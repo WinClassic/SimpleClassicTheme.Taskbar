@@ -24,6 +24,9 @@ namespace SimpleClassicThemeTaskbar.Helpers
         public static void Initialize(LoggerVerbosity verbosity)
         {
             SetVerbosity(verbosity);
+            if (loggerOff)
+                return;
+
             _ = Directory.CreateDirectory("./logs");
             var logPath = "./logs/log_" + DateTime.Now.ToString("yyyy-dd-M--HH-mm-ss") + ".txt";
 
@@ -39,22 +42,32 @@ namespace SimpleClassicThemeTaskbar.Helpers
         public static void Log(LoggerVerbosity verbosity, string source, string text)
         {
             Debug.WriteLine(text, source);
-
+            text.Replace("\n", "".PadLeft(38));
             if (loggerOff) return;
             if (verbosity <= verb)
             {
-                string toWrite = $"[{verbosity,8}][{source,-16}]: {text}\n";
+                string toWrite = $"[{verbosity,-8}][{source,-24}]: {text}\n";
                 byte[] bytes = Encoding.UTF8.GetBytes(toWrite);
                 fs.Write(bytes, 0, bytes.Length);
                 fs.Flush();
             }
         }
 
+        public static LoggerVerbosity GetVerbosity() => verb;
+
         public static void SetVerbosity(LoggerVerbosity verbosity)
         {
             verb = verbosity;
             loggerOff = verb == LoggerVerbosity.None;
         }
+
+        public static void OpenLog()
+		{
+            if (fs != null)
+			{
+                Process.Start(fs.Name);
+			}
+		}
 
         public static void Uninitialize()
         {
