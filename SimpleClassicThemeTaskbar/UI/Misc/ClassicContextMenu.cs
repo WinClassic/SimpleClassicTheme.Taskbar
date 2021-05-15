@@ -7,43 +7,6 @@ using System.Runtime.InteropServices;
 
 namespace System.Windows.Forms
 {
-    [Flags]
-    public enum SystemContextMenuItemFlags : uint
-    {
-        Default = 0x0000,
-        GrayedAndDisabled = 0x0001,
-        Disabled = 0x0002,
-        Bitmap = 0x0004,
-        Checked = 0x0008,
-        OwnerDraw = 0x0100,
-        IsSeperator = 0x0800
-    }
-
-    [Flags]
-    public enum SystemContextMenuTrackPopupMenuFlags : uint
-    {
-        Default = 0x0000,
-
-        LeftAlign = 0x0000,
-        HorizontalCenterAlign = 0x0004,
-        RightAlign = 0x0008,
-
-        TopAlign = 0x0000,
-        VerticalCenterAlign = 0x0010,
-        BottomAlign = 0x0020,
-
-        TrackLeftButton = 0x0000,
-        TrackRightButton = 0x0002,
-
-        LeftToRightAnimation = 0x0400,
-        RightToLeftAnimation = 0x0800,
-        TopToBottomAnimation = 0x1000,
-        BottomToTopAnimation = 0x2000,
-        NoAnimation = 0x4000,
-
-        ReturnResult = 0x0100
-    }
-
     public class SystemContextMenu
     {
         public List<SystemContextMenuItem> Items = new();
@@ -60,28 +23,8 @@ namespace System.Windows.Forms
             SystemContextMenu systemContextMenu = new();
             foreach (ToolStripItem item in contextMenuStrip.Items)
             {
-                if (item is ToolStripMenuItem menuItem)
-                {
-                    SystemContextMenuItemFlags flags = SystemContextMenuItemFlags.Default;
-                    if (menuItem.Checked)
-                        flags |= SystemContextMenuItemFlags.Checked;
-                    if (!menuItem.Enabled)
-                        flags |= SystemContextMenuItemFlags.Disabled;
-
-                    if (menuItem.Image != null)
-                    {
-                        flags |= SystemContextMenuItemFlags.Bitmap;
-                        SystemContextMenuItem systemContextMenuItem = new(menuItem.Text, menuItem.PerformClick, flags, menuItem.Image);
-                        systemContextMenu.AddItem(systemContextMenuItem);
-                    }
-                    else
-                    {
-                        SystemContextMenuItem systemContextMenuItem = new(menuItem.Text, menuItem.PerformClick, flags);
-                        systemContextMenu.AddItem(systemContextMenuItem);
-                    }
-                }
-                else if (item is ToolStripSeparator seperator)
-                    systemContextMenu.AddItem(new SystemContextMenuItem("", new Action(() => { }), SystemContextMenuItemFlags.IsSeperator));
+                var systemItem = GetSystemContextMenuItem(item);
+                systemContextMenu.AddItem(systemItem);
             }
             return systemContextMenu;
         }
@@ -90,10 +33,11 @@ namespace System.Windows.Forms
         {
             Items.Add(item);
             item.ID = nextItemId;
-            if (item.MenuItemFlags.HasFlag(SystemContextMenuItemFlags.Bitmap))
-                _ = User32.AppendMenu(MenuHandle, item.MenuItemFlags, nextItemId++, item.Image.GetHbitmap());
+
+            if ((item.Flags & User32.MF_BITMAP) == User32.MF_BITMAP)
+                _ = User32.AppendMenu(MenuHandle, item.Flags, nextItemId++, item.Image.GetHbitmap());
             else
-                _ = User32.AppendMenu(MenuHandle, item.MenuItemFlags, nextItemId++, item.Text);
+                _ = User32.AppendMenu(MenuHandle, item.Flags, nextItemId++, item.Text);
         }
 
         public void PerformAction(int itemId)
@@ -117,34 +61,68 @@ namespace System.Windows.Forms
 
         public void Show(IntPtr windowHandle, int x, int y)
         {
-            int id = User32.TrackPopupMenuEx(MenuHandle, SystemContextMenuTrackPopupMenuFlags.ReturnResult, x, y, windowHandle, IntPtr.Zero);
+            int id = User32.TrackPopupMenuEx(MenuHandle, User32.TPM_RETURNCMD, x, y, windowHandle, IntPtr.Zero);
             PerformAction(id);
+        }
+
+        private static SystemContextMenuItem GetSystemContextMenuItem(ToolStripItem item)
+        {
+            uint flags = 0;
+
+            switch (item)
+            {
+                case ToolStripMenuItem menuItem:
+                    if (menuItem.Checked)
+                    {
+                        flags |= User32.MF_CHECKED;
+                    }
+
+                    if (!menuItem.Enabled)
+                    {
+                        flags |= User32.MF_DISABLED;
+                        flags |= User32.MF_GRAYED;
+                    }
+
+                    if (menuItem.Image != null)
+                    {
+                        flags |= User32.MF_BITMAP;
+                        return new(menuItem.Text, menuItem.PerformClick, flags, menuItem.Image);
+                    }
+                    else
+                    {
+                        return new(menuItem.Text, menuItem.PerformClick, flags);
+                    }
+
+                case ToolStripSeparator seperator:
+                    flags |= User32.MF_SEPARATOR;
+                    return new SystemContextMenuItem(string.Empty, new Action(() => { }), flags);
+
+                default:
+                    throw new ArgumentException($"Unsupported ToolStripItem type {item.GetType()}", nameof(item));
+            }
         }
     }
 
     public class SystemContextMenuItem
     {
+        public uint Flags;
         public int ID;
         public Bitmap Image;
-        public SystemContextMenuItemFlags MenuItemFlags;
         public Action OnClick;
         public string Text;
 
-        public SystemContextMenuItem(string text, Action onClick, SystemContextMenuItemFlags flags)
+        public SystemContextMenuItem(string text, Action onClick, uint flags)
         {
             Text = text;
             OnClick = onClick;
-            MenuItemFlags = flags;
+            Flags = flags;
         }
 
-        public SystemContextMenuItem(string text, Action onClick, SystemContextMenuItemFlags flags, Image image)
+        public SystemContextMenuItem(string text, Action onClick, uint flags, Image image)
         {
-            if (!flags.HasFlag(SystemContextMenuItemFlags.Bitmap))
-                flags |= SystemContextMenuItemFlags.Bitmap;
-
+            Flags = flags | User32.MF_BITMAP;
             Text = text;
             OnClick = onClick;
-            MenuItemFlags = flags;
             Image = new Bitmap(image);
         }
     }

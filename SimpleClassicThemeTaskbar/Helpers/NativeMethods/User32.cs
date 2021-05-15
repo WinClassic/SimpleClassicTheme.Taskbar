@@ -11,6 +11,33 @@ namespace SimpleClassicThemeTaskbar.Helpers.NativeMethods
     {
         internal const int KEYEVENTF_EXTENDEDKEY = 1;
         internal const int KEYEVENTF_KEYUP = 2;
+        internal const uint MF_BITMAP = 0x00000004;
+        internal const uint MF_CHECKED = 0x00000008;
+        internal const uint MF_DISABLED = 0x00000002;
+        internal const uint MF_ENABLED = 0x00000000;
+        internal const uint MF_GRAYED = 0x00000001;
+        internal const uint MF_MENUBARBREAK = 0x00000020;
+        internal const uint MF_MENUBREAK = 0x00000040;
+        internal const uint MF_OWNERDRAW = 0x00000100;
+        internal const uint MF_POPUP = 0x00000010;
+        internal const uint MF_SEPARATOR = 0x00000800;
+        internal const uint MF_STRING = 0x00000000;
+        internal const uint MF_UNCHECKED = 0x00000000;
+        internal const uint TPM_BOTTOMALIGN = 0x0020;
+        internal const uint TPM_CENTERALIGN = 0x0004;
+        internal const uint TPM_HORNEGANIMATION = 0x0800;
+        internal const uint TPM_HORPOSANIMATION = 0x0400;
+        internal const uint TPM_LEFTALIGN = 0x0000;
+        internal const uint TPM_LEFTBUTTON = 0x0000;
+        internal const uint TPM_NOANIMATION = 0x4000;
+        internal const uint TPM_NONOTIFY = 0x0080;
+        internal const uint TPM_RETURNCMD = 0x0100;
+        internal const uint TPM_RIGHTALIGN = 0x0008;
+        internal const uint TPM_RIGHTBUTTON = 0x0002;
+        internal const uint TPM_TOPALIGN = 0x0000;
+        internal const uint TPM_VCENTERALIGN = 0x0010;
+        internal const uint TPM_VERNEGANIMATION = 0x2000;
+        internal const uint TPM_VERPOSANIMATION = 0x2000;
         internal const uint VK_F4 = 0x73;
         internal const uint VK_MENU = 0x12;
         internal const uint WM_CLOSE = 0x0010;
@@ -38,10 +65,10 @@ namespace SimpleClassicThemeTaskbar.Helpers.NativeMethods
         }
 
         [DllImport("user32.dll", CharSet = CharSet.Unicode)]
-        internal static extern bool AppendMenu(IntPtr hMenu, SystemContextMenuItemFlags uFlags, int uIDNewItem, string lpNewItem);
+        internal static extern bool AppendMenu(IntPtr hMenu, uint uFlags, int uIDNewItem, string lpNewItem);
 
         [DllImport("user32.dll", CharSet = CharSet.Auto)]
-        internal static extern bool AppendMenu(IntPtr hMenu, SystemContextMenuItemFlags uFlags, int uIDNewItem, IntPtr lpNewItem);
+        internal static extern bool AppendMenu(IntPtr hMenu, uint uFlags, int uIDNewItem, IntPtr lpNewItem);
 
         [DllImport("user32.dll")]
         internal static extern ushort CascadeWindows(IntPtr hwndParent, uint wHow, IntPtr lpRect, uint cKids, IntPtr lpKids);
@@ -157,7 +184,7 @@ namespace SimpleClassicThemeTaskbar.Helpers.NativeMethods
         internal static extern ushort TileWindows(IntPtr hwndParent, uint wHow, IntPtr lpRect, uint cKids, IntPtr lpKids);
 
         [DllImport("user32.dll")]
-        internal static extern int TrackPopupMenuEx(IntPtr hmenu, SystemContextMenuTrackPopupMenuFlags fuFlags, int x, int y, IntPtr hwnd, IntPtr lptpm);
+        internal static extern int TrackPopupMenuEx(IntPtr hmenu, uint fuFlags, int x, int y, IntPtr hwnd, IntPtr lptpm);
 
         [StructLayout(LayoutKind.Sequential)]
         internal struct ICONINFO

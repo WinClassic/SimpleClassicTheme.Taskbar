@@ -382,7 +382,7 @@ namespace SimpleClassicThemeTaskbar
                     d = new ContextMenuStrip();
 
                     //Exit menu item
-                    ToolStripMenuItem toolbars = new("(NIY) &Toolbars");
+                    ToolStripMenuItem toolbars = new("&Toolbars") { Enabled = false };
                     ToolStripSeparator seperator1 = new();
                     ToolStripMenuItem cascadeWindows = new("Casca&de windows");
                     ToolStripMenuItem showWindowsStacked = new("Show windows stack&ed");
@@ -391,7 +391,7 @@ namespace SimpleClassicThemeTaskbar
                     ToolStripSeparator seperator2 = new();
                     ToolStripMenuItem taskManager = new("Tas&k Manager");
                     ToolStripSeparator seperator3 = new();
-                    ToolStripMenuItem lockTaskbar = new("(NIY) &Lock the taskbar");
+                    ToolStripMenuItem lockTaskbar = new("&Lock the taskbar") { Enabled = false };
                     ToolStripMenuItem settings = new("Configu&re SCT Taskbar");
                     ToolStripMenuItem exit = new("&Exit SCT Taskbar");
 
@@ -417,7 +417,7 @@ namespace SimpleClassicThemeTaskbar
                     _ = d.Items.Add(settings);
                     _ = d.Items.Add(exit);
 
-                    d.RenderMode = ToolStripRenderMode.Professional;
+                    d.RenderMode = ToolStripRenderMode.System;
                 }
                 ////Show the context menu
                 //d.Show(this, e.Location);
