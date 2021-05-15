@@ -88,16 +88,8 @@ namespace SimpleClassicThemeTaskbar
                 if (arg.StartsWith("-v="))
                     Logger.SetVerbosity((LoggerVerbosity)Int32.Parse(arg[3..]));
             }
+
             Logger.Log(LoggerVerbosity.Detailed, "EntryPoint", "Parsing arguments");
-            if (args.Contains("--dutch"))
-            {
-                System.Globalization.CultureInfo ci = new("nl-NL");
-                System.Threading.Thread.CurrentThread.CurrentCulture = ci;
-                System.Threading.Thread.CurrentThread.CurrentUICulture = ci;
-            }
-            System.Globalization.CultureInfo cii = new("en-US");
-            System.Threading.Thread.CurrentThread.CurrentCulture = cii;
-            System.Threading.Thread.CurrentThread.CurrentUICulture = cii;
             if (args.Contains("--exit"))
             {
                 Logger.Log(LoggerVerbosity.Detailed, "EntryPoint", "Killing all SCTT instances");

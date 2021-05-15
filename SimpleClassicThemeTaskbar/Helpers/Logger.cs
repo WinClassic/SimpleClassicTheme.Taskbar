@@ -24,6 +24,9 @@ namespace SimpleClassicThemeTaskbar.Helpers
         public static void Initialize(LoggerVerbosity verbosity)
         {
             SetVerbosity(verbosity);
+            if (loggerOff)
+                return;
+
             _ = Directory.CreateDirectory("./logs");
             var logPath = "./logs/log_" + DateTime.Now.ToString("yyyy-dd-M--HH-mm-ss") + ".txt";
 
