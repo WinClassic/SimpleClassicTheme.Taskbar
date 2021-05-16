@@ -38,8 +38,6 @@ namespace SimpleClassicThemeTaskbar.Helpers
         {
             var sb = new StringBuilder();
 
-            sb.AppendLine("Watch Logic:");
-
             foreach (var (Label, Elapsed) in Times)
             {
                 sb.AppendLine(Elapsed.ToString() + '\t' + Label);

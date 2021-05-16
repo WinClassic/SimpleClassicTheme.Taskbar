@@ -55,8 +55,8 @@ namespace SimpleClassicThemeTaskbar
         private Range taskArea;
 
         private int taskIconWidth;
+        private TimingDebugger timingDebugger = new();
         private bool watchLogic = true;
-
         private bool watchUI = true;
 
         //Constructor
@@ -461,10 +461,7 @@ namespace SimpleClassicThemeTaskbar
         private void timerUpdateInformation_Tick(object sender, EventArgs e)
         {
             if (!watchLogic)
-            {
-                sw.Reset();
-                sw.Start();
-            }
+                timingDebugger.Start();
 
             //Get the forground window to check some stuff
             IntPtr ForegroundWindow = User32.GetForegroundWindow();
@@ -483,11 +480,7 @@ namespace SimpleClassicThemeTaskbar
                     User32.ShowWindow(w.Handle, 0);
 
             if (!watchLogic)
-            {
-                times.Add(("Hide Shell_TrayWnd and Shell_SecondaryTrayWnd", sw.Elapsed));
-                sw.Reset();
-                sw.Start();
-            }
+                timingDebugger.FinishRegion("Hide Shell_TrayWnd and Shell_SecondaryTrayWnd");
 
             //The window should only be visible if the active window is not fullscreen (with the exception of the desktop window)
             Screen scr = Screen.FromHandle(wnd.Handle);
@@ -504,11 +497,7 @@ namespace SimpleClassicThemeTaskbar
                 return;
 
             if (!watchLogic)
-            {
-                times.Add(("Hide if ForegroundWindow is fullscreen", sw.Elapsed));
-                sw.Reset();
-                sw.Start();
-            }
+                timingDebugger.FinishRegion("Hide if ForegroundWindow is fullscreen");
 
             //Obtain task list
             windows.Clear();
@@ -516,11 +505,7 @@ namespace SimpleClassicThemeTaskbar
             User32.EnumWindows(d, 0);
 
             if (!watchLogic)
-            {
-                times.Add(("Get the task list", sw.Elapsed));
-                sw.Reset();
-                sw.Start();
-            }
+                timingDebugger.FinishRegion("Get the task list");
 
             //Resize work area
             Screen screen = Screen.FromHandle(CrossThreadHandle);
@@ -533,11 +518,7 @@ namespace SimpleClassicThemeTaskbar
                 Location = desiredLocation;
 
             if (!watchLogic)
-            {
-                times.Add(("Resize work area", sw.Elapsed));
-                sw.Reset();
-                sw.Start();
-            }
+                timingDebugger.FinishRegion("Resize work area");
 
             List<BaseTaskbarProgram> oldList = new();
             oldList.AddRange(icons);
@@ -633,11 +614,7 @@ namespace SimpleClassicThemeTaskbar
                 goto addAllWindows;
 
             if (!watchLogic)
-            {
-                times.Add(("Create controls for all tasks", sw.Elapsed));
-                sw.Reset();
-                sw.Start();
-            }
+                timingDebugger.FinishRegion("Create controls for all tasks");
 
             //Check for grouping and finalize position values
             foreach (BaseTaskbarProgram taskbarProgram in newIcons)
@@ -777,12 +754,10 @@ namespace SimpleClassicThemeTaskbar
                     goto addAllWindows;
                 }
             }
+
             if (!watchLogic)
-            {
-                times.Add(("Do grouping", sw.Elapsed));
-                sw.Reset();
-                sw.Start();
-            }
+                timingDebugger.FinishRegion("Do grouping");
+
             icons = programs;
             goto displayWindows;
 
@@ -801,22 +776,14 @@ namespace SimpleClassicThemeTaskbar
                 systemTray1.UpdateIcons();
 
             if (!watchLogic)
-            {
-                times.Add(("Systray", sw.Elapsed));
-                sw.Reset();
-                sw.Start();
-            }
+                timingDebugger.FinishRegion("Systray");
 
             //Update quick-launch
             if (Primary)
                 quickLaunch1.UpdateIcons();
 
             if (!watchLogic)
-            {
-                times.Add(("Quicklaunch", sw.Elapsed));
-                sw.Reset();
-                sw.Start();
-            }
+                timingDebugger.FinishRegion("Quick Launch");
 
             //Put divider in correct place
             verticalDivider3.Location = new Point(systemTray1.Location.X - 9, verticalDivider3.Location.Y);
@@ -827,12 +794,10 @@ namespace SimpleClassicThemeTaskbar
             if (!watchLogic)
             {
                 watchLogic = true;
-                sw.Stop();
-                string f = "Watch Logic: \n";
-                foreach ((string, TimeSpan) ts in times)
-                    f += $"{ts.Item2}\t{ts.Item1}\n";
-                f += $"{sw.Elapsed}\tFinal bit";
-                MessageBox.Show(f);
+
+                timingDebugger.Stop();
+
+                MessageBox.Show(timingDebugger.ToString());
             }
 
             //Update UI
