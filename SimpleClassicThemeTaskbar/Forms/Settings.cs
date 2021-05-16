@@ -226,7 +226,7 @@ namespace SimpleClassicThemeTaskbar
                 previewTaskbar = new Taskbar(true)
                 {
                     TopLevel = false,
-                    Width = 1000,
+                    Width = 1024, // 1024x768 is a pretty normal resolution
                     Dummy = true,
                 };
 
