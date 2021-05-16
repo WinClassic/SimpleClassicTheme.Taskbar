@@ -1,15 +1,14 @@
-﻿using SimpleClassicThemeTaskbar.UIElements.StartButton;
-using SimpleClassicThemeTaskbar.UIElements.SystemTray;
+﻿using SimpleClassicThemeTaskbar.Helpers;
+using SimpleClassicThemeTaskbar.Helpers.NativeMethods;
 using SimpleClassicThemeTaskbar.UIElements.QuickLaunch;
+using SimpleClassicThemeTaskbar.UIElements.StartButton;
+using SimpleClassicThemeTaskbar.UIElements.SystemTray;
+
 using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Text;
-using System.Runtime.InteropServices;
 using System.Windows.Forms;
-using SimpleClassicThemeTaskbar.Helpers;
-using SimpleClassicThemeTaskbar.Helpers.NativeMethods;
-using SimpleClassicThemeTaskbar.ThemeEngine;
 
 namespace SimpleClassicThemeTaskbar.ThemeEngine
 {
