@@ -45,11 +45,11 @@ namespace SimpleClassicThemeTaskbar
         //Window handle list
         private readonly List<Window> windows = new();
 
+        //TODO: Clean this shitty mess like wth
+        private ContextMenuStrip contextMenu;
+
         //private Thread BackgroundThread;
         private IntPtr CrossThreadHandle;
-
-        //TODO: Clean this shitty mess like wth
-        private ContextMenuStrip d;
 
         private bool dummy;
         private List<BaseTaskbarProgram> icons = new();
@@ -309,39 +309,41 @@ namespace SimpleClassicThemeTaskbar
 
         private ContextMenuStrip ConstructTaskbarContextMenu()
         {
-            ToolStripMenuItem cascadeWindows;
-            ToolStripMenuItem showWindowsStacked;
-            ToolStripMenuItem showWindowsSideBySide;
-            ToolStripMenuItem taskManager;
-            ToolStripMenuItem settings;
-            ToolStripMenuItem showDesktop;
-            ToolStripMenuItem exit;
+            ContextMenuStrip c = new();
 
             var items = new ToolStripItem[]
             {
                 new ToolStripMenuItem("&Toolbars") { Enabled = false },
                 new ToolStripSeparator(),
-                cascadeWindows = new("Ca&scade Windows"),
-                showWindowsStacked = new("Tile Windows &Horizontally"),
-                showWindowsSideBySide = new("Tile Windows V&ertically"),
-                showDesktop = new("&Show the Desktop", null, (_, __) => Keyboard.KeyPress(Keys.LWin, Keys.D)),
+                new ToolStripMenuItem("Ca&scade Windows", null, (_, __) => {
+                    _ = User32.CascadeWindows(IntPtr.Zero, User32.MDITILE_ZORDER, IntPtr.Zero, 0, IntPtr.Zero);
+                }),
+                new ToolStripMenuItem("Tile Windows &Horizontally", null, (_, __) => {
+                    _ = User32.TileWindows(IntPtr.Zero, User32.MDITILE_HORIZONTAL, IntPtr.Zero, 0, IntPtr.Zero);
+                }),
+                new ToolStripMenuItem("Tile Windows V&ertically", null, (_, __) => {
+                    _ = User32.TileWindows(IntPtr.Zero, User32.MDITILE_VERTICAL, IntPtr.Zero, 0, IntPtr.Zero);
+                }),
+                new ToolStripMenuItem("&Show the Desktop", null, (_, __) => {
+                    Keyboard.KeyPress(Keys.LWin, Keys.D);
+                }),
                 new ToolStripSeparator(),
-                taskManager = new("Tas&k Manager", null, (_, __) => Process.Start("taskmgr")),
+                new ToolStripMenuItem("Tas&k Manager", null, (_, __) => {
+                    Process.Start("taskmgr");
+                }),
                 new ToolStripSeparator(),
                 new ToolStripMenuItem("&Lock the Taskbar") { Enabled = false },
-                settings = new("P&roperties"),
-                // exit = new("&Exit SCT Taskbar", null, (_, __) => ApplicationEntryPoint.ExitSCTT()),
+                new ToolStripMenuItem("P&roperties", null, (_, __) => {
+                    new Settings().Show();
+                }),
+                new ToolStripMenuItem("&Exit SCT Taskbar", null, (_, __) => {
+                    ApplicationEntryPoint.ExitSCTT();
+                }),
             };
 
-            cascadeWindows.Click += delegate { _ = User32.CascadeWindows(IntPtr.Zero, User32.MDITILE_ZORDER, IntPtr.Zero, 0, IntPtr.Zero); };
-            showWindowsStacked.Click += delegate { _ = User32.TileWindows(IntPtr.Zero, User32.MDITILE_HORIZONTAL, IntPtr.Zero, 0, IntPtr.Zero); };
-            showWindowsSideBySide.Click += delegate { _ = User32.TileWindows(IntPtr.Zero, User32.MDITILE_VERTICAL, IntPtr.Zero, 0, IntPtr.Zero); };
-            settings.Click += delegate { new Settings().Show(); };
+            c.Items.AddRange(items);
 
-            ContextMenuStrip contextMenu = new();
-            contextMenu.Items.AddRange(items);
-
-            return contextMenu;
+            return c;
         }
 
         private bool EnumWind(IntPtr hWnd, int lParam)
@@ -472,18 +474,19 @@ namespace SimpleClassicThemeTaskbar
                 return;
             }
 
-            //Open context menu
+            // Open context menu
             if (e.Button == MouseButtons.Right)
             {
-                if (d == null)
-                {
-                    d = ConstructTaskbarContextMenu();
-                }
-                ////Show the context menu
-                //d.Show(this, e.Location);
-                SystemContextMenu menu = SystemContextMenu.FromContextMenuStrip(d);
+                contextMenu ??= ConstructTaskbarContextMenu();
+
+                var menu = SystemContextMenu.FromToolStripItems(contextMenu.Items);
                 Point location = PointToScreen(e.Location);
                 menu.Show(Handle, location.X, location.Y);
+
+                // Reset, state might have changed.
+                menu.Dispose();
+                contextMenu.Dispose();
+                contextMenu = null;
             }
             else if (e.Button == MouseButtons.Left && e.Location.X == Width - 1)
             {

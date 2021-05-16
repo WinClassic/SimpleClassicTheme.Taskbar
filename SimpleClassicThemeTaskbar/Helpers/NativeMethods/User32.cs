@@ -103,6 +103,13 @@ namespace SimpleClassicThemeTaskbar.Helpers.NativeMethods
         [DllImport("user32.dll")]
         internal static extern bool DeleteMenu(IntPtr hMenu, int uPosition, uint uFlags);
 
+        /// <summary>
+        /// Destroys the specified menu and frees any memory that the menu occupies.
+        /// </summary>
+        /// <param name="hMenu">A handle to the menu to be destroyed.</param>
+        [DllImport("user32.dll", SetLastError = true)]
+        internal static extern bool DestroyMenu(IntPtr hMenu);
+
         [DllImport("user32.dll")]
         internal static extern int DrawFrameControl(IntPtr hdc, ref RECT lpRect, uint un1, uint un2);
 
