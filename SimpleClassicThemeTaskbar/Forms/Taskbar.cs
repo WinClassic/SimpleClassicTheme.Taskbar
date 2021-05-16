@@ -347,7 +347,7 @@ namespace SimpleClassicThemeTaskbar
                 // Create a button for the new window
                 case User32.ShellEvents.HSHELL_WINDOWCREATED:
                     Window window = new(wParam);
-                    BaseTaskbarProgram button = new SingleTaskbarProgram
+                    SingleTaskbarProgram button = new SingleTaskbarProgram
                     {
                         Window = window
                     };
@@ -364,7 +364,63 @@ namespace SimpleClassicThemeTaskbar
                     if (BlacklistedClassNames.Contains(window.ClassName) || BlacklistedWindowNames.Contains(window.Title) || BlacklistedProcessNames.Contains(p.ProcessName))
                         button.Dispose();
                     else
-                        icons.Add(button);
+					{
+                        bool sameProcessExists = false;
+                        bool sameExecutableExists = false;
+                        bool sameModuleNameExists = false;
+                        BaseTaskbarProgram sameThing = null;
+                        foreach (BaseTaskbarProgram program in icons)
+                        {
+                            if (button.Process.Id == program.Process.Id)
+                            {
+                                sameProcessExists = true;
+                                sameThing = program;
+                            }
+                            try
+                            {
+                                if (button.Process.MainModule.FileName == program.Process.MainModule.FileName)
+                                {
+                                    sameExecutableExists = true;
+                                    sameThing = program;
+                                }
+                                if (button.Process.MainModule.ModuleName == program.Process.MainModule.ModuleName)
+                                {
+                                    sameModuleNameExists = true;
+                                    sameThing = program;
+                                }
+                            }
+                            catch (Win32Exception) { }
+                        }
+
+                        if ((Config.ProgramGroupCheck == ProgramGroupCheck.Process && sameProcessExists) ||
+                            (Config.ProgramGroupCheck == ProgramGroupCheck.FileNameAndPath && sameExecutableExists) ||
+                            (Config.ProgramGroupCheck == ProgramGroupCheck.ModuleName && sameModuleNameExists))
+                        {
+                            if (sameThing is GroupedTaskbarProgram)
+                            {
+                                GroupedTaskbarProgram group = sameThing as GroupedTaskbarProgram;
+                                if (!group.ProgramWindows.Contains(button))
+                                {
+                                    button.IsMoving = false;
+                                    group.ProgramWindows.Add(button);
+                                }
+                            }
+                            else
+                            {
+                                GroupedTaskbarProgram group = new();
+                                icons.Remove(sameThing);
+                                group.MouseDown += Taskbar_IconDown;
+                                group.ProgramWindows.Add(sameThing as SingleTaskbarProgram);
+                                group.ProgramWindows.Add(button);
+                                button.IsMoving = false;
+                                icons.Add(group);
+                            }
+                        }
+                        else
+                        {
+                            icons.Add(button);
+                        }
+                    }
 
                     UpdateUI();
                     UpdateUI();
@@ -374,7 +430,45 @@ namespace SimpleClassicThemeTaskbar
                         taskbarProgram.ActiveWindow = taskbarProgram.Window.Handle == wParam;
                     break;
                 case User32.ShellEvents.HSHELL_WINDOWDESTROYED:
-                    
+                    List<BaseTaskbarProgram> referenceList = new List<BaseTaskbarProgram>(icons);
+                    foreach (BaseTaskbarProgram taskbarProgram in referenceList)
+					{
+                        if (taskbarProgram is SingleTaskbarProgram singleProgram)
+						{
+                            if (singleProgram.ActiveWindow)
+							{
+                                icons.Remove(singleProgram);
+							}
+						}
+                        else if (taskbarProgram is GroupedTaskbarProgram groupedProgram)
+						{
+                            if (!groupedProgram.RemoveWindow(wParam))
+							{
+                                if (groupedProgram.ProgramWindows.Count == 1)
+                                {
+                                    BaseTaskbarProgram seperatedProgram = new SingleTaskbarProgram
+                                    {
+                                        Window = groupedProgram.ProgramWindows[0].Window
+                                    };
+                                    seperatedProgram.MouseDown += Taskbar_IconDown;
+                                    seperatedProgram.MouseMove += Taskbar_IconMove;
+                                    seperatedProgram.MouseUp += Taskbar_IconUp;
+                                    seperatedProgram.Height = Height;
+
+                                    User32.GetWindowThreadProcessId(seperatedProgram.Window.Handle, out uint processId);
+                                    Process process = Process.GetProcessById((int)processId);
+                                    seperatedProgram.Process = process;
+
+                                    icons.Insert(icons.IndexOf(groupedProgram), seperatedProgram);
+                                }
+                                icons.Remove(groupedProgram);
+                                groupedProgram.Dispose();
+                            }
+                        }
+                    }
+
+                    UpdateUI();
+                    UpdateUI();
                     break;
                 default:
                     break;
