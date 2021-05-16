@@ -62,6 +62,7 @@ namespace SimpleClassicThemeTaskbar
         private bool watchUI = true;
         private bool experimentGetDataPushed = false;
         private User32.WindowsHookProcedure hookProcedure;
+        private int WM_SHELLHOOKMESSAGE = -1;
 
         /// <summary>
         /// Sets whether this taskbar should behave a "decoration piece", this disables some logic.
@@ -133,20 +134,6 @@ namespace SimpleClassicThemeTaskbar
             systemTray1.Height = Height;
             quickLaunch1.Height = Height;
 
-            // Create shell hook
-            if (File.Exists("egdp.txt")) 
-                experimentGetDataPushed = true;
-            if (experimentGetDataPushed)
-            {
-                hookProcedure = new User32.WindowsHookProcedure(HookProcedure);
-                if (User32.SetWindowsHookEx(User32.WH_SHELL, hookProcedure, IntPtr.Zero, Kernel32.GetCurrentThreadId()) == IntPtr.Zero)
-				{
-                    int errorCode = Marshal.GetLastWin32Error();
-                    Logger.Log(LoggerVerbosity.Basic, "Taskbar/Constructor", $"Failed to create Windows Hook. ({errorCode:X8})");
-                    throw new Win32Exception(errorCode);
-				}
-            }
-
             //Make sure programs are aware of the new work area
             if (isPrimary)
             {
@@ -165,36 +152,38 @@ namespace SimpleClassicThemeTaskbar
 
         protected override void WndProc(ref Message m)
         {
-            if (m.Msg == User32.WM_ENDSESSION)
-            {
-                ApplicationEntryPoint.ExitSCTT();
-            }
+            switch (m.Msg)
+			{
+                case User32.WM_ENDSESSION:
+                    ApplicationEntryPoint.ExitSCTT();
+                    break;
+                case User32.WM_QUERYENDSESSION:
+                    m.Result = new IntPtr(1);
+                    break;
+                case Constants.WM_SCT:
+                    switch (m.WParam.ToInt32())
+                    {
+                        case Constants.SCTWP_EXIT:
+                            if (ApplicationEntryPoint.SCTCompatMode || m.LParam.ToInt32() == Constants.SCTLP_FORCE)
+                            {
+                                ApplicationEntryPoint.ExitSCTT();
+                            }
+                            break;
 
-            if (m.Msg == User32.WM_QUERYENDSESSION)
-            {
-                m.Result = new IntPtr(1);
-            }
+                        case Constants.SCTWP_ISMANAGED:
+                            m.Result = new IntPtr(1);
+                            return;
 
-            if (m.Msg == Constants.WM_SCT)
-            {
-                switch (m.WParam.ToInt32())
-                {
-                    case Constants.SCTWP_EXIT:
-                        if (ApplicationEntryPoint.SCTCompatMode || m.LParam.ToInt32() == Constants.SCTLP_FORCE)
-                        {
-                            ApplicationEntryPoint.ExitSCTT();
-                        }
-                        break;
-
-                    case Constants.SCTWP_ISMANAGED:
-                        m.Result = new IntPtr(1);
-                        return;
-
-                    case Constants.SCTWP_ISSCT:
-                        m.Result = new IntPtr(ApplicationEntryPoint.SCTCompatMode ? 1 : 0);
-                        return;
-                }
-            }
+                        case Constants.SCTWP_ISSCT:
+                            m.Result = new IntPtr(ApplicationEntryPoint.SCTCompatMode ? 1 : 0);
+                            return;
+                    }
+                    break;
+			}
+            if (m.Msg == WM_SHELLHOOKMESSAGE)
+			{
+                HookProcedure((User32.ShellEvents)m.WParam, m.LParam, IntPtr.Zero);
+			}
             base.WndProc(ref m);
         }
 
@@ -206,8 +195,26 @@ namespace SimpleClassicThemeTaskbar
             quickLaunch1.Disabled = (!Primary) || (!Config.EnableQuickLaunch);
             quickLaunch1.UpdateIcons();
 
-            if (experimentGetDataPushed)
+            // Create shell hook
+            if (File.Exists("egdp.txt"))
             {
+                experimentGetDataPushed = true;
+                hookProcedure = new User32.WindowsHookProcedure(HookProcedure);
+                if (!User32.RegisterShellHookWindow(Handle))
+                //if (User32.SetWindowsHookEx(User32.ShellHookId.WH_SHELL, hookProcedure, Marshal.GetHINSTANCE(typeof(Taskbar).Module), /*Kernel32.GetCurrentThreadId()*/0) == IntPtr.Zero)
+                {
+                    int errorCode = Marshal.GetLastWin32Error();
+                    Logger.Log(LoggerVerbosity.Basic, "Taskbar/Constructor", $"Failed to create Shell Hook. ({errorCode:X8})");
+                    throw new Win32Exception(errorCode);
+                }
+                WM_SHELLHOOKMESSAGE = User32.RegisterWindowMessage("SHELLHOOK");
+                if (WM_SHELLHOOKMESSAGE == 0)
+				{
+                    int errorCode = Marshal.GetLastWin32Error();
+                    Logger.Log(LoggerVerbosity.Basic, "Taskbar/Constructor", $"Failed to register Shell Hook message. ({errorCode:X8})");
+                    throw new Win32Exception(errorCode);
+                }
+
                 EnumerateWindows();
                 timerUpdate.Start();
             }
@@ -360,16 +367,20 @@ namespace SimpleClassicThemeTaskbar
                         icons.Add(button);
 
                     UpdateUI();
+                    UpdateUI();
                     break;
                 case User32.ShellEvents.HSHELL_WINDOWACTIVATED:
                     foreach (BaseTaskbarProgram taskbarProgram in icons)
                         taskbarProgram.ActiveWindow = taskbarProgram.Window.Handle == wParam;
                     break;
+                case User32.ShellEvents.HSHELL_WINDOWDESTROYED:
+                    
+                    break;
                 default:
                     break;
             }
 
-            return IntPtr.Zero;
+            return User32.CallNextHookEx(IntPtr.Zero, nCode, wParam, lParam);
         }
 
         private void EnumerateWindows()
@@ -573,16 +584,23 @@ namespace SimpleClassicThemeTaskbar
                             sameProcessExists = true;
                             sameThing = program;
                         }
-                        if (icon.Process.MainModule.FileName == program.Process.MainModule.FileName)
+                        try
                         {
-                            sameExecutableExists = true;
-                            sameThing = program;
+                            if (icon.Process.MainModule.FileName == program.Process.MainModule.FileName)
+                            {
+                                sameExecutableExists = true;
+                                sameThing = program;
+                            }
+                            if (icon.Process.MainModule.ModuleName == program.Process.MainModule.ModuleName)
+                            {
+                                sameModuleNameExists = true;
+                                sameThing = program;
+                            }
                         }
-                        if (icon.Process.MainModule.ModuleName == program.Process.MainModule.ModuleName)
-                        {
-                            sameModuleNameExists = true;
-                            sameThing = program;
-                        }
+                        catch
+						{
+
+						}
                     }
 
                     if ((Config.ProgramGroupCheck == ProgramGroupCheck.Process && sameProcessExists) ||

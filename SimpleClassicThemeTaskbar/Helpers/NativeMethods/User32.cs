@@ -52,7 +52,6 @@ namespace SimpleClassicThemeTaskbar.Helpers.NativeMethods
         internal const uint TPM_VERPOSANIMATION = 0x2000;
         internal const uint VK_F4 = 0x73;
         internal const uint VK_MENU = 0x12;
-        internal const int WH_SHELL = 0xa;
         internal const uint WM_CLOSE = 0x0010;
         internal const int WM_ENDSESSION = 0x0016;
         internal const int WM_GETICON = 0x007F;
@@ -70,6 +69,12 @@ namespace SimpleClassicThemeTaskbar.Helpers.NativeMethods
         internal delegate bool EnumWindowsCallback(IntPtr hWnd, int lParam);
 
         internal delegate IntPtr WindowsHookProcedure(ShellEvents nCode, IntPtr wParam, IntPtr lParam);
+
+        internal enum ShellHookId : int
+        {
+            WH_SHELL = 0xa,
+            WH_CBT = 0x5
+        }
 
         internal enum ShellEvents : int
         {
@@ -173,7 +178,10 @@ namespace SimpleClassicThemeTaskbar.Helpers.NativeMethods
         [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Auto)]
         internal static extern bool PostMessage(IntPtr hWnd, uint Msg, uint wParam, uint lParam);
 
-        [DllImport("user32.dll", EntryPoint = "RegisterWindowMessageA", CharSet = CharSet.Unicode, SetLastError = true, ExactSpelling = true)]
+        [DllImport("user32.dll", SetLastError = true)]
+        internal static extern bool RegisterShellHookWindow(IntPtr hwnd);
+
+        [DllImport("user32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
         internal static extern int RegisterWindowMessage(string lpString);
 
         [DllImport("user32.dll", CharSet = CharSet.Auto)]
@@ -192,7 +200,7 @@ namespace SimpleClassicThemeTaskbar.Helpers.NativeMethods
         internal static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int X, int Y, int cx, int cy, uint uFlags);
 
         [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-        internal static extern IntPtr SetWindowsHookEx(int idHook, WindowsHookProcedure lpfn, IntPtr hmod, uint dwThreadId);
+        internal static extern IntPtr SetWindowsHookEx(ShellHookId idHook, WindowsHookProcedure lpfn, IntPtr hmod, uint dwThreadId);
 
         [DllImport("user32.dll", SetLastError = true)]
         internal static extern bool SetWindowTextW(IntPtr hWnd, string lpString);
