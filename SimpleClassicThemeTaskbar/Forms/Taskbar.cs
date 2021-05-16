@@ -374,20 +374,12 @@ namespace SimpleClassicThemeTaskbar
 
         private void EnumerateWindows()
 		{
-            //Obtain task list
-            windows.Clear();
-            User32.EnumWindowsCallback d = EnumWind;
-            User32.EnumWindows(d, 0);
-
-            if (!watchLogic)
-                timingDebugger.FinishRegion("Get the task list");
-
             if (!Dummy)
             {
-                //Resize work area
+                // Resize work area
                 ApplyWorkArea();
 
-                //Hide explorer's taskbar(s)
+                // Hide explorer's taskbar(s)
                 waitBeforeShow = false;
                 windows.Clear();
                 LookingForTray = true;
@@ -400,6 +392,12 @@ namespace SimpleClassicThemeTaskbar
                         User32.ShowWindow(w.Handle, 0);
             }
 
+            // Obtain task list
+            windows.Clear();
+            User32.EnumWindowsCallback d = EnumWind;
+            User32.EnumWindows(d, 0);
+
+            // Save old list for later
             List<BaseTaskbarProgram> oldList = new();
             oldList.AddRange(icons);
 
