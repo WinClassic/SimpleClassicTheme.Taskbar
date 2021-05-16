@@ -69,7 +69,7 @@ namespace SimpleClassicThemeTaskbar.Helpers.NativeMethods
 
         internal delegate bool EnumWindowsCallback(IntPtr hWnd, int lParam);
 
-        internal delegate IntPtr WindowsHookProcedure(int nCode, IntPtr wParam, IntPtr lParam);
+        internal delegate IntPtr WindowsHookProcedure(ShellEvents nCode, IntPtr wParam, IntPtr lParam);
 
         internal enum ShellEvents : int
         {
@@ -92,7 +92,7 @@ namespace SimpleClassicThemeTaskbar.Helpers.NativeMethods
         internal static extern bool AppendMenu(IntPtr hMenu, uint uFlags, int uIDNewItem, IntPtr lpNewItem);
 
         [DllImport("user32.dll")]
-        internal static extern IntPtr CallNextHookEx(IntPtr hhk, int nCode, IntPtr wParam, IntPtr lParam);
+        internal static extern IntPtr CallNextHookEx(IntPtr hhk, ShellEvents nCode, IntPtr wParam, IntPtr lParam);
 
         [DllImport("user32.dll")]
         internal static extern ushort CascadeWindows(IntPtr hwndParent, uint wHow, IntPtr lpRect, uint cKids, IntPtr lpKids);
