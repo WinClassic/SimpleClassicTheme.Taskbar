@@ -104,7 +104,7 @@ namespace SimpleClassicThemeTaskbar
             if (isPrimary)
             {
                 windows.Clear();
-                EnumWindowsCallback callback = EnumWind;
+                User32.EnumWindowsCallback callback = EnumWind;
                 _ = User32.EnumWindows(callback, 0);
                 foreach (Window w in windows)
                 {
@@ -148,7 +148,7 @@ namespace SimpleClassicThemeTaskbar
             //Show explorer's taskbar(s)
             windows.Clear();
             LookingForTray = true;
-            EnumWindowsCallback callback = EnumWind;
+            User32.EnumWindowsCallback callback = EnumWind;
             _ = User32.EnumWindows(callback, 0);
             LookingForTray = false;
 
@@ -170,30 +170,32 @@ namespace SimpleClassicThemeTaskbar
 
         protected override void WndProc(ref Message m)
         {
-            if (m.Msg == WM_ENDSESSION)
+            if (m.Msg == User32.WM_ENDSESSION)
             {
                 ApplicationEntryPoint.ExitSCTT();
             }
-            if (m.Msg == WM_QUERYENDSESSION)
+
+            if (m.Msg == User32.WM_QUERYENDSESSION)
             {
                 m.Result = new IntPtr(1);
             }
-            if (m.Msg == WM_SCT)
+
+            if (m.Msg == Constants.WM_SCT)
             {
                 switch (m.WParam.ToInt32())
                 {
-                    case SCTWP_EXIT:
-                        if (ApplicationEntryPoint.SCTCompatMode || m.LParam.ToInt32() == SCTLP_FORCE)
+                    case Constants.SCTWP_EXIT:
+                        if (ApplicationEntryPoint.SCTCompatMode || m.LParam.ToInt32() == Constants.SCTLP_FORCE)
                         {
                             ApplicationEntryPoint.ExitSCTT();
                         }
                         break;
 
-                    case SCTWP_ISMANAGED:
+                    case Constants.SCTWP_ISMANAGED:
                         m.Result = new IntPtr(1);
                         return;
 
-                    case SCTWP_ISSCT:
+                    case Constants.SCTWP_ISSCT:
                         m.Result = new IntPtr(ApplicationEntryPoint.SCTCompatMode ? 1 : 0);
                         return;
                 }
@@ -455,9 +457,9 @@ namespace SimpleClassicThemeTaskbar
                     ToolStripMenuItem settings = new("Configu&re SCT Taskbar");
                     ToolStripMenuItem exit = new("&Exit SCT Taskbar");
 
-                    cascadeWindows.Click += delegate { _ = User32.CascadeWindows(IntPtr.Zero, MDITILE_ZORDER, IntPtr.Zero, 0, IntPtr.Zero); };
-                    showWindowsStacked.Click += delegate { _ = User32.TileWindows(IntPtr.Zero, MDITILE_HORIZONTAL, IntPtr.Zero, 0, IntPtr.Zero); };
-                    showWindowsSideBySide.Click += delegate { _ = User32.TileWindows(IntPtr.Zero, MDITILE_VERTICAL, IntPtr.Zero, 0, IntPtr.Zero); };
+                    cascadeWindows.Click += delegate { _ = User32.CascadeWindows(IntPtr.Zero, User32.MDITILE_ZORDER, IntPtr.Zero, 0, IntPtr.Zero); };
+                    showWindowsStacked.Click += delegate { _ = User32.TileWindows(IntPtr.Zero, User32.MDITILE_HORIZONTAL, IntPtr.Zero, 0, IntPtr.Zero); };
+                    showWindowsSideBySide.Click += delegate { _ = User32.TileWindows(IntPtr.Zero, User32.MDITILE_VERTICAL, IntPtr.Zero, 0, IntPtr.Zero); };
                     taskManager.Click += delegate { _ = Process.Start("taskmgr"); };
                     settings.Click += delegate { new Settings().Show(); };
                     showDesktop.Click += delegate { Keyboard.KeyPress(Keys.LWin, Keys.D); };
@@ -509,7 +511,7 @@ namespace SimpleClassicThemeTaskbar
             waitBeforeShow = false;
             windows.Clear();
             LookingForTray = true;
-            EnumWindowsCallback callback = EnumWind;
+            User32.EnumWindowsCallback callback = EnumWind;
             User32.EnumWindows(callback, 0);
             LookingForTray = false;
 
@@ -539,7 +541,7 @@ namespace SimpleClassicThemeTaskbar
 
             //Obtain task list
             windows.Clear();
-            EnumWindowsCallback d = EnumWind;
+            User32.EnumWindowsCallback d = EnumWind;
             User32.EnumWindows(d, 0);
 
             if (!watchLogic)

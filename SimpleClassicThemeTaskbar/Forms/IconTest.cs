@@ -63,15 +63,15 @@ namespace SimpleClassicThemeTaskbar.Forms
             IntPtr hwnd = wnd.Handle;
             IntPtr iconHandle = IntPtr.Zero;
             if (index == 0)
-                iconHandle = User32.SendMessage(hwnd, Taskbar.WM_GETICON, Taskbar.ICON_SMALL2, 0);
+                iconHandle = User32.SendMessage(hwnd, User32.WM_GETICON, User32.ICON_SMALL2, 0);
             if (index == 1)
-                iconHandle = User32.SendMessage(hwnd, Taskbar.WM_GETICON, Taskbar.ICON_SMALL, 0);
+                iconHandle = User32.SendMessage(hwnd, User32.WM_GETICON, User32.ICON_SMALL, 0);
             if (index == 2)
-                iconHandle = User32.SendMessage(hwnd, Taskbar.WM_GETICON, Taskbar.ICON_BIG, 0);
+                iconHandle = User32.SendMessage(hwnd, User32.WM_GETICON, User32.ICON_BIG, 0);
             if (index == 3)
-                iconHandle = Taskbar.GetClassLongPtr(hwnd, Taskbar.GCL_HICONSM);
+                iconHandle = Taskbar.GetClassLongPtr(hwnd, User32.GCL_HICONSM);
             if (index == 4)
-                iconHandle = Taskbar.GetClassLongPtr(hwnd, Taskbar.GCL_HICON);
+                iconHandle = Taskbar.GetClassLongPtr(hwnd, User32.GCL_HICON);
             return iconHandle;
         }
 

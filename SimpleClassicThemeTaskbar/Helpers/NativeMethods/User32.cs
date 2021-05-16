@@ -12,8 +12,16 @@ namespace SimpleClassicThemeTaskbar.Helpers.NativeMethods
         internal const uint DFC_BUTTON = 4;
         internal const uint DFCS_BUTTONPUSH = 0x10;
         internal const uint DFCS_PUSHED = 512;
+        internal const int GCL_HICON = -14;
+        internal const int GCL_HICONSM = -34;
+        internal const int ICON_BIG = 1;
+        internal const int ICON_SMALL = 0;
+        internal const int ICON_SMALL2 = 2;
         internal const int KEYEVENTF_EXTENDEDKEY = 1;
         internal const int KEYEVENTF_KEYUP = 2;
+        internal const int MDITILE_HORIZONTAL = 0x0001;
+        internal const int MDITILE_VERTICAL = 0x0000;
+        internal const int MDITILE_ZORDER = 0x0004;
         internal const uint MF_BITMAP = 0x00000004;
         internal const uint MF_CHECKED = 0x00000008;
         internal const uint MF_DISABLED = 0x00000002;
@@ -45,15 +53,20 @@ namespace SimpleClassicThemeTaskbar.Helpers.NativeMethods
         internal const uint VK_F4 = 0x73;
         internal const uint VK_MENU = 0x12;
         internal const uint WM_CLOSE = 0x0010;
+        internal const int WM_ENDSESSION = 0x0016;
+        internal const int WM_GETICON = 0x007F;
         internal const uint WM_KEYDOWN = 0x0100;
         internal const uint WM_KEYUP = 0x0101;
         internal const uint WM_LBUTTONDOWN = 0x0201;
         internal const uint WM_LBUTTONUP = 0x0202;
+        internal const int WM_QUERYENDSESSION = 0x0011;
         internal const uint WM_RBUTTONDOWN = 0x0204;
         internal const uint WM_RBUTTONUP = 0x0205;
         internal const int WM_SYSCOMMAND = 0x0112;
 
         internal delegate bool EnumThreadDelegate(IntPtr hWnd, IntPtr lParam);
+
+        internal delegate bool EnumWindowsCallback(IntPtr hWnd, int lParam);
 
         internal enum ShellEvents : int
         {

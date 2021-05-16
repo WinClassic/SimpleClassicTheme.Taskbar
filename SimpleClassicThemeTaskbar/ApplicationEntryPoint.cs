@@ -15,10 +15,6 @@ namespace SimpleClassicThemeTaskbar
 {
     internal static class ApplicationEntryPoint
     {
-        public const int SCTLP_FORCE = 0x0001;
-        public const int SCTWP_EXIT = 0x0001;
-        public const int SCTWP_ISSCT = 0x0003;
-        public const int WM_SCT = 0x0420;
         public static int ErrorCount = 0;
         public static UserControlEx ErrorSource;
 
@@ -117,12 +113,14 @@ namespace SimpleClassicThemeTaskbar
                     {
                         StringBuilder builder = new(1000);
                         User32.GetClassName(handle, builder, 1000);
+
                         if (builder.Length > 0)
                             s = s + builder.ToString() + "\n";
-                        IntPtr returnValue = User32.SendMessage(handle, WM_SCT, new IntPtr(SCTWP_ISSCT), IntPtr.Zero);
+
+                        IntPtr returnValue = User32.SendMessage(handle, Constants.WM_SCT, new IntPtr(Constants.SCTWP_ISSCT), IntPtr.Zero);
                         if (returnValue != IntPtr.Zero)
                         {
-                            User32.SendMessage(handle, WM_SCT, new IntPtr(SCTWP_EXIT), IntPtr.Zero);
+                            User32.SendMessage(handle, Constants.WM_SCT, new IntPtr(Constants.SCTWP_EXIT), IntPtr.Zero);
                         }
                     }
                 });
@@ -179,7 +177,6 @@ namespace SimpleClassicThemeTaskbar
                         Logger.OpenLog();
 					}
 				}
-                
             };
 #endif
             //Check if system/program architecture matches
