@@ -21,6 +21,8 @@ namespace SimpleClassicThemeTaskbar
             InitializeComponent();
 
             labelCopyrightSCT.Location = new Point(tabAbout.Width - labelCopyrightSCT.Width, labelCopyrightSCT.Location.Y);
+
+            this.SetFlatStyle(FlatStyle.System);
         }
 
         public void SaveSettings()
