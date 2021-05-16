@@ -36,7 +36,6 @@ namespace SimpleClassicThemeTaskbar
 			this.verticalDivider3 = new SimpleClassicThemeTaskbar.UIElements.Misc.VerticalDivider();
 			this.systemTray1 = new SimpleClassicThemeTaskbar.UIElements.SystemTray.SystemTray();
 			this.startButton1 = new SimpleClassicThemeTaskbar.UIElements.StartButton.StartButton();
-			this.startButtonPanel = new System.Windows.Forms.Panel();
 			this.timerUpdateUI = new System.Windows.Forms.Timer(this.components);
 			this.timerUpdateInformation = new System.Windows.Forms.Timer(this.components);
 			this.SuspendLayout();
@@ -88,15 +87,6 @@ namespace SimpleClassicThemeTaskbar
 			this.startButton1.Size = new System.Drawing.Size(57, 28);
 			this.startButton1.TabIndex = 4;
 			// 
-			// startButtonPanel
-			// 
-			this.startButtonPanel.BackColor = System.Drawing.Color.Transparent;
-			this.startButtonPanel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-			this.startButtonPanel.Location = new System.Drawing.Point(0, 0);
-			this.startButtonPanel.Name = "startButtonPanel";
-			this.startButtonPanel.Size = new System.Drawing.Size(57, 28);
-			this.startButtonPanel.TabIndex = 14;
-			// 
 			// timerUpdateUI
 			// 
 			this.timerUpdateUI.Interval = 15;
@@ -116,7 +106,6 @@ namespace SimpleClassicThemeTaskbar
 			this.Controls.Add(this.verticalDivider3);
 			this.Controls.Add(this.systemTray1);
 			this.Controls.Add(this.startButton1);
-			this.Controls.Add(this.startButtonPanel);
 			this.DoubleBuffered = true;
 			this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
@@ -134,7 +123,6 @@ namespace SimpleClassicThemeTaskbar
 
         #endregion
 
-        private System.Windows.Forms.Panel startButtonPanel;
         private UIElements.StartButton.StartButton startButton1;
         private UIElements.SystemTray.SystemTray systemTray1;
         private UIElements.Misc.VerticalDivider verticalDivider3;

@@ -127,7 +127,6 @@ namespace SimpleClassicThemeTaskbar
             //Fix height according to renderers preferences
             Height = Config.Renderer.TaskbarHeight;
             startButton1.Height = Height;
-            startButtonPanel.Height = Height;
             systemTray1.Height = Height;
             quickLaunch1.Height = Height;
 
@@ -349,21 +348,6 @@ namespace SimpleClassicThemeTaskbar
             //BackgroundThread.Start();
             timerUpdateInformation.Start();
             //timerUpdateUI.Start();
-        }
-
-        private void StartButtonPanel_MouseClick(object sender, System.Windows.Forms.MouseEventArgs e)
-        {
-            startButton1.OnMouseClick(startButton1, e);
-        }
-
-        private void StartButtonPanel_MouseDown(object sender, System.Windows.Forms.MouseEventArgs e)
-        {
-            startButton1.OnMouseDown(startButton1, e);
-        }
-
-        private void StartButtonPanel_MouseUp(object sender, System.Windows.Forms.MouseEventArgs e)
-        {
-            startButton1.OnMouseUp(startButton1, e);
         }
 
         private void Taskbar_FormClosing(object sender, FormClosingEventArgs e)
@@ -834,7 +818,6 @@ namespace SimpleClassicThemeTaskbar
             startButton1.UpdateState(wnd);
 
             //Put left side controls in the correct place
-            startButtonPanel.Width = startButton1.Width + 2;
             quickLaunch1.Location = new Point(startButton1.Location.X + startButton1.Width + 2, 1);
 
             //Calculate availabe space in taskbar and then divide that space over all programs
