@@ -52,6 +52,8 @@ namespace SimpleClassicThemeTaskbar
         private IntPtr CrossThreadHandle;
 
         private bool dummy;
+        private bool experimentGetDataPushed = false;
+        private User32.WindowsHookProcedure hookProcedure;
         private List<BaseTaskbarProgram> icons = new();
         private bool LookingForTray = false;
         private Range taskArea;
@@ -60,39 +62,6 @@ namespace SimpleClassicThemeTaskbar
         private TimingDebugger timingDebugger = new();
         private bool watchLogic = true;
         private bool watchUI = true;
-        private bool experimentGetDataPushed = false;
-        private User32.WindowsHookProcedure hookProcedure;
-
-        /// <summary>
-        /// Sets whether this taskbar should behave a "decoration piece", this disables some logic.
-        /// </summary>
-        public bool Dummy
-        {
-            get => dummy;
-            set
-            {
-                dummy = value;
-
-                if (dummy)
-                {
-                    Enabled = false;
-                }
-            }
-        }
-
-        /// <summary>
-        /// Make sure form doesnt show in alt tab and that it shows up on all virtual desktops
-        /// </summary>
-        protected override CreateParams CreateParams
-        {
-            get
-            {
-                CreateParams cp = base.CreateParams;
-                // Turn on WS_EX_TOOLWINDOW style bit
-                cp.ExStyle |= 0x80;
-                return cp;
-            }
-        }
 
         //Constructor
         public Taskbar(bool isPrimary)
@@ -134,17 +103,17 @@ namespace SimpleClassicThemeTaskbar
             quickLaunch1.Height = Height;
 
             // Create shell hook
-            if (File.Exists("egdp.txt")) 
+            if (File.Exists("egdp.txt"))
                 experimentGetDataPushed = true;
             if (experimentGetDataPushed)
             {
                 hookProcedure = new User32.WindowsHookProcedure(HookProcedure);
                 if (User32.SetWindowsHookEx(User32.WH_SHELL, hookProcedure, IntPtr.Zero, Kernel32.GetCurrentThreadId()) == IntPtr.Zero)
-				{
+                {
                     int errorCode = Marshal.GetLastWin32Error();
                     Logger.Log(LoggerVerbosity.Basic, "Taskbar/Constructor", $"Failed to create Windows Hook. ({errorCode:X8})");
                     throw new Win32Exception(errorCode);
-				}
+                }
             }
 
             //Make sure programs are aware of the new work area
@@ -161,21 +130,51 @@ namespace SimpleClassicThemeTaskbar
             }
         }
 
+        /// <summary>
+        /// Sets whether this taskbar should behave a "decoration piece", this disables some logic.
+        /// </summary>
+        public bool Dummy
+        {
+            get => dummy;
+            set
+            {
+                dummy = value;
+
+                if (dummy)
+                {
+                    Enabled = false;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Make sure form doesnt show in alt tab and that it shows up on all virtual desktops
+        /// </summary>
+        protected override CreateParams CreateParams
+        {
+            get
+            {
+                CreateParams cp = base.CreateParams;
+                // Turn on WS_EX_TOOLWINDOW style bit
+                cp.ExStyle |= 0x80;
+                return cp;
+            }
+        }
+
         public IntPtr HookProcedure(int nCode, IntPtr wParam, IntPtr lParam)
-		{
+        {
             Logger.Log(LoggerVerbosity.Verbose, "Taskbar/HookProcedure", $"Call parameters: {nCode}, {wParam:X8}, {lParam:X8}");
 
             if (nCode < 0)
                 goto callNextHook;
 
             switch (nCode)
-			{
-
-			}
+            {
+            }
 
         callNextHook:
             return User32.CallNextHookEx(IntPtr.Zero, nCode, wParam, lParam);
-		}
+        }
 
         //Function that displays the taskbar on the specified screen
         public void ShowOnScreen(Screen screen)
@@ -307,9 +306,49 @@ namespace SimpleClassicThemeTaskbar
                 timingDebugger.FinishRegion("Resize work area");
         }
 
+        private ToolStripMenuItem ConstructDebuggingMenu()
+        {
+            var debuggingItem = new ToolStripMenuItem("&Debugging");
+
+            debuggingItem.DropDownItems.Add(new ToolStripMenuItem("Watch UI", null, (_, __) =>
+            {
+                times.Clear();
+                watchUI = !watchUI;
+            })
+            {
+                Checked = watchUI,
+            });
+
+            debuggingItem.DropDownItems.Add(new ToolStripMenuItem("Watch Logic", null, (_, __) =>
+            {
+                times.Clear();
+                watchLogic = !watchLogic;
+            })
+            {
+                Checked = watchLogic,
+            });
+
+            debuggingItem.DropDownItems.Add(new ToolStripMenuItem("Watch Tray", null, (_, __) =>
+            {
+                times.Clear();
+                systemTray1.times.Clear();
+                systemTray1.watchTray = !systemTray1.watchTray;
+            })
+            {
+                Checked = systemTray1.watchTray,
+            });
+
+            return debuggingItem;
+        }
+
         private ContextMenuStrip ConstructTaskbarContextMenu()
         {
             ContextMenuStrip c = new();
+
+            if (Config.EnableDebugging)
+            {
+                c.Items.Add(ConstructDebuggingMenu());
+            }
 
             var items = new ToolStripItem[]
             {
@@ -385,6 +424,17 @@ namespace SimpleClassicThemeTaskbar
             //timerUpdateUI.Start();
         }
 
+        private bool ShouldShowExit()
+        {
+            if (Config.ExitMenuItemCondition == ExitMenuItemCondition.Always)
+            {
+                return true;
+            }
+
+            // ExitMenuItemCondition.RequireShortcut
+            return ModifierKeys.HasFlag(Keys.Control | Keys.Shift);
+        }
+
         private void Taskbar_FormClosing(object sender, FormClosingEventArgs e)
         {
             if (!selfClose)
@@ -450,30 +500,6 @@ namespace SimpleClassicThemeTaskbar
 
         private void Taskbar_MouseClick(object sender, MouseEventArgs e)
         {
-            if (e.Button == MouseButtons.Middle)
-            {
-                times.Clear();
-                systemTray1.times.Clear();
-                switch (Microsoft.VisualBasic.Interaction.InputBox(""))
-                {
-                    case "1":
-                        watchUI = false;
-                        break;
-
-                    case "2":
-                        watchLogic = false;
-                        break;
-
-                    case "3":
-                        systemTray1.watchTray = false;
-                        break;
-
-                    default:
-                        break;
-                }
-                return;
-            }
-
             // Open context menu
             if (e.Button == MouseButtons.Right)
             {
