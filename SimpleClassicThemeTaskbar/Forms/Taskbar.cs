@@ -113,6 +113,11 @@ namespace SimpleClassicThemeTaskbar
             }
         }
 
+        /// <summary>
+        /// Sets whether this taskbar should behave a "decoration piece", this disables some logic.
+        /// </summary>
+        public bool Dummy { get; set; }
+
         //Make sure form doesnt show in alt tab and that it shows up on all virtual desktops
         protected override CreateParams CreateParams
         {
@@ -245,6 +250,26 @@ namespace SimpleClassicThemeTaskbar
 
             //If none of those things failed: Yay, we have a window we should display!
             return true;
+        }
+
+        private void ApplyWorkArea()
+        {
+            Screen screen = Screen.FromHandle(CrossThreadHandle);
+            Rectangle rct = screen.Bounds;
+            rct.Height -= Height;
+            Point desiredLocation = new(rct.Left, rct.Bottom);
+
+            if (screen.WorkingArea.ToString() != rct.ToString())
+            {
+                var windowHandles = windows.Select(a => a.Handle).ToArray();
+                cppCode.SetWorkingArea(rct.Left, rct.Right, rct.Top, rct.Bottom, Environment.OSVersion.Version.Major < 10, windowHandles);
+            }
+
+            if (Location.ToString() != desiredLocation.ToString())
+                Location = desiredLocation;
+
+            if (!watchLogic)
+                timingDebugger.FinishRegion("Resize work area");
         }
 
         private bool EnumWind(IntPtr hWnd, int lParam)
@@ -508,17 +533,11 @@ namespace SimpleClassicThemeTaskbar
                 timingDebugger.FinishRegion("Get the task list");
 
             //Resize work area
-            Screen screen = Screen.FromHandle(CrossThreadHandle);
-            Rectangle rct = screen.Bounds;
-            rct.Height -= Height;
-            Point desiredLocation = new(rct.Left, rct.Bottom);
-            if (screen.WorkingArea.ToString() != rct.ToString())
-                cppCode.SetWorkingArea(rct.Left, rct.Right, rct.Top, rct.Bottom, Environment.OSVersion.Version.Major < 10, windows.Select(a => a.Handle).ToArray());
-            if (Location.ToString() != desiredLocation.ToString())
-                Location = desiredLocation;
 
-            if (!watchLogic)
-                timingDebugger.FinishRegion("Resize work area");
+            if (!Dummy)
+            {
+                ApplyWorkArea();
+            }
 
             List<BaseTaskbarProgram> oldList = new();
             oldList.AddRange(icons);
