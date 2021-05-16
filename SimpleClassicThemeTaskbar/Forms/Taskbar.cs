@@ -50,6 +50,7 @@ namespace SimpleClassicThemeTaskbar
         //TODO: Clean this shitty mess like wth
         private ContextMenuStrip d;
 
+        private bool dummy;
         private List<BaseTaskbarProgram> icons = new();
         private bool LookingForTray = false;
         private Range taskArea;
@@ -116,7 +117,19 @@ namespace SimpleClassicThemeTaskbar
         /// <summary>
         /// Sets whether this taskbar should behave a "decoration piece", this disables some logic.
         /// </summary>
-        public bool Dummy { get; set; }
+        public bool Dummy
+        {
+            get => dummy;
+            set
+            {
+                dummy = value;
+
+                if (dummy)
+                {
+                    Enabled = false;
+                }
+            }
+        }
 
         //Make sure form doesnt show in alt tab and that it shows up on all virtual desktops
         protected override CreateParams CreateParams
