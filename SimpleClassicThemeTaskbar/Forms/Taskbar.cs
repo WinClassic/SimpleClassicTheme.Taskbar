@@ -3,6 +3,7 @@ using SimpleClassicThemeTaskbar.Helpers.NativeMethods;
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
@@ -59,6 +60,8 @@ namespace SimpleClassicThemeTaskbar
         private TimingDebugger timingDebugger = new();
         private bool watchLogic = true;
         private bool watchUI = true;
+        private bool experimentGetDataPushed = false;
+        private User32.WindowsHookProcedure hookProcedure;
 
         /// <summary>
         /// Sets whether this taskbar should behave a "decoration piece", this disables some logic.
@@ -130,6 +133,20 @@ namespace SimpleClassicThemeTaskbar
             systemTray1.Height = Height;
             quickLaunch1.Height = Height;
 
+            // Create shell hook
+            if (File.Exists("egdp.txt")) 
+                experimentGetDataPushed = true;
+            if (experimentGetDataPushed)
+            {
+                hookProcedure = new User32.WindowsHookProcedure(HookProcedure);
+                if (User32.SetWindowsHookEx(User32.WH_SHELL, hookProcedure, IntPtr.Zero, Kernel32.GetCurrentThreadId()) == IntPtr.Zero)
+				{
+                    int errorCode = Marshal.GetLastWin32Error();
+                    Logger.Log(LoggerVerbosity.Basic, "Taskbar/Constructor", $"Failed to create Windows Hook. ({errorCode:X8})");
+                    throw new Win32Exception(errorCode);
+				}
+            }
+
             //Make sure programs are aware of the new work area
             if (isPrimary)
             {
@@ -143,6 +160,22 @@ namespace SimpleClassicThemeTaskbar
                 }
             }
         }
+
+        public IntPtr HookProcedure(int nCode, IntPtr wParam, IntPtr lParam)
+		{
+            Logger.Log(LoggerVerbosity.Verbose, "Taskbar/HookProcedure", $"Call parameters: {nCode}, {wParam:X8}, {lParam:X8}");
+
+            if (nCode < 0)
+                goto callNextHook;
+
+            switch (nCode)
+			{
+
+			}
+
+        callNextHook:
+            return User32.CallNextHookEx(IntPtr.Zero, nCode, wParam, lParam);
+		}
 
         //Function that displays the taskbar on the specified screen
         public void ShowOnScreen(Screen screen)

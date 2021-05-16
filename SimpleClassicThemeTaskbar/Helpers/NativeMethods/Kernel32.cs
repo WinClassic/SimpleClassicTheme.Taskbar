@@ -13,5 +13,8 @@ namespace SimpleClassicThemeTaskbar.Helpers.NativeMethods
 
         [DllImport("kernel32", CharSet = CharSet.Unicode)]
         internal static extern long WritePrivateProfileString(string section, string key, string val, string filePath);
+
+        [DllImport("kernel32")]
+        internal static extern uint GetCurrentThreadId();
     }
 }

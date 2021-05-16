@@ -92,6 +92,9 @@ namespace SimpleClassicThemeTaskbar.Helpers.NativeMethods
         internal static extern bool AppendMenu(IntPtr hMenu, uint uFlags, int uIDNewItem, IntPtr lpNewItem);
 
         [DllImport("user32.dll")]
+        internal static extern IntPtr CallNextHookEx(IntPtr hhk, int nCode, IntPtr wParam, IntPtr lParam);
+
+        [DllImport("user32.dll")]
         internal static extern ushort CascadeWindows(IntPtr hwndParent, uint wHow, IntPtr lpRect, uint cKids, IntPtr lpKids);
 
         [DllImport("user32.dll")]
