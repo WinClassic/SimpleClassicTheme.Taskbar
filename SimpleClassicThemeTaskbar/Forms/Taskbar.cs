@@ -622,13 +622,25 @@ namespace SimpleClassicThemeTaskbar
             }
             
             icons = programs;
-            UpdateUI();
-            return;
+            goto finish;
 
         addAllWindows:
             icons = newIcons;
+            goto finish;
+
+        finish:
+            //Update systray
+            if (Primary)
+                systemTray1.UpdateIcons();
+
+            //Update quick-launch
+            if (Primary)
+                quickLaunch1.UpdateIcons();
+
+            //Put divider in correct place
+            verticalDivider3.Location = new Point(systemTray1.Location.X - 9, verticalDivider3.Location.Y);
             UpdateUI();
-            return;
+            UpdateUI();
         }
 
         private void UpdateUI()
@@ -668,6 +680,7 @@ namespace SimpleClassicThemeTaskbar
                 }
                 x += icon.Width + Config.SpaceBetweenTaskbarIcons;
                 icon.Visible = true;
+                icon.Height = Height;
             }
             if (heldDownButton != null)
             {
@@ -677,11 +690,16 @@ namespace SimpleClassicThemeTaskbar
 
             taskArea = new Range(new Index(startX), new Index(maxX));
             taskIconWidth = iconWidth;
+
+            Invalidate();
         }
 
         private void timerUpdate_Tick(object sender, EventArgs e)
 		{
-
+            // Get the foreground window to set the ActiveWindow property on the taskbar items
+            IntPtr ForegroundWindow = User32.GetForegroundWindow();
+            foreach (BaseTaskbarProgram taskbarProgram in icons)
+                taskbarProgram.ActiveWindow = taskbarProgram.Window.Handle == ForegroundWindow;
         }
 
         private void ApplyWorkArea()
