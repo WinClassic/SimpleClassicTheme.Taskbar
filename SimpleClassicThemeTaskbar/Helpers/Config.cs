@@ -80,8 +80,13 @@ namespace SimpleClassicThemeTaskbar.Helpers
                     }
 
                     Logger.Log(LoggerVerbosity.Verbose, "Config", $"Setting property: {property.Name} → {value} → {registryValue}");
-
-                    property.SetValue(null, registryValue);
+                    try
+                    {
+                        property.SetValue(null, registryValue);
+                    }
+                    catch
+                    {
+                    }
                 }
             }
 
