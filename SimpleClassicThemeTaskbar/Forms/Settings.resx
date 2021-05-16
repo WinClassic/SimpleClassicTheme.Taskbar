@@ -1996,18 +1996,6 @@ no warranty what so ever.</value>
   <data name="&gt;&gt;panelContent.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
-  <data name="&gt;&gt;tbdLabel.Name" xml:space="preserve">
-    <value>tbdLabel</value>
-  </data>
-  <data name="&gt;&gt;tbdLabel.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=5.0.6.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tbdLabel.Parent" xml:space="preserve">
-    <value>panelPreview</value>
-  </data>
-  <data name="&gt;&gt;tbdLabel.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
   <data name="panelPreview.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Top</value>
   </data>
@@ -2031,36 +2019,6 @@ no warranty what so ever.</value>
   </data>
   <data name="&gt;&gt;panelPreview.ZOrder" xml:space="preserve">
     <value>1</value>
-  </data>
-  <data name="tbdLabel.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="tbdLabel.Location" type="System.Drawing.Point, System.Drawing.Primitives">
-    <value>0, 0</value>
-  </data>
-  <data name="tbdLabel.Size" type="System.Drawing.Size, System.Drawing.Primitives">
-    <value>378, 96</value>
-  </data>
-  <data name="tbdLabel.TabIndex" type="System.Int32, System.Private.CoreLib">
-    <value>0</value>
-  </data>
-  <data name="tbdLabel.Text" xml:space="preserve">
-    <value>Preview TBD!</value>
-  </data>
-  <data name="tbdLabel.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing.Common">
-    <value>MiddleCenter</value>
-  </data>
-  <data name="&gt;&gt;tbdLabel.Name" xml:space="preserve">
-    <value>tbdLabel</value>
-  </data>
-  <data name="&gt;&gt;tbdLabel.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=5.0.6.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tbdLabel.Parent" xml:space="preserve">
-    <value>panelPreview</value>
-  </data>
-  <data name="&gt;&gt;tbdLabel.ZOrder" xml:space="preserve">
-    <value>0</value>
   </data>
   <data name="notifyIcon1.Text" xml:space="preserve">
     <value>notifyIcon1</value>

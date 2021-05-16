@@ -81,7 +81,6 @@
             this.aboutLabel = new System.Windows.Forms.LinkLabel();
             this.panelContent = new System.Windows.Forms.Panel();
             this.panelPreview = new System.Windows.Forms.Panel();
-            this.tbdLabel = new System.Windows.Forms.Label();
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
             this.customIconFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.tabControl.SuspendLayout();
@@ -99,7 +98,6 @@
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.bannerPictureBox)).BeginInit();
             this.panelContent.SuspendLayout();
-            this.panelPreview.SuspendLayout();
             this.SuspendLayout();
             // 
             // buttonApply
@@ -136,7 +134,7 @@
             this.tabControl.Name = "tabControl";
             this.tabControl.SelectedIndex = 0;
             this.tabControl.SizeMode = System.Windows.Forms.TabSizeMode.FillToRight;
-            this.tabControl.SelectedIndexChanged += new System.EventHandler(this.settingsTabs_SelectedIndexChanged);
+            this.tabControl.SelectedIndexChanged += new System.EventHandler(this.SettingsTabs_SelectedIndexChanged);
             // 
             // tabGeneral
             // 
@@ -508,15 +506,8 @@
             // 
             this.panelPreview.BackColor = System.Drawing.SystemColors.Desktop;
             this.panelPreview.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.panelPreview.Controls.Add(this.tbdLabel);
             resources.ApplyResources(this.panelPreview, "panelPreview");
             this.panelPreview.Name = "panelPreview";
-            // 
-            // tbdLabel
-            // 
-            resources.ApplyResources(this.tbdLabel, "tbdLabel");
-            this.tbdLabel.ForeColor = System.Drawing.Color.White;
-            this.tbdLabel.Name = "tbdLabel";
             // 
             // notifyIcon1
             // 
@@ -563,7 +554,6 @@
             this.tableLayoutPanel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.bannerPictureBox)).EndInit();
             this.panelContent.ResumeLayout(false);
-            this.panelPreview.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -611,7 +601,6 @@
         private System.Windows.Forms.LinkLabel aboutLabel;
         private System.Windows.Forms.Panel panelContent;
         private System.Windows.Forms.Panel panelPreview;
-        private System.Windows.Forms.Label tbdLabel;
         private System.Windows.Forms.Button customIconBrowseButton;
         private System.Windows.Forms.TextBox customIconTextBox;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;

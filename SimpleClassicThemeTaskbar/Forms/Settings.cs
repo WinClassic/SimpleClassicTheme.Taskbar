@@ -13,6 +13,7 @@ namespace SimpleClassicThemeTaskbar
 {
     public partial class Settings : Form
     {
+        private Taskbar previewTaskbar;
         private System.ComponentModel.ComponentResourceManager Resources = new(typeof(Settings));
 
         public Settings()
@@ -218,6 +219,35 @@ namespace SimpleClassicThemeTaskbar
             }
         }
 
+        private void LayoutTaskbarPreview(bool showRightSide = false)
+        {
+            if (previewTaskbar == null)
+            {
+                previewTaskbar = new Taskbar(true)
+                {
+                    TopLevel = false,
+                    Width = 1000,
+                    Dummy = true,
+                };
+
+                panelPreview.Controls.Add(previewTaskbar);
+
+                previewTaskbar.Show();
+            }
+
+            const int weirdOffset = -4;
+            previewTaskbar.Top = panelPreview.Height - previewTaskbar.Height + weirdOffset;
+
+            if (showRightSide)
+            {
+                previewTaskbar.Left = panelPreview.Width - previewTaskbar.Width;
+            }
+            else
+            {
+                previewTaskbar.Left = 0;
+            }
+        }
+
         private void LoadSettings()
         {
             comboBoxGroupingMethod.SelectedIndex = (int)Config.ProgramGroupCheck;
@@ -305,13 +335,24 @@ namespace SimpleClassicThemeTaskbar
             }
 
             _ = UXTheme.SetWindowTheme(Handle, " ", " ");
+
+            LayoutTaskbarPreview();
         }
 
-        private void settingsTabs_SelectedIndexChanged(object sender, EventArgs e)
+        private void SettingsTabs_SelectedIndexChanged(object sender, EventArgs e)
         {
             var aboutIndex = tabControl.TabPages.IndexOf(tabAbout);
+            var systemTrayIndex = tabControl.TabPages.IndexOf(tabSystemTray);
 
-            panelPreview.Visible = tabControl.SelectedIndex != aboutIndex;
+            var aboutSelected = tabControl.SelectedIndex == aboutIndex;
+            var systemTraySelected = tabControl.SelectedIndex == systemTrayIndex;
+
+            if (!aboutSelected)
+            {
+                LayoutTaskbarPreview(systemTraySelected);
+            }
+
+            panelPreview.Visible = !aboutSelected;
         }
 
         private void StartButtonRadioButton_CheckedChanged(object sender, EventArgs e)
