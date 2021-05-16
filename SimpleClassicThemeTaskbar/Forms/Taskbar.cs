@@ -301,14 +301,14 @@ namespace SimpleClassicThemeTaskbar
             {
                 new ToolStripMenuItem("&Toolbars") { Enabled = false },
                 new ToolStripSeparator(),
-                cascadeWindows = new("Ca&scade windows"),
+                cascadeWindows = new("Ca&scade Windows"),
                 showWindowsStacked = new("Tile Windows &Horizontally"),
                 showWindowsSideBySide = new("Tile Windows V&ertically"),
-                showDesktop = new("&Show the desktop", null, (_, __) => Keyboard.KeyPress(Keys.LWin, Keys.D)),
+                showDesktop = new("&Show the Desktop", null, (_, __) => Keyboard.KeyPress(Keys.LWin, Keys.D)),
                 new ToolStripSeparator(),
                 taskManager = new("Tas&k Manager", null, (_, __) => Process.Start("taskmgr")),
                 new ToolStripSeparator(),
-                new ToolStripMenuItem("&Lock the taskbar") { Enabled = false },
+                new ToolStripMenuItem("&Lock the Taskbar") { Enabled = false },
                 settings = new("P&roperties"),
                 // exit = new("&Exit SCT Taskbar", null, (_, __) => ApplicationEntryPoint.ExitSCTT()),
             };
