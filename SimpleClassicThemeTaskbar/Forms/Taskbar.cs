@@ -364,63 +364,7 @@ namespace SimpleClassicThemeTaskbar
                     if (BlacklistedClassNames.Contains(window.ClassName) || BlacklistedWindowNames.Contains(window.Title) || BlacklistedProcessNames.Contains(p.ProcessName))
                         button.Dispose();
                     else
-					{
-                        bool sameProcessExists = false;
-                        bool sameExecutableExists = false;
-                        bool sameModuleNameExists = false;
-                        BaseTaskbarProgram sameThing = null;
-                        foreach (BaseTaskbarProgram program in icons)
-                        {
-                            if (button.Process.Id == program.Process.Id)
-                            {
-                                sameProcessExists = true;
-                                sameThing = program;
-                            }
-                            try
-                            {
-                                if (button.Process.MainModule.FileName == program.Process.MainModule.FileName)
-                                {
-                                    sameExecutableExists = true;
-                                    sameThing = program;
-                                }
-                                if (button.Process.MainModule.ModuleName == program.Process.MainModule.ModuleName)
-                                {
-                                    sameModuleNameExists = true;
-                                    sameThing = program;
-                                }
-                            }
-                            catch (Win32Exception) { }
-                        }
-
-                        if ((Config.ProgramGroupCheck == ProgramGroupCheck.Process && sameProcessExists) ||
-                            (Config.ProgramGroupCheck == ProgramGroupCheck.FileNameAndPath && sameExecutableExists) ||
-                            (Config.ProgramGroupCheck == ProgramGroupCheck.ModuleName && sameModuleNameExists))
-                        {
-                            if (sameThing is GroupedTaskbarProgram)
-                            {
-                                GroupedTaskbarProgram group = sameThing as GroupedTaskbarProgram;
-                                if (!group.ProgramWindows.Contains(button))
-                                {
-                                    button.IsMoving = false;
-                                    group.ProgramWindows.Add(button);
-                                }
-                            }
-                            else
-                            {
-                                GroupedTaskbarProgram group = new();
-                                icons.Remove(sameThing);
-                                group.MouseDown += Taskbar_IconDown;
-                                group.ProgramWindows.Add(sameThing as SingleTaskbarProgram);
-                                group.ProgramWindows.Add(button);
-                                button.IsMoving = false;
-                                icons.Add(group);
-                            }
-                        }
-                        else
-                        {
-                            icons.Add(button);
-                        }
-                    }
+                        icons.Add(button);
 
                     UpdateUI();
                     UpdateUI();
