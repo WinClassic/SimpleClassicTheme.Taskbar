@@ -287,6 +287,43 @@ namespace SimpleClassicThemeTaskbar
                 timingDebugger.FinishRegion("Resize work area");
         }
 
+        private ContextMenuStrip ConstructTaskbarContextMenu()
+        {
+            ToolStripMenuItem cascadeWindows;
+            ToolStripMenuItem showWindowsStacked;
+            ToolStripMenuItem showWindowsSideBySide;
+            ToolStripMenuItem taskManager;
+            ToolStripMenuItem settings;
+            ToolStripMenuItem showDesktop;
+            ToolStripMenuItem exit;
+
+            var items = new ToolStripItem[]
+            {
+                new ToolStripMenuItem("&Toolbars") { Enabled = false },
+                new ToolStripSeparator(),
+                cascadeWindows = new("Ca&scade windows"),
+                showWindowsStacked = new("Tile Windows &Horizontally"),
+                showWindowsSideBySide = new("Tile Windows V&ertically"),
+                showDesktop = new("&Show the desktop", null, (_, __) => Keyboard.KeyPress(Keys.LWin, Keys.D)),
+                new ToolStripSeparator(),
+                taskManager = new("Tas&k Manager", null, (_, __) => Process.Start("taskmgr")),
+                new ToolStripSeparator(),
+                new ToolStripMenuItem("&Lock the taskbar") { Enabled = false },
+                settings = new("P&roperties"),
+                // exit = new("&Exit SCT Taskbar", null, (_, __) => ApplicationEntryPoint.ExitSCTT()),
+            };
+
+            cascadeWindows.Click += delegate { _ = User32.CascadeWindows(IntPtr.Zero, User32.MDITILE_ZORDER, IntPtr.Zero, 0, IntPtr.Zero); };
+            showWindowsStacked.Click += delegate { _ = User32.TileWindows(IntPtr.Zero, User32.MDITILE_HORIZONTAL, IntPtr.Zero, 0, IntPtr.Zero); };
+            showWindowsSideBySide.Click += delegate { _ = User32.TileWindows(IntPtr.Zero, User32.MDITILE_VERTICAL, IntPtr.Zero, 0, IntPtr.Zero); };
+            settings.Click += delegate { new Settings().Show(); };
+
+            ContextMenuStrip contextMenu = new();
+            contextMenu.Items.AddRange(items);
+
+            return contextMenu;
+        }
+
         private bool EnumWind(IntPtr hWnd, int lParam)
         {
             if (LookingForTray)
@@ -433,53 +470,9 @@ namespace SimpleClassicThemeTaskbar
             //Open context menu
             if (e.Button == MouseButtons.Right)
             {
-                //systemTray1.watchTray = false;
-                //systemTray1.times.Clear();
-                //return;
-
-                //Check if the context menu is initialized
                 if (d == null)
                 {
-                    //Create the context menu
-                    d = new ContextMenuStrip();
-
-                    //Exit menu item
-                    ToolStripMenuItem toolbars = new("&Toolbars") { Enabled = false };
-                    ToolStripSeparator seperator1 = new();
-                    ToolStripMenuItem cascadeWindows = new("Casca&de windows");
-                    ToolStripMenuItem showWindowsStacked = new("Show windows stack&ed");
-                    ToolStripMenuItem showWindowsSideBySide = new("Show windows s&ide by side");
-                    ToolStripMenuItem showDesktop = new("&Show the desktop");
-                    ToolStripSeparator seperator2 = new();
-                    ToolStripMenuItem taskManager = new("Tas&k Manager");
-                    ToolStripSeparator seperator3 = new();
-                    ToolStripMenuItem lockTaskbar = new("&Lock the taskbar") { Enabled = false };
-                    ToolStripMenuItem settings = new("Configu&re SCT Taskbar");
-                    ToolStripMenuItem exit = new("&Exit SCT Taskbar");
-
-                    cascadeWindows.Click += delegate { _ = User32.CascadeWindows(IntPtr.Zero, User32.MDITILE_ZORDER, IntPtr.Zero, 0, IntPtr.Zero); };
-                    showWindowsStacked.Click += delegate { _ = User32.TileWindows(IntPtr.Zero, User32.MDITILE_HORIZONTAL, IntPtr.Zero, 0, IntPtr.Zero); };
-                    showWindowsSideBySide.Click += delegate { _ = User32.TileWindows(IntPtr.Zero, User32.MDITILE_VERTICAL, IntPtr.Zero, 0, IntPtr.Zero); };
-                    taskManager.Click += delegate { _ = Process.Start("taskmgr"); };
-                    settings.Click += delegate { new Settings().Show(); };
-                    showDesktop.Click += delegate { Keyboard.KeyPress(Keys.LWin, Keys.D); };
-                    exit.Click += delegate { ApplicationEntryPoint.ExitSCTT(); };
-
-                    //Add all menu items
-                    _ = d.Items.Add(toolbars);
-                    _ = d.Items.Add(seperator1);
-                    _ = d.Items.Add(cascadeWindows);
-                    _ = d.Items.Add(showWindowsStacked);
-                    _ = d.Items.Add(showWindowsSideBySide);
-                    _ = d.Items.Add(showDesktop);
-                    _ = d.Items.Add(seperator2);
-                    _ = d.Items.Add(taskManager);
-                    _ = d.Items.Add(seperator3);
-                    _ = d.Items.Add(lockTaskbar);
-                    _ = d.Items.Add(settings);
-                    _ = d.Items.Add(exit);
-
-                    d.RenderMode = ToolStripRenderMode.System;
+                    d = ConstructTaskbarContextMenu();
                 }
                 ////Show the context menu
                 //d.Show(this, e.Location);
