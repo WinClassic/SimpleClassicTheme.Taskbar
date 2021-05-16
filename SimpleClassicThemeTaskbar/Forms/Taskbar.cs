@@ -60,6 +60,37 @@ namespace SimpleClassicThemeTaskbar
         private bool watchLogic = true;
         private bool watchUI = true;
 
+        /// <summary>
+        /// Sets whether this taskbar should behave a "decoration piece", this disables some logic.
+        /// </summary>
+        public bool Dummy
+        {
+            get => dummy;
+            set
+            {
+                dummy = value;
+
+                if (dummy)
+                {
+                    Enabled = false;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Make sure form doesnt show in alt tab and that it shows up on all virtual desktops
+        /// </summary>
+        protected override CreateParams CreateParams
+        {
+            get
+            {
+                CreateParams cp = base.CreateParams;
+                // Turn on WS_EX_TOOLWINDOW style bit
+                cp.ExStyle |= 0x80;
+                return cp;
+            }
+        }
+
         //Constructor
         public Taskbar(bool isPrimary)
         {
@@ -112,49 +143,6 @@ namespace SimpleClassicThemeTaskbar
                     _ = User32.PostMessage(w.Handle, 0x001A, 0x002F, 0);
                 }
             }
-        }
-
-        /// <summary>
-        /// Sets whether this taskbar should behave a "decoration piece", this disables some logic.
-        /// </summary>
-        public bool Dummy
-        {
-            get => dummy;
-            set
-            {
-                dummy = value;
-
-                if (dummy)
-                {
-                    Enabled = false;
-                }
-            }
-        }
-
-        //Make sure form doesnt show in alt tab and that it shows up on all virtual desktops
-        protected override CreateParams CreateParams
-        {
-            get
-            {
-                CreateParams cp = base.CreateParams;
-                // Turn on WS_EX_TOOLWINDOW style bit
-                cp.ExStyle |= 0x80;
-                return cp;
-            }
-        }
-
-        public void RestoreExplorer()
-        {
-            //Show explorer's taskbar(s)
-            windows.Clear();
-            LookingForTray = true;
-            User32.EnumWindowsCallback callback = EnumWind;
-            _ = User32.EnumWindows(callback, 0);
-            LookingForTray = false;
-
-            foreach (Window w in windows)
-                if ((w.WindowInfo.dwStyle & 0x10000000L) > 0)
-                    _ = User32.ShowWindow(w.Handle, 5 /* SW_SHOW */);
         }
 
         //Function that displays the taskbar on the specified screen
