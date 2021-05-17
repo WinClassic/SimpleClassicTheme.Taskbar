@@ -20,11 +20,11 @@ jobs:
       uses: microsoft/setup-msbuild@v1
       
     - name: Build SCTT x86
-      run: msbuild SimpleClassicThemeTaskbar.sln -noLogo -property:Configuration=Release -property:Plaform=x86
+      run: msbuild -noLogo -property:Configuration=Release -property:Plaform=x86 SimpleClassicThemeTaskbar.sln
       working-directory: ./
 
     - name: Build SCTT x64
-      run: msbuild SimpleClassicThemeTaskbar.sln -noLogo -property:Configuration=Release -property:Plaform=AMD64
+      run: msbuild -noLogo -property:Configuration=Release -property:Plaform=AMD64 SimpleClassicThemeTaskbar.sln
       working-directory: ./
 
     - name: Upload x86 build artifacts
