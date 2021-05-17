@@ -100,7 +100,7 @@ bool SimpleClassicThemeTaskbar::UnmanagedCode::WindowIsOnCurrentDesktop(HWND hWn
 		//Ask the VDM if the window is on the current desktop
 		BOOL isCurrent;
 		if (SUCCEEDED(g_pvdm->IsWindowOnCurrentVirtualDesktop(hWnd, &isCurrent)))
-
+			
 		//Return the result from the VDM
 		return isCurrent;
 	}

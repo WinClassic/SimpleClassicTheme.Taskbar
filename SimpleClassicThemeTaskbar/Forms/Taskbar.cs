@@ -465,11 +465,15 @@ namespace SimpleClassicThemeTaskbar
 
         private void EnumerateWindows()
 		{
-            if (!Dummy)
-            {
-                // Resize work area
-                ApplyWorkArea();
+            // Check if the foreground window was the start menu
+            IntPtr ForegroundWindow = User32.GetForegroundWindow();
+            startButton1.UpdateState(new Window(ForegroundWindow));
 
+            //Put left side controls in the correct place
+            quickLaunch1.Location = new Point(startButton1.Location.X + startButton1.Width + 2, 1);
+
+            if (!Dummy)
+			{
                 // Hide explorer's taskbar(s)
                 waitBeforeShow = false;
                 windows.Clear();
@@ -483,17 +487,16 @@ namespace SimpleClassicThemeTaskbar
                         User32.ShowWindow(w.Handle, 0);
             }
 
-            // Check if the foreground window was the start menu
-            IntPtr ForegroundWindow = User32.GetForegroundWindow();
-            startButton1.UpdateState(new Window(ForegroundWindow));
-
-            //Put left side controls in the correct place
-            quickLaunch1.Location = new Point(startButton1.Location.X + startButton1.Width + 2, 1);
-
             // Obtain task list
             windows.Clear();
             User32.EnumWindowsCallback d = EnumWind;
             User32.EnumWindows(d, 0);
+
+            if (!Dummy)
+            {
+                // Resize work area
+                ApplyWorkArea();
+            }
 
             // Save old list for later
             List<BaseTaskbarProgram> oldList = new();
@@ -826,7 +829,7 @@ namespace SimpleClassicThemeTaskbar
             if (screen.WorkingArea.ToString() != rct.ToString())
             {
                 var windowHandles = windows.Select(a => a.Handle).ToArray();
-                cppCode.SetWorkingArea(rct.Left, rct.Right, rct.Top, rct.Bottom, Environment.OSVersion.Version.Major < 10, windowHandles);
+                UnmanagedCodeMigration.SetWorkingArea(new RECT(rct), Environment.OSVersion.Version.Major < 10, windowHandles);
             }
 
             if (Location.ToString() != desiredLocation.ToString())

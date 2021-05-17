@@ -13,7 +13,7 @@ namespace SimpleClassicThemeTaskbar.Helpers.NativeMethods
 	/// We'll migrate everything here first, and then put it in the appropriate areas of SCTT accordingly.
 	/// Don't move or rename anything out of here before UnmanagedCode is fully migrated.
 	/// </summary>
-	static class UnmanagedCodeMigration
+	internal static class UnmanagedCodeMigration
 	{
 		#region NativeImports
 		[DllImport("user32.dll", SetLastError = true)]
@@ -62,10 +62,36 @@ namespace SimpleClassicThemeTaskbar.Helpers.NativeMethods
 		}
 		#endregion
 
-		static void SetWorkingArea(RECT rect, bool sendChange, List<IntPtr> windows)
+		static Type vdmType;
+		static object vdmObject;
+
+		internal static void InitializeVdmInterface()
+		{
+		    vdmType = Type.GetTypeFromCLSID(new Guid("a5cd92ff-29be-454c-8d04-d82879fb3f1b"));
+			vdmObject = Activator.CreateInstance(vdmType);
+		}
+
+		internal static void UnitializeVdmInterface()
+		{
+			vdmType.InvokeMember("Release", System.Reflection.BindingFlags.InvokeMethod, null, vdmObject, Array.Empty<object>());
+		}
+
+		internal static bool IsWindowOnCurrentVirtualDesktop(IntPtr window)
+		{
+			if (vdmObject is not null)
+			{
+				bool isWndOnDekstop = false;
+				ref bool pointer = ref isWndOnDekstop;
+				vdmType.InvokeMember("IsWindowOnCurrentVirtualDesktop", System.Reflection.BindingFlags.InvokeMethod, null, vdmObject, new object[] { window, pointer });
+				return isWndOnDekstop;
+			}
+			return true;
+		}
+
+		internal static void SetWorkingArea(RECT rect, bool sendChange, IEnumerable<IntPtr> windows)
 		{
 			const int SC_MAXIMIZE = 0xF030;
-			const int SC_RESTORE = 0xF220;
+			const int SC_RESTORE = 0xF120;
 			const int SW_SHOWMAXIMIZED = 3;
 			const int WM_SYSCOMMAND = 0x0112;
 
