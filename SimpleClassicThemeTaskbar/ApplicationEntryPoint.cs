@@ -20,6 +20,8 @@ namespace SimpleClassicThemeTaskbar
 
         public static bool SCTCompatMode = false;
 
+        static UnmanagedCodeMigration.VirtualDesktopNotification VirtualDesktopNotification;
+        static int virtualDesktopNotificationCookie;
         internal static CodeBridge d = new();
 
         internal static void ExitSCTT()
@@ -196,6 +198,9 @@ namespace SimpleClassicThemeTaskbar
             {
                 Logger.Log(LoggerVerbosity.Detailed, "EntryPoint", "OSVersion.Major is above 10. Initializing IVirtualDesktopManager");
                 UnmanagedCodeMigration.InitializeVdmInterface();
+                VirtualDesktopNotification = new();
+                VirtualDesktopNotification.CurrentDesktopChanged += VirtualDesktopNotifcation_CurrentDesktopChanged;
+                UnmanagedCodeMigration.RegisterVdmNotification(VirtualDesktopNotification);
             }
 
             Logger.Log(LoggerVerbosity.Detailed, "EntryPoint", "Main initialization done, passing execution to TaskbarManager");
@@ -211,5 +216,10 @@ namespace SimpleClassicThemeTaskbar
             Application.Run();
             ExitSCTT();
         }
+
+        public static void VirtualDesktopNotifcation_CurrentDesktopChanged(object sender, EventArgs e)
+		{
+            MessageBox.Show("Virtual desktop changed!");
+		}
     }
 }

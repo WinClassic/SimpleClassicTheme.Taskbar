@@ -25,6 +25,10 @@ namespace SimpleClassicThemeTaskbar.Helpers.NativeMethods
 		static extern bool GetWindowPlacement(IntPtr hWnd, ref WINDOWPLACEMENT lpwndpl);
 		#endregion
 
+		#region NativeConstants
+		const int TB_BUTTONCOUNT = 0x0418;
+		#endregion NativeConstants
+
 		#region NativeEnums
 		enum SPI : uint
 		{
@@ -41,6 +45,34 @@ namespace SimpleClassicThemeTaskbar.Helpers.NativeMethods
 		#endregion
 
 		#region NativeStructures
+		[Serializable]
+		[StructLayout(LayoutKind.Sequential)]
+		struct TBUTTON32
+		{
+			int iBitmap;
+			int idCommand;
+			byte fsState;
+			byte fsStyle;
+			[MarshalAs(UnmanagedType.ByValArray, SizeConst = 2)]
+			byte[] bReserved;
+			UIntPtr dwData;
+			IntPtr iString;
+		}
+
+		[Serializable]
+		[StructLayout(LayoutKind.Sequential)]
+		struct TBUTTON64
+		{
+			int iBitmap;
+			int idCommand;
+			byte fsState;
+			byte fsStyle;
+			[MarshalAs(UnmanagedType.ByValArray, SizeConst = 6)]
+			byte[] bReserved;
+			UIntPtr dwData;
+			IntPtr iString;
+		}
+
 		[Serializable]
 		[StructLayout(LayoutKind.Sequential)]
 		struct POINT
@@ -69,20 +101,84 @@ namespace SimpleClassicThemeTaskbar.Helpers.NativeMethods
 		public interface IVirtualDesktopManager
 		{
 			bool IsWindowOnCurrentVirtualDesktop(IntPtr topLevelWindow);
-
 			Guid GetWindowDesktopId(IntPtr topLevelWindow);
-
 			void MoveWindowToDesktop(IntPtr topLevelWindow, ref Guid desktopId);
+		}
+
+		[ComImport]
+		[Guid("c179334c-4295-40d3-bea1-c654d965605a")]
+		[InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+		public interface IVirtualDesktopNotification
+		{
+			int VirtualDesktopCreated(IntPtr pDesktop);
+			int VirtualDesktopDestroyBegin(IntPtr pDesktopDestroyed, IntPtr pDesktopFallback);
+			int VirtualDesktopDestroyFailed(IntPtr pDesktopDestroyed, IntPtr pDesktopFallback);
+			int VirtualDesktopDestroyed(IntPtr pDesktopDestroyed, IntPtr pDesktopFallback);
+			int ViewVirtualDesktopChanged(IntPtr pView);
+			int CurrentVirtualDesktopChanged(IntPtr pDesktopOld, IntPtr pDesktopNew);
+		}
+
+		[ComImport]
+		[Guid("0cd45e71-d927-4f15-8b0a-8fef525337bf")]
+		[InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+		public interface IVirtualDesktopNotificationService
+		{
+			int Register(ref IVirtualDesktopNotification pNotification, out IntPtr pdwCookie);
+			int Unregister(IntPtr dwCookie);
+		}
+
+		[ComImport]
+		[Guid("6d5140c1-7436-11ce-8034-00aa006009fa")]
+		[InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+		public interface IServiceProvider
+		{
+			[PreserveSig]
+			[return: MarshalAs(UnmanagedType.I4)]
+			int QueryService(ref Guid guidService, ref Guid riid, [MarshalAs(UnmanagedType.Interface)] out object ppvObject);
+		}
+
+		public class VirtualDesktopNotification : IVirtualDesktopNotification
+		{
+			public EventHandler CurrentDesktopChanged;
+
+			public int VirtualDesktopCreated(IntPtr pDesktop) => 0;
+			public int VirtualDesktopDestroyBegin(IntPtr pDesktopDestroyed, IntPtr pDesktopFallback) => 0;
+			public int VirtualDesktopDestroyFailed(IntPtr pDesktopDestroyed, IntPtr pDesktopFallback) => 0;
+			public int VirtualDesktopDestroyed(IntPtr pDesktopDestroyed, IntPtr pDesktopFallback) => 0;
+			public int ViewVirtualDesktopChanged(IntPtr pView) => 0;
+			public int CurrentVirtualDesktopChanged(IntPtr pDesktopOld, IntPtr pDesktopNew)
+			{
+				CurrentDesktopChanged?.Invoke(this, EventArgs.Empty);
+				return 0;
+			}
 		}
 		#endregion
 
+	    static IVirtualDesktopNotificationService virtualDesktopNotificationService;
 		static IVirtualDesktopManager virtualDesktopManager;
+
+		internal static int GetTrayButtonCount(IntPtr sysTray)
+		{
+			return (int)User32.SendMessage(sysTray, TB_BUTTONCOUNT, 0, 0);
+		}
 
 		internal static void InitializeVdmInterface()
 		{
 		    Type vdmType = Type.GetTypeFromCLSID(new Guid("aa509086-5ca9-4c25-8f95-589d3c07b48a"));
 			virtualDesktopManager = (IVirtualDesktopManager) Activator.CreateInstance(vdmType);
-		} 
+
+			Type spType = Type.GetTypeFromCLSID(new Guid("c2f03a33-21f5-47fa-b4bb-156362a2f239"));
+			IServiceProvider serviceProvider = (IServiceProvider) Activator.CreateInstance(spType);
+			serviceProvider.QueryService(new Guid("a501fdec-4a09-464c-ae4e-1b9c21b84918"), typeof(IVirtualDesktopNotificationService).GUID, out object ppvObject);
+			virtualDesktopNotificationService = (IVirtualDesktopNotificationService)ppvObject;
+		}
+		
+		internal static IntPtr RegisterVdmNotification(IVirtualDesktopNotification notification)
+		{
+			//virtualDesktopNotificationService.Register(ref notification, out IntPtr cookie);
+			//return cookie;
+			return IntPtr.Zero;
+		}
 
 		internal static bool IsWindowOnCurrentVirtualDesktop(IntPtr window)
 		{
