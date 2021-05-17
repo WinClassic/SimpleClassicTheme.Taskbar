@@ -19,15 +19,25 @@ jobs:
     - name: Setup MSBuild
       uses: microsoft/setup-msbuild@v1
       
-    - name: Build SCTT
-      run: msbuild SimpleClassicThemeTaskbar.sln -noLogo -p:Configuration=Release
+    - name: Build SCTT x86
+      run: msbuild SimpleClassicThemeTaskbar.sln -noLogo -p:Configuration=Release -p:Plaform="x86"
       working-directory: ./
 
-    - name: Upload build artifacts
+    - name: Build SCTT x64
+      run: msbuild SimpleClassicThemeTaskbar.sln -noLogo -p:Configuration=Release -p:Plaform="AMD64"
+      working-directory: ./
+
+    - name: Upload x86 build artifacts
       uses: actions/upload-artifact@v2.2.3
       with:
-        name: binaries
-        path: './SimpleClassicThemeTaskbar/bin/Release/net5.0-windows'
+        name: SimpleClassicThemeTaskbar_x86
+        path: './SimpleClassicThemeTaskbar/bin/Release/x86/net5.0-windows'
+
+    - name: Upload x64 build artifacts
+      uses: actions/upload-artifact@v2.2.3
+      with:
+        name: SimpleClassicThemeTaskbar_x64
+        path: './SimpleClassicThemeTaskbar/bin/Release/x64/net5.0-windows'
 
   release:
     runs-on: ubuntu-latest
