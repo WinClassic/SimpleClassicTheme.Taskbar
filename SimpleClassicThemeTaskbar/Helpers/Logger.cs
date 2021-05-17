@@ -21,6 +21,8 @@ namespace SimpleClassicThemeTaskbar.Helpers
         private static bool loggerOff = false;
         private static LoggerVerbosity verb;
 
+        public static LoggerVerbosity GetVerbosity() => verb;
+
         public static void Initialize(LoggerVerbosity verbosity)
         {
             SetVerbosity(verbosity);
@@ -55,21 +57,19 @@ namespace SimpleClassicThemeTaskbar.Helpers
             }
         }
 
-        public static LoggerVerbosity GetVerbosity() => verb;
+        public static void OpenLog()
+        {
+            if (fs != null)
+            {
+                Process.Start(fs.Name);
+            }
+        }
 
         public static void SetVerbosity(LoggerVerbosity verbosity)
         {
             verb = verbosity;
             loggerOff = verb == LoggerVerbosity.None;
         }
-
-        public static void OpenLog()
-		{
-            if (fs != null)
-			{
-                Process.Start(fs.Name);
-			}
-		}
 
         public static void Uninitialize()
         {
