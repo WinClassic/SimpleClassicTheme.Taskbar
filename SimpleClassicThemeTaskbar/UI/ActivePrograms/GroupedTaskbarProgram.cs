@@ -127,6 +127,21 @@ namespace SimpleClassicThemeTaskbar
             return "None - I shouldn't be here!";
         }
 
+        public bool RemoveWindow(IntPtr window)
+		{
+            List<SingleTaskbarProgram> referenceList = new List<SingleTaskbarProgram>(ProgramWindows);
+            foreach (SingleTaskbarProgram program in referenceList)
+			{
+                if (program.Window.Handle == window)
+				{
+                    ProgramWindows.Remove(program);
+                    program.Dispose();
+				}
+			}
+
+            return ProgramWindows.Count > 1;
+		}
+
         public bool UpdateWindowList(List<Window> windows)
         {
             //The new list of icons

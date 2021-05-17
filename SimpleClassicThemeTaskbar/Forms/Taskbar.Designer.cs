@@ -38,6 +38,7 @@ namespace SimpleClassicThemeTaskbar
 			this.startButton1 = new SimpleClassicThemeTaskbar.UIElements.StartButton.StartButton();
 			this.timerUpdateUI = new System.Windows.Forms.Timer(this.components);
 			this.timerUpdateInformation = new System.Windows.Forms.Timer(this.components);
+			this.timerUpdate = new System.Windows.Forms.Timer(this.components);
 			this.SuspendLayout();
 			// 
 			// quickLaunch1
@@ -97,6 +98,10 @@ namespace SimpleClassicThemeTaskbar
 			this.timerUpdateInformation.Interval = 75;
 			this.timerUpdateInformation.Tick += new System.EventHandler(this.timerUpdateInformation_Tick);
 			// 
+			// timerUpdate
+			// 
+			this.timerUpdate.Tick += new System.EventHandler(this.timerUpdate_Tick);
+			// 
 			// Taskbar
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -129,6 +134,7 @@ namespace SimpleClassicThemeTaskbar
         private UIElements.QuickLaunch.QuickLaunch quickLaunch1;
         private System.Windows.Forms.Timer timerUpdateUI;
         private System.Windows.Forms.Timer timerUpdateInformation;
-    }
+		private System.Windows.Forms.Timer timerUpdate;
+	}
 }
 
