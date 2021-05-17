@@ -219,7 +219,14 @@ namespace SimpleClassicThemeTaskbar
 
         public static void VirtualDesktopNotifcation_CurrentDesktopChanged(object sender, EventArgs e)
 		{
-            MessageBox.Show("Virtual desktop changed!");
-		}
+            Logger.Log(LoggerVerbosity.Detailed, "TaskbarManager", "Current virtual desktop changed, sending notification to all Taskbars.");
+            var activeBars = Helpers.Helpers.GetOpenTaskbars();
+
+            foreach (Taskbar bar in activeBars)
+            {
+                // Redo the enumeration because the open windows are completely different
+                bar.Invoke(new Action(() => { bar.EnumerateWindows(); }));
+            }
+        }
     }
 }

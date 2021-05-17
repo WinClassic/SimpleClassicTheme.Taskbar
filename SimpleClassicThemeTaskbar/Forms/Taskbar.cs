@@ -462,7 +462,7 @@ namespace SimpleClassicThemeTaskbar
             return User32.CallNextHookEx(IntPtr.Zero, nCode, wParam, lParam);
         }
 
-        private void EnumerateWindows()
+        internal void EnumerateWindows()
 		{
             // Check if the foreground window was the start menu
             IntPtr ForegroundWindow = User32.GetForegroundWindow();
