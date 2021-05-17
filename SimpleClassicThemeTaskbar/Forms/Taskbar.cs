@@ -50,6 +50,7 @@ namespace SimpleClassicThemeTaskbar
 
         //TODO: Clean this shitty mess like wth
         private ContextMenuStrip d;
+        private ToolStripMenuItem exitContextMenuItem;
 
         private bool dummy;
         private List<BaseTaskbarProgram> icons = new();
@@ -329,7 +330,8 @@ namespace SimpleClassicThemeTaskbar
                 }
                 ////Show the context menu
                 //d.Show(this, e.Location);
-                SystemContextMenu menu = SystemContextMenu.FromContextMenuStrip(d);
+                exitContextMenuItem.Available = ShouldShowExit();
+                SystemContextMenu menu = SystemContextMenu.FromToolStripItems(d.Items);
                 Point location = PointToScreen(e.Location);
                 menu.Show(Handle, location.X, location.Y);
             }
@@ -337,6 +339,41 @@ namespace SimpleClassicThemeTaskbar
             {
                 Keyboard.KeyPress(Keys.LWin, Keys.D);
             }
+        }
+
+        private ToolStripMenuItem ConstructDebuggingMenu()
+        {
+            var debuggingItem = new ToolStripMenuItem("&Debugging");
+
+            debuggingItem.DropDownItems.Add(new ToolStripMenuItem("Watch UI", null, (_, __) =>
+            {
+                times.Clear();
+                watchUI = !watchUI;
+            })
+            {
+                Checked = watchUI,
+            });
+
+            debuggingItem.DropDownItems.Add(new ToolStripMenuItem("Watch Logic", null, (_, __) =>
+            {
+                times.Clear();
+                watchLogic = !watchLogic;
+            })
+            {
+                Checked = watchLogic,
+            });
+
+            debuggingItem.DropDownItems.Add(new ToolStripMenuItem("Watch Tray", null, (_, __) =>
+            {
+                times.Clear();
+                systemTray1.times.Clear();
+                systemTray1.watchTray = !systemTray1.watchTray;
+            })
+            {
+                Checked = systemTray1.watchTray,
+            });
+
+            return debuggingItem;
         }
 
         private IntPtr HookProcedure(User32.ShellEvents nCode, IntPtr wParam, IntPtr lParam)
@@ -790,15 +827,16 @@ namespace SimpleClassicThemeTaskbar
                 timingDebugger.FinishRegion("Resize work area");
         }
 
-        private static ContextMenuStrip ConstructTaskbarContextMenu()
+        private ContextMenuStrip ConstructTaskbarContextMenu()
         {
+            ContextMenuStrip c = new();
+
             ToolStripMenuItem cascadeWindows;
             ToolStripMenuItem showWindowsStacked;
             ToolStripMenuItem showWindowsSideBySide;
             ToolStripMenuItem taskManager;
             ToolStripMenuItem settings;
             ToolStripMenuItem showDesktop;
-            ToolStripMenuItem exit;
 
             var items = new ToolStripItem[]
             {
@@ -813,7 +851,7 @@ namespace SimpleClassicThemeTaskbar
                 new ToolStripSeparator(),
                 new ToolStripMenuItem("&Lock the Taskbar") { Enabled = false },
                 settings = new("P&roperties"),
-                // exit = new("&Exit SCT Taskbar", null, (_, __) => ApplicationEntryPoint.ExitSCTT()),
+                exitContextMenuItem = new("&Exit SCT Taskbar", null, (_, __) => ApplicationEntryPoint.ExitSCTT())
             };
 
             cascadeWindows.Click += delegate { _ = User32.CascadeWindows(IntPtr.Zero, User32.MDITILE_ZORDER, IntPtr.Zero, 0, IntPtr.Zero); };
@@ -821,10 +859,25 @@ namespace SimpleClassicThemeTaskbar
             showWindowsSideBySide.Click += delegate { _ = User32.TileWindows(IntPtr.Zero, User32.MDITILE_VERTICAL, IntPtr.Zero, 0, IntPtr.Zero); };
             settings.Click += delegate { new Settings().Show(); };
 
-            ContextMenuStrip contextMenu = new();
-            contextMenu.Items.AddRange(items);
+            if (Config.EnableDebugging)
+            {
+                c.Items.Add(ConstructDebuggingMenu());
+            }
 
-            return contextMenu;
+            c.Items.AddRange(items);
+
+            return c;
+        }
+
+        private bool ShouldShowExit()
+        {
+            if (Config.ExitMenuItemCondition == ExitMenuItemCondition.Always)
+            {
+                return true;
+            }
+
+            // ExitMenuItemCondition.RequireShortcut
+            return ModifierKeys.HasFlag(Keys.Control | Keys.Shift);
         }
 
         //Function that displays the taskbar on the specified screen
