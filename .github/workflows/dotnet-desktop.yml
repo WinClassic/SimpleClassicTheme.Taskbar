@@ -20,11 +20,11 @@ jobs:
       uses: microsoft/setup-msbuild@v1
       
     - name: Build SCTT x86
-      run: msbuild SimpleClassicThemeTaskbar.sln -noLogo -p:Configuration=Release -p:Plaform="x86"
+      run: msbuild SimpleClassicThemeTaskbar.sln -noLogo -p:Configuration=Release -p:Plaform=x86
       working-directory: ./
 
     - name: Build SCTT x64
-      run: msbuild SimpleClassicThemeTaskbar.sln -noLogo -p:Configuration=Release -p:Plaform="AMD64"
+      run: msbuild SimpleClassicThemeTaskbar.sln -noLogo -p:Configuration=Release -p:Plaform=AMD64
       working-directory: ./
 
     - name: Upload x86 build artifacts
@@ -44,14 +44,23 @@ jobs:
     if: ${{ github.event_name == 'push' }}
     needs: [build]
     steps:
-    - name: Download build artifact
+    - name: Download x86 build artifacts 
       uses: actions/download-artifact@v2.0.9
       with:
-        name: binaries
-        path: binaries
+        name: SimpleClassicThemeTaskbar_x86
+        path: SimpleClassicThemeTaskbar_x86
+
+    - name: Download x64 build artifacts
+      uses: actions/download-artifact@v2.0.9
+      with:
+        name: SimpleClassicThemeTaskbar_x64
+        path: SimpleClassicThemeTaskbar_x64
         
-    - name: Zip files
-      run: zip -r binaries.zip binaries
+    - name: Zip files for x86
+      run: zip -r SimpleClassicThemeTaskbar_x86.zip SimpleClassicThemeTaskbar_x86
+
+    - name: Zip files for x64
+      run: zip -r SimpleClassicThemeTaskbar_x64.zip SimpleClassicThemeTaskbar_x64
         
     - name: Publish release
       uses: "marvinpinto/action-automatic-releases@latest"
@@ -60,4 +69,6 @@ jobs:
         automatic_release_tag: "latest"
         prerelease: true
         title: "Development Build"
-        files: 'binaries.zip'
+        files: |
+          SimpleClassicThemeTaskbar_x86.zip
+          SimpleClassicThemeTaskbar_x64.zip
