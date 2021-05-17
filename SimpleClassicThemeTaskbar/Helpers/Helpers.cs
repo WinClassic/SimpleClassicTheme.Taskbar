@@ -26,7 +26,10 @@ namespace SimpleClassicThemeTaskbar.Helpers
                 var form = Application.OpenForms[i];
                 if (form is Taskbar taskbar)
                 {
-                    yield return taskbar;
+                    if (form.ParentForm is not Settings)
+                    {
+                        yield return taskbar;
+                    }
                 }
             }
         }

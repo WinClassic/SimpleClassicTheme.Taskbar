@@ -484,6 +484,13 @@ namespace SimpleClassicThemeTaskbar
                         User32.ShowWindow(w.Handle, 0);
             }
 
+            // Check if the foreground window was the start menu
+            IntPtr ForegroundWindow = User32.GetForegroundWindow();
+            startButton1.UpdateState(new Window(ForegroundWindow));
+
+            //Put left side controls in the correct place
+            quickLaunch1.Location = new Point(startButton1.Location.X + startButton1.Width + 2, 1);
+
             // Obtain task list
             windows.Clear();
             User32.EnumWindowsCallback d = EnumWind;
