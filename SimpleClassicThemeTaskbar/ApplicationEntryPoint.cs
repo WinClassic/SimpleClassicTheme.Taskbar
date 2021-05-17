@@ -191,6 +191,13 @@ namespace SimpleClassicThemeTaskbar
 #endif
                 Logger.Log(LoggerVerbosity.Detailed, "EntryPoint", "Debug instance, ignoring incorrect architecture");
             }
+
+            if (Environment.OSVersion.Version.Major == 10)
+            {
+                Logger.Log(LoggerVerbosity.Detailed, "EntryPoint", "OSVersion.Major is above 10. Initializing IVirtualDesktopManager");
+                UnmanagedCodeMigration.InitializeVdmInterface();
+            }
+
             Logger.Log(LoggerVerbosity.Detailed, "EntryPoint", "Main initialization done, passing execution to TaskbarManager");
 
             //Application.EnableVisualStyles();

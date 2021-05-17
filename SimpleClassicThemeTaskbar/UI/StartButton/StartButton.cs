@@ -160,7 +160,9 @@ namespace SimpleClassicThemeTaskbar.UIElements.StartButton
                 return;
             if (OpeningStartMenu)
             {
-                if (fgWnd.ClassName != "OpenShell.CMenuContainer" && fgWnd.ClassName != "Windows.UI.Core.CoreWindow" && fgWnd.Handle != Parent.Handle)
+                if (fgWnd.ClassName == "OpenShell.CMenuContainer" || fgWnd.ClassName == "Windows.UI.Core.CoreWindow")
+                    OpeningStartMenu = false;
+                else if (fgWnd.ClassName != "OpenShell.CMenuContainer" && fgWnd.ClassName != "Windows.UI.Core.CoreWindow" && fgWnd.Handle != Parent.Handle)
                 {
                     OpeningStartMenu = false;
                 }

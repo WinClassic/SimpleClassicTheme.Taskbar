@@ -62,28 +62,37 @@ namespace SimpleClassicThemeTaskbar.Helpers.NativeMethods
 		}
 		#endregion
 
-		static Type vdmType;
-		static object vdmObject;
+		#region NativeInterfaces
+		[ComImport]
+		[Guid("a5cd92ff-29be-454c-8d04-d82879fb3f1b")]
+		[InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+		public interface IVirtualDesktopManager
+		{
+			bool IsWindowOnCurrentVirtualDesktop(IntPtr topLevelWindow);
+
+			Guid GetWindowDesktopId(IntPtr topLevelWindow);
+
+			void MoveWindowToDesktop(IntPtr topLevelWindow, ref Guid desktopId);
+		}
+		#endregion
+
+		static IVirtualDesktopManager virtualDesktopManager;
 
 		internal static void InitializeVdmInterface()
 		{
-		    vdmType = Type.GetTypeFromCLSID(new Guid("a5cd92ff-29be-454c-8d04-d82879fb3f1b"));
-			vdmObject = Activator.CreateInstance(vdmType);
-		}
-
-		internal static void UnitializeVdmInterface()
-		{
-			vdmType.InvokeMember("Release", System.Reflection.BindingFlags.InvokeMethod, null, vdmObject, Array.Empty<object>());
-		}
+		    Type vdmType = Type.GetTypeFromCLSID(new Guid("aa509086-5ca9-4c25-8f95-589d3c07b48a"));
+			virtualDesktopManager = (IVirtualDesktopManager) Activator.CreateInstance(vdmType);
+		} 
 
 		internal static bool IsWindowOnCurrentVirtualDesktop(IntPtr window)
 		{
-			if (vdmObject is not null)
+			if (virtualDesktopManager is not null)
 			{
-				bool isWndOnDekstop = false;
-				ref bool pointer = ref isWndOnDekstop;
-				vdmType.InvokeMember("IsWindowOnCurrentVirtualDesktop", System.Reflection.BindingFlags.InvokeMethod, null, vdmObject, new object[] { window, pointer });
-				return isWndOnDekstop;
+				return virtualDesktopManager.IsWindowOnCurrentVirtualDesktop(window);
+				//bool isWndOnDekstop = false;
+				//ref bool pointer = ref isWndOnDekstop;
+				//vdmType.InvokeMember("IsWindowOnCurrentVirtualDesktop", System.Reflection.BindingFlags.InvokeMethod, null, vdmObject, new object[] { window, pointer });
+				//return isWndOnDekstop;
 			}
 			return true;
 		}

@@ -35,7 +35,7 @@ namespace SimpleClassicThemeTaskbar
             //Check if the OS is Windows 10
             if (Environment.OSVersion.Version.Major == 10)
                 //Check if the window is on the current Desktop
-                if (!cppCode.WindowIsOnCurrentDesktop(hwnd))
+                if (!UnmanagedCodeMigration.IsWindowOnCurrentVirtualDesktop(hwnd))
                     return false;
 
             //Get the root owner of the window

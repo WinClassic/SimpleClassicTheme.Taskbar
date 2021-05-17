@@ -127,7 +127,6 @@ namespace SimpleClassicThemeTaskbar
             InitializeComponent();
             HandleCreated += delegate { CrossThreadHandle = Handle; };
             TopLevel = true;
-            cppCode.InitCom();
 
             //Fix height according to renderers preferences
             Height = Config.Renderer.TaskbarHeight;
@@ -235,7 +234,7 @@ namespace SimpleClassicThemeTaskbar
             }
             else
             {
-                //Kill background thread and show taskbar
+                //Show taskbar
                 _ = User32.ShowWindow(User32.FindWindowW("Shell_TrayWnd", ""), 5);
             }
         }
