@@ -260,10 +260,12 @@ namespace SimpleClassicThemeTaskbar
             if (showRightSide)
             {
                 previewTaskbar.Left = panelPreview.Width - previewTaskbar.Width;
+                previewTaskbar.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             }
             else
             {
                 previewTaskbar.Left = 0;
+                previewTaskbar.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             }
         }
 

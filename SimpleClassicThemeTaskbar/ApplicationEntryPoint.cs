@@ -142,8 +142,8 @@ namespace SimpleClassicThemeTaskbar
             }
             if (args.Contains("--unmanaged"))
             {
-                Logger.Log(LoggerVerbosity.Detailed, "EntryPoint", "Starting unmanaged SCTT. From here on nothing will be logged");
-                Environment.Exit(d.UnmanagedSCTT());
+                Logger.Log(LoggerVerbosity.Detailed, "EntryPoint", "Attempted to start unmanaged SCTT. This is not supported anymore.");
+                Environment.Exit(/*d.UnmanagedSCTT()*/0);
             }
             if (args.Contains("--sct"))
             {
