@@ -110,12 +110,12 @@ namespace SimpleClassicThemeTaskbar.Helpers.NativeMethods
 		[InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
 		public interface IVirtualDesktopNotification
 		{
-			int VirtualDesktopCreated(IntPtr pDesktop);
-			int VirtualDesktopDestroyBegin(IntPtr pDesktopDestroyed, IntPtr pDesktopFallback);
-			int VirtualDesktopDestroyFailed(IntPtr pDesktopDestroyed, IntPtr pDesktopFallback);
-			int VirtualDesktopDestroyed(IntPtr pDesktopDestroyed, IntPtr pDesktopFallback);
-			int ViewVirtualDesktopChanged(IntPtr pView);
-			int CurrentVirtualDesktopChanged(IntPtr pDesktopOld, IntPtr pDesktopNew);
+			void VirtualDesktopCreated(IntPtr pDesktop);
+			void VirtualDesktopDestroyBegin(IntPtr pDesktopDestroyed, IntPtr pDesktopFallback);
+			void VirtualDesktopDestroyFailed(IntPtr pDesktopDestroyed, IntPtr pDesktopFallback);
+			void VirtualDesktopDestroyed(IntPtr pDesktopDestroyed, IntPtr pDesktopFallback);
+			void ViewVirtualDesktopChanged(IntPtr pView);
+			void CurrentVirtualDesktopChanged(IntPtr pDesktopOld, IntPtr pDesktopNew);
 		}
 
 		[ComImport]
@@ -123,7 +123,7 @@ namespace SimpleClassicThemeTaskbar.Helpers.NativeMethods
 		[InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
 		public interface IVirtualDesktopNotificationService
 		{
-			int Register(ref IVirtualDesktopNotification pNotification, out IntPtr pdwCookie);
+			int Register(IVirtualDesktopNotification pNotification, out IntPtr dwCookie);
 			int Unregister(IntPtr dwCookie);
 		}
 
@@ -141,15 +141,14 @@ namespace SimpleClassicThemeTaskbar.Helpers.NativeMethods
 		{
 			public EventHandler CurrentDesktopChanged;
 
-			public int VirtualDesktopCreated(IntPtr pDesktop) => 0;
-			public int VirtualDesktopDestroyBegin(IntPtr pDesktopDestroyed, IntPtr pDesktopFallback) => 0;
-			public int VirtualDesktopDestroyFailed(IntPtr pDesktopDestroyed, IntPtr pDesktopFallback) => 0;
-			public int VirtualDesktopDestroyed(IntPtr pDesktopDestroyed, IntPtr pDesktopFallback) => 0;
-			public int ViewVirtualDesktopChanged(IntPtr pView) => 0;
-			public int CurrentVirtualDesktopChanged(IntPtr pDesktopOld, IntPtr pDesktopNew)
+			public void VirtualDesktopCreated(IntPtr pDesktop) { }
+			public void VirtualDesktopDestroyBegin(IntPtr pDesktopDestroyed, IntPtr pDesktopFallback) { }
+			public void VirtualDesktopDestroyFailed(IntPtr pDesktopDestroyed, IntPtr pDesktopFallback) { }
+			public void VirtualDesktopDestroyed(IntPtr pDesktopDestroyed, IntPtr pDesktopFallback) { }
+			public void ViewVirtualDesktopChanged(IntPtr pView) { }
+			public void CurrentVirtualDesktopChanged(IntPtr pDesktopOld, IntPtr pDesktopNew)
 			{
 				CurrentDesktopChanged?.Invoke(this, EventArgs.Empty);
-				return 0;
 			}
 		}
 		#endregion
@@ -175,9 +174,8 @@ namespace SimpleClassicThemeTaskbar.Helpers.NativeMethods
 		
 		internal static IntPtr RegisterVdmNotification(IVirtualDesktopNotification notification)
 		{
-			//virtualDesktopNotificationService.Register(ref notification, out IntPtr cookie);
-			//return cookie;
-			return IntPtr.Zero;
+			virtualDesktopNotificationService.Register(notification, out IntPtr cookie);
+			return cookie;
 		}
 
 		internal static bool IsWindowOnCurrentVirtualDesktop(IntPtr window)
