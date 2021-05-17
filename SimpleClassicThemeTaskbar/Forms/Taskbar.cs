@@ -383,8 +383,9 @@ namespace SimpleClassicThemeTaskbar
 					{
                         if (taskbarProgram is SingleTaskbarProgram singleProgram)
 						{
-                            if (singleProgram.ActiveWindow)
+                            if (singleProgram.Window.Handle == wParam)
 							{
+                                Controls.Remove(singleProgram);
                                 icons.Remove(singleProgram);
 							}
 						}
@@ -410,6 +411,7 @@ namespace SimpleClassicThemeTaskbar
                                     icons.Insert(icons.IndexOf(groupedProgram), seperatedProgram);
                                 }
                                 icons.Remove(groupedProgram);
+                                Controls.Remove(groupedProgram);
                                 groupedProgram.Dispose();
                             }
                         }
@@ -693,6 +695,9 @@ namespace SimpleClassicThemeTaskbar
             if (Primary)
                 systemTray1.UpdateIcons();
 
+            //Update clock
+            systemTray1.UpdateTime();
+
             //Update quick-launch
             if (Primary)
                 quickLaunch1.UpdateIcons();
@@ -704,7 +709,13 @@ namespace SimpleClassicThemeTaskbar
         }
 
         private void UpdateUI()
-		{
+        {
+            // Get the foreground window to set the ActiveWindow property on the taskbar items and start menu
+            IntPtr ForegroundWindow = User32.GetForegroundWindow();
+
+            // Check if the foreground window was the start menu
+            startButton1.UpdateState(new Window(ForegroundWindow));
+
             // Calculate availabe space in taskbar and then divide that space over all programs
             int startX = quickLaunch1.Location.X + quickLaunch1.Width + 4;
             int programWidth = Primary ? Config.TaskbarProgramWidth + Config.SpaceBetweenTaskbarIcons : 24;
@@ -716,9 +727,6 @@ namespace SimpleClassicThemeTaskbar
             int x = startX;
             int iconWidth = icons.Count > 0 ? (int)Math.Floor((double)availableSpace / icons.Count) - Config.SpaceBetweenTaskbarIcons : 01;
             int maxX = verticalDivider3.Location.X - iconWidth;
-
-            // Get the foreground window to set the ActiveWindow property on the taskbar items
-            IntPtr ForegroundWindow = User32.GetForegroundWindow();
 
             // Re-display all windows (except heldDownButton)
             foreach (BaseTaskbarProgram icon in icons)
