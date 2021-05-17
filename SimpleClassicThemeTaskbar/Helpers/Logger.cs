@@ -41,11 +41,12 @@ namespace SimpleClassicThemeTaskbar.Helpers
 
         public static void Log(LoggerVerbosity verbosity, string source, string text)
         {
-            Debug.WriteLine(text, source);
             text.Replace("\n", "".PadLeft(38));
             if (loggerOff) return;
             if (verbosity <= verb)
             {
+                Debug.WriteLine(text, source);
+
                 string toWrite = $"[{verbosity,-8}][{source,-24}]: {text}\n";
                 byte[] bytes = Encoding.UTF8.GetBytes(toWrite);
                 fs.Write(bytes, 0, bytes.Length);
