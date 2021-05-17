@@ -386,8 +386,8 @@ namespace SimpleClassicThemeTaskbar
                 // Create a button for the new window
                 case User32.ShellEvents.HSHELL_WINDOWCREATED:
                     Window window = new(wParam);
-                    SingleTaskbarProgram button = new SingleTaskbarProgram
-                    {
+                    SingleTaskbarProgram button = new()
+					{
                         Window = window
                     };
                     button.MouseDown += Taskbar_IconDown;
@@ -400,10 +400,16 @@ namespace SimpleClassicThemeTaskbar
                     button.Process = p;
 
                     //Check if not blacklisted
-                    if (BlacklistedClassNames.Contains(window.ClassName) || BlacklistedWindowNames.Contains(window.Title) || BlacklistedProcessNames.Contains(p.ProcessName))
+                    if (BlacklistedClassNames.Contains(window.ClassName) ||
+                        BlacklistedWindowNames.Contains(window.Title) ||
+                        BlacklistedProcessNames.Contains(p.ProcessName) ||
+                        (Environment.OSVersion.Version.Major == 10 && !UnmanagedCodeMigration.IsWindowOnCurrentVirtualDesktop(wParam)))
                         button.Dispose();
                     else
+                    {
                         icons.Add(button);
+                        Logger.Log(LoggerVerbosity.Verbose, "Taskbar/EnumerateWindows", $"Adding window {button.Title}.");
+                    }
 
                     UpdateUI();
                     UpdateUI();
@@ -420,6 +426,7 @@ namespace SimpleClassicThemeTaskbar
 						{
                             if (singleProgram.Window.Handle == wParam)
 							{
+                                Logger.Log(LoggerVerbosity.Verbose, "Taskbar/EnumerateWindows", $"Deleting window {singleProgram.Title}.");
                                 Controls.Remove(singleProgram);
                                 icons.Remove(singleProgram);
 							}
@@ -497,92 +504,49 @@ namespace SimpleClassicThemeTaskbar
                 ApplyWorkArea();
             }
 
-            // Save old list for later
-            List<BaseTaskbarProgram> oldList = new();
-            oldList.AddRange(icons);
+            // Clear icon list as this is a full enumeration
+            icons.Clear();
 
             //Check if any new window exists, if so: add it
             foreach (Window z in windows)
             {
-                //Get a handle
-                IntPtr hWnd = z.Handle;
-                //Check if it already exists
-                bool exists = false;
-                foreach (BaseTaskbarProgram icon in icons)
-                    if (icon is SingleTaskbarProgram)
-                        if (icon.Window.Handle == hWnd)
-                            exists = true;
-                        else { }
-                    else if (icon is GroupedTaskbarProgram group)
-                        if (group.ContainsWindow(hWnd))
-                            exists = true;
-                if (!exists)
+                //Create the button
+                BaseTaskbarProgram button = new SingleTaskbarProgram
                 {
-                    //Create the button
-                    BaseTaskbarProgram button = new SingleTaskbarProgram
-                    {
-                        Window = z
-                    };
-                    button.MouseDown += Taskbar_IconDown;
-                    button.MouseMove += Taskbar_IconMove;
-                    button.MouseUp += Taskbar_IconUp;
-                    button.Height = Height;
+                    Window = z
+                };
+                button.MouseDown += Taskbar_IconDown;
+                button.MouseMove += Taskbar_IconMove;
+                button.MouseUp += Taskbar_IconUp;
+                button.Height = Height;
 
-                    User32.GetWindowThreadProcessId(button.Window.Handle, out uint pid);
-                    Process p = Process.GetProcessById((int)pid);
-                    button.Process = p;
+                User32.GetWindowThreadProcessId(button.Window.Handle, out uint pid);
+                Process p = Process.GetProcessById((int)pid);
+                button.Process = p;
 
-                    //Check if not blacklisted
-                    if (BlacklistedClassNames.Contains(z.ClassName) || BlacklistedWindowNames.Contains(z.Title) || BlacklistedProcessNames.Contains(p.ProcessName))
-                        button.Dispose();
-                    else
-                        icons.Add(button);
-                }
+                //Check if not blacklisted
+                if (BlacklistedClassNames.Contains(z.ClassName) || BlacklistedWindowNames.Contains(z.Title) || BlacklistedProcessNames.Contains(p.ProcessName))
+                    button.Dispose();
+                else
+                    icons.Add(button);
+
+                Logger.Log(LoggerVerbosity.Verbose, "Taskbar/EnumerateWindows", $"Adding window {button.Title}.");
             }
 
             //The new list of icons
-            List<BaseTaskbarProgram> newIcons = new();
+            List<BaseTaskbarProgram> newIcons = new(icons);
 
-            //Create a new list with only the windows that are still open
-            foreach (BaseTaskbarProgram baseIcon in icons)
+            // Remove all currently displayed controls
+            Control[] controls = new Control[Controls.Count];
+            Controls.CopyTo(controls, 0);
+            foreach (Control control in controls)
             {
-                if (baseIcon is SingleTaskbarProgram singleIcon)
+                if (control is BaseTaskbarProgram taskbarProgram)
                 {
-                    bool contains = false;
-                    foreach (Window z in windows)
-                        if (z.Handle == singleIcon.Window.Handle)
-                        {
-                            contains = true;
-                            singleIcon.Window = z;
-                        }
-
-                    if (contains)
-                        newIcons.Add(singleIcon);
-                }
-                if (baseIcon is GroupedTaskbarProgram groupedIcon)
-                {
-                    if (groupedIcon.UpdateWindowList(windows))
-                    {
-                        newIcons.Add(groupedIcon);
-                    }
-                }
-            }
-
-            if (oldList.SequenceEqual(newIcons))
-                return;
-
-            //Remove controls of the windows that were removed from the list
-            foreach (Control dd in Controls)
-            {
-                if (dd is BaseTaskbarProgram)
-                {
-                    BaseTaskbarProgram icon = dd as BaseTaskbarProgram;
-                    if (!newIcons.Contains(icon))
-                    {
-                        icons.Remove(icon);
-                        Controls.Remove(icon);
-                        icon.Dispose();
-                    }
+                    Logger.Log(LoggerVerbosity.Verbose, "Taskbar/EnumerateWindows", $"Deleting window {taskbarProgram.Title}.");
+                    icons.Remove(taskbarProgram);
+                    Controls.Remove(taskbarProgram);
+                    taskbarProgram.Dispose();
                 }
             }
 
