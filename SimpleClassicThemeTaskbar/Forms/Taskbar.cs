@@ -747,11 +747,8 @@ namespace SimpleClassicThemeTaskbar
 
         private void UpdateUI()
         {
-            // Get the foreground window to set the ActiveWindow property on the taskbar items and start menu
+            // Get the foreground window to set the ActiveWindow property on the taskbar items
             IntPtr ForegroundWindow = User32.GetForegroundWindow();
-
-            // Check if the foreground window was the start menu
-            startButton1.UpdateState(new Window(ForegroundWindow));
 
             // Calculate availabe space in taskbar and then divide that space over all programs
             int startX = quickLaunch1.Location.X + quickLaunch1.Width + 4;
@@ -805,6 +802,12 @@ namespace SimpleClassicThemeTaskbar
             IntPtr ForegroundWindow = User32.GetForegroundWindow();
             foreach (BaseTaskbarProgram taskbarProgram in icons)
                 taskbarProgram.ActiveWindow = taskbarProgram.Window.Handle == ForegroundWindow;
+
+            // Check if the foreground window was the start menu
+            startButton1.UpdateState(new Window(ForegroundWindow));
+
+            //Put left side controls in the correct place
+            quickLaunch1.Location = new Point(startButton1.Location.X + startButton1.Width + 2, 1);
         }
 
         private void ApplyWorkArea()
