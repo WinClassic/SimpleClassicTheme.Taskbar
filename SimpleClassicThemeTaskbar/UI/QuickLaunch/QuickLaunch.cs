@@ -12,8 +12,6 @@ using System.Runtime.InteropServices;
 using System.Diagnostics;
 using SimpleClassicThemeTaskbar.Helpers;
 
-using SimpleClassicThemeTaskbar.Helpers;
-
 namespace SimpleClassicThemeTaskbar.UIElements.QuickLaunch
 {
     public partial class QuickLaunch : UserControl
