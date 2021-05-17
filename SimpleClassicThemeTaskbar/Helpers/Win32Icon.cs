@@ -89,16 +89,17 @@ namespace SimpleClassicThemeTaskbar.Helpers
         public int yBitmap;
     }
 
+    [StructLayout(LayoutKind.Sequential)]
     public struct SHFILEINFO
     {
-        public uint dwAttributes;
         public IntPtr hIcon;
         public int iIcon;
-
-        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 254)]
-        public string szDisplayName;
+        public uint dwAttributes;
 
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 260)]
+        public string szDisplayName;
+
+        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 80)]
         public string szTypeName;
     };
 
@@ -112,28 +113,19 @@ namespace SimpleClassicThemeTaskbar.Helpers
             ExtraLargeIcon = Shell32.SHIL_JUMBO
         }
 
-        public static IntPtr GetIconHandleFromFilePath(string filepath, IconSizeEnum iconsize)
-        {
-            var shinfo = new SHFILEINFO();
+        public static IntPtr GetIconFromPath(string path, IconSizeEnum size)
+		{
             const uint SHGFI_SYSICONINDEX = 0x4000;
-            const int FILE_ATTRIBUTE_NORMAL = 0x80;
-            uint flags = SHGFI_SYSICONINDEX;
-            return getIconHandleFromFilePathWithFlags(filepath, iconsize, ref shinfo, FILE_ATTRIBUTE_NORMAL, flags);
-        }
-
-        private static IntPtr getIconHandleFromFilePathWithFlags(
-            string filepath, IconSizeEnum iconsize,
-            ref SHFILEINFO shinfo, int fileAttributeFlag, uint flags)
-        {
             const int ILD_TRANSPARENT = 1;
-            var retval = Shell32.SHGetFileInfo(filepath, fileAttributeFlag, ref shinfo, Marshal.SizeOf(shinfo), flags);
-            if (retval == 0) throw new System.IO.FileNotFoundException();
-            var iconIndex = shinfo.iIcon;
-            var iImageListGuid = new Guid("46EB5926-582E-4017-9FDF-E8998DAA0950");
-            _ = Shell32.SHGetImageList((int)iconsize, ref iImageListGuid, out IImageList iml);
-            var hIcon = IntPtr.Zero;
-            _ = iml.GetIcon(iconIndex, ILD_TRANSPARENT, ref hIcon);
-            return hIcon;
+
+            SHFILEINFO fileInfo = new();
+            var retval = Shell32.SHGetFileInfo(path, 0, ref fileInfo, Marshal.SizeOf(fileInfo), SHGFI_SYSICONINDEX);
+            var imageListGuid = new Guid("46EB5926-582E-4017-9FDF-E8998DAA0950");
+            Shell32.SHGetImageList((int)size, ref imageListGuid, out IImageList imageList);
+            var iconIndex = fileInfo.iIcon;
+            IntPtr iconHandle = IntPtr.Zero;
+            imageList.GetIcon(iconIndex, ILD_TRANSPARENT, ref iconHandle);
+            return iconHandle;
         }
     }
 }

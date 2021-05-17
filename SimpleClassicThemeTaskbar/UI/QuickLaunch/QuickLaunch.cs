@@ -66,7 +66,7 @@ namespace SimpleClassicThemeTaskbar.UIElements.QuickLaunch
                     {
                         _ = Process.Start(new ProcessStartInfo(icon.FileName) { UseShellExecute = true });
                     };
-                    Icon icn = Icon.FromHandle(Win32Icon.GetIconHandleFromFilePath(icon.FileName, Win32Icon.IconSizeEnum.SmallIcon16));
+                    Icon icn = Icon.FromHandle(Win32Icon.GetIconFromPath(icon.FileName, Win32Icon.IconSizeEnum.SmallIcon16));
                     icon.Image = icn.ToBitmap();
                     icons.Add(icon);
                 }
