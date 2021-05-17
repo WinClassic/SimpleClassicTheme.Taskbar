@@ -6,8 +6,18 @@ using System.Windows.Forms;
 
 namespace SimpleClassicThemeTaskbar.Helpers
 {
-    internal class Helpers
+    internal static class Helpers
     {
+        public static void Crawl(this Control control, Action<Control> action)
+        {
+            foreach (Control childControl in control.Controls)
+            {
+                Crawl(childControl, action);
+            }
+
+            action.Invoke(control);
+        }
+
         public static IEnumerable<Taskbar> GetOpenTaskbars()
         {
             // We're using a for loop because apparently Application.OpenForm can be modified while iterating
@@ -30,6 +40,31 @@ namespace SimpleClassicThemeTaskbar.Helpers
             {
                 FileName = quickLaunchPath,
                 UseShellExecute = true,
+            });
+        }
+
+        public static void SetFlatStyle(this Form form, FlatStyle style)
+        {
+            form.Crawl((control) =>
+            {
+                switch (control)
+                {
+                    case ButtonBase buttonBase:
+                        buttonBase.FlatStyle = style;
+                        break;
+
+                    case Label label:
+                        label.FlatStyle = style;
+                        break;
+
+                    case ComboBox comboBox:
+                        comboBox.FlatStyle = style;
+                        break;
+
+                    case GroupBox groupBox:
+                        groupBox.FlatStyle = style;
+                        break;
+                }
             });
         }
     }

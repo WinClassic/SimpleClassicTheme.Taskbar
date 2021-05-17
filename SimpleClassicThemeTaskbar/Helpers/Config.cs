@@ -18,9 +18,11 @@ namespace SimpleClassicThemeTaskbar.Helpers
         private const BindingFlags bindingFlags = BindingFlags.Static | BindingFlags.Public | BindingFlags.GetProperty | BindingFlags.SetProperty;
         private static string rendererPath = "Internal/Classic";
         public static bool ConfigChanged { get; set; } = true;
+        public static bool EnableDebugging { get; internal set; } = true;
         public static bool EnableQuickLaunch { get; set; } = true;
         public static bool EnableSystemTrayColorChange { get; set; } = true;
         public static bool EnableSystemTrayHover { get; set; } = true;
+        public static ExitMenuItemCondition ExitMenuItemCondition { get; internal set; }
         public static string Language { get; set; }
         public static ProgramGroupCheck ProgramGroupCheck { get; set; } = ProgramGroupCheck.FileNameAndPath;
         public static string QuickLaunchOrder { get; set; } = string.Empty;

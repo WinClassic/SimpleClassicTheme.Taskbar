@@ -21,6 +21,8 @@ namespace SimpleClassicThemeTaskbar
             InitializeComponent();
 
             labelCopyrightSCT.Location = new Point(tabAbout.Width - labelCopyrightSCT.Width, labelCopyrightSCT.Location.Y);
+
+            this.SetFlatStyle(FlatStyle.System);
         }
 
         public void SaveSettings()
@@ -35,25 +37,36 @@ namespace SimpleClassicThemeTaskbar
             Config.SpaceBetweenQuickLaunchIcons = (int)quickLaunchSpacingNumBox.Value;
             Config.StartButtonImage = customButtonTextBox.Text;
             Config.StartButtonIconImage = customIconTextBox.Text;
-
             Config.StartButtonAppearance = GetCurrentStartButtonAppearance();
-
+            Config.Language = (string)languageComboBox.SelectedItem;
             Config.ProgramGroupCheck = (ProgramGroupCheck)comboBoxGroupingMethod.SelectedIndex;
+            Config.ExitMenuItemCondition = (ExitMenuItemCondition)exitItemComboBox.SelectedIndex;
+            Config.EnableDebugging = enableDebuggingCheckBox.Checked;
+
+            // Save taskbar filter
             string taskbarFilter = "";
-            foreach (object f in listBox1.Items)
+            foreach (object f in taskbarFilterListBox.Items)
             {
                 string filter = f.ToString();
                 taskbarFilter += filter + "*";
             }
             Config.TaskbarProgramFilter = taskbarFilter;
-            Config.Language = (string)languageComboBox.SelectedItem;
 
-            if ((string)themeComboBox.SelectedItem == "Classic")
-                Config.RendererPath = "Internal/Classic";
-            else if ((string)themeComboBox.SelectedItem == "Luna")
-                Config.RendererPath = "Internal/Luna";
-            else
-                Config.RendererPath = (string)themeComboBox.SelectedItem;
+            // Save renderer path
+            switch (themeComboBox.SelectedItem)
+            {
+                case "Classic":
+                    Config.RendererPath = "Internal/Classic";
+                    break;
+
+                case "Luna":
+                    Config.RendererPath = "Internal/Luna";
+                    break;
+
+                default:
+                    Config.RendererPath = (string)themeComboBox.SelectedItem;
+                    break;
+            }
 
             Config.ConfigChanged = true;
             Config.SaveToRegistry();
@@ -64,15 +77,15 @@ namespace SimpleClassicThemeTaskbar
         {
             SettingsAddProgramFilter dialog = new();
             _ = dialog.ShowDialog(this);
-            _ = listBox1.Items.Add(dialog.result);
+            _ = taskbarFilterListBox.Items.Add(dialog.result);
             dialog.Dispose();
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
-            if (listBox1.SelectedIndex != -1)
+            if (taskbarFilterListBox.SelectedIndex != -1)
             {
-                listBox1.Items.RemoveAt(listBox1.SelectedIndex);
+                taskbarFilterListBox.Items.RemoveAt(taskbarFilterListBox.SelectedIndex);
             }
         }
 
@@ -149,14 +162,14 @@ namespace SimpleClassicThemeTaskbar
             }
             catch
             {
-                _ = MessageBox.Show(this, "Invalid image!");
+                _ = MessageBox.Show(this, "The image you selected is invalid.", "SimpleClassicThemeTaskbar", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 e.Cancel = true;
                 return;
             }
 
             if (temp.Height != 66)
             {
-                _ = MessageBox.Show(this, "Image is not 66px high! (3 * 22px)");
+                _ = MessageBox.Show(this, $"The image must be 66 pixels in height. The current height is {temp.Height} pixels. (3 * 22px)", "SimpleClassicThemeTaskbar", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 e.Cancel = true;
                 return;
             }
@@ -177,21 +190,26 @@ namespace SimpleClassicThemeTaskbar
             Image temp;
             try
             {
-                temp = Image.FromFile(customButtonFileDialog.FileName);
+                temp = Image.FromFile(customIconFileDialog.FileName);
             }
-            catch
+            catch (Exception ex)
             {
-                _ = MessageBox.Show(this, "Invalid image!");
+                _ = MessageBox.Show(this, "The image you selected is invalid.", "SimpleClassicThemeTaskbar", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 e.Cancel = true;
                 return;
             }
 
             if (temp.Width != 16 || temp.Height != 16)
             {
-                _ = MessageBox.Show(this, "Image is not 16x16!");
+                _ = MessageBox.Show(this, $"The image you specified must be 16x16 pixels in size.", "SimpleClassicThemeTaskbar", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 e.Cancel = true;
                 return;
             }
+
+            customIconTextBox.Text = customIconFileDialog.FileName;
+            temp.Dispose();
+
+            UpdateStartButton();
         }
 
         private void EnableQuickLaunchCheckBox_CheckedChanged(object sender, EventArgs e)
@@ -251,7 +269,9 @@ namespace SimpleClassicThemeTaskbar
         private void LoadSettings()
         {
             comboBoxGroupingMethod.SelectedIndex = (int)Config.ProgramGroupCheck;
+            exitItemComboBox.SelectedIndex = (int)Config.ExitMenuItemCondition;
 
+            enableDebuggingCheckBox.Checked = Config.EnableDebugging;
             enableSysTrayHover.Checked = Config.EnableSystemTrayHover;
             enableSysTrayColorChange.Checked = Config.EnableSystemTrayColorChange;
             showTaskbarOnAllDesktops.Checked = Config.ShowTaskbarOnAllDesktops;
@@ -262,34 +282,21 @@ namespace SimpleClassicThemeTaskbar
             customButtonRadioButton.Checked = Config.StartButtonAppearance == StartButtonAppearance.CustomButton;
             radioStartDefault.Checked = Config.StartButtonAppearance == StartButtonAppearance.Default;
             customButtonTextBox.Text = Config.StartButtonImage;
+            customIconTextBox.Text = Config.StartButtonIconImage;
 
-            if (Config.TaskbarProgramWidth <= taskbarProgramWidth.Maximum)
-                taskbarProgramWidth.Value = Config.TaskbarProgramWidth;
-            else
-                taskbarProgramWidth.Value = taskbarProgramWidth.Maximum;
-
-            if (Config.SpaceBetweenTrayIcons <= spaceBetweenTrayIcons.Maximum)
-                spaceBetweenTrayIcons.Value = Config.SpaceBetweenTrayIcons;
-            else
-                spaceBetweenTrayIcons.Value = spaceBetweenTrayIcons.Maximum;
-
-            if (Config.SpaceBetweenTaskbarIcons <= spaceBetweenTaskbarIcons.Maximum)
-                spaceBetweenTaskbarIcons.Value = Config.SpaceBetweenTaskbarIcons;
-            else
-                spaceBetweenTaskbarIcons.Value = spaceBetweenTaskbarIcons.Maximum;
-
-            if (Config.SpaceBetweenQuickLaunchIcons <= quickLaunchSpacingNumBox.Maximum)
-                quickLaunchSpacingNumBox.Value = Config.SpaceBetweenQuickLaunchIcons;
-            else
-                quickLaunchSpacingNumBox.Value = quickLaunchSpacingNumBox.Maximum;
+            taskbarProgramWidth.Value = Math.Min(Config.TaskbarProgramWidth, taskbarProgramWidth.Maximum);
+            spaceBetweenTrayIcons.Value = Math.Min(Config.SpaceBetweenTrayIcons, spaceBetweenTrayIcons.Maximum);
+            spaceBetweenTaskbarIcons.Value = Math.Min(Config.SpaceBetweenTaskbarIcons, spaceBetweenTaskbarIcons.Maximum);
+            quickLaunchSpacingNumBox.Value = Math.Min(Config.SpaceBetweenQuickLaunchIcons, quickLaunchSpacingNumBox.Maximum);
 
             taskbarProgramWidth.Maximum = Screen.PrimaryScreen.Bounds.Width;
             languageComboBox.SelectedItem = Config.Language;
 
+            // Load taskbar filter
             string taskbarFilter = Config.TaskbarProgramFilter;
             foreach (string filter in taskbarFilter.Split('*'))
                 if (filter != "")
-                    _ = listBox1.Items.Add(filter);
+                    _ = taskbarFilterListBox.Items.Add(filter);
 
             // Detect renderer correctly
             switch (Config.RendererPath)
