@@ -18,14 +18,10 @@ jobs:
     
     - name: Setup MSBuild
       uses: microsoft/setup-msbuild@v1
-
-    - name: Build UnmanagedCode
-      run: msbuild -noLogo -p:Configuration=Release
-      working-directory: ./SimpleClassicThemeTaskbar.UnmanagedCode/
       
     - name: Build SCTT
-      run: msbuild -noLogo -p:Configuration=Release
-      working-directory: ./SimpleClassicThemeTaskbar/
+      run: msbuild SimpleClassicThemeTaskbar.sln -noLogo -p:Configuration=Release
+      working-directory: ./
 
     - name: Upload build artifacts
       uses: actions/upload-artifact@v2.2.3
