@@ -268,6 +268,8 @@ namespace SimpleClassicThemeTaskbar
                     icons.Insert(Math.Min(icons.Count, newIndex), heldDownButton);
                 }
 
+                heldDownButton.BringToFront();
+
                 if ((MouseButtons & MouseButtons.Left) == 0)
                     heldDownButton = null;
 
@@ -288,6 +290,8 @@ namespace SimpleClassicThemeTaskbar
         private void Taskbar_IconUp(object sender, MouseEventArgs e)
         {
             heldDownButton = null;
+            UpdateUI();
+            UpdateUI();
         }
 
         private void Taskbar_MouseClick(object sender, MouseEventArgs e)
