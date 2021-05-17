@@ -56,13 +56,13 @@ namespace SimpleClassicThemeTaskbar
         private List<BaseTaskbarProgram> icons = new();
         private bool LookingForTray = false;
         private Range taskArea;
-
         private int taskIconWidth;
+        
         private TimingDebugger timingDebugger = new();
         private bool watchLogic = true;
         private bool watchUI = true;
-        private bool experimentGetDataPushed = false;
-        private User32.WindowsHookProcedure hookProcedure;
+        
+        //private User32.WindowsHookProcedure hookProcedure;
         private int WM_SHELLHOOKMESSAGE = -1;
 
         /// <summary>
@@ -197,11 +197,10 @@ namespace SimpleClassicThemeTaskbar
             quickLaunch1.UpdateIcons();
 
             // Create shell hook
-            if (File.Exists("egdp.txt"))
+            if (Config.EnablePassiveTaskbar)
             {
-                experimentGetDataPushed = true;
-                hookProcedure = new User32.WindowsHookProcedure(HookProcedure);
                 if (!User32.RegisterShellHookWindow(Handle))
+                //hookProcedure = new User32.WindowsHookProcedure(HookProcedure);
                 //if (User32.SetWindowsHookEx(User32.ShellHookId.WH_SHELL, hookProcedure, Marshal.GetHINSTANCE(typeof(Taskbar).Module), /*Kernel32.GetCurrentThreadId()*/0) == IntPtr.Zero)
                 {
                     int errorCode = Marshal.GetLastWin32Error();

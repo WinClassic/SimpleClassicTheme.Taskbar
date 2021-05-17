@@ -19,6 +19,7 @@ namespace SimpleClassicThemeTaskbar.Helpers
         private static string rendererPath = "Internal/Classic";
         public static bool ConfigChanged { get; set; } = true;
         public static bool EnableDebugging { get; internal set; } = true;
+        public static bool EnablePassiveTaskbar { get; internal set; } = false;
         public static bool EnableQuickLaunch { get; set; } = true;
         public static bool EnableSystemTrayColorChange { get; set; } = true;
         public static bool EnableSystemTrayHover { get; set; } = true;

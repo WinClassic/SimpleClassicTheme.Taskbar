@@ -42,6 +42,7 @@ namespace SimpleClassicThemeTaskbar
             Config.ProgramGroupCheck = (ProgramGroupCheck)comboBoxGroupingMethod.SelectedIndex;
             Config.ExitMenuItemCondition = (ExitMenuItemCondition)exitItemComboBox.SelectedIndex;
             Config.EnableDebugging = enableDebuggingCheckBox.Checked;
+            Config.EnablePassiveTaskbar = enablePassiveTaskbarCheckBox.Checked;
 
             // Save taskbar filter
             string taskbarFilter = "";
@@ -271,6 +272,7 @@ namespace SimpleClassicThemeTaskbar
             comboBoxGroupingMethod.SelectedIndex = (int)Config.ProgramGroupCheck;
             exitItemComboBox.SelectedIndex = (int)Config.ExitMenuItemCondition;
 
+            enablePassiveTaskbarCheckBox.Checked = Config.EnablePassiveTaskbar;
             enableDebuggingCheckBox.Checked = Config.EnableDebugging;
             enableSysTrayHover.Checked = Config.EnableSystemTrayHover;
             enableSysTrayColorChange.Checked = Config.EnableSystemTrayColorChange;
@@ -291,6 +293,11 @@ namespace SimpleClassicThemeTaskbar
 
             taskbarProgramWidth.Maximum = Screen.PrimaryScreen.Bounds.Width;
             languageComboBox.SelectedItem = Config.Language;
+
+            if (!Config.EnableDebugging)
+            {
+                tabControl.TabPages.Remove(tabDebug);
+            }
 
             // Load taskbar filter
             string taskbarFilter = Config.TaskbarProgramFilter;
@@ -375,5 +382,19 @@ namespace SimpleClassicThemeTaskbar
             // var appearance = GetCurrentStartButtonAppearance();
             // startButton.DummySettings(customButtonTextBox.Text, customIconTextBox.Text, appearance);
         }
-    }
+
+		private void enableDebuggingCheckBox_CheckedChanged(object sender, EventArgs e)
+		{
+            if (enableDebuggingCheckBox.Checked)
+			{
+                if (!tabControl.TabPages.Contains(tabDebug))
+                    tabControl.TabPages.Add(tabDebug);
+			}
+            else
+			{
+                if (tabControl.TabPages.Contains(tabDebug))
+                    tabControl.TabPages.Remove(tabDebug);
+			}
+		}
+	}
 }
