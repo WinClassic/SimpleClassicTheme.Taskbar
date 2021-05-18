@@ -529,14 +529,13 @@ namespace SimpleClassicThemeTaskbar
                 }
             }
 
+            if (!watchLogic)
+                timingDebugger.FinishRegion("Create controls for all tasks");
+
             //Create new list for finalized values
             List<BaseTaskbarProgram> programs = new();
             if (Config.ProgramGroupCheck != ProgramGroupCheck.None)
             {
-
-                if (!watchLogic)
-                    timingDebugger.FinishRegion("Create controls for all tasks");
-
                 //Check for grouping and finalize position values
                 foreach (BaseTaskbarProgram taskbarProgram in newIcons)
                 {
