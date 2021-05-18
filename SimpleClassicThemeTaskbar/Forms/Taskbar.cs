@@ -35,7 +35,6 @@ namespace SimpleClassicThemeTaskbar
         public bool NeverShow = false;
         public bool Primary = true;
         public bool selfClose = false;
-        private static readonly CodeBridge cppCode = new();
         private readonly List<string> BlacklistedClassNames = new();
         private readonly List<string> BlacklistedProcessNames = new();
         private readonly List<string> BlacklistedWindowNames = new();

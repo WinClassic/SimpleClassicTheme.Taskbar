@@ -11,8 +11,6 @@ using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 
-using static SimpleClassicThemeTaskbar.CodeBridge;
-
 namespace SimpleClassicThemeTaskbar.UIElements.SystemTray
 {
     public partial class SystemTray : UserControlEx
@@ -23,7 +21,6 @@ namespace SimpleClassicThemeTaskbar.UIElements.SystemTray
         public int mouseOriginalX = 0;
         public List<(string, TimeSpan)> times = new();
         public bool watchTray = true;
-        private readonly CodeBridge d = new();
         private readonly Stopwatch sw = new();
         private object culprit;
 
@@ -58,22 +55,19 @@ namespace SimpleClassicThemeTaskbar.UIElements.SystemTray
             sb.AppendLine("Unexpected error occured while " + controlState);
 
             var buttonInfo = GetCulpritButtonInfo();
-            if (buttonInfo != null)
-            {
-                var process = GetProcessFromIcon(buttonInfo).MainModule.ModuleName;
+            var process = GetProcessFromIcon(buttonInfo).MainModule.ModuleName;
 
-                var windowHwnd = buttonInfo.hwnd;
-                var isWindowHwndValid = User32.IsWindow(windowHwnd);
+            var windowHwnd = buttonInfo.hwnd;
+            var isWindowHwndValid = User32.IsWindow(windowHwnd);
 
-                var iconHwnd = buttonInfo.icon;
-                var isIconHwndValid = User32.IsWindow(iconHwnd);
+            var iconHwnd = buttonInfo.icon;
+            var isIconHwndValid = User32.IsWindow(iconHwnd);
 
-                sb.AppendLine($"Process: {process} ({buttonInfo.pid})");
-                sb.AppendLine($"Corresponding Window HWND: {windowHwnd} ({(isWindowHwndValid ? "Valid" : "Invalid")})");
-                sb.AppendLine($"Icon HWND: {iconHwnd} ({(isIconHwndValid ? "Valid" : "Invalid")})");
-                sb.AppendLine($"Icon Caption: {buttonInfo.toolTip}");
-                sb.AppendLine($"Icon ID: {buttonInfo.id}");
-            }
+            sb.AppendLine($"Process: {process} ({buttonInfo.pid})");
+            sb.AppendLine($"Corresponding Window HWND: {windowHwnd} ({(isWindowHwndValid ? "Valid" : "Invalid")})");
+            sb.AppendLine($"Icon HWND: {iconHwnd} ({(isIconHwndValid ? "Valid" : "Invalid")})");
+            sb.AppendLine($"Icon Caption: {buttonInfo.toolTip}");
+            sb.AppendLine($"Icon ID: {buttonInfo.id}");
 
             return sb.ToString();
         }
@@ -86,17 +80,14 @@ namespace SimpleClassicThemeTaskbar.UIElements.SystemTray
                 sw.Start();
             }
 
-            //Get button count
-            int count = d.GetTrayButtonCount(GetSystemTrayHandle());
-
             //Lists that will receive all button information
-            List<CodeBridge.TBUTTONINFO> existingButtons = new();
+            List<UnmanagedCodeMigration.TBBUTTONINFO> existingButtons = new();
             List<IntPtr> existingHWNDs = new();
             IntPtr tray = GetSystemTrayHandle();
 
             //Loop through all buttons
-            CodeBridge.TBUTTONINFO[] bInfos = d.GetTrayButtons(tray, count);
-            foreach (CodeBridge.TBUTTONINFO bInfo in bInfos)
+            UnmanagedCodeMigration.TBBUTTONINFO[] bInfos = UnmanagedCodeMigration.GetTrayButtons(tray);
+            foreach (UnmanagedCodeMigration.TBBUTTONINFO bInfo in bInfos)
             {
                 //Save it
                 if (bInfo.visible)
@@ -136,7 +127,7 @@ namespace SimpleClassicThemeTaskbar.UIElements.SystemTray
             }
 
             //Add icons that didn't display before
-            foreach (CodeBridge.TBUTTONINFO info in existingButtons)
+            foreach (UnmanagedCodeMigration.TBBUTTONINFO info in existingButtons)
             {
                 //By default we say the icon doesn't exist
                 bool exists = false;
@@ -276,7 +267,7 @@ namespace SimpleClassicThemeTaskbar.UIElements.SystemTray
             labelTime.Text = DateTime.Now.ToString(CultureInfo.CurrentCulture.DateTimeFormat.ShortTimePattern);
         }
 
-        private static Process GetProcessFromIcon(CodeBridge.TBUTTONINFO TBUTTONINFO_Struct)
+        private static Process GetProcessFromIcon(UnmanagedCodeMigration.TBBUTTONINFO TBUTTONINFO_Struct)
         {
             _ = User32.GetWindowThreadProcessId(TBUTTONINFO_Struct.hwnd, out uint pid);
             return Process.GetProcessById((int)pid);
@@ -301,19 +292,19 @@ namespace SimpleClassicThemeTaskbar.UIElements.SystemTray
             return IntPtr.Zero;
         }
 
-        private CodeBridge.TBUTTONINFO GetCulpritButtonInfo()
+        private UnmanagedCodeMigration.TBBUTTONINFO GetCulpritButtonInfo()
         {
             if (culprit is SystemTrayIcon trayIcon)
             {
                 return trayIcon.TBUTTONINFO_Struct;
             }
-            else if (culprit is CodeBridge.TBUTTONINFO @struct)
+            else if (culprit is UnmanagedCodeMigration.TBBUTTONINFO @struct)
             {
                 return @struct;
             }
             else
             {
-                return null;
+                return new();
             }
         }
 

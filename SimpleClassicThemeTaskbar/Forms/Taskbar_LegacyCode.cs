@@ -126,8 +126,8 @@ namespace SimpleClassicThemeTaskbar
 
             //The window should only be visible if the active window is not fullscreen (with the exception of the desktop window)
             Screen scr = Screen.FromHandle(wnd.Handle);
-            int xy = cppCode.GetSize(wnd.Handle);
-            int width = xy >> 16, height = xy & 0x0000FFFF;
+            User32.GetWindowRect(wnd.Handle, out RECT rect);
+            int width = rect.Right - rect.Left, height = rect.Bottom - rect.Top;
             bool full = width >= scr.Bounds.Width && height >= scr.Bounds.Height;
             if (NeverShow)
                 Visible = false;

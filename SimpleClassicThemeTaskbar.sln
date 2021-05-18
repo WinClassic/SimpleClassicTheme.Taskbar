@@ -3,13 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29306.81
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SimpleClassicThemeTaskbar.CodeBridge", "SimpleClassicThemeTaskbar.CodeBridge\SimpleClassicThemeTaskbar.CodeBridge.vcxproj", "{11B39786-BD1C-49D1-8C9F-5823B0C8C12E}"
-	ProjectSection(ProjectDependencies) = postProject
-		{7AAB5462-4C1D-48F1-B59E-25844B76C551} = {7AAB5462-4C1D-48F1-B59E-25844B76C551}
-	EndProjectSection
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SimpleClassicThemeTaskbar.UnmanagedCode", "SimpleClassicThemeTaskbar.UnmanagedCode\SimpleClassicThemeTaskbar.UnmanagedCode.vcxproj", "{7AAB5462-4C1D-48F1-B59E-25844B76C551}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{16D0D798-44E2-4863-A6FB-8AF59A7AA463}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
@@ -32,22 +25,6 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{11B39786-BD1C-49D1-8C9F-5823B0C8C12E}.Debug|AMD64.ActiveCfg = Debug|x64
-		{11B39786-BD1C-49D1-8C9F-5823B0C8C12E}.Debug|AMD64.Build.0 = Debug|x64
-		{11B39786-BD1C-49D1-8C9F-5823B0C8C12E}.Debug|x86.ActiveCfg = Debug|Win32
-		{11B39786-BD1C-49D1-8C9F-5823B0C8C12E}.Debug|x86.Build.0 = Debug|Win32
-		{11B39786-BD1C-49D1-8C9F-5823B0C8C12E}.Release|AMD64.ActiveCfg = Release|x64
-		{11B39786-BD1C-49D1-8C9F-5823B0C8C12E}.Release|AMD64.Build.0 = Release|x64
-		{11B39786-BD1C-49D1-8C9F-5823B0C8C12E}.Release|x86.ActiveCfg = Release|Win32
-		{11B39786-BD1C-49D1-8C9F-5823B0C8C12E}.Release|x86.Build.0 = Release|Win32
-		{7AAB5462-4C1D-48F1-B59E-25844B76C551}.Debug|AMD64.ActiveCfg = Debug|x64
-		{7AAB5462-4C1D-48F1-B59E-25844B76C551}.Debug|AMD64.Build.0 = Debug|x64
-		{7AAB5462-4C1D-48F1-B59E-25844B76C551}.Debug|x86.ActiveCfg = Debug|Win32
-		{7AAB5462-4C1D-48F1-B59E-25844B76C551}.Debug|x86.Build.0 = Debug|Win32
-		{7AAB5462-4C1D-48F1-B59E-25844B76C551}.Release|AMD64.ActiveCfg = Release|x64
-		{7AAB5462-4C1D-48F1-B59E-25844B76C551}.Release|AMD64.Build.0 = Release|x64
-		{7AAB5462-4C1D-48F1-B59E-25844B76C551}.Release|x86.ActiveCfg = Release|Win32
-		{7AAB5462-4C1D-48F1-B59E-25844B76C551}.Release|x86.Build.0 = Release|Win32
 		{9267271F-5D75-471E-87DA-A3EAE513FF8D}.Debug|AMD64.ActiveCfg = Debug|x64
 		{9267271F-5D75-471E-87DA-A3EAE513FF8D}.Debug|AMD64.Build.0 = Debug|x64
 		{9267271F-5D75-471E-87DA-A3EAE513FF8D}.Debug|x86.ActiveCfg = Debug|x86

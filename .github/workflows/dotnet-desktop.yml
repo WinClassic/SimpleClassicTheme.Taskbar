@@ -27,14 +27,6 @@ jobs:
       run: msbuild -p:Configuration=Release -p:Platform=AMD64 SimpleClassicThemeTaskbar.sln
       working-directory: ./
 
-    - name: Copy dependencies file for x86
-      run: Copy-Item -Path "./build/SimpleClassicThemeTaskbar.deps.json" -Destination "./SimpleClassicThemeTaskbar/bin/x86/Release/net5.0-windows" -Force 
-      working-directory: ./
-
-    - name: Copy dependencies file for x64
-      run: Copy-Item -Path "./build/SimpleClassicThemeTaskbar.deps.json" -Destination "./SimpleClassicThemeTaskbar/bin/x64/Release/net5.0-windows" -Force 
-      working-directory: ./
-
     - name: Upload x86 build artifacts
       uses: actions/upload-artifact@v2.2.3
       with:

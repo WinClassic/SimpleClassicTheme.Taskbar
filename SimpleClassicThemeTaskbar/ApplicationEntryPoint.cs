@@ -22,7 +22,6 @@ namespace SimpleClassicThemeTaskbar
 
         static UnmanagedCodeMigration.VirtualDesktopNotification VirtualDesktopNotification;
         static int virtualDesktopNotificationCookie;
-        internal static CodeBridge d = new();
 
         internal static void ExitSCTT()
         {

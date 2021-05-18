@@ -30,13 +30,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-		<ProjectReference Include="..\SimpleClassicThemeTaskbar.CodeBridge\SimpleClassicThemeTaskbar.CodeBridge.vcxproj">
-			<Project>{11B39786-BD1C-49D1-8C9F-5823B0C8C12E}</Project>
-			<Name>SimpleClassicThemeTaskbar.CodeBridge</Name>
-			<Private>True</Private>
-		</ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Update="Properties\Settings.Designer.cs">
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <AutoGen>True</AutoGen>
