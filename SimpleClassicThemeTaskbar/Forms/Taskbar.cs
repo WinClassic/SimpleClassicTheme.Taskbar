@@ -6,12 +6,8 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
-using System.Globalization;
-using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Runtime.InteropServices;
-using System.Threading;
 using System.Windows.Forms;
 
 namespace SimpleClassicThemeTaskbar
@@ -294,30 +290,6 @@ namespace SimpleClassicThemeTaskbar
 
         private void Taskbar_MouseClick(object sender, MouseEventArgs e)
         {
-            if (e.Button == MouseButtons.Middle)
-            {
-                times.Clear();
-                systemTray1.times.Clear();
-                switch (Microsoft.VisualBasic.Interaction.InputBox(""))
-                {
-                    case "1":
-                        watchUI = false;
-                        break;
-
-                    case "2":
-                        watchLogic = false;
-                        break;
-
-                    case "3":
-                        systemTray1.watchTray = false;
-                        break;
-
-                    default:
-                        break;
-                }
-                return;
-            }
-
             //Open context menu
             if (e.Button == MouseButtons.Right)
             {
