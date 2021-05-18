@@ -28,11 +28,11 @@ jobs:
       working-directory: ./
 
     - name: Copy dependencies file for x86
-      run: copy /y ./build/SimpleClassicThemeTaskbar.deps.json ./SimpleClassicThemeTaskbar/bin/x86/Release/net5.0-windows
+      run: Copy-Item -Path "./build/SimpleClassicThemeTaskbar.deps.json" -Destination "./SimpleClassicThemeTaskbar/bin/x86/Release/net5.0-windows" -Force 
       working-directory: ./
 
     - name: Copy dependencies file for x64
-      run: copy /y ./build/SimpleClassicThemeTaskbar.deps.json ./SimpleClassicThemeTaskbar/bin/x64/Release/net5.0-windows
+      run: Copy-Item -Path "./build/SimpleClassicThemeTaskbar.deps.json" -Destination "./SimpleClassicThemeTaskbar/bin/x64/Release/net5.0-windows" -Force 
       working-directory: ./
 
     - name: Upload x86 build artifacts
