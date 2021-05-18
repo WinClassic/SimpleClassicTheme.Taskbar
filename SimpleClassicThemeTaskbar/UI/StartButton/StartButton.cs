@@ -76,6 +76,24 @@ namespace SimpleClassicThemeTaskbar.UIElements.StartButton
         [Browsable(true), EditorBrowsable(EditorBrowsableState.Always), Description("Indicates if the control is to be used for example only"), Category("Behavior")]
         public bool Dummy { get; set; } = false;
 
+        public MouseState MouseState
+        {
+            get
+            {
+                if (Pressed)
+                {
+                    return MouseState.Pressed;
+                }
+
+                if (ClientRectangle.Contains(PointToClient(Control.MousePosition)))
+                {
+                    return MouseState.Hover;
+                }
+
+                return MouseState.Normal;
+            }
+        }
+
         public bool Pressed
         {
             get
