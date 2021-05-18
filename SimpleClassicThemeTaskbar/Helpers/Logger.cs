@@ -10,8 +10,20 @@ namespace SimpleClassicThemeTaskbar.Helpers
     public enum LoggerVerbosity : int
     {
         None = 0,
+
+        /// <summary>
+        /// Log messages about basic information
+        /// </summary>
         Basic = 1,
+
+        /// <summary>
+        /// Log messages about program flow
+        /// </summary>
         Detailed = 2,
+
+        /// <summary>
+        /// Log messages for debugging or about received values
+        /// </summary>
         Verbose = 4
     }
 
