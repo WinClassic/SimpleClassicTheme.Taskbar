@@ -531,97 +531,96 @@ namespace SimpleClassicThemeTaskbar
 
             //Create new list for finalized values
             List<BaseTaskbarProgram> programs = new();
-            if (Config.ProgramGroupCheck == ProgramGroupCheck.None)
-                goto addAllWindows;
-
-            if (!watchLogic)
-                timingDebugger.FinishRegion("Create controls for all tasks");
-
-            //Check for grouping and finalize position values
-            foreach (BaseTaskbarProgram taskbarProgram in newIcons)
+            if (Config.ProgramGroupCheck != ProgramGroupCheck.None)
             {
-                if (taskbarProgram is GroupedTaskbarProgram)
+
+                if (!watchLogic)
+                    timingDebugger.FinishRegion("Create controls for all tasks");
+
+                //Check for grouping and finalize position values
+                foreach (BaseTaskbarProgram taskbarProgram in newIcons)
                 {
-                    GroupedTaskbarProgram group = taskbarProgram as GroupedTaskbarProgram;
-                    if (group.ProgramWindows.Count == 1)
+                    if (taskbarProgram is GroupedTaskbarProgram)
                     {
-                        //Create the button
-                        BaseTaskbarProgram button = new SingleTaskbarProgram
+                        GroupedTaskbarProgram group = taskbarProgram as GroupedTaskbarProgram;
+                        if (group.ProgramWindows.Count == 1)
                         {
-                            Window = group.ProgramWindows[0].Window
-                        };
-                        button.MouseDown += Taskbar_IconDown;
-                        button.MouseMove += Taskbar_IconMove;
-                        button.MouseUp += Taskbar_IconUp;
+                            //Create the button
+                            BaseTaskbarProgram button = new SingleTaskbarProgram
+                            {
+                                Window = group.ProgramWindows[0].Window
+                            };
+                            button.MouseDown += Taskbar_IconDown;
+                            button.MouseMove += Taskbar_IconMove;
+                            button.MouseUp += Taskbar_IconUp;
 
-                        User32.GetWindowThreadProcessId(button.Window.Handle, out uint pid);
-                        Process p = Process.GetProcessById((int)pid);
-                        button.Process = p;
+                            User32.GetWindowThreadProcessId(button.Window.Handle, out uint pid);
+                            Process p = Process.GetProcessById((int)pid);
+                            button.Process = p;
 
-                        //Add it to the list
-                        programs.Add(button);
+                            //Add it to the list
+                            programs.Add(button);
 
-                        group.Dispose();
-                        continue;
-                    }
-                    if (group.ProgramWindows.Count == 0)
-                    {
-                        group.Dispose();
-                        continue;
-                    }
-                    BaseTaskbarProgram[] pr = new BaseTaskbarProgram[programs.Count];
-                    programs.CopyTo(pr);
-                    foreach (BaseTaskbarProgram programBase in pr)
-                    {
-                        if (programBase is SingleTaskbarProgram program && IsGroupConditionMet(group, program))
-                        {
-                            programs.Remove(program);
-                            group.ProgramWindows.Add(program);
+                            group.Dispose();
+                            continue;
                         }
-                    }
-                    programs.Add(taskbarProgram);
-                }
-                else if (taskbarProgram is SingleTaskbarProgram icon)
-                {
-                    BaseTaskbarProgram sameThing = programs.FirstOrDefault((p) => IsGroupConditionMet(p, icon));
-
-                    // No group
-                    if (sameThing == null)
-                    {
-                        programs.Add(icon);
-                        continue;
-                    }
-
-                    if (sameThing is GroupedTaskbarProgram group)
-                    {
-                        if (!group.ProgramWindows.Contains(icon))
+                        if (group.ProgramWindows.Count == 0)
                         {
+                            group.Dispose();
+                            continue;
+                        }
+                        BaseTaskbarProgram[] pr = new BaseTaskbarProgram[programs.Count];
+                        programs.CopyTo(pr);
+                        foreach (BaseTaskbarProgram programBase in pr)
+                        {
+                            if (programBase is SingleTaskbarProgram program && IsGroupConditionMet(group, program))
+                            {
+                                programs.Remove(program);
+                                group.ProgramWindows.Add(program);
+                            }
+                        }
+                        programs.Add(taskbarProgram);
+                    }
+                    else if (taskbarProgram is SingleTaskbarProgram icon)
+                    {
+                        BaseTaskbarProgram sameThing = programs.FirstOrDefault((p) => IsGroupConditionMet(p, icon));
+
+                        // No group
+                        if (sameThing == null)
+                        {
+                            programs.Add(icon);
+                            continue;
+                        }
+
+                        if (sameThing is GroupedTaskbarProgram group)
+                        {
+                            if (!group.ProgramWindows.Contains(icon))
+                            {
+                                icon.IsMoving = false;
+                                group.ProgramWindows.Add(icon);
+                            }
+                        }
+                        else
+                        {
+                            GroupedTaskbarProgram newGroup = new();
+                            Controls.Remove(sameThing);
+                            programs.Remove(sameThing);
+                            newGroup.MouseDown += Taskbar_IconDown;
+                            newGroup.ProgramWindows.Add(sameThing as SingleTaskbarProgram);
+                            newGroup.ProgramWindows.Add(icon);
                             icon.IsMoving = false;
-                            group.ProgramWindows.Add(icon);
+                            programs.Add(newGroup);
                         }
                     }
-                    else
-                    {
-                        GroupedTaskbarProgram newGroup = new();
-                        Controls.Remove(sameThing);
-                        programs.Remove(sameThing);
-                        newGroup.MouseDown += Taskbar_IconDown;
-                        newGroup.ProgramWindows.Add(sameThing as SingleTaskbarProgram);
-                        newGroup.ProgramWindows.Add(icon);
-                        icon.IsMoving = false;
-                        programs.Add(newGroup);
-                    }
                 }
+
+                icons = programs;
             }
-            
-            icons = programs;
-            goto finish;
+            else
+            {
+                icons = newIcons;
+            }
 
-        addAllWindows:
-            icons = newIcons;
-            goto finish;
-
-        finish:
             //Update systray
             if (Primary)
                 systemTray1.UpdateIcons();
