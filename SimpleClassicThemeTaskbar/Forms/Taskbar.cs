@@ -641,13 +641,21 @@ namespace SimpleClassicThemeTaskbar
 
         private static bool IsGroupConditionMet(BaseTaskbarProgram a, BaseTaskbarProgram b)
         {
-            return Config.ProgramGroupCheck switch
+            try
             {
-                ProgramGroupCheck.Process => a.Process.Id == b.Process.Id,
-                ProgramGroupCheck.FileNameAndPath => a.Process.MainModule.FileName == b.Process.MainModule.FileName,
-                ProgramGroupCheck.ModuleName => a.Process.MainModule.ModuleName == b.Process.MainModule.ModuleName,
-                _ => false,
-            };
+                return Config.ProgramGroupCheck switch
+                {
+                    ProgramGroupCheck.Process => a.Process.Id == b.Process.Id,
+                    ProgramGroupCheck.FileNameAndPath => a.Process.MainModule.FileName == b.Process.MainModule.FileName,
+                    ProgramGroupCheck.ModuleName => a.Process.MainModule.ModuleName == b.Process.MainModule.ModuleName,
+                    _ => false,
+                };
+            }
+            catch (Exception ex)
+            {
+                Logger.Log(LoggerVerbosity.Basic, "Taskbar/Groups", $"Failed to compare taskbar programs: {ex}");
+                return false;
+            }
         }
 
         private void UpdateUI()
