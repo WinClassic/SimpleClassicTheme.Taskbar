@@ -41,10 +41,7 @@ namespace SimpleClassicThemeTaskbar.Helpers
             if (loggerOff)
                 return;
 
-            _ = Directory.CreateDirectory("./logs");
-            var logPath = "./logs/log_" + DateTime.Now.ToString("yyyy-dd-M--HH-mm-ss") + ".txt";
-
-            fs = new FileStream(logPath, FileMode.Append, FileAccess.Write, FileShare.Read);
+            fs = new FileStream("latest.log", FileMode.Create, FileAccess.Write, FileShare.Read);
             Log(LoggerVerbosity.Basic, "Logger", "Succesfully initialized logger");
 
             Log(LoggerVerbosity.Detailed, "SystemDump", "Performing quick system dump");
