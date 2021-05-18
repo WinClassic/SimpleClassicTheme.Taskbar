@@ -72,6 +72,9 @@ namespace SimpleClassicThemeTaskbar
             Config.ConfigChanged = true;
             Config.SaveToRegistry();
             ApplicationEntryPoint.NewTaskbars();
+
+            previewTaskbar.Height = Config.Renderer.TaskbarHeight;
+            previewTaskbar.EnumerateWindows();
         }
 
         private void button2_Click(object sender, EventArgs e)
