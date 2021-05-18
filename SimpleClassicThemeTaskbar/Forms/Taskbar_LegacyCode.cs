@@ -126,8 +126,8 @@ namespace SimpleClassicThemeTaskbar
 
             //The window should only be visible if the active window is not fullscreen (with the exception of the desktop window)
             Screen scr = Screen.FromHandle(wnd.Handle);
-            int xy = cppCode.GetSize(wnd.Handle);
-            int width = xy >> 16, height = xy & 0x0000FFFF;
+            User32.GetWindowRect(wnd.Handle, out RECT rect);
+            int width = rect.Right - rect.Left, height = rect.Bottom - rect.Top;
             bool full = width >= scr.Bounds.Width && height >= scr.Bounds.Height;
             if (NeverShow)
                 Visible = false;
@@ -184,7 +184,6 @@ namespace SimpleClassicThemeTaskbar
                     button.MouseDown += Taskbar_IconDown;
                     button.MouseMove += Taskbar_IconMove;
                     button.MouseUp += Taskbar_IconUp;
-                    button.Height = Height;
 
                     User32.GetWindowThreadProcessId(button.Window.Handle, out uint pid);
                     Process p = Process.GetProcessById((int)pid);
@@ -498,6 +497,7 @@ namespace SimpleClassicThemeTaskbar
                 {
                     Controls.Add(icon);
                     icon.Width = iconWidth;
+                    icon.Height = Height;
                     verticalDivider3.BringToFront();
                 }
                 x += icon.Width + Config.SpaceBetweenTaskbarIcons;

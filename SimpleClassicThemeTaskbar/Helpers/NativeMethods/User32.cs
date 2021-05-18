@@ -35,6 +35,9 @@ namespace SimpleClassicThemeTaskbar.Helpers.NativeMethods
         internal const uint MF_STRING = 0x00000000;
         internal const uint MF_UNCHECKED = 0x00000000;
         internal const int SW_SHOW = 5;
+        internal const int TBSTATE_HIDDEN = 0x0008;
+        internal const int TB_BUTTONCOUNT = 0x0418;
+        internal const int TB_GETBUTTON = 0x0417;
         internal const uint TPM_BOTTOMALIGN = 0x0020;
         internal const uint TPM_CENTERALIGN = 0x0004;
         internal const uint TPM_HORNEGANIMATION = 0x0800;
@@ -159,6 +162,9 @@ namespace SimpleClassicThemeTaskbar.Helpers.NativeMethods
 
         [DllImport("user32.dll")]
         internal static extern bool GetWindowInfo(IntPtr hWnd, out WINDOWINFO pwi);
+
+        [DllImport("user32.dll", SetLastError = true)]
+        internal static extern bool GetWindowRect(IntPtr hwnd, out RECT lpRect);
 
         [DllImport("user32", EntryPoint = "GetWindowTextA", CharSet = CharSet.Unicode, SetLastError = true, ExactSpelling = true)]
         internal static extern int GetWindowText(IntPtr hwnd, System.Text.StringBuilder lpString, int cch);

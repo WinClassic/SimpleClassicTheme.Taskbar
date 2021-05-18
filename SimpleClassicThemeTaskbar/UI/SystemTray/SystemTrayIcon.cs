@@ -18,18 +18,17 @@ namespace SimpleClassicThemeTaskbar.UIElements.SystemTray
 
         public uint PID;
 
-        public CodeBridge.TBUTTONINFO TBUTTONINFO_Struct;
+        internal UnmanagedCodeMigration.TBBUTTONINFO TBUTTONINFO_Struct;
 
         public new string Text;
 
         public Misc.BetterToolTip toolTip;
 
-        public SystemTrayIcon(CodeBridge.TBUTTONINFO button)
+        internal SystemTrayIcon(UnmanagedCodeMigration.TBBUTTONINFO button)
         {
             Handle = button.hwnd;
             Text = button.toolTip;
             SizeMode = PictureBoxSizeMode.StretchImage;
-            PID = button.pid;
             TBUTTONINFO_Struct = button;
 
             //Icon size
@@ -85,7 +84,7 @@ namespace SimpleClassicThemeTaskbar.UIElements.SystemTray
             return Text;
         }
 
-        public void UpdateTrayIcon(CodeBridge.TBUTTONINFO button, bool firstTime = false)
+        internal void UpdateTrayIcon(UnmanagedCodeMigration.TBBUTTONINFO button, bool firstTime = false)
         {
             if (TBUTTONINFO_Struct.icon != button.icon || firstTime)
             {
