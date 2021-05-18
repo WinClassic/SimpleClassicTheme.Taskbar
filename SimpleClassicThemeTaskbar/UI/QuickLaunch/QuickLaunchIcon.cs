@@ -12,13 +12,12 @@ using System.Diagnostics;
 
 namespace SimpleClassicThemeTaskbar.UIElements.QuickLaunch
 {
-    public partial class QuickLaunchIcon : UserControl
+    public partial class QuickLaunchIcon : PictureBox
     {
         private IntPtr iconHandle { get; set; }
 
         public string FileName = "";
         public IntPtr IconHandle { get { return iconHandle; } set { iconHandle = value; Image = Icon.FromHandle(value).ToBitmap(); } }
-        public Image Image { get { return pictureBox1.Image; } set { pictureBox1.Image = value; } }
 
         public bool IsMoving = false;
         public new MouseEventHandler MouseDown;
@@ -29,17 +28,14 @@ namespace SimpleClassicThemeTaskbar.UIElements.QuickLaunch
         {
             InitializeComponent();
 
-            base.MouseDown += delegate (object sender, MouseEventArgs e) { _ = (MouseDown?.DynamicInvoke(this, e)); };
-            pictureBox1.MouseDown += delegate (object sender, MouseEventArgs e) { _ = (MouseDown?.DynamicInvoke(this, e)); };
-            base.MouseUp += delegate (object sender, MouseEventArgs e) { _ = (MouseUp?.DynamicInvoke(this, e)); };
-            pictureBox1.MouseUp += delegate (object sender, MouseEventArgs e) { _ = (MouseUp?.DynamicInvoke(this, e)); };
-            base.MouseMove += delegate (object sender, MouseEventArgs e) { _ = (MouseMove?.DynamicInvoke(this, e)); };
-            pictureBox1.MouseMove += delegate (object sender, MouseEventArgs e) { _ = (MouseMove?.DynamicInvoke(this, e)); };
+            SizeMode = PictureBoxSizeMode.CenterImage;
+
+            MouseDown += delegate (object sender, MouseEventArgs e) { _ = (MouseDown?.DynamicInvoke(this, e)); };
+            MouseUp += delegate (object sender, MouseEventArgs e) { _ = (MouseUp?.DynamicInvoke(this, e)); };
+            MouseMove += delegate (object sender, MouseEventArgs e) { _ = (MouseMove?.DynamicInvoke(this, e)); };
 
             DragEnter += QuickLaunchIcon_DragEnter;
-            pictureBox1.DragEnter += QuickLaunchIcon_DragEnter;
             DragDrop += QuickLaunchIcon_DragDrop;
-            pictureBox1.DragDrop += QuickLaunchIcon_DragDrop;
 
             AllowDrop = true;
         }
@@ -56,19 +52,6 @@ namespace SimpleClassicThemeTaskbar.UIElements.QuickLaunch
         {
             string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
             foreach (string file in files) _ = Process.Start(FileName, $"\"{file}\"");
-        }
-
-        private void QuickLaunchIcon_Load(object sender, EventArgs e)
-        {
-
-        }
-
-        private void pictureBox1_Click(object sender, EventArgs e)
-        {
-            if (IsMoving)
-                IsMoving = false;
-            else
-                OnClick(new EventArgs());
         }
     }
 }
