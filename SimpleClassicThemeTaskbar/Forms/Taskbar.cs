@@ -133,8 +133,7 @@ namespace SimpleClassicThemeTaskbar
             if (isPrimary)
             {
                 windows.Clear();
-                User32.EnumWindowsCallback callback = EnumWind;
-                _ = User32.EnumWindows(callback, 0);
+                _ = User32.EnumWindows(EnumWind, 0);
                 foreach (Window w in windows)
                 {
                     //WM_WININICHANGE - SPI_SETWORKAREA
@@ -466,8 +465,7 @@ namespace SimpleClassicThemeTaskbar
                 waitBeforeShow = false;
                 windows.Clear();
                 LookingForTray = true;
-                User32.EnumWindowsCallback callback = EnumWind;
-                User32.EnumWindows(callback, 0);
+                User32.EnumWindows(EnumWind, 0);
                 LookingForTray = false;
 
                 foreach (Window w in windows)
@@ -477,8 +475,7 @@ namespace SimpleClassicThemeTaskbar
 
             // Obtain task list
             windows.Clear();
-            User32.EnumWindowsCallback d = EnumWind;
-            User32.EnumWindows(d, 0);
+            User32.EnumWindows(EnumWind, 0);
 
             if (!Dummy)
             {
