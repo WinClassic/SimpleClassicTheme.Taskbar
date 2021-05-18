@@ -1,0 +1,58 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v5.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v5.0": {
+      "SimpleClassicThemeTaskbar/1.0.0": {
+        "dependencies": {
+          "SimpleClassicThemeTaskbar.CodeBridge": "1.0.0",
+          "ManagedWifi": "1.0.0.0"
+        },
+        "runtime": {
+          "SimpleClassicThemeTaskbar.dll": {}
+        },
+        "resources": {
+          "nl-NL/SimpleClassicThemeTaskbar.resources.dll": {
+            "locale": "nl-NL"
+          },
+          "nl/SimpleClassicThemeTaskbar.resources.dll": {
+            "locale": "nl"
+          }
+        }
+      },
+      "SimpleClassicThemeTaskbar.CodeBridge/1.0.0": {
+        "runtime": {
+          "SimpleClassicThemeTaskbar.CodeBridge.dll": {}
+        }
+      },
+      "ManagedWifi/1.0.0.0": {
+        "runtime": {
+          "ManagedWifi.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "SimpleClassicThemeTaskbar/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "SimpleClassicThemeTaskbar.CodeBridge/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "ManagedWifi/1.0.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}
