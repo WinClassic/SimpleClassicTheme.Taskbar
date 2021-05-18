@@ -24,7 +24,7 @@ namespace SimpleClassicThemeTaskbar.Helpers
         /// <summary>
         /// Log messages for debugging or about received values
         /// </summary>
-        Verbose = 4
+        Verbose = 3
     }
 
     public static class Logger
