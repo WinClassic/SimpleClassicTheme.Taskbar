@@ -576,99 +576,43 @@ namespace SimpleClassicThemeTaskbar
                     programs.CopyTo(pr);
                     foreach (BaseTaskbarProgram programBase in pr)
                     {
-                        if (programBase is SingleTaskbarProgram program)
+                        if (programBase is SingleTaskbarProgram program && IsGroupConditionMet(group, program))
                         {
-                            bool sameProcessExists = false;
-                            bool sameExecutableExists = false;
-                            bool sameModuleNameExists = false;
-                            if (group.Process.Id == program.Process.Id)
-                            {
-                                sameProcessExists = true;
-                            }
-                            if (group.Process.MainModule.FileName == program.Process.MainModule.FileName)
-                            {
-                                sameExecutableExists = true;
-                            }
-                            if (group.Process.MainModule.ModuleName == program.Process.MainModule.ModuleName)
-                            {
-                                sameModuleNameExists = true;
-                            }
-                            if ((Config.ProgramGroupCheck == ProgramGroupCheck.Process && sameProcessExists) ||
-                                (Config.ProgramGroupCheck == ProgramGroupCheck.FileNameAndPath && sameExecutableExists) ||
-                                (Config.ProgramGroupCheck == ProgramGroupCheck.ModuleName && sameModuleNameExists))
-                            {
-                                programs.Remove(program);
-                                group.ProgramWindows.Add(program);
-                            }
+                            programs.Remove(program);
+                            group.ProgramWindows.Add(program);
                         }
                     }
                     programs.Add(taskbarProgram);
                 }
-                else if (taskbarProgram is SingleTaskbarProgram)
+                else if (taskbarProgram is SingleTaskbarProgram icon)
                 {
-                    SingleTaskbarProgram icon = taskbarProgram as SingleTaskbarProgram;
-                    bool sameProcessExists = false;
-                    bool sameExecutableExists = false;
-                    bool sameModuleNameExists = false;
-                    BaseTaskbarProgram sameThing = null;
-                    foreach (BaseTaskbarProgram program in programs)
-                    {
-                        if (icon.Process.Id == program.Process.Id)
-                        {
-                            sameProcessExists = true;
-                            sameThing = program;
-                        }
-                        try
-                        {
-                            if (icon.Process.MainModule.FileName == program.Process.MainModule.FileName)
-                            {
-                                sameExecutableExists = true;
-                                sameThing = program;
-                            }
-                            if (icon.Process.MainModule.ModuleName == program.Process.MainModule.ModuleName)
-                            {
-                                sameModuleNameExists = true;
-                                sameThing = program;
-                            }
-                        }
-                        catch
-						{
+                    BaseTaskbarProgram sameThing = programs.FirstOrDefault((p) => IsGroupConditionMet(p, icon));
 
-						}
+                    // No group
+                    if (sameThing == null)
+                    {
+                        programs.Add(icon);
+                        continue;
                     }
 
-                    if ((Config.ProgramGroupCheck == ProgramGroupCheck.Process && sameProcessExists) ||
-                        (Config.ProgramGroupCheck == ProgramGroupCheck.FileNameAndPath && sameExecutableExists) ||
-                        (Config.ProgramGroupCheck == ProgramGroupCheck.ModuleName && sameModuleNameExists))
+                    if (sameThing is GroupedTaskbarProgram group)
                     {
-                        if (sameThing is GroupedTaskbarProgram)
+                        if (!group.ProgramWindows.Contains(icon))
                         {
-                            GroupedTaskbarProgram group = sameThing as GroupedTaskbarProgram;
-                            if (!group.ProgramWindows.Contains(icon))
-                            {
-                                icon.IsMoving = false;
-                                group.ProgramWindows.Add(icon);
-                            }
-                        }
-                        else
-                        {
-                            GroupedTaskbarProgram group = new();
-                            Controls.Remove(sameThing);
-                            programs.Remove(sameThing);
-                            group.MouseDown += Taskbar_IconDown;
-                            group.ProgramWindows.Add(sameThing as SingleTaskbarProgram);
-                            group.ProgramWindows.Add(icon);
                             icon.IsMoving = false;
-                            programs.Add(group);
+                            group.ProgramWindows.Add(icon);
                         }
-                        //foreach (TaskbarProgram p in programs)
-                        //    Console.Write($"- {p.Process.ProcessName} ({programs.IndexOf(p)})");
-                        //Console.WriteLine($" / {index} -> {programs.IndexOf(icon)}");
-                        //Console.WriteLine($"{index} -> {programs.IndexOf(icon)}");
                     }
                     else
                     {
-                        programs.Add(icon);
+                        GroupedTaskbarProgram newGroup = new();
+                        Controls.Remove(sameThing);
+                        programs.Remove(sameThing);
+                        newGroup.MouseDown += Taskbar_IconDown;
+                        newGroup.ProgramWindows.Add(sameThing as SingleTaskbarProgram);
+                        newGroup.ProgramWindows.Add(icon);
+                        icon.IsMoving = false;
+                        programs.Add(newGroup);
                     }
                 }
             }
@@ -696,6 +640,17 @@ namespace SimpleClassicThemeTaskbar
             verticalDivider3.Location = new Point(systemTray1.Location.X - 9, verticalDivider3.Location.Y);
             UpdateUI();
             UpdateUI();
+        }
+
+        private static bool IsGroupConditionMet(BaseTaskbarProgram a, BaseTaskbarProgram b)
+        {
+            return Config.ProgramGroupCheck switch
+            {
+                ProgramGroupCheck.Process => a.Process.Id == b.Process.Id,
+                ProgramGroupCheck.FileNameAndPath => a.Process.MainModule.FileName == b.Process.MainModule.FileName,
+                ProgramGroupCheck.ModuleName => a.Process.MainModule.ModuleName == b.Process.MainModule.ModuleName,
+                _ => false,
+            };
         }
 
         private void UpdateUI()
