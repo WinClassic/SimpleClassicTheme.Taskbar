@@ -359,6 +359,7 @@ namespace SimpleClassicThemeTaskbar
                     break;
 
                 default:
+                    Logger.Log(LoggerVerbosity.Verbose, "Taskbar/HookProcedure", $"Cannot handle {(int)nCode} (W:{wParam:X8}, L:{lParam:X8})");
                     break;
             }
 
