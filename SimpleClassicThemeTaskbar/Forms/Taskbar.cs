@@ -318,29 +318,20 @@ namespace SimpleClassicThemeTaskbar
             {
                 times.Clear();
                 watchUI = !watchUI;
-            })
-            {
-                Checked = watchUI,
-            });
+            }));
 
             debuggingItem.DropDownItems.Add(new ToolStripMenuItem("Watch Logic", null, (_, __) =>
             {
                 times.Clear();
                 watchLogic = !watchLogic;
-            })
-            {
-                Checked = watchLogic,
-            });
+            }));
 
             debuggingItem.DropDownItems.Add(new ToolStripMenuItem("Watch Tray", null, (_, __) =>
             {
                 times.Clear();
                 systemTray1.times.Clear();
                 systemTray1.watchTray = !systemTray1.watchTray;
-            })
-            {
-                Checked = systemTray1.watchTray,
-            });
+            }));
 
             return debuggingItem;
         }
