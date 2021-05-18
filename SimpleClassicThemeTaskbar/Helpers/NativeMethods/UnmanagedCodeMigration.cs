@@ -12,6 +12,8 @@ namespace SimpleClassicThemeTaskbar.Helpers.NativeMethods
 	/// This class is intended for the functions currently present in SimpleClassicThemeTaskbar.UnmanagedCode
 	/// We'll migrate everything here first, and then put it in the appropriate areas of SCTT accordingly.
 	/// Don't move or rename anything out of here before UnmanagedCode is fully migrated.
+	/// 
+	/// Update: Migration is done. Class is ready to be taken apart
 	/// </summary>
 	internal static class UnmanagedCodeMigration
 	{
