@@ -14,7 +14,10 @@ namespace SimpleClassicThemeTaskbar.UIElements.QuickLaunch
 {
     public partial class QuickLaunchIcon : UserControl
     {
+        private IntPtr iconHandle { get; set; }
+
         public string FileName = "";
+        public IntPtr IconHandle { get { return iconHandle; } set { iconHandle = value; Image = Icon.FromHandle(value).ToBitmap(); } }
         public Image Image { get { return pictureBox1.Image; } set { pictureBox1.Image = value; } }
 
         public bool IsMoving = false;
