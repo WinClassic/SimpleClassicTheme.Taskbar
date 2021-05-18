@@ -21,7 +21,7 @@ namespace SimpleClassicThemeTaskbar
         public static bool SCTCompatMode = false;
 
         static UnmanagedCodeMigration.VirtualDesktopNotification VirtualDesktopNotification;
-        static int virtualDesktopNotificationCookie;
+        static IntPtr virtualDesktopNotificationCookie;
 
         internal static void ExitSCTT()
         {
@@ -41,6 +41,9 @@ namespace SimpleClassicThemeTaskbar
             // Taskbar randomBar = activeBars.FirstOrDefault();
             Logger.Log(LoggerVerbosity.Detailed, "TaskbarManager", $"Killed all taskbars, exiting");
             Logger.Uninitialize();
+
+            if (Environment.OSVersion.Version.Major == 10)
+                UnmanagedCodeMigration.UnregisterVdmNotification(virtualDesktopNotificationCookie);
 
             Environment.Exit(0);
         }
@@ -199,7 +202,7 @@ namespace SimpleClassicThemeTaskbar
                 UnmanagedCodeMigration.InitializeVdmInterface();
                 VirtualDesktopNotification = new();
                 VirtualDesktopNotification.CurrentDesktopChanged += VirtualDesktopNotifcation_CurrentDesktopChanged;
-                UnmanagedCodeMigration.RegisterVdmNotification(VirtualDesktopNotification);
+                virtualDesktopNotificationCookie = UnmanagedCodeMigration.RegisterVdmNotification(VirtualDesktopNotification);
             }
 
             Logger.Log(LoggerVerbosity.Detailed, "EntryPoint", "Main initialization done, passing execution to TaskbarManager");

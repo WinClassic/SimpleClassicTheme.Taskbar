@@ -349,6 +349,11 @@ namespace SimpleClassicThemeTaskbar.Helpers.NativeMethods
 			return cookie;
 		}
 
+		internal static void UnregisterVdmNotification(IntPtr notificationCookie)
+		{
+			virtualDesktopNotificationService.Unregister(notificationCookie);
+		}
+
 		internal static bool IsWindowOnCurrentVirtualDesktop(IntPtr window)
 		{
 			if (virtualDesktopManager is not null)
