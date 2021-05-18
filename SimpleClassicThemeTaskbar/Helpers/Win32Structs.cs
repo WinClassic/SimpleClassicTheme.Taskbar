@@ -1,6 +1,8 @@
 ﻿using SimpleClassicThemeTaskbar.Helpers.NativeMethods;
 
 using System;
+using System.Diagnostics;
+using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Text;
 
@@ -19,7 +21,7 @@ namespace SimpleClassicThemeTaskbar
             Bottom = bottom;
         }
 
-        public RECT(System.Drawing.Rectangle r) : this(r.Left, r.Top, r.Right, r.Bottom)
+        public RECT(Rectangle r) : this(r.Left, r.Top, r.Right, r.Bottom)
         {
         }
     }
@@ -42,6 +44,15 @@ namespace SimpleClassicThemeTaskbar
                 var sb = new StringBuilder(100);
                 _ = User32.GetClassName(Handle, sb, sb.Capacity - 1);
                 return sb.ToString();
+            }
+        }
+
+        public Process Process
+        {
+            get
+            {
+                _ = User32.GetWindowThreadProcessId(Handle, out uint pid);
+                return Process.GetProcessById((int)pid);
             }
         }
 
