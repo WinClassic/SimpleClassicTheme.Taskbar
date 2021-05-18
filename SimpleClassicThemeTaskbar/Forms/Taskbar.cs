@@ -650,19 +650,12 @@ namespace SimpleClassicThemeTaskbar
                     _ => false,
                 };
             }
-            catch (Win32Exception ex)
+            catch (Win32Exception ex) when (ex.NativeErrorCode == 5)
             {
                 // If we got an access denied exception we catch it and return false.
                 // Otherwise we re-throw the exception
-                if (ex.ErrorCode == 5)
-                {
-                    Logger.Log(LoggerVerbosity.Basic, "Taskbar/Groups", $"Failed to compare taskbar programs: {ex}");
-                    return false;
-                }
-                else
-				{
-					throw;
-				}
+                Logger.Log(LoggerVerbosity.Basic, "Taskbar/Groups", $"Failed to compare taskbar programs: {ex}");
+                return false;
             }
         }
 
