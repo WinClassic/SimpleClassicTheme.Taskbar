@@ -133,6 +133,8 @@ namespace SimpleClassicThemeTaskbar
                 Invalidate();
             };
             MouseClick += OnClick;
+
+            ClientSizeChanged += delegate { if (Height == 24) Logger.Log(LoggerVerbosity.Verbose, "BaseTaskbarProgram", $"Size changed to {ClientRectangle}"); };
         }
 
         public abstract void FinishOnPaint(PaintEventArgs e);
