@@ -290,10 +290,12 @@ namespace SimpleClassicThemeTaskbar
                 var contextMenu = ConstructTaskbarContextMenu();
 
                 SystemContextMenu menu = SystemContextMenu.FromToolStripItems(contextMenu.Items);
+
                 Point location = PointToScreen(e.Location);
                 menu.Show(Handle, location.X, location.Y);
 
                 User32.DestroyMenu(contextMenu.Handle);
+                contextMenu.Dispose();
             }
             else if (e.Button == MouseButtons.Left && e.Location.X == Width - 1)
             {
