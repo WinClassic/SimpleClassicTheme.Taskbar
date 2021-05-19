@@ -516,18 +516,7 @@ namespace SimpleClassicThemeTaskbar
             List<BaseTaskbarProgram> newIcons = new(icons);
 
             // Remove all currently displayed controls
-            Control[] controls = new Control[Controls.Count];
-            Controls.CopyTo(controls, 0);
-            foreach (Control control in controls)
-            {
-                if (control is BaseTaskbarProgram taskbarProgram)
-                {
-                    Logger.Log(LoggerVerbosity.Verbose, "Taskbar/EnumerateWindows", $"Deleting window {taskbarProgram.Title}.");
-                    icons.Remove(taskbarProgram);
-                    Controls.Remove(taskbarProgram);
-                    taskbarProgram.Dispose();
-                }
-            }
+            Clear();
 
             if (!watchLogic)
                 timingDebugger.FinishRegion("Create controls for all tasks");
@@ -635,6 +624,22 @@ namespace SimpleClassicThemeTaskbar
             verticalDivider3.Location = new Point(systemTray1.Location.X - 9, verticalDivider3.Location.Y);
             UpdateUI();
             UpdateUI();
+        }
+
+        private void Clear()
+        {
+            Control[] controls = new Control[Controls.Count];
+            Controls.CopyTo(controls, 0);
+            foreach (Control control in controls)
+            {
+                if (control is BaseTaskbarProgram taskbarProgram)
+                {
+                    Logger.Log(LoggerVerbosity.Verbose, "Taskbar/EnumerateWindows", $"Deleting window {taskbarProgram.Title}.");
+                    icons.Remove(taskbarProgram);
+                    Controls.Remove(taskbarProgram);
+                    taskbarProgram.Dispose();
+                }
+            }
         }
 
         private static bool IsGroupConditionMet(BaseTaskbarProgram a, BaseTaskbarProgram b)
