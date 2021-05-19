@@ -289,7 +289,7 @@ namespace SimpleClassicThemeTaskbar
             {
                 var contextMenu = ConstructTaskbarContextMenu();
 
-                SystemContextMenu menu = SystemContextMenu.FromToolStripItems(d.Items);
+                SystemContextMenu menu = SystemContextMenu.FromToolStripItems(contextMenu.Items);
                 Point location = PointToScreen(e.Location);
                 menu.Show(Handle, location.X, location.Y);
 
@@ -772,7 +772,7 @@ namespace SimpleClassicThemeTaskbar
                 new ToolStripMenuItem("P&roperties", null, (_, __) => {
                     new Settings().Show();
                 }),
-                exitContextMenuItem = new("&Exit SCT Taskbar", null, (_, __) => ApplicationEntryPoint.ExitSCTT()) { Available = ShouldShowExit() }
+                new ToolStripMenuItem("&Exit SCT Taskbar", null, (_, __) => ApplicationEntryPoint.ExitSCTT()) { Available = ShouldShowExit() }
             });
 
             return contextMenu;
