@@ -471,17 +471,14 @@ namespace SimpleClassicThemeTaskbar
                 foreach (Window w in windows)
                     if ((w.WindowInfo.dwStyle & 0x10000000L) > 0)
                         User32.ShowWindow(w.Handle, 0);
+
+                // Resize work area
+                ApplyWorkArea();
             }
 
             // Obtain task list
             windows.Clear();
-            User32.EnumWindows(EnumWind, 0);
-
-            if (!Dummy)
-            {
-                // Resize work area
-                ApplyWorkArea();
-            }
+            _ = User32.EnumWindows(EnumWind, 0);
 
             // Clear icon list as this is a full enumeration
             icons.Clear();
