@@ -42,11 +42,6 @@ namespace SimpleClassicThemeTaskbar
 
         //private Thread BackgroundThread;
         private IntPtr CrossThreadHandle;
-
-        //TODO: Clean this shitty mess like wth
-        private ContextMenuStrip d;
-        private ToolStripMenuItem exitContextMenuItem;
-
         private bool dummy;
         private List<BaseTaskbarProgram> icons = new();
         private bool LookingForTray = false;
@@ -292,16 +287,13 @@ namespace SimpleClassicThemeTaskbar
             //Open context menu
             if (e.Button == MouseButtons.Right)
             {
-                if (d == null)
-                {
-                    d = ConstructTaskbarContextMenu();
-                }
-                ////Show the context menu
-                //d.Show(this, e.Location);
-                exitContextMenuItem.Available = ShouldShowExit();
+                var contextMenu = ConstructTaskbarContextMenu();
+
                 SystemContextMenu menu = SystemContextMenu.FromToolStripItems(d.Items);
                 Point location = PointToScreen(e.Location);
                 menu.Show(Handle, location.X, location.Y);
+
+                User32.DestroyMenu(contextMenu.Handle);
             }
             else if (e.Button == MouseButtons.Left && e.Location.X == Width - 1)
             {
@@ -752,44 +744,38 @@ namespace SimpleClassicThemeTaskbar
 
         private ContextMenuStrip ConstructTaskbarContextMenu()
         {
-            ContextMenuStrip c = new();
-
-            ToolStripMenuItem cascadeWindows;
-            ToolStripMenuItem showWindowsStacked;
-            ToolStripMenuItem showWindowsSideBySide;
-            ToolStripMenuItem taskManager;
-            ToolStripMenuItem settings;
-            ToolStripMenuItem showDesktop;
-
-            var items = new ToolStripItem[]
-            {
-                new ToolStripMenuItem("&Toolbars") { Enabled = false },
-                new ToolStripSeparator(),
-                cascadeWindows = new("Ca&scade Windows"),
-                showWindowsStacked = new("Tile Windows &Horizontally"),
-                showWindowsSideBySide = new("Tile Windows V&ertically"),
-                showDesktop = new("&Show the Desktop", null, (_, __) => Keyboard.KeyPress(Keys.LWin, Keys.D)),
-                new ToolStripSeparator(),
-                taskManager = new("Tas&k Manager", null, (_, __) => Process.Start("taskmgr")),
-                new ToolStripSeparator(),
-                new ToolStripMenuItem("&Lock the Taskbar") { Enabled = false },
-                settings = new("P&roperties"),
-                exitContextMenuItem = new("&Exit SCT Taskbar", null, (_, __) => ApplicationEntryPoint.ExitSCTT())
-            };
-
-            cascadeWindows.Click += delegate { _ = User32.CascadeWindows(IntPtr.Zero, User32.MDITILE_ZORDER, IntPtr.Zero, 0, IntPtr.Zero); };
-            showWindowsStacked.Click += delegate { _ = User32.TileWindows(IntPtr.Zero, User32.MDITILE_HORIZONTAL, IntPtr.Zero, 0, IntPtr.Zero); };
-            showWindowsSideBySide.Click += delegate { _ = User32.TileWindows(IntPtr.Zero, User32.MDITILE_VERTICAL, IntPtr.Zero, 0, IntPtr.Zero); };
-            settings.Click += delegate { new Settings().Show(); };
+            ContextMenuStrip contextMenu = new();
 
             if (Config.EnableDebugging)
             {
-                c.Items.Add(ConstructDebuggingMenu());
+                contextMenu.Items.Add(ConstructDebuggingMenu());
             }
 
-            c.Items.AddRange(items);
+            contextMenu.Items.AddRange(new ToolStripItem[]
+            {
+                new ToolStripMenuItem("&Toolbars") { Enabled = false },
+                new ToolStripSeparator(),
+                new ToolStripMenuItem("Ca&scade Windows", null, (_, __) => {
+                    User32.CascadeWindows(IntPtr.Zero, User32.MDITILE_ZORDER, IntPtr.Zero, 0, IntPtr.Zero);
+                }),
+                new ToolStripMenuItem("Tile Windows &Horizontally", null, (_, __) => {
+                    User32.TileWindows(IntPtr.Zero, User32.MDITILE_HORIZONTAL, IntPtr.Zero, 0, IntPtr.Zero);
+                }),
+                new ToolStripMenuItem("Tile Windows V&ertically", null, (_, __) => {
+                    User32.TileWindows(IntPtr.Zero, User32.MDITILE_VERTICAL, IntPtr.Zero, 0, IntPtr.Zero);
+                }),
+                new ToolStripMenuItem("&Show the Desktop", null, (_, __) => Keyboard.KeyPress(Keys.LWin, Keys.D)),
+                new ToolStripSeparator(),
+                new ToolStripMenuItem("Tas&k Manager", null, (_, __) => Process.Start("taskmgr")),
+                new ToolStripSeparator(),
+                new ToolStripMenuItem("&Lock the Taskbar") { Enabled = false },
+                new ToolStripMenuItem("P&roperties", null, (_, __) => {
+                    new Settings().Show();
+                }),
+                exitContextMenuItem = new("&Exit SCT Taskbar", null, (_, __) => ApplicationEntryPoint.ExitSCTT()) { Available = ShouldShowExit() }
+            });
 
-            return c;
+            return contextMenu;
         }
 
         private bool ShouldShowExit()
