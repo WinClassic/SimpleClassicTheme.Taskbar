@@ -42,11 +42,6 @@ namespace SimpleClassicThemeTaskbar
 
         //private Thread BackgroundThread;
         private IntPtr CrossThreadHandle;
-
-        //TODO: Clean this shitty mess like wth
-        private ContextMenuStrip d;
-        private ToolStripMenuItem exitContextMenuItem;
-
         private bool dummy;
         private List<BaseTaskbarProgram> icons = new();
         private bool LookingForTray = false;
@@ -292,16 +287,13 @@ namespace SimpleClassicThemeTaskbar
             //Open context menu
             if (e.Button == MouseButtons.Right)
             {
-                if (d == null)
-                {
-                    d = ConstructTaskbarContextMenu();
-                }
-                ////Show the context menu
-                //d.Show(this, e.Location);
-                exitContextMenuItem.Available = ShouldShowExit();
-                SystemContextMenu menu = SystemContextMenu.FromToolStripItems(d.Items);
+                var contextMenu = ConstructTaskbarContextMenu();
+
+                SystemContextMenu menu = SystemContextMenu.FromToolStripItems(contextMenu.Items);
                 Point location = PointToScreen(e.Location);
                 menu.Show(Handle, location.X, location.Y);
+
+                User32.DestroyMenu(contextMenu.Handle);
             }
             else if (e.Button == MouseButtons.Left && e.Location.X == Width - 1)
             {
@@ -417,34 +409,43 @@ namespace SimpleClassicThemeTaskbar
                 taskbarProgram.ActiveWindow = taskbarProgram.Window.Handle == wParam;
         }
 
+        private bool IsBlacklisted(Window window)
+        {
+            if (BlacklistedClassNames.Contains(window.ClassName))
+            {
+                return true;
+            }
+
+            if (BlacklistedWindowNames.Contains(window.Title))
+            {
+                return true;
+            }
+
+            if (BlacklistedProcessNames.Contains(window.Process.ProcessName))
+            {
+                return true;
+            }
+
+            return false;
+        }
+
         private void HandleWindowCreated(IntPtr wParam)
         {
-
-            Window window = new(wParam);
-            SingleTaskbarProgram button = new()
+            if ((Environment.OSVersion.Version.Major == 10 && !UnmanagedCodeMigration.IsWindowOnCurrentVirtualDesktop(wParam)))
             {
-                Window = window
-            };
-            button.MouseDown += Taskbar_IconDown;
-            button.MouseMove += Taskbar_IconMove;
-            button.MouseUp += Taskbar_IconUp;
-            button.Height = Height;
-
-            User32.GetWindowThreadProcessId(button.Window.Handle, out uint pid);
-            Process p = Process.GetProcessById((int)pid);
-            button.Process = p;
-
-            //Check if not blacklisted
-            if (BlacklistedClassNames.Contains(window.ClassName) ||
-                BlacklistedWindowNames.Contains(window.Title) ||
-                BlacklistedProcessNames.Contains(p.ProcessName) ||
-                (Environment.OSVersion.Version.Major == 10 && !UnmanagedCodeMigration.IsWindowOnCurrentVirtualDesktop(wParam)))
-                button.Dispose();
-            else
-            {
-                icons.Add(button);
-                Logger.Log(LoggerVerbosity.Verbose, "Taskbar/EnumerateWindows", $"Adding window {button.Title}.");
+                return;
             }
+
+            var window = new Window(wParam);
+            if (IsBlacklisted(window))
+            {
+                return;
+            }
+
+            
+            var button = CreateTaskButton(window);
+            icons.Add(button);
+            Logger.Log(LoggerVerbosity.Verbose, "Taskbar/EnumerateWindows", $"Adding window {button.Title}.");
 
             UpdateUI();
             UpdateUI();
@@ -471,17 +472,14 @@ namespace SimpleClassicThemeTaskbar
                 foreach (Window w in windows)
                     if ((w.WindowInfo.dwStyle & 0x10000000L) > 0)
                         User32.ShowWindow(w.Handle, 0);
+
+                // Resize work area
+                ApplyWorkArea();
             }
 
             // Obtain task list
             windows.Clear();
-            User32.EnumWindows(EnumWind, 0);
-
-            if (!Dummy)
-            {
-                // Resize work area
-                ApplyWorkArea();
-            }
+            _ = User32.EnumWindows(EnumWind, 0);
 
             // Clear icon list as this is a full enumeration
             icons.Clear();
@@ -489,26 +487,13 @@ namespace SimpleClassicThemeTaskbar
             //Check if any new window exists, if so: add it
             foreach (Window z in windows)
             {
-                //Create the button
-                BaseTaskbarProgram button = new SingleTaskbarProgram
-                {
-                    Window = z
-                };
-                button.MouseDown += Taskbar_IconDown;
-                button.MouseMove += Taskbar_IconMove;
-                button.MouseUp += Taskbar_IconUp;
-                button.Height = Height;
-
-                User32.GetWindowThreadProcessId(button.Window.Handle, out uint pid);
-                Process p = Process.GetProcessById((int)pid);
-                button.Process = p;
-
                 //Check if not blacklisted
-                if (BlacklistedClassNames.Contains(z.ClassName) || BlacklistedWindowNames.Contains(z.Title) || BlacklistedProcessNames.Contains(p.ProcessName))
-                    button.Dispose();
-                else
-                    icons.Add(button);
+                if (IsBlacklisted(z))
+                    continue;
 
+                //Create the button
+                BaseTaskbarProgram button = CreateTaskButton(z);
+                icons.Add(button);
                 Logger.Log(LoggerVerbosity.Verbose, "Taskbar/EnumerateWindows", $"Adding window {button.Title}.");
             }
 
@@ -516,18 +501,7 @@ namespace SimpleClassicThemeTaskbar
             List<BaseTaskbarProgram> newIcons = new(icons);
 
             // Remove all currently displayed controls
-            Control[] controls = new Control[Controls.Count];
-            Controls.CopyTo(controls, 0);
-            foreach (Control control in controls)
-            {
-                if (control is BaseTaskbarProgram taskbarProgram)
-                {
-                    Logger.Log(LoggerVerbosity.Verbose, "Taskbar/EnumerateWindows", $"Deleting window {taskbarProgram.Title}.");
-                    icons.Remove(taskbarProgram);
-                    Controls.Remove(taskbarProgram);
-                    taskbarProgram.Dispose();
-                }
-            }
+            Clear();
 
             if (!watchLogic)
                 timingDebugger.FinishRegion("Create controls for all tasks");
@@ -541,44 +515,25 @@ namespace SimpleClassicThemeTaskbar
                 {
                     if (taskbarProgram is GroupedTaskbarProgram)
                     {
-                        GroupedTaskbarProgram group = taskbarProgram as GroupedTaskbarProgram;
-                        if (group.ProgramWindows.Count == 1)
+                        var group = taskbarProgram as GroupedTaskbarProgram;
+                        if (group.ProgramWindows.Count < 2)
                         {
-                            //Create the button
-                            BaseTaskbarProgram button = new SingleTaskbarProgram
-                            {
-                                Window = group.ProgramWindows[0].Window
-                            };
-                            button.MouseDown += Taskbar_IconDown;
-                            button.MouseMove += Taskbar_IconMove;
-                            button.MouseUp += Taskbar_IconUp;
-
-                            User32.GetWindowThreadProcessId(button.Window.Handle, out uint pid);
-                            Process p = Process.GetProcessById((int)pid);
-                            button.Process = p;
-
-                            //Add it to the list
-                            programs.Add(button);
-
-                            group.Dispose();
-                            continue;
+                            DissolveGroupButton(ref programs, group);
                         }
-                        if (group.ProgramWindows.Count == 0)
+                        else
                         {
-                            group.Dispose();
-                            continue;
-                        }
-                        BaseTaskbarProgram[] pr = new BaseTaskbarProgram[programs.Count];
-                        programs.CopyTo(pr);
-                        foreach (BaseTaskbarProgram programBase in pr)
-                        {
-                            if (programBase is SingleTaskbarProgram program && IsGroupConditionMet(group, program))
+                            BaseTaskbarProgram[] pr = new BaseTaskbarProgram[programs.Count];
+                            programs.CopyTo(pr);
+                            foreach (BaseTaskbarProgram programBase in pr)
                             {
-                                programs.Remove(program);
-                                group.ProgramWindows.Add(program);
+                                if (programBase is SingleTaskbarProgram program && IsGroupConditionMet(group, program))
+                                {
+                                    programs.Remove(program);
+                                    group.ProgramWindows.Add(program);
+                                }
                             }
+                            programs.Add(taskbarProgram);
                         }
-                        programs.Add(taskbarProgram);
                     }
                     else if (taskbarProgram is SingleTaskbarProgram icon)
                     {
@@ -635,6 +590,50 @@ namespace SimpleClassicThemeTaskbar
             verticalDivider3.Location = new Point(systemTray1.Location.X - 9, verticalDivider3.Location.Y);
             UpdateUI();
             UpdateUI();
+        }
+
+        private void DissolveGroupButton(ref List<BaseTaskbarProgram> programs, GroupedTaskbarProgram group)
+        {
+            if (group.ProgramWindows.Count == 1)
+            {
+                var button = CreateTaskButton(group.ProgramWindows[0].Window);
+
+                //Add it to the list
+                programs.Add(button);
+            }
+
+            group.Dispose();
+        }
+
+        private void Clear()
+        {
+            Control[] controls = new Control[Controls.Count];
+            Controls.CopyTo(controls, 0);
+            foreach (Control control in controls)
+            {
+                if (control is BaseTaskbarProgram taskbarProgram)
+                {
+                    Logger.Log(LoggerVerbosity.Verbose, "Taskbar/EnumerateWindows", $"Deleting window {taskbarProgram.Title}.");
+                    icons.Remove(taskbarProgram);
+                    Controls.Remove(taskbarProgram);
+                    taskbarProgram.Dispose();
+                }
+            }
+        }
+
+        private SingleTaskbarProgram CreateTaskButton(Window window)
+        {
+            SingleTaskbarProgram button = new()
+            {
+                Window = window,
+                Process = window.Process,
+            };
+
+            button.MouseDown += Taskbar_IconDown;
+            button.MouseMove += Taskbar_IconMove;
+            button.MouseUp += Taskbar_IconUp;
+
+            return button;
         }
 
         private static bool IsGroupConditionMet(BaseTaskbarProgram a, BaseTaskbarProgram b)
@@ -745,44 +744,38 @@ namespace SimpleClassicThemeTaskbar
 
         private ContextMenuStrip ConstructTaskbarContextMenu()
         {
-            ContextMenuStrip c = new();
-
-            ToolStripMenuItem cascadeWindows;
-            ToolStripMenuItem showWindowsStacked;
-            ToolStripMenuItem showWindowsSideBySide;
-            ToolStripMenuItem taskManager;
-            ToolStripMenuItem settings;
-            ToolStripMenuItem showDesktop;
-
-            var items = new ToolStripItem[]
-            {
-                new ToolStripMenuItem("&Toolbars") { Enabled = false },
-                new ToolStripSeparator(),
-                cascadeWindows = new("Ca&scade Windows"),
-                showWindowsStacked = new("Tile Windows &Horizontally"),
-                showWindowsSideBySide = new("Tile Windows V&ertically"),
-                showDesktop = new("&Show the Desktop", null, (_, __) => Keyboard.KeyPress(Keys.LWin, Keys.D)),
-                new ToolStripSeparator(),
-                taskManager = new("Tas&k Manager", null, (_, __) => Process.Start("taskmgr")),
-                new ToolStripSeparator(),
-                new ToolStripMenuItem("&Lock the Taskbar") { Enabled = false },
-                settings = new("P&roperties"),
-                exitContextMenuItem = new("&Exit SCT Taskbar", null, (_, __) => ApplicationEntryPoint.ExitSCTT())
-            };
-
-            cascadeWindows.Click += delegate { _ = User32.CascadeWindows(IntPtr.Zero, User32.MDITILE_ZORDER, IntPtr.Zero, 0, IntPtr.Zero); };
-            showWindowsStacked.Click += delegate { _ = User32.TileWindows(IntPtr.Zero, User32.MDITILE_HORIZONTAL, IntPtr.Zero, 0, IntPtr.Zero); };
-            showWindowsSideBySide.Click += delegate { _ = User32.TileWindows(IntPtr.Zero, User32.MDITILE_VERTICAL, IntPtr.Zero, 0, IntPtr.Zero); };
-            settings.Click += delegate { new Settings().Show(); };
+            ContextMenuStrip contextMenu = new();
 
             if (Config.EnableDebugging)
             {
-                c.Items.Add(ConstructDebuggingMenu());
+                contextMenu.Items.Add(ConstructDebuggingMenu());
             }
 
-            c.Items.AddRange(items);
+            contextMenu.Items.AddRange(new ToolStripItem[]
+            {
+                new ToolStripMenuItem("&Toolbars") { Enabled = false },
+                new ToolStripSeparator(),
+                new ToolStripMenuItem("Ca&scade Windows", null, (_, __) => {
+                    User32.CascadeWindows(IntPtr.Zero, User32.MDITILE_ZORDER, IntPtr.Zero, 0, IntPtr.Zero);
+                }),
+                new ToolStripMenuItem("Tile Windows &Horizontally", null, (_, __) => {
+                    User32.TileWindows(IntPtr.Zero, User32.MDITILE_HORIZONTAL, IntPtr.Zero, 0, IntPtr.Zero);
+                }),
+                new ToolStripMenuItem("Tile Windows V&ertically", null, (_, __) => {
+                    User32.TileWindows(IntPtr.Zero, User32.MDITILE_VERTICAL, IntPtr.Zero, 0, IntPtr.Zero);
+                }),
+                new ToolStripMenuItem("&Show the Desktop", null, (_, __) => Keyboard.KeyPress(Keys.LWin, Keys.D)),
+                new ToolStripSeparator(),
+                new ToolStripMenuItem("Tas&k Manager", null, (_, __) => Process.Start("taskmgr")),
+                new ToolStripSeparator(),
+                new ToolStripMenuItem("&Lock the Taskbar") { Enabled = false },
+                new ToolStripMenuItem("P&roperties", null, (_, __) => {
+                    new Settings().Show();
+                }),
+                new ToolStripMenuItem("&Exit SCT Taskbar", null, (_, __) => ApplicationEntryPoint.ExitSCTT()) { Available = ShouldShowExit() }
+            });
 
-            return c;
+            return contextMenu;
         }
 
         private bool ShouldShowExit()
