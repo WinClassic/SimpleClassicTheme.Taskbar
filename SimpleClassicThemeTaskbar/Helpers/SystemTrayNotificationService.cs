@@ -16,24 +16,30 @@ namespace SimpleClassicThemeTaskbar.Helpers
 		SetVersion = 4
 	}
 
-	internal enum SystemTrayNotificationFlags
+	[Flags]
+	internal enum SystemTrayNotificationFlags : int
 	{
 		None = 0,
 		CallbackMessageValid = 1,
 		IconHandleValid = 2,
 		ToolTipValid = 4,
 		StateValid = 8,
-
+		InfoBalloonValid = 16,
+		GuidValid = 32,
+		Realtime = 64,
+		ShowToolTip = 128
 	}
 
-	internal enum SystemTrayIconState
+	[Flags]
+	internal enum SystemTrayIconState : int
 	{
 		None = 0,
 		Hidden = 1,
 		IconHandleShared = 2
 	}
 
-	internal enum SystemTrayIconInfoBalloonFlags
+	[Flags]
+	internal enum SystemTrayIconInfoBalloonFlags : int
 	{
 		NoIcon = 0,
 		InfoIcon = 1,
@@ -48,12 +54,12 @@ namespace SimpleClassicThemeTaskbar.Helpers
 	[StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
 	internal class SystemTrayNotificationData
 	{
-		private int Size = Marshal.SizeOf(typeof(SystemTrayNotificationData));
-		public IntPtr WindowHandle;
-		public int Id;
+		public int Size/* = Marshal.SizeOf(typeof(SystemTrayNotificationData))*/;
+		private int windowHandle;
+		public uint Id;
 		public SystemTrayNotificationFlags Flags;
-		public int CallbackMessage;
-		public IntPtr IconHandle;
+		public uint CallbackMessage;
+		private int iconHandle;
 		[MarshalAs(UnmanagedType.ByValTStr, SizeConst = 0x80)]
 		public string ToolTip;
 		public SystemTrayIconState State;
@@ -65,10 +71,30 @@ namespace SimpleClassicThemeTaskbar.Helpers
 		public string InfoBalloonTitle;
 		public SystemTrayIconInfoBalloonFlags InfoBalloonFlags;
 		public Guid Guid;
-		public IntPtr InfoBalloonIcon;
+		private int infoBalloonIcon;
+
+		public IntPtr WindowHandle => new IntPtr(windowHandle);
+		public IntPtr IconHandle => new IntPtr(iconHandle);
+		public IntPtr InfoBalloonIcon => new IntPtr(infoBalloonIcon);
 
 		public int Timeout { get => TimeoutOrVersion; }
 		public int Version { get => TimeoutOrVersion; }
+		public IntPtr Identifier => WindowHandle + (int)Id;
+
+		public void Update(SystemTrayNotificationData newData)
+		{
+			if (newData.Flags.HasFlag(SystemTrayNotificationFlags.CallbackMessageValid))
+				CallbackMessage = newData.CallbackMessage;
+			if (newData.Flags.HasFlag(SystemTrayNotificationFlags.IconHandleValid))
+				iconHandle = newData.iconHandle;
+			if (newData.Flags.HasFlag(SystemTrayNotificationFlags.ToolTipValid))
+				ToolTip = newData.ToolTip;
+			if (newData.Flags.HasFlag(SystemTrayNotificationFlags.StateValid))
+			{
+				State = newData.State & newData.StateMask;
+				StateMask = newData.StateMask;
+			}
+		}
 	}
 
 	internal class SystemTrayNotificationEventArgs : EventArgs
@@ -106,6 +132,10 @@ namespace SimpleClassicThemeTaskbar.Helpers
 		public void RegisterNotificationEvent(SystemTrayNotificationEventHandler eventHandler)
 		{
 			systemTrayNotification += eventHandler;
+			if (User32.SendMessage(new IntPtr(HWND_BROADCAST), WM_TASKBARCREATED, IntPtr.Zero, IntPtr.Zero) == IntPtr.Zero)
+			{
+				Debugger.Break();
+			}
 		}
 
 		public void UnregisterNotificationEvent(SystemTrayNotificationEventHandler eventHandler)
@@ -113,22 +143,21 @@ namespace SimpleClassicThemeTaskbar.Helpers
 			systemTrayNotification -= eventHandler;
 		}
 		
-		[DllImport("user32.dll", CharSet = CharSet.Auto)]
-		static extern IntPtr CreateWindow(string lpClassName, string lpWindowName, int dwStyle, int x, int y, int nWidth, int nHeight, IntPtr hWndParent, IntPtr hMenu, IntPtr hInstance, IntPtr lpParam);
-
-		[DllImport("user32.dll", CharSet = CharSet.Auto)]
-		static extern IntPtr RegisterClass(ref WNDCLASS lpWndClass);
+		[DllImport("user32.dll", CharSet = CharSet.Unicode)]
+		static extern IntPtr CreateWindowEx(int dwExStyle, UInt16 lpClassName, [MarshalAs(UnmanagedType.LPWStr)] string lpWindowName, int dwStyle, int x, int y, int nWidth, int nHeight, IntPtr hWndParent, IntPtr hMenu, IntPtr hInstance, IntPtr lpParam);
+		
+		[DllImport("user32.dll", CharSet = CharSet.Unicode)]
+		static extern UInt16 RegisterClass([In] ref WNDCLASS lpWndClass);
 
 		[DllImport("user32.dll")]
 		static extern IntPtr DefWindowProc(IntPtr hWnd, uint uMsg, IntPtr wParam, IntPtr lParam);
 
 		[DllImport("user32.dll")]
-		static extern bool SendNotifyMessage(IntPtr hWnd, uint uMsg, IntPtr wParam, IntPtr lParam);
+		static extern bool SendNotifyMessage(int hWnd, uint uMsg, IntPtr wParam, IntPtr lParam);
 
-		[StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
+		[StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
 		internal struct WNDCLASS
 		{
-			[MarshalAs(UnmanagedType.U4)]
 			public int style;
 			public IntPtr lpfnWndProc;
 			public int cbClsExtra;
@@ -137,11 +166,13 @@ namespace SimpleClassicThemeTaskbar.Helpers
 			public IntPtr hIcon;
 			public IntPtr hCursor;
 			public IntPtr hbrBackground;
+			[MarshalAs(UnmanagedType.LPWStr)]
 			public string lpszMenuName;
+			[MarshalAs(UnmanagedType.LPWStr)]
 			public string lpszClassName;
 		}
 
-		[StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
+		[StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
 		struct COPYDATASTRUCT
 		{
 			public IntPtr dwData;    // Any value the sender chooses.  Perhaps its main window handle?
@@ -149,44 +180,53 @@ namespace SimpleClassicThemeTaskbar.Helpers
 			public IntPtr lpData;    // The address of the message.
 		}
 
-		[StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
+		[StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
 		struct TRAYNOTIFYDATA
 		{
-			public int dwSignature;
-			public int dwMessage;
+			public uint dwSignature;
+			public uint dwMessage;
 			public SystemTrayNotificationData nid;
 		}
 
-
+		const int HWND_BROADCAST = 0xFFFF;
+		int WM_TASKBARCREATED = User32.RegisterWindowMessage("TaskbarCreated");
 		delegate IntPtr WndProc(IntPtr hWnd, uint uMsg, IntPtr wParam, IntPtr lParam);
+		WNDCLASS windowClass;
+		WndProc windowProcedure;
 
 		private void Initialize()
 		{
 			IntPtr hInstance = Marshal.GetHINSTANCE(typeof(SystemTrayNotificationService).Module);
-			
-			WNDCLASS windowClass = new();
-			windowClass.lpfnWndProc = Marshal.GetFunctionPointerForDelegate(new WndProc(WindowProcedure));
+			windowProcedure = new WndProc(WindowProcedure);
+
+			windowClass = new();
+			windowClass.lpfnWndProc = Marshal.GetFunctionPointerForDelegate(windowProcedure);
 			windowClass.hInstance = hInstance;
 			windowClass.lpszClassName = "Shell_TrayWnd";
 
-			if (RegisterClass(ref windowClass) == IntPtr.Zero)
+			ushort classHandle = RegisterClass(ref windowClass);
+			if (classHandle == 0)
 			{
 				Debugger.Break();
 			}
 
+			const int WS_EX_TOOLWINDOW = 0x00000080;
 			const int WS_TILEDWINDOW = 0xCF0000;
 			const int WS_VISIBLE = 0x10000000;
 			const int CW_USEDEFAULT = unchecked((int)0x80000000);
-			const int HWND_BROADCAST = 0xFFFF;
+			const int WS_POPUP = CW_USEDEFAULT;
 
-		    windowHandle = CreateWindow("Shell_TrayWnd", "SCTT_TRAY", WS_TILEDWINDOW | WS_VISIBLE, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, IntPtr.Zero, IntPtr.Zero, hInstance, IntPtr.Zero);
+			windowHandle = CreateWindowEx(WS_EX_TOOLWINDOW, classHandle, "", WS_POPUP, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, IntPtr.Zero, IntPtr.Zero, hInstance, IntPtr.Zero);
 			if (windowHandle == IntPtr.Zero)
 			{
 				Debugger.Break();
 			}
 
 			User32.ShowWindow(windowHandle, User32.SW_SHOW);
-			SendNotifyMessage(new IntPtr(HWND_BROADCAST), (uint)User32.RegisterWindowMessage("TaskbarCreated"), IntPtr.Zero, IntPtr.Zero);
+			if (!SendNotifyMessage(HWND_BROADCAST, (uint)WM_TASKBARCREATED, IntPtr.Zero, IntPtr.Zero))// == IntPtr.Zero)
+			{
+				Debugger.Break();
+			}
 		}
 
 		private void Uninitialize()
@@ -199,14 +239,15 @@ namespace SimpleClassicThemeTaskbar.Helpers
 			switch (uMsg)
 			{
 				case 0x004A: //WM_COPYDATA
-					if (lParam == new IntPtr(0x00000001)) //Shell private constant: TCDM_NOTIFY
+					COPYDATASTRUCT cds = Marshal.PtrToStructure<COPYDATASTRUCT>(lParam);
+					if (cds.dwData == new IntPtr(0x00000001)) //Shell private constant: TCDM_NOTIFY
 					{
-						COPYDATASTRUCT cds = Marshal.PtrToStructure<COPYDATASTRUCT>(wParam);
-						if (cds.cbData != Marshal.SizeOf(typeof(TRAYNOTIFYDATA)))
-							break;
 						TRAYNOTIFYDATA data = Marshal.PtrToStructure<TRAYNOTIFYDATA>(cds.lpData);
 						SystemTrayNotificationData notificationData = data.nid;
-						int message = data.dwMessage;
+						if (notificationData.Size != Marshal.SizeOf(typeof(SystemTrayNotificationData)))
+							//Debugger.Break();
+							break;
+						int message = (int)data.dwMessage;
 						SystemTrayNotificationEventArgs e = new((SystemTrayNotificationType)message, notificationData);
 						systemTrayNotification?.Invoke(this, e);
 						return e.ReturnValue;

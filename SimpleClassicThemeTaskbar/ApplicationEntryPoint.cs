@@ -20,6 +20,7 @@ namespace SimpleClassicThemeTaskbar
 
         public static bool SCTCompatMode = false;
 
+        public static SystemTrayNotificationService TrayNotificationService;
         static UnmanagedCodeMigration.VirtualDesktopNotification VirtualDesktopNotification;
         static IntPtr virtualDesktopNotificationCookie;
 
@@ -39,12 +40,19 @@ namespace SimpleClassicThemeTaskbar
                 bar.Dispose();
             }
             // Taskbar randomBar = activeBars.FirstOrDefault();
-            Logger.Log(LoggerVerbosity.Detailed, "TaskbarManager", $"Killed all taskbars, exiting");
-            Logger.Uninitialize();
+            Logger.Log(LoggerVerbosity.Detailed, "TaskbarManager", $"Killed all taskbars");
 
             if (Environment.OSVersion.Version.Major == 10)
+            {
+                Logger.Log(LoggerVerbosity.Detailed, "TaskbarManager", "Unregistered virtual desktop notify serivce");
                 UnmanagedCodeMigration.UnregisterVdmNotification(virtualDesktopNotificationCookie);
+            }
 
+            Logger.Log(LoggerVerbosity.Detailed, "TaskbarManager", "Unitializing SystemTrayNotificationService");
+            TrayNotificationService.Dispose();
+
+            Logger.Log(LoggerVerbosity.Detailed, "TaskbarManager", "Uninitialization sequence completed, exiting");
+            Logger.Uninitialize();
             Environment.Exit(0);
         }
 
@@ -152,6 +160,43 @@ namespace SimpleClassicThemeTaskbar
                 Logger.Log(LoggerVerbosity.Detailed, "EntryPoint", "Current instance is an SCT managed instance");
                 SCTCompatMode = true;
             }
+            if (args.Contains("--traydump"))
+			{
+                Logger.Log(LoggerVerbosity.Detailed, "EntryPoint", "Dumping system tray information to traydump.txt");
+                FileStream fs = new FileStream("traydump.txt", FileMode.Create, FileAccess.ReadWrite);
+
+                IntPtr hWndTray = User32.FindWindowW("Shell_TrayWnd", null);
+                if (hWndTray != IntPtr.Zero)
+                {
+                    hWndTray = User32.FindWindowExW(hWndTray, IntPtr.Zero, "TrayNotifyWnd", null);
+                    if (hWndTray != IntPtr.Zero)
+                    {
+                        hWndTray = User32.FindWindowExW(hWndTray, IntPtr.Zero, "SysPager", null);
+                        if (hWndTray != IntPtr.Zero)
+                        {
+                            hWndTray = User32.FindWindowExW(hWndTray, IntPtr.Zero, "ToolbarWindow32", null);
+                            if (hWndTray != IntPtr.Zero)
+                            {
+                                UnmanagedCodeMigration.TBBUTTONINFO[] buttons = UnmanagedCodeMigration.GetTrayButtons(hWndTray);
+                                foreach (var button in buttons)
+                                {
+                                    string str = "START OF TBBUTTONINFO\n";
+                                    foreach (var d in button.GetType().GetProperties())
+                                        str += d.Name + ": " + d.GetValue(button) + "\n";
+                                    foreach (var d in button.GetType().GetFields())
+                                        str += d.Name + ": " + d.GetValue(button) + "\n";
+                                    str += "END OF TBBUTTONINFO\n";
+                                    byte[] bytes = Encoding.UTF8.GetBytes(str);
+                                    fs.Write(bytes, 0, bytes.Length);
+                                    fs.Flush();
+                                }
+                            }
+                        }
+                    }
+                }
+                fs.Close();
+                return;
+            }
 
 #if DEBUG
 #else
@@ -196,7 +241,7 @@ namespace SimpleClassicThemeTaskbar
                 Logger.Log(LoggerVerbosity.Detailed, "EntryPoint", "Debug instance, ignoring incorrect architecture");
             }
 
-            if (Environment.OSVersion.Version.Major == 10)
+            if (Environment.OSVersion.Version.Major == 10 && Process.GetProcessesByName("explorer").Length > 0)
             {
                 Logger.Log(LoggerVerbosity.Detailed, "EntryPoint", "OSVersion.Major is above 10. Initializing IVirtualDesktopManager");
                 UnmanagedCodeMigration.InitializeVdmInterface();
@@ -204,6 +249,9 @@ namespace SimpleClassicThemeTaskbar
                 VirtualDesktopNotification.CurrentDesktopChanged += VirtualDesktopNotifcation_CurrentDesktopChanged;
                 virtualDesktopNotificationCookie = UnmanagedCodeMigration.RegisterVdmNotification(VirtualDesktopNotification);
             }
+
+            Logger.Log(LoggerVerbosity.Detailed, "EntryPoint", "Initializing new SystemTrayNotificationService");
+            TrayNotificationService = new();
 
             Logger.Log(LoggerVerbosity.Detailed, "EntryPoint", "Main initialization done, passing execution to TaskbarManager");
 
