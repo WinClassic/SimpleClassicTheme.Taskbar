@@ -61,10 +61,8 @@ namespace SimpleClassicThemeTaskbar
             get
             {
                 var sb = new StringBuilder(100);
-                if (User32.GetWindowTextW(Handle, sb, sb.Capacity))
-                    return sb.ToString();
-                else
-                    return "";
+                _ = User32.GetWindowTextW(Handle, sb, 100);
+                return sb.ToString();
             }
             set
             {

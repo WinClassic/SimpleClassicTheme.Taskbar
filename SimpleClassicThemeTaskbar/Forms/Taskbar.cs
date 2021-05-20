@@ -116,7 +116,6 @@ namespace SimpleClassicThemeTaskbar
             //Initialize thingies
             InitializeComponent();
             HandleCreated += delegate { CrossThreadHandle = Handle; };
-            systemTray1.SizeChanged += delegate { UpdateUI(); UpdateUI(); };
             TopLevel = true;
 
             //Fix height according to renderers preferences
@@ -318,6 +317,13 @@ namespace SimpleClassicThemeTaskbar
             {
                 times.Clear();
                 watchLogic = !watchLogic;
+            }));
+
+            debuggingItem.DropDownItems.Add(new ToolStripMenuItem("Watch Tray", null, (_, __) =>
+            {
+                times.Clear();
+                systemTray1.times.Clear();
+                systemTray1.watchTray = !systemTray1.watchTray;
             }));
 
             return debuggingItem;
@@ -570,6 +576,10 @@ namespace SimpleClassicThemeTaskbar
             {
                 icons = newIcons;
             }
+
+            //Update systray
+            if (Primary)
+                systemTray1.UpdateIcons();
 
             //Update clock
             systemTray1.UpdateTime();
