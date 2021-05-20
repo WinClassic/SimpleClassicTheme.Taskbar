@@ -406,10 +406,6 @@ namespace SimpleClassicThemeTaskbar
         //Re-display all windows (except heldDownButton)
         displayWindows:
 
-            //Update systray
-            if (Primary)
-                systemTray1.UpdateIcons();
-
             if (!watchLogic)
                 timingDebugger.FinishRegion("Systray");
 
