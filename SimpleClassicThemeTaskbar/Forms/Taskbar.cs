@@ -216,16 +216,16 @@ namespace SimpleClassicThemeTaskbar
             if (!selfClose)
             {
                 //If we don't close ourselves, show the shutdown dialog
-                _ = User32.PostMessage(User32.FindWindowW("Shell_TrayWnd", ""), (int)User32.WM_KEYDOWN, (int)User32.VK_MENU, 0);
-                _ = User32.PostMessage(User32.FindWindowW("Shell_TrayWnd", ""), (int)User32.WM_KEYDOWN, (int)User32.VK_F4, 0);
-                _ = User32.SendMessage(User32.FindWindowW("Shell_TrayWnd", ""), (int)User32.WM_KEYUP, (int)User32.VK_F4, 0);
-                _ = User32.SendMessage(User32.FindWindowW("Shell_TrayWnd", ""), (int)User32.WM_KEYUP, (int)User32.VK_MENU, 0);
+                _ = User32.PostMessage(User32.FindWindow("Shell_TrayWnd", ""), (int)User32.WM_KEYDOWN, (int)User32.VK_MENU, 0);
+                _ = User32.PostMessage(User32.FindWindow("Shell_TrayWnd", ""), (int)User32.WM_KEYDOWN, (int)User32.VK_F4, 0);
+                _ = User32.SendMessage(User32.FindWindow("Shell_TrayWnd", ""), (int)User32.WM_KEYUP, (int)User32.VK_F4, 0);
+                _ = User32.SendMessage(User32.FindWindow("Shell_TrayWnd", ""), (int)User32.WM_KEYUP, (int)User32.VK_MENU, 0);
                 e.Cancel = true;
             }
             else
             {
                 //Show taskbar
-                _ = User32.ShowWindow(User32.FindWindowW("Shell_TrayWnd", ""), 5);
+                _ = User32.ShowWindow(User32.FindWindow("Shell_TrayWnd", ""), 5);
             }
         }
 
@@ -328,7 +328,7 @@ namespace SimpleClassicThemeTaskbar
             Logger.Log(LoggerVerbosity.Verbose, "Taskbar/HookProcedure", $"Call parameters: {nCode}, {wParam:X8}, {lParam:X8}");
 
             if (nCode < 0)
-                return User32.CallNextHookEx(IntPtr.Zero, nCode, wParam, lParam);
+                return User32.CallNextHookEx(IntPtr.Zero, (int)nCode, wParam, lParam);
 
             switch (nCode)
             {
@@ -350,7 +350,7 @@ namespace SimpleClassicThemeTaskbar
                     break;
             }
 
-            return User32.CallNextHookEx(IntPtr.Zero, nCode, wParam, lParam);
+            return User32.CallNextHookEx(IntPtr.Zero, (int)nCode, wParam, lParam);
         }
 
         private void HandleWindowDestroyed(IntPtr wParam)
@@ -382,7 +382,7 @@ namespace SimpleClassicThemeTaskbar
                             seperatedProgram.MouseUp += Taskbar_IconUp;
                             seperatedProgram.Height = Height;
 
-                            User32.GetWindowThreadProcessId(seperatedProgram.Window.Handle, out uint processId);
+                            User32.GetWindowThreadProcessId(seperatedProgram.Window.Handle, out Integer32 processId);
                             Process process = Process.GetProcessById((int)processId);
                             seperatedProgram.Process = process;
 
@@ -758,7 +758,7 @@ namespace SimpleClassicThemeTaskbar
                 }),
                 new ToolStripMenuItem("&Show the Desktop", null, (_, __) => Keyboard.KeyPress(Keys.LWin, Keys.D)),
                 new ToolStripSeparator(),
-                new ToolStripMenuItem("Tas&k Manager", null, (_, __) => Process.Start("taskmgr")),
+                new ToolStripMenuItem("Tas&k Manager", null, (_, __) => Process.Start(new ProcessStartInfo("taskmgr") { UseShellExecute = true })),
                 new ToolStripSeparator(),
                 new ToolStripMenuItem("&Lock the Taskbar") { Enabled = false },
                 new ToolStripMenuItem("P&roperties", null, (_, __) => {

@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using System.Text;
-using System.Windows.Forms;
-
-using static SimpleClassicThemeTaskbar.Taskbar;
 
 namespace SimpleClassicThemeTaskbar.Helpers.NativeMethods
 {
@@ -56,12 +53,14 @@ namespace SimpleClassicThemeTaskbar.Helpers.NativeMethods
         internal const uint VK_F4 = 0x73;
         internal const uint VK_MENU = 0x12;
         internal const uint WM_CLOSE = 0x0010;
+        internal const uint WM_COPYDATA = 0x004a;
         internal const int WM_ENDSESSION = 0x0016;
         internal const int WM_GETICON = 0x007F;
         internal const uint WM_KEYDOWN = 0x0100;
         internal const uint WM_KEYUP = 0x0101;
         internal const uint WM_LBUTTONDOWN = 0x0201;
         internal const uint WM_LBUTTONUP = 0x0202;
+        internal const uint WM_PAINT = 0x000F;
         internal const int WM_QUERYENDSESSION = 0x0011;
         internal const uint WM_RBUTTONDOWN = 0x0204;
         internal const uint WM_RBUTTONUP = 0x0205;
@@ -94,142 +93,140 @@ namespace SimpleClassicThemeTaskbar.Helpers.NativeMethods
         }
 
         [DllImport("user32.dll", CharSet = CharSet.Unicode)]
-        internal static extern bool AppendMenu(IntPtr hMenu, uint uFlags, int uIDNewItem, string lpNewItem);
-
-        [DllImport("user32.dll", CharSet = CharSet.Auto)]
-        internal static extern bool AppendMenu(IntPtr hMenu, uint uFlags, int uIDNewItem, IntPtr lpNewItem);
+        internal static extern bool AppendMenu(Integer hMenu, Integer32 uFlags, Integer32 uIDNewItem, Integer lpNewItem);
 
         [DllImport("user32.dll")]
-        internal static extern IntPtr CallNextHookEx(IntPtr hhk, ShellEvents nCode, IntPtr wParam, IntPtr lParam);
+        internal static extern IntPtr CallNextHookEx(Integer hhk, Integer32 nCode, Integer32 wParam, Integer64 lParam);
 
         [DllImport("user32.dll")]
-        internal static extern ushort CascadeWindows(IntPtr hwndParent, uint wHow, IntPtr lpRect, uint cKids, IntPtr lpKids);
+        internal static extern short CascadeWindows(Integer hwndParent, Integer32 wHow, Integer lpRect, Integer32 cKids, Integer lpKids);
 
         [DllImport("user32.dll")]
-        internal static extern IntPtr CreatePopupMenu();
+        internal static extern Integer CreatePopupMenu();
 
         [DllImport("user32.dll")]
-        internal static extern bool DeleteMenu(IntPtr hMenu, int uPosition, uint uFlags);
+        internal static extern bool DeleteMenu(Integer hMenu, Integer32 uPosition, Integer32 uFlags);
 
-        /// <summary>
-        /// Destroys the specified menu and frees any memory that the menu occupies.
-        /// </summary>
-        /// <param name="hMenu">A handle to the menu to be destroyed.</param>
         [DllImport("user32.dll", SetLastError = true)]
-        internal static extern bool DestroyMenu(IntPtr hMenu);
+        internal static extern bool DestroyMenu(Integer hMenu);
+
+        [DllImport("user32.dll", SetLastError = true)]
+        internal static extern bool DestroyWindow(Integer hwnd);
 
         [DllImport("user32.dll")]
-        internal static extern int DrawFrameControl(IntPtr hdc, ref RECT lpRect, uint un1, uint un2);
+        internal static extern int DrawFrameControl(Integer hdc, ref RECT lpRect, Integer32 un1, Integer32 un2);
 
         [DllImport("user32.dll")]
-        internal static extern bool EnumThreadWindows(int dwThreadId, EnumThreadDelegate lpfn, IntPtr lParam);
+        internal static extern bool EnumThreadWindows(Integer32 dwThreadId, EnumThreadDelegate lpfn, Integer lParam);
 
         [DllImport("user32.dll")]
-        internal static extern int EnumWindows(EnumWindowsCallback callPtr, int lParam);
+        internal static extern int EnumWindows(EnumWindowsCallback callPtr, Integer64 lParam);
 
         [DllImport("user32.dll", CharSet = CharSet.Unicode)]
-        internal static extern IntPtr FindWindowExW(IntPtr hWndParent, IntPtr hWndChildAfter, string lpszClass, string lpszWindow);
+        internal static extern Integer FindWindowEx(Integer hWndParent, Integer hWndChildAfter, string lpszClass, string lpszWindow);
 
         [DllImport("user32.dll", CharSet = CharSet.Unicode)]
-        internal static extern IntPtr FindWindowW(string a, string b);
+        internal static extern Integer FindWindow(string a, string b);
 
         [DllImport("user32.dll")]
-        internal static extern IntPtr GetAncestor(IntPtr hWnd, uint gaFlags);
+        internal static extern Integer GetAncestor(Integer hWnd, Integer32 gaFlags);
 
         [DllImport("user32.dll", EntryPoint = "GetClassLong")]
-        internal static extern uint GetClassLongPtr32(IntPtr hWnd, int nIndex);
+        internal static extern Integer32 GetClassLongPtr32(Integer32 hWnd, Integer32 nIndex);
 
         [DllImport("user32.dll", EntryPoint = "GetClassLongPtr")]
-        internal static extern IntPtr GetClassLongPtr64(IntPtr hWnd, int nIndex);
+        internal static extern Integer GetClassLongPtr64(Integer hWnd, Integer32 nIndex);
 
         [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
-        internal static extern int GetClassName(IntPtr hWnd, StringBuilder lpClassName, int nMaxCount);
+        internal static extern Integer32 GetClassName(Integer hWnd, StringBuilder lpClassName, Integer32 nMaxCount);
 
         [DllImport("user32.dll")]
-        internal static extern IntPtr GetForegroundWindow();
+        internal static extern Integer GetForegroundWindow();
 
         [DllImport("user32.dll")]
-        internal static extern bool GetIconInfo(IntPtr hIcon, out ICONINFO piconinfo);
+        internal static extern bool GetIconInfo(Integer hIcon, out ICONINFO piconinfo);
 
         [DllImport("user32.dll")]
-        internal static extern IntPtr GetLastActivePopup(IntPtr hWnd);
+        internal static extern Integer GetLastActivePopup(Integer hWnd);
 
         [DllImport("user32.dll")]
-        internal static extern IntPtr GetSystemMenu(IntPtr hWnd, bool bRevert);
+        internal static extern Integer GetSystemMenu(Integer hWnd, bool bRevert);
 
         [DllImport("user32.dll")]
-        internal static extern IntPtr GetWindow(IntPtr hWnd, uint gwFlags);
+        internal static extern Integer GetWindow(Integer hWnd, Integer32 gwFlags);
 
         [DllImport("user32.dll")]
-        internal static extern bool GetWindowInfo(IntPtr hWnd, out WINDOWINFO pwi);
+        internal static extern bool GetWindowInfo(Integer hWnd, out WINDOWINFO pwi);
 
         [DllImport("user32.dll", SetLastError = true)]
-        internal static extern bool GetWindowRect(IntPtr hwnd, out RECT lpRect);
+        internal static extern bool GetWindowRect(Integer hwnd, out RECT lpRect);
 
-        [DllImport("user32", EntryPoint = "GetWindowTextA", CharSet = CharSet.Unicode, SetLastError = true, ExactSpelling = true)]
-        internal static extern int GetWindowText(IntPtr hwnd, System.Text.StringBuilder lpString, int cch);
+        [DllImport("user32", EntryPoint = "GetWindowTextW", CharSet = CharSet.Unicode, SetLastError = true, ExactSpelling = true)]
+        internal static extern Integer32 GetWindowText(Integer hwnd, StringBuilder lpString, Integer32 nMaxCount);
 
         [DllImport("user32", EntryPoint = "GetWindowTextLengthA", CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true)]
-        internal static extern int GetWindowTextLength(IntPtr hwnd);
-
-        [DllImport("user32.dll", CharSet = CharSet.Unicode)]
-        internal static extern bool GetWindowTextW(IntPtr hWnd, StringBuilder lpString, int nMaxCount);
+        internal static extern Integer32 GetWindowTextLength(Integer hwnd);
 
         [DllImport("User32.dll")]
-        internal static extern uint GetWindowThreadProcessId(IntPtr hWnd, out uint lpdwProcessId);
+        internal static extern Integer32 GetWindowThreadProcessId(Integer hWnd, out Integer32 lpdwProcessId);
 
         [DllImport("user32.dll", SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
-        internal static extern bool IsWindow(IntPtr hWnd);
+        internal static extern bool IsWindow(Integer hWnd);
 
         [DllImport("user32.dll")]
-        internal static extern bool IsWindowVisible(IntPtr hWnd);
+        internal static extern bool IsWindowVisible(Integer hWnd);
 
         [DllImport("user32.dll")]
-        internal static extern void keybd_event(byte bVk, byte bScan, int dwFlags, int dwExtraInfo);
+        internal static extern void keybd_event(byte bVk, byte bScan, Integer32 dwFlags, Integer dwExtraInfo);
 
         [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Auto)]
-        internal static extern bool PostMessage(IntPtr hWnd, uint Msg, uint wParam, uint lParam);
+        internal static extern bool PostMessage(Integer hWnd, Integer Msg, Integer wParam, Integer lParam);
 
         [DllImport("user32.dll", SetLastError = true)]
-        internal static extern bool RegisterShellHookWindow(IntPtr hwnd);
+        internal static extern bool RegisterShellHookWindow(Integer hwnd);
 
         [DllImport("user32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
         internal static extern int RegisterWindowMessage(string lpString);
 
         [DllImport("user32.dll", CharSet = CharSet.Auto)]
-        internal static extern IntPtr SendMessage(IntPtr hWnd, int Msg, IntPtr wParam, IntPtr lParam);
-
-        [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = false)]
-        internal static extern IntPtr SendMessage(IntPtr hWnd, int Msg, int wParam, int lParam);
+        internal static extern Integer SendMessage(Integer hWnd, Integer Msg, Integer wParam, Integer lParam);
 
         [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Auto)]
-        internal static extern bool SendNotifyMessage(IntPtr hWnd, uint Msg, uint wParam, uint lParam);
+        internal static extern bool SendNotifyMessage(Integer hWnd, Integer32 Msg, Integer wParam, Integer64 lParam);
 
         [DllImport("user32.dll")]
-        internal static extern bool SetForegroundWindow(IntPtr hWnd);
+        internal static extern bool SetForegroundWindow(Integer hWnd);
+
+        [DllImport("user32.dll")]
+        internal static extern bool SetTaskmanWindow(Integer hWnd);
 
         [DllImport("user32.dll", SetLastError = true)]
-        internal static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int X, int Y, int cx, int cy, uint uFlags);
+        internal static extern bool SetWindowPos(Integer hWnd, Integer hWndInsertAfter, Integer32 X, Integer32 Y, Integer32 cx, Integer32 cy, Integer32 uFlags);
+
+        //[DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        //internal static extern IntPtr SetWindowsHookEx(ShellHookId idHook, WindowsHookProcedure lpfn, IntPtr hmod, uint dwThreadId);
+        
+        [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        internal static extern IntPtr SetWindowsHookEx(Integer32 idHook, Integer lpfn, Integer hmod, Integer32 dwThreadId);
+
+        [DllImport("user32.dll", SetLastError = true)]
+        internal static extern bool SetWindowText(Integer hWnd, string lpString);
+
+        [DllImport("user32.dll")]
+        internal static extern bool ShowScrollBar(Integer hWnd, Integer32 wBar, bool bShow);
+
+        [DllImport("user32.dll")]
+        internal static extern bool ShowWindow(Integer hWnd, Integer32 nCmdShow);
+
+        [DllImport("user32.dll")]
+        internal static extern ushort TileWindows(Integer hwndParent, Integer32 wHow, Integer lpRect, Integer32 cKids, Integer lpKids);
+
+        [DllImport("user32.dll")]
+        internal static extern Integer32 TrackPopupMenuEx(Integer hmenu, Integer32 fuFlags, Integer32 x, Integer32 y, Integer hwnd, Integer lptpm);
 
         [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-        internal static extern IntPtr SetWindowsHookEx(ShellHookId idHook, WindowsHookProcedure lpfn, IntPtr hmod, uint dwThreadId);
-
-        [DllImport("user32.dll", SetLastError = true)]
-        internal static extern bool SetWindowTextW(IntPtr hWnd, string lpString);
-
-        [DllImport("user32.dll")]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        internal static extern bool ShowScrollBar(IntPtr hWnd, int wBar, bool bShow);
-
-        [DllImport("user32.dll")]
-        internal static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
-
-        [DllImport("user32.dll")]
-        internal static extern ushort TileWindows(IntPtr hwndParent, uint wHow, IntPtr lpRect, uint cKids, IntPtr lpKids);
-
-        [DllImport("user32.dll")]
-        internal static extern int TrackPopupMenuEx(IntPtr hmenu, uint fuFlags, int x, int y, IntPtr hwnd, IntPtr lptpm);
+        internal static extern bool UnhookWindowsHookEx(Integer hhk);
 
         [StructLayout(LayoutKind.Sequential)]
         internal struct ICONINFO
@@ -243,22 +240,22 @@ namespace SimpleClassicThemeTaskbar.Helpers.NativeMethods
             /// <summary>
             /// The x-coordinate of a cursor's hot spot
             /// </summary>
-            internal Int32 xHotspot;
+            internal Integer32 xHotspot;
 
             /// <summary>
             /// The y-coordinate of a cursor's hot spot
             /// </summary>
-            internal Int32 yHotspot;
+            internal Integer32 yHotspot;
 
             /// <summary>
             /// The icon bitmask bitmap
             /// </summary>
-            internal IntPtr hbmMask;
+            internal Integer hbmMask;
 
             /// <summary>
             /// A handle to the icon color bitmap.
             /// </summary>
-            internal IntPtr hbmColor;
+            internal Integer hbmColor;
         }
     }
 }

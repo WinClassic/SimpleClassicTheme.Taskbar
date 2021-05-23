@@ -25,6 +25,7 @@ namespace SimpleClassicThemeTaskbar.UIElements.SystemTray
         public SystemTray()
         {
             InitializeComponent();
+
             Point p = Config.Renderer.SystemTrayTimeLocation;
             labelTime.Location = new Point(Width + p.X, p.Y);
             labelTime.Font = Config.Renderer.SystemTrayTimeFont;
@@ -33,6 +34,8 @@ namespace SimpleClassicThemeTaskbar.UIElements.SystemTray
             ApplicationEntryPoint.TrayNotificationService.RegisterNotificationEvent(TrayNotified);
             Disposed += delegate { ApplicationEntryPoint.TrayNotificationService.UnregisterNotificationEvent(TrayNotified); };
             ParentChanged += delegate { RepositionIcons(); };
+            ControlAdded += delegate { RepositionIcons(); };
+            ControlRemoved += delegate { RepositionIcons(); };
         }
 
         public void ClearButtons()
@@ -86,7 +89,10 @@ namespace SimpleClassicThemeTaskbar.UIElements.SystemTray
             // Create a new tray icon and add it if it isn't hidden
             SystemTrayIcon trayIcon = new(e.Data);
             trayIcon.MouseDown += SystemTray_IconDown;
-            if (!e.Data.State.HasFlag(SystemTrayIconState.Hidden))
+            if (e.Data.StateMask.HasFlag(SystemTrayIconState.Hidden))
+                if (!e.Data.State.HasFlag(SystemTrayIconState.Hidden))
+                    Controls.Add(trayIcon);
+            if (!e.Data.StateMask.HasFlag(SystemTrayIconState.Hidden))
                 Controls.Add(trayIcon);
 
             // Save icon for reference
@@ -94,8 +100,6 @@ namespace SimpleClassicThemeTaskbar.UIElements.SystemTray
                 lookupGuid.Add(e.Data.Guid, trayIcon);
             else
                 lookupId.Add(e.Data.Identifier, trayIcon);
-
-            // Position icons
             RepositionIcons();
         }
 
@@ -109,6 +113,14 @@ namespace SimpleClassicThemeTaskbar.UIElements.SystemTray
                 icon = lookupId[e.Data.Identifier];
             else
                 return;
+
+            // If the icon is hidden, remove it (as long as it's not already removed)
+            // If the icon is not hidden, add it (as long as it's not already added)
+            if (e.Data.StateMask.HasFlag(SystemTrayIconState.Hidden))
+                if (e.Data.State.HasFlag(SystemTrayIconState.Hidden) && Controls.Contains(icon))
+                    Controls.Remove(icon);
+                else if (!e.Data.State.HasFlag(SystemTrayIconState.Hidden) && !Controls.Contains(icon))
+                    Controls.Add(icon);
 
             // Call the update function
             icon.Update(e.Data);
@@ -138,15 +150,21 @@ namespace SimpleClassicThemeTaskbar.UIElements.SystemTray
             Controls.CopyTo(icons, 0);
 
             // Set the width and position of the tray
-            Width = Config.Renderer.GetSystemTrayWidth(icons.Length);
+            Width = Config.Renderer.GetSystemTrayWidth(icons.Length - 1);
             if (Parent != null)
                 Location = new Point(Parent.Width - Width, 0);
             foreach (Control control in icons)
             {
                 // Put the control at the correct position
                 if (control is SystemTrayIcon icon)
-                    icon.Location = Config.Renderer.GetSystemTrayIconLocation(Array.IndexOf(icons, icon));
+                    icon.Location = Config.Renderer.GetSystemTrayIconLocation(Array.IndexOf(icons, icon) - 1);
             }
+
+            // Fix tray clock
+            Point p = Config.Renderer.SystemTrayTimeLocation;
+            labelTime.Location = new Point(Width + p.X, p.Y);
+            labelTime.Font = Config.Renderer.SystemTrayTimeFont;
+            labelTime.ForeColor = Config.Renderer.SystemTrayTimeColor;
         }
 
         public void UpdateTime()

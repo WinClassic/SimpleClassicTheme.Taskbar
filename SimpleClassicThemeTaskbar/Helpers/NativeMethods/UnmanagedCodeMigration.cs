@@ -206,7 +206,7 @@ namespace SimpleClassicThemeTaskbar.Helpers.NativeMethods
 			bool Is64Bit = IntPtr.Size == 8;
 			int tbButtonSize = Marshal.SizeOf(Is64Bit ? new TBBUTTON64().GetType() : new TBBUTTON32().GetType());
 
-			User32.GetWindowThreadProcessId(sysTray, out uint trayProcess);
+			User32.GetWindowThreadProcessId(sysTray, out Integer32 trayProcess);
 			IntPtr hProcess = Kernel32.OpenProcess(Kernel32.PROCESS_ALL_ACCESS, false, (int)trayProcess);
 			if (hProcess == IntPtr.Zero)
 			{
@@ -243,7 +243,7 @@ namespace SimpleClassicThemeTaskbar.Helpers.NativeMethods
 					trData = (TRAYDATA) Marshal.PtrToStructure(trDataHandle.AddrOfPinnedObject(), trData.GetType());
 					trDataHandle.Free();
 
-					User32.GetWindowThreadProcessId(trData.hwnd, out uint iconPid);
+					User32.GetWindowThreadProcessId(trData.hwnd, out Integer32 iconPid);
 
 					byte[] buffer = new byte[2];
 					StringBuilder toolTip = new(1024);
@@ -292,7 +292,7 @@ namespace SimpleClassicThemeTaskbar.Helpers.NativeMethods
 					trData = (TRAYDATA)Marshal.PtrToStructure(trDataHandle.AddrOfPinnedObject(), trData.GetType());
 					trDataHandle.Free();
 
-					User32.GetWindowThreadProcessId(trData.hwnd, out uint iconPid);
+					User32.GetWindowThreadProcessId(trData.hwnd, out Integer32 iconPid);
 
 					byte[] buffer = new byte[1];
 					StringBuilder toolTip = new(1024);
@@ -329,7 +329,7 @@ namespace SimpleClassicThemeTaskbar.Helpers.NativeMethods
 
 		internal static int GetTrayButtonCount(IntPtr sysTray)
 		{
-			return (int)User32.SendMessage(sysTray, User32.TB_BUTTONCOUNT, 0, 0);
+			return User32.SendMessage(sysTray, User32.TB_BUTTONCOUNT, 0, 0);
 		}
 
 		internal static void InitializeVdmInterface()

@@ -1,6 +1,7 @@
 ﻿using SimpleClassicThemeTaskbar.Helpers.NativeMethods;
 using System;
 using System.Diagnostics;
+using System.Drawing;
 using System.Runtime.InteropServices;
 
 namespace SimpleClassicThemeTaskbar.Helpers
@@ -107,7 +108,6 @@ namespace SimpleClassicThemeTaskbar.Helpers
 		{
 			Type = type;
 			Data = data;
-			ReturnValue = IntPtr.Zero;
 		}
 	}
 
@@ -131,8 +131,10 @@ namespace SimpleClassicThemeTaskbar.Helpers
 
 		public void RegisterNotificationEvent(SystemTrayNotificationEventHandler eventHandler)
 		{
-			systemTrayNotification += eventHandler;
-			if (User32.SendMessage(new IntPtr(HWND_BROADCAST), WM_TASKBARCREATED, IntPtr.Zero, IntPtr.Zero) == IntPtr.Zero)
+			systemTrayNotification += eventHandler; 
+			User32.ShowWindow(oldTaskbar, 0);
+			User32.SetWindowPos(windowHandle, 0, 0, 0, 0, 0, 0x0010 | 0x0002 | 0x0008 | 0x0400 | 0x0001);
+			if (!User32.PostMessage(HWND_BROADCAST, WM_TASKBARCREATED, 0, 0))
 			{
 				Debugger.Break();
 			}
@@ -142,6 +144,9 @@ namespace SimpleClassicThemeTaskbar.Helpers
 		{
 			systemTrayNotification -= eventHandler;
 		}
+
+		[DllImport("SCTTTrayHelper.dll")]
+		static extern bool RegisterShellHook();
 		
 		[DllImport("user32.dll", CharSet = CharSet.Unicode)]
 		static extern IntPtr CreateWindowEx(int dwExStyle, UInt16 lpClassName, [MarshalAs(UnmanagedType.LPWStr)] string lpWindowName, int dwStyle, int x, int y, int nWidth, int nHeight, IntPtr hWndParent, IntPtr hMenu, IntPtr hInstance, IntPtr lpParam);
@@ -190,15 +195,19 @@ namespace SimpleClassicThemeTaskbar.Helpers
 
 		const int HWND_BROADCAST = 0xFFFF;
 		int WM_TASKBARCREATED = User32.RegisterWindowMessage("TaskbarCreated");
-		delegate IntPtr WndProc(IntPtr hWnd, uint uMsg, IntPtr wParam, IntPtr lParam);
+		Integer oldTaskbar;
+		delegate Integer WndProc(IntPtr hWnd, uint uMsg, IntPtr wParam, IntPtr lParam);
 		WNDCLASS windowClass;
 		WndProc windowProcedure;
 
 		private void Initialize()
 		{
+			oldTaskbar = User32.FindWindow("Shell_TrayWnd", "");
+			User32.ShowWindow(oldTaskbar, 0);
+
 			IntPtr hInstance = Marshal.GetHINSTANCE(typeof(SystemTrayNotificationService).Module);
 			windowProcedure = new WndProc(WindowProcedure);
-
+			
 			windowClass = new();
 			windowClass.lpfnWndProc = Marshal.GetFunctionPointerForDelegate(windowProcedure);
 			windowClass.hInstance = hInstance;
@@ -210,20 +219,21 @@ namespace SimpleClassicThemeTaskbar.Helpers
 				Debugger.Break();
 			}
 
+			const int WS_EX_TOPMOST = 0x00000008;
 			const int WS_EX_TOOLWINDOW = 0x00000080;
-			const int WS_TILEDWINDOW = 0xCF0000;
-			const int WS_VISIBLE = 0x10000000;
 			const int CW_USEDEFAULT = unchecked((int)0x80000000);
+			const int WS_OVERLAPPEDWINDOW = 0x00CF0000;
 			const int WS_POPUP = CW_USEDEFAULT;
 
-			windowHandle = CreateWindowEx(WS_EX_TOOLWINDOW, classHandle, "", WS_POPUP, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, IntPtr.Zero, IntPtr.Zero, hInstance, IntPtr.Zero);
+			windowHandle = CreateWindowEx(WS_EX_TOOLWINDOW | WS_EX_TOPMOST, classHandle, "SCT Shell Window", WS_OVERLAPPEDWINDOW | WS_POPUP, 40, 40, 800, 600, IntPtr.Zero, IntPtr.Zero, hInstance, IntPtr.Zero);
 			if (windowHandle == IntPtr.Zero)
 			{
 				Debugger.Break();
 			}
 
-			User32.ShowWindow(windowHandle, User32.SW_SHOW);
-			if (!SendNotifyMessage(HWND_BROADCAST, (uint)WM_TASKBARCREATED, IntPtr.Zero, IntPtr.Zero))// == IntPtr.Zero)
+			User32.SetWindowPos(windowHandle, 0, 0, 0, 0, 0, 0x0010 | 0x0002 | 0x0008 | 0x0400 | 0x0001);
+
+			if (!User32.PostMessage(HWND_BROADCAST, WM_TASKBARCREATED, 0, 0))
 			{
 				Debugger.Break();
 			}
@@ -234,11 +244,11 @@ namespace SimpleClassicThemeTaskbar.Helpers
 			// Destroy window
 		}
 
-		private IntPtr WindowProcedure(IntPtr hWnd, uint uMsg, IntPtr wParam, IntPtr lParam)
+		private Integer WindowProcedure(IntPtr hWnd, uint uMsg, IntPtr wParam, IntPtr lParam)
 		{
 			switch (uMsg)
 			{
-				case 0x004A: //WM_COPYDATA
+				case User32.WM_COPYDATA: //WM_COPYDATA
 					COPYDATASTRUCT cds = Marshal.PtrToStructure<COPYDATASTRUCT>(lParam);
 					if (cds.dwData == new IntPtr(0x00000001)) //Shell private constant: TCDM_NOTIFY
 					{
@@ -250,8 +260,15 @@ namespace SimpleClassicThemeTaskbar.Helpers
 						int message = (int)data.dwMessage;
 						SystemTrayNotificationEventArgs e = new((SystemTrayNotificationType)message, notificationData);
 						systemTrayNotification?.Invoke(this, e);
-						return e.ReturnValue;
+						User32.SendMessage(oldTaskbar, User32.WM_COPYDATA, wParam, lParam);
 					}
+				/*case User32.WM_PAINT:
+					Graphics g = Graphics.FromHwnd(hWnd);
+					g.Clear(SystemColors.Control);
+					g.Dispose();
+					break;
+				case User32.WM_RBUTTONDOWN:
+					_ = User32.SendMessage(new IntPtr(HWND_BROADCAST), WM_TASKBARCREATED, IntPtr.Zero, IntPtr.Zero);*/
 					break;
 			}
 

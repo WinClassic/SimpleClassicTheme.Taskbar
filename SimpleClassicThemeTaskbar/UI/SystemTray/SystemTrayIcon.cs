@@ -44,6 +44,21 @@ namespace SimpleClassicThemeTaskbar.UIElements.SystemTray
             }
         }
 
+        internal void Update(SystemTrayNotificationData data)
+        {
+            NotificationData.Update(data);
+            if (data.Flags.HasFlag(SystemTrayNotificationFlags.ToolTipValid))
+            {
+                string tempText = Text.Replace("\r\n", "\n");
+                string text = tempText.Contains("\n") ? tempText[(tempText.IndexOf('\n') + 1)..] : "";
+                string tooltip = $"{text}";
+                toolTip.SetToolTip(this, tooltip);
+                toolTip.ToolTipTitle = tempText.Contains("\n") ? tempText.Substring(0, tempText.IndexOf("\n")) : tempText;
+            }
+            if (data.Flags.HasFlag(SystemTrayNotificationFlags.IconHandleValid))
+                Icon = Icon.FromHandle(NotificationData.IconHandle);
+        }
+
         internal SystemTrayIcon(SystemTrayNotificationData data)
         {
             NotificationData = data;
@@ -71,33 +86,51 @@ namespace SimpleClassicThemeTaskbar.UIElements.SystemTray
             toolTip.SetToolTip(this, tooltip);
             toolTip.ToolTipTitle = tempText.Contains("\n") ? tempText.Substring(0, tempText.IndexOf("\n")) : tempText;
 
+			MouseEnter += SystemTrayIcon_MouseEnter;
+			MouseLeave += SystemTrayIcon_MouseLeave;
+			MouseMove += SystemTrayIcon_MouseMove;
+			MouseDown += SystemTrayIcon_MouseDown;
+			MouseUp += SystemTrayIcon_MouseUp;
             MouseClick += SystemTrayIcon_MouseClick;
+			MouseDoubleClick += SystemTrayIcon_MouseDoubleClick;
             VisibleChanged += delegate { Size = new Size(16, 16); };
 		}
 
-        internal void Update(SystemTrayNotificationData data)
+		private void SystemTrayIcon_MouseDoubleClick(object sender, MouseEventArgs e)
 		{
-            NotificationData.Update(data);
-            if (data.Flags.HasFlag(SystemTrayNotificationFlags.ToolTipValid))
-            {
-                string tempText = Text.Replace("\r\n", "\n");
-                string text = tempText.Contains("\n") ? tempText[(tempText.IndexOf('\n') + 1)..] : "";
-                string tooltip = $"{text}";
-                toolTip.SetToolTip(this, tooltip);
-                toolTip.ToolTipTitle = tempText.Contains("\n") ? tempText.Substring(0, tempText.IndexOf("\n")) : tempText;
-            }
-            if (data.Flags.HasFlag(SystemTrayNotificationFlags.IconHandleValid))
-                Icon = Icon.FromHandle(NotificationData.IconHandle);
-		}
+            const uint WM_LBUTTONDBLCLICK = 0x0203;
+            const uint WM_RBUTTONDBLCLICK = 0x0206;
 
-        private void SystemTrayIcon_MouseClick(object sender, MouseEventArgs e)
+            if (NotificationData.Flags.HasFlag(SystemTrayNotificationFlags.CallbackMessageValid))
+                SendNotifyMessage(Handle, CallbackMessage, Id, (e.Button == MouseButtons.Left) ? WM_LBUTTONDBLCLICK : WM_RBUTTONDBLCLICK, NotificationData.Version);
+        }
+
+        private void SystemTrayIcon_MouseMove(object sender, MouseEventArgs e)
         {
-            const uint WM_CONTEXTMENU = 0x007B;
-            const uint WM_LBUTTONDOWN = 0x0201;
+            if (!User32.IsWindow(NotificationData.WindowHandle))
+                (Parent as SystemTray).TrayNotified(this, new SystemTrayNotificationEventArgs(SystemTrayNotificationType.IconDeleted, NotificationData));
+        }
+
+        private void SystemTrayIcon_MouseLeave(object sender, EventArgs e)
+		{
+            const uint WM_MOUSELEAVE = 0x0200;
+
+            if (NotificationData.Flags.HasFlag(SystemTrayNotificationFlags.CallbackMessageValid))
+                SendNotifyMessage(Handle, CallbackMessage, Id, WM_MOUSELEAVE, NotificationData.Version);
+        }
+
+		private void SystemTrayIcon_MouseEnter(object sender, EventArgs e)
+		{
+            const uint WM_MOUSEMOVE = 0x0200;
+
+            if (NotificationData.Flags.HasFlag(SystemTrayNotificationFlags.CallbackMessageValid))
+                SendNotifyMessage(Handle, CallbackMessage, Id, WM_MOUSEMOVE, NotificationData.Version);
+        }
+
+		private void SystemTrayIcon_MouseUp(object sender, MouseEventArgs e)
+        {
             const uint WM_LBUTTONUP = 0x0202;
-            const uint WM_RBUTTONDOWN = 0x0204;
             const uint WM_RBUTTONUP = 0x0205;
-            const uint NIN_SELECT = 0x0400;
 
             if (IsMoving)
             {
@@ -105,19 +138,38 @@ namespace SimpleClassicThemeTaskbar.UIElements.SystemTray
                 return;
             }
 
-            uint mouse = ((uint)Cursor.Position.Y << 16) | (uint)Cursor.Position.X;
+            if (NotificationData.Flags.HasFlag(SystemTrayNotificationFlags.CallbackMessageValid))
+                SendNotifyMessage(Handle, CallbackMessage, Id, (e.Button == MouseButtons.Left) ? WM_LBUTTONUP : WM_RBUTTONUP, NotificationData.Version);
+        }
+
+		private void SystemTrayIcon_MouseDown(object sender, MouseEventArgs e)
+        {
+            const uint WM_LBUTTONDOWN = 0x0201;
+            const uint WM_RBUTTONDOWN = 0x0204;
 
             if (NotificationData.Flags.HasFlag(SystemTrayNotificationFlags.CallbackMessageValid))
-            {
-                _ = User32.SendNotifyMessage(Handle, CallbackMessage, mouse,
-                    (e.Button == MouseButtons.Left ? WM_LBUTTONDOWN : WM_RBUTTONDOWN) | (Id << 16));
-                _ = User32.SendNotifyMessage(Handle, CallbackMessage, mouse,
-                    (e.Button == MouseButtons.Left ? WM_LBUTTONUP : WM_RBUTTONUP) | (Id << 16));
-                _ = User32.SendNotifyMessage(Handle, CallbackMessage, mouse,
-                    (e.Button == MouseButtons.Left ? NIN_SELECT : WM_CONTEXTMENU) | (Id << 16));
-            }
-            return;
+                SendNotifyMessage(Handle, CallbackMessage, Id, (e.Button == MouseButtons.Left) ? WM_LBUTTONDOWN : WM_RBUTTONDOWN, NotificationData.Version);
         }
+
+        private void SystemTrayIcon_MouseClick(object sender, MouseEventArgs e)
+        {
+            const uint NIN_SELECT = 0x0400;
+            const uint WM_CONTEXTMENU = 0x007B;
+
+            if (NotificationData.Flags.HasFlag(SystemTrayNotificationFlags.CallbackMessageValid) && NotificationData.Version >= 3)
+                SendNotifyMessage(Handle, CallbackMessage, Id, (e.Button == MouseButtons.Left) ? NIN_SELECT : WM_CONTEXTMENU, NotificationData.Version);
+        }
+
+        public static void SendNotifyMessage(IntPtr hWnd, uint uCallbackMessage, uint uID, uint eventMessage, int version)
+		{
+            uint mouse = ((uint)Cursor.Position.Y << 16) | (uint)Cursor.Position.X;
+            uint wParam = version > 3 ? mouse : uID;
+            uint lParamH = version > 3 ? uID : 0;
+            uint lParamL = eventMessage;
+            uint lParam = lParamH << 16 | lParamL;
+
+            _ = User32.SendNotifyMessage(hWnd, uCallbackMessage, wParam, lParam);
+		}
 
         public override string ToString()
         {

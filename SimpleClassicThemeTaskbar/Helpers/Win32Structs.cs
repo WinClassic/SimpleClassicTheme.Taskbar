@@ -51,8 +51,8 @@ namespace SimpleClassicThemeTaskbar
         {
             get
             {
-                _ = User32.GetWindowThreadProcessId(Handle, out uint pid);
-                return Process.GetProcessById((int)pid);
+                _ = User32.GetWindowThreadProcessId(Handle, out Integer32 pid);
+                return Process.GetProcessById(pid);
             }
         }
 
@@ -61,14 +61,14 @@ namespace SimpleClassicThemeTaskbar
             get
             {
                 var sb = new StringBuilder(100);
-                if (User32.GetWindowTextW(Handle, sb, sb.Capacity))
+                if (User32.GetWindowText(Handle, sb, sb.Capacity) != 0)
                     return sb.ToString();
                 else
                     return "";
             }
             set
             {
-                User32.SetWindowTextW(Handle, value);
+                User32.SetWindowText(Handle, value);
             }
         }
     }

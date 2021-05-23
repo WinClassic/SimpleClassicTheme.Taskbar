@@ -330,7 +330,7 @@ namespace SimpleClassicThemeTaskbar
 
         private void QuickLaunchLinkLabel_Click(object sender, EventArgs e)
         {
-            Helpers.Helpers.OpenQuickLaunchFolder();
+            HelperFunctions.OpenQuickLaunchFolder();
         }
 
         private void Settings_Load(object sender, EventArgs e)

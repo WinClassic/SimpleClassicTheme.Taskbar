@@ -29,7 +29,7 @@ namespace SimpleClassicThemeTaskbar
             Logger.Log(LoggerVerbosity.Detailed, "TaskbarManager", $"Exit requested");
             Config.SaveToRegistry();
 
-            var activeBars = Helpers.Helpers.GetOpenTaskbars();
+            var activeBars = HelperFunctions.GetOpenTaskbars();
 
             foreach (Taskbar bar in activeBars)
             {
@@ -42,7 +42,7 @@ namespace SimpleClassicThemeTaskbar
             // Taskbar randomBar = activeBars.FirstOrDefault();
             Logger.Log(LoggerVerbosity.Detailed, "TaskbarManager", $"Killed all taskbars");
 
-            if (Environment.OSVersion.Version.Major == 10)
+            if (Environment.OSVersion.Version.Major == 10 && virtualDesktopNotificationCookie != IntPtr.Zero)
             {
                 Logger.Log(LoggerVerbosity.Detailed, "TaskbarManager", "Unregistered virtual desktop notify serivce");
                 UnmanagedCodeMigration.UnregisterVdmNotification(virtualDesktopNotificationCookie);
@@ -60,7 +60,7 @@ namespace SimpleClassicThemeTaskbar
         {
             Logger.Log(LoggerVerbosity.Detailed, "TaskbarManager", "Generating new taskbars");
 
-            var activeBars = Helpers.Helpers.GetOpenTaskbars();
+            var activeBars = HelperFunctions.GetOpenTaskbars();
 
             foreach (Taskbar bar in activeBars)
             {
@@ -165,16 +165,16 @@ namespace SimpleClassicThemeTaskbar
                 Logger.Log(LoggerVerbosity.Detailed, "EntryPoint", "Dumping system tray information to traydump.txt");
                 FileStream fs = new FileStream("traydump.txt", FileMode.Create, FileAccess.ReadWrite);
 
-                IntPtr hWndTray = User32.FindWindowW("Shell_TrayWnd", null);
+                IntPtr hWndTray = User32.FindWindow("Shell_TrayWnd", null);
                 if (hWndTray != IntPtr.Zero)
                 {
-                    hWndTray = User32.FindWindowExW(hWndTray, IntPtr.Zero, "TrayNotifyWnd", null);
+                    hWndTray = User32.FindWindowEx(hWndTray, IntPtr.Zero, "TrayNotifyWnd", null);
                     if (hWndTray != IntPtr.Zero)
                     {
-                        hWndTray = User32.FindWindowExW(hWndTray, IntPtr.Zero, "SysPager", null);
+                        hWndTray = User32.FindWindowEx(hWndTray, IntPtr.Zero, "SysPager", null);
                         if (hWndTray != IntPtr.Zero)
                         {
-                            hWndTray = User32.FindWindowExW(hWndTray, IntPtr.Zero, "ToolbarWindow32", null);
+                            hWndTray = User32.FindWindowEx(hWndTray, IntPtr.Zero, "ToolbarWindow32", null);
                             if (hWndTray != IntPtr.Zero)
                             {
                                 UnmanagedCodeMigration.TBBUTTONINFO[] buttons = UnmanagedCodeMigration.GetTrayButtons(hWndTray);
@@ -270,7 +270,7 @@ namespace SimpleClassicThemeTaskbar
         public static void VirtualDesktopNotifcation_CurrentDesktopChanged(object sender, EventArgs e)
 		{
             Logger.Log(LoggerVerbosity.Detailed, "TaskbarManager", "Current virtual desktop changed, sending notification to all Taskbars.");
-            var activeBars = Helpers.Helpers.GetOpenTaskbars();
+            var activeBars = HelperFunctions.GetOpenTaskbars();
 
             foreach (Taskbar bar in activeBars)
             {

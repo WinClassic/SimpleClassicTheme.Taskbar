@@ -82,10 +82,11 @@ namespace SimpleClassicThemeTaskbar
         {
             if (LookingForTray)
             {
+                //return false;
                 //If looking for the taskbar, check if it is Shell_TrayWnd and if it is in the bound of the current desktop
                 Window wi = new(hWnd);
                 if (wi.ClassName == "Shell_TrayWnd" || wi.ClassName == "Shell_SecondaryTrayWnd")
-                    if (Screen.FromHandle(hWnd).Bounds == Screen.FromHandle(CrossThreadHandle).Bounds)
+                    if (wi.Title != "SCT Shell Window" && Screen.FromHandle(hWnd).Bounds == Screen.FromHandle(CrossThreadHandle).Bounds)
                     {
                         windows.Add(wi);
                         return false;
@@ -185,7 +186,7 @@ namespace SimpleClassicThemeTaskbar
                     button.MouseMove += Taskbar_IconMove;
                     button.MouseUp += Taskbar_IconUp;
 
-                    User32.GetWindowThreadProcessId(button.Window.Handle, out uint pid);
+                    User32.GetWindowThreadProcessId(button.Window.Handle, out Integer32 pid);
                     Process p = Process.GetProcessById((int)pid);
                     button.Process = p;
 
@@ -271,7 +272,7 @@ namespace SimpleClassicThemeTaskbar
                             button.MouseUp += Taskbar_IconUp;
                             button.Height = Height;
 
-                            User32.GetWindowThreadProcessId(button.Window.Handle, out uint pid);
+                            User32.GetWindowThreadProcessId(button.Window.Handle, out Integer32 pid);
                             Process p = Process.GetProcessById((int)pid);
                             button.Process = p;
 
