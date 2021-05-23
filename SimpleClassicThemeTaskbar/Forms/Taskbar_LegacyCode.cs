@@ -65,7 +65,7 @@ namespace SimpleClassicThemeTaskbar
             if (wi.ClassName == "ApplicationFrameWindow")
             {
                 //Do an API call to see if app isn't cloaked
-                _ = DwmApi.DwmGetWindowAttribute(wi.Handle, DwmApi.DWMWINDOWATTRIBUTE.Cloaked, out int d, Marshal.SizeOf(0));
+                _ = DwmApi.DwmGetWindowAttribute(wi.Handle, DwmApi.DWMWINDOWATTRIBUTE.Cloaked, out var d, Marshal.SizeOf(0));
 
                 //If returned value is not 0, the window is cloaked
                 if (d > 0)
@@ -78,7 +78,7 @@ namespace SimpleClassicThemeTaskbar
             return true;
         }
 
-        private bool EnumWind(IntPtr hWnd, int lParam)
+        private bool EnumWind(Integer hWnd, Integer32 lParam)
         {
             if (LookingForTray)
             {
@@ -364,6 +364,8 @@ namespace SimpleClassicThemeTaskbar
                                 Controls.Remove(sameThing);
                                 programs.Remove(sameThing);
                                 group.MouseDown += Taskbar_IconDown;
+                                group.MouseMove += Taskbar_IconMove;
+                                group.MouseUp += Taskbar_IconUp;
                                 group.ProgramWindows.Add(sameThing as SingleTaskbarProgram);
                                 group.ProgramWindows.Add(icon);
                                 icon.IsMoving = false;

@@ -556,6 +556,8 @@ namespace SimpleClassicThemeTaskbar
                             Controls.Remove(sameThing);
                             programs.Remove(sameThing);
                             newGroup.MouseDown += Taskbar_IconDown;
+                            newGroup.MouseMove += Taskbar_IconMove;
+                            newGroup.MouseUp += Taskbar_IconUp;
                             newGroup.ProgramWindows.Add(sameThing as SingleTaskbarProgram);
                             newGroup.ProgramWindows.Add(icon);
                             icon.IsMoving = false;
@@ -633,12 +635,12 @@ namespace SimpleClassicThemeTaskbar
             try
             {
                 return Config.ProgramGroupCheck switch
-                {
-                    ProgramGroupCheck.Process => a.Process.Id == b.Process.Id,
-                    ProgramGroupCheck.FileNameAndPath => a.Process.MainModule.FileName == b.Process.MainModule.FileName,
-                    ProgramGroupCheck.ModuleName => a.Process.MainModule.ModuleName == b.Process.MainModule.ModuleName,
-                    _ => false,
-                };
+				{
+					ProgramGroupCheck.Process => a.Process.Id == b.Process.Id,
+					ProgramGroupCheck.FileNameAndPath => a.Process.MainModule.FileName == b.Process.MainModule.FileName,
+					ProgramGroupCheck.ModuleName => a.Process.MainModule.ModuleName == b.Process.MainModule.ModuleName,
+					_ => false
+				};
             }
             catch (Win32Exception ex) when (ex.NativeErrorCode == 5)
             {

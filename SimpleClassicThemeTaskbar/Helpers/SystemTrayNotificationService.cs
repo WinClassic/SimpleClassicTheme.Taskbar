@@ -231,7 +231,7 @@ namespace SimpleClassicThemeTaskbar.Helpers
 				Debugger.Break();
 			}
 
-			User32.SetWindowPos(windowHandle, 0, 0, 0, 0, 0, 0x0010 | 0x0002 | 0x0008 | 0x0400 | 0x0001);
+			User32.SetWindowPos(windowHandle, -1, 0, 0, 0, 0, 0x0010 | 0x0002 | 0x0008 | 0x0400 | 0x0001);
 
 			if (!User32.PostMessage(HWND_BROADCAST, WM_TASKBARCREATED, 0, 0))
 			{
@@ -246,6 +246,7 @@ namespace SimpleClassicThemeTaskbar.Helpers
 
 		private Integer WindowProcedure(IntPtr hWnd, uint uMsg, IntPtr wParam, IntPtr lParam)
 		{
+			const int WS_EX_TOOLWINDOW = 0x00000080;
 			switch (uMsg)
 			{
 				case User32.WM_COPYDATA: //WM_COPYDATA
