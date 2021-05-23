@@ -183,7 +183,7 @@ namespace SimpleClassicThemeTaskbar.Helpers.NativeMethods
 			if (process == IntPtr.Zero)
 				return "Couldn't open process";
 
-			uint size = 64;
+			Integer32 size = 64;
 		callGetApplicationUserModelId:
 			StringBuilder buffer = new((int)size);
 			int result = Kernel32.GetApplicationUserModelId(process, ref size, buffer);
@@ -232,7 +232,7 @@ namespace SimpleClassicThemeTaskbar.Helpers.NativeMethods
 					User32.SendMessage(sysTray, User32.TB_GETBUTTON, i, (int)dataPtr);
 
 					byte[] tbButtonBytes = new byte[tbButtonSize];
-					Kernel32.ReadProcessMemory(hProcess, dataPtr, tbButtonBytes, tbButtonSize, out int bytesRead);
+					Kernel32.ReadProcessMemory(hProcess, dataPtr, tbButtonBytes, tbButtonSize, out var bytesRead);
 					GCHandle tbButtonHandle = GCHandle.Alloc(tbButtonBytes, GCHandleType.Pinned);
 					tbButton = (TBBUTTON64) Marshal.PtrToStructure(tbButtonHandle.AddrOfPinnedObject(), tbButton.GetType());
 					tbButtonHandle.Free();
@@ -281,7 +281,7 @@ namespace SimpleClassicThemeTaskbar.Helpers.NativeMethods
 					User32.SendMessage(sysTray, User32.TB_GETBUTTON, i, (int)dataPtr);
 
 					byte[] tbButtonBytes = new byte[tbButtonSize];
-					Kernel32.ReadProcessMemory(hProcess, dataPtr, tbButtonBytes, tbButtonSize, out int bytesRead);
+					Kernel32.ReadProcessMemory(hProcess, dataPtr, tbButtonBytes, tbButtonSize, out var bytesRead);
 					GCHandle tbButtonHandle = GCHandle.Alloc(tbButtonBytes, GCHandleType.Pinned);
 					tbButton = (TBBUTTON32)Marshal.PtrToStructure(tbButtonHandle.AddrOfPinnedObject(), tbButton.GetType());
 					tbButtonHandle.Free();

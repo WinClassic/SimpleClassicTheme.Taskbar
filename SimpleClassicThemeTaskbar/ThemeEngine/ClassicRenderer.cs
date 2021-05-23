@@ -188,7 +188,7 @@ namespace SimpleClassicThemeTaskbar.ThemeEngine
                 buttonStyle |= User32.DFCS_PUSHED;
             }
 
-            _ = Shell32.DrawFrameControl(g.GetHdc(), ref rect, User32.DFC_BUTTON, buttonStyle);
+            _ = User32.DrawFrameControl(g.GetHdc(), ref rect, User32.DFC_BUTTON, buttonStyle);
             g.ReleaseHdc();
             g.ResetTransform();
 

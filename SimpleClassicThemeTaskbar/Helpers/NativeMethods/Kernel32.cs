@@ -15,34 +15,34 @@ namespace SimpleClassicThemeTaskbar.Helpers.NativeMethods
 		internal const int MEM_RELEASE = 0x00008000;
 		internal const int PAGE_READWRITE = 0x00000004;
 
-		[DllImport("kernel32.dll")]
-		internal static extern bool CloseHandle(IntPtr hHandle);
+		[DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
+		internal static extern bool CloseHandle(Integer hHandle);
 
-		[DllImport("kernel32.dll", SetLastError = true)]
-		internal static extern Int32 GetApplicationUserModelId(IntPtr hProcess, ref UInt32 applicationUserModelIdLength, [MarshalAs(UnmanagedType.LPWStr)] StringBuilder applicationUserModelId);
+		[DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
+		internal static extern Integer32 GetApplicationUserModelId(IntPtr hProcess, ref Integer32 applicationUserModelIdLength, [MarshalAs(UnmanagedType.LPWStr)] StringBuilder applicationUserModelId);
 
-		[DllImport("kernel32")]
-		internal static extern uint GetCurrentThreadId();
+		[DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
+		internal static extern Integer32 GetCurrentThreadId();
 
-		[DllImport("kernel32", CharSet = CharSet.Unicode)]
-		internal static extern int GetPrivateProfileString(string section, string key, string def, StringBuilder retVal, int size, string filePath);
+		[DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
+		internal static extern Integer32 GetPrivateProfileString(string section, string key, string def, StringBuilder retVal, Integer32 size, string filePath);
 
-		[DllImport("kernel32.dll", CharSet = CharSet.Auto)]
-		internal static extern int GetShortPathName([MarshalAs(UnmanagedType.LPWStr)] string path, [MarshalAs(UnmanagedType.LPWStr)] StringBuilder shortPath, int shortPathLength);
+		[DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
+		internal static extern Integer32 GetShortPathName([MarshalAs(UnmanagedType.LPWStr)] string path, [MarshalAs(UnmanagedType.LPWStr)] StringBuilder shortPath, Integer32 shortPathLength);
 
-		[DllImport("kernel32.dll")]
-		internal static extern IntPtr OpenProcess(int dwDesiredAccess, bool bInheritHandle, int dwProcessId);
+		[DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
+		internal static extern Integer32 OpenProcess(Integer32 dwDesiredAccess, bool bInheritHandle, Integer32 dwProcessId);
 
-		[DllImport("kernel32.dll")]
-		internal static extern bool ReadProcessMemory(IntPtr hProcess, IntPtr lpBaseAddress, [Out] byte[] buffer, int dwSize, out int lpNumberOfBytesRead);
+		[DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
+		internal static extern bool ReadProcessMemory(Integer hProcess, Integer lpBaseAddress, [Out] byte[] buffer, Integer32 dwSize, out Integer32 lpNumberOfBytesRead);
 
-		[DllImport("kernel32.dll", SetLastError = true, ExactSpelling = true)]
-		internal static extern IntPtr VirtualAllocEx(IntPtr hProcess, IntPtr lpAddress, uint dwSize, int flAllocationType, int flProtect);
+		[DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
+		internal static extern Integer VirtualAllocEx(Integer hProcess, Integer lpAddress, Integer32 dwSize, Integer32 flAllocationType, Integer32 flProtect);
 		
-		[DllImport("kernel32.dll", SetLastError = true, ExactSpelling = true)]
-		internal static extern bool VirtualFreeEx(IntPtr hProcess, IntPtr lpAddress, uint dwSize, int dwFreeType);
+		[DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
+		internal static extern bool VirtualFreeEx(Integer hProcess, Integer lpAddress, Integer32 dwSize, Integer32 dwFreeType);
 
-		[DllImport("kernel32", CharSet = CharSet.Unicode)]
-		internal static extern long WritePrivateProfileString(string section, string key, string val, string filePath);
+		[DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
+		internal static extern bool WritePrivateProfileString(string section, string key, string val, string filePath);
 	}
 }

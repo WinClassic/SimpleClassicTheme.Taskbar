@@ -2,6 +2,38 @@
 
 namespace SimpleClassicThemeTaskbar.Helpers.NativeMethods
 {
+    /*
+     * When to use what integer type:
+     * 
+     * Integer:
+     * Any WINAPI variable that is a handle (the ones that starts with H)
+     * Any variable that is a pointer (the ones that start with lp)
+     * 
+     * Integer32:
+     * int, long, DWORD
+     * INT_PTR, UINT_PTR
+     * LONG_PTR, ULONG_PTR (as crazy as it may sound to a .NET developer, long is 32-bit in C++)
+     * WPARAM, LPARAM
+     * 
+     * Integer64:
+     * This one should only be used when you create a definition for a function
+     * made only for 64-bit systems. (eg. SetWindowLongPtr or GetWindowClassPtr)
+     * 
+     * Why take this approach? Because I'm sick of casting integers from one type
+     * to the other while they are practically the same value. 
+     * 
+     * Note: These types should only be used for the P/Invoke methods themselves.
+     * 
+     * Note: Integer may cause a runtime error when being cast to a 32-bit integer
+     *       on 64-bit systems. This is because the value represents a 64-bit value
+     *       and therefore the cast would result in the loss of information.
+     *       
+     * Note: Integer may cause a runtime error when a 64-bit integer is being cast
+     *       to it on 32-bit systems. This is because the value represents a 32-bit
+     *       value and therefore the cast would result in the loss of information.
+     * 
+     */
+
     /// <summary>
     /// Integer class for use when a WinAPI function declaration specifies a handle
     /// Note that if the value is 64-bit and you cast it to an int/uint this class
@@ -31,6 +63,7 @@ namespace SimpleClassicThemeTaskbar.Helpers.NativeMethods
 
         public static implicit operator Integer(bool i) => new(new(i ? 1 : 0));
         public static implicit operator Integer(Integer32 i) => new(new(i));
+        public static implicit operator Integer(Integer64 i) => new(new(i));
 
         public override string ToString() => value.ToString();
         public string ToString(string? format, IFormatProvider? provider) => value.ToString(format, provider);
