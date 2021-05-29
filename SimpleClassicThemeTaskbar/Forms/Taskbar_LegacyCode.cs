@@ -80,23 +80,31 @@ namespace SimpleClassicThemeTaskbar
 
         private bool EnumWind(IntPtr hWnd, int lParam)
         {
-            if (LookingForTray)
+            try
             {
-                //If looking for the taskbar, check if it is Shell_TrayWnd and if it is in the bound of the current desktop
-                Window wi = new(hWnd);
-                if (wi.ClassName == "Shell_TrayWnd" || wi.ClassName == "Shell_SecondaryTrayWnd")
-                    if (Screen.FromHandle(hWnd).Bounds == Screen.FromHandle(CrossThreadHandle).Bounds)
-                    {
-                        windows.Add(wi);
-                        return false;
-                    }
+                if (LookingForTray)
+                {
+                    //If looking for the taskbar, check if it is Shell_TrayWnd and if it is in the bound of the current desktop
+                    Window wi = new(hWnd);
+                    if (wi.ClassName == "Shell_TrayWnd" || wi.ClassName == "Shell_SecondaryTrayWnd")
+                        if (Screen.FromHandle(hWnd).Bounds == Screen.FromHandle(CrossThreadHandle).Bounds)
+                        {
+                            windows.Add(wi);
+                            return false;
+                        }
+                }
+                else
+                {
+                    //If you would show the window in alt+tab, show it on the custom taskbar
+                    if (IsAltTabWindow(hWnd))
+                        windows.Add(new Window(hWnd));
+                }
             }
-            else
+            catch (Exception ex)
             {
-                //If you would show the window in alt+tab, show it on the custom taskbar
-                if (IsAltTabWindow(hWnd))
-                    windows.Add(new Window(hWnd));
+                Logger.Log(LoggerVerbosity.Basic, "Taskbar/Legacy/EnumWind", $"Enumeration failed: {ex}");
             }
+
             return true;
         }
 
@@ -484,24 +492,27 @@ namespace SimpleClassicThemeTaskbar
         displayWindows:
             foreach (BaseTaskbarProgram icon in icons)
             {
-                icon.Width = Math.Max(icon.MinimumWidth, iconWidth);
-                if (icon == heldDownButton)
+                lock (icon)
                 {
+                    icon.Width = Math.Max(icon.MinimumWidth, iconWidth);
+                    if (icon == heldDownButton)
+                    {
+                        x += icon.Width + Config.SpaceBetweenTaskbarIcons;
+                        continue;
+                    }
+                    _ = icon.IsActiveWindow(ForegroundWindow);
+                    icon.Location = new Point(x, 0);
+                    icon.Icon = GetAppIcon(icon.Window);
+                    if (!Controls.Contains(icon))
+                    {
+                        Controls.Add(icon);
+                        icon.Width = iconWidth;
+                        icon.Height = Height;
+                        verticalDivider3.BringToFront();
+                    }
                     x += icon.Width + Config.SpaceBetweenTaskbarIcons;
-                    continue;
+                    icon.Visible = true;
                 }
-                _ = icon.IsActiveWindow(ForegroundWindow);
-                icon.Location = new Point(x, 0);
-                icon.Icon = GetAppIcon(icon.Window);
-                if (!Controls.Contains(icon))
-                {
-                    Controls.Add(icon);
-                    icon.Width = iconWidth;
-                    icon.Height = Height;
-                    verticalDivider3.BringToFront();
-                }
-                x += icon.Width + Config.SpaceBetweenTaskbarIcons;
-                icon.Visible = true;
             }
             if (heldDownButton != null)
             {
