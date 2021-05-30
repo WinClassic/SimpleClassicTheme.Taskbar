@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 
@@ -69,6 +70,11 @@ namespace SimpleClassicThemeTaskbar.Helpers
                         break;
                 }
             });
+        }
+
+        public static void DrawImage(this Graphics graphics, Image image, Rectangle destRect, Rectangle srcRect)
+        {
+            graphics.DrawImage(image, destRect, srcRect, GraphicsUnit.Pixel);
         }
     }
 }
