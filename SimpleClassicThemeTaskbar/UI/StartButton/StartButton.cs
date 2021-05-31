@@ -1,46 +1,24 @@
 ﻿using SimpleClassicThemeTaskbar.Helpers;
-using SimpleClassicThemeTaskbar.Helpers.NativeMethods;
-using SimpleClassicThemeTaskbar.UIElements.Misc;
-using SimpleClassicThemeTaskbar.UIElements.SystemTray;
 
 using System;
 using System.ComponentModel;
-using System.Drawing;
-using System.Drawing.Drawing2D;
-using System.Drawing.Text;
-using System.Runtime.InteropServices;
 using System.Windows.Forms;
-
-using HWND = System.IntPtr;
 
 namespace SimpleClassicThemeTaskbar.UIElements.StartButton
 {
     public partial class StartButton : UserControl
     {
         public const uint DFC_BUTTON = 4;
-
         public const uint DFCS_BUTTONPUSH = 0x10;
-
         public const uint DFCS_PUSHED = 512;
 
-        public bool Do3DBorder = true;
-
-        public bool isButton = true;
-
-        public bool pressed = false;
+        private bool OpeningStartMenu = false;
+        private bool Do3DBorder = true;
+        private bool isButton = true;
+        private bool pressed = false;
+        private bool WasPressed = false;
 
         public Border3DStyle style = Border3DStyle.Raised;
-
-        public bool WasPressed = false;
-
-        private string buttonImageFile = "";
-
-        // private readonly DateTime LastPress = DateTime.Now;
-        private bool CustomButton = false;
-
-        private bool CustomIcon = false;
-        private string iconImageFile = "";
-        private bool OpeningStartMenu = false;
 
         public StartButton()
         {
@@ -52,8 +30,6 @@ namespace SimpleClassicThemeTaskbar.UIElements.StartButton
 
             Do3DBorder = true;
 
-            buttonImageFile = Config.StartButtonImage;
-            iconImageFile = Config.StartButtonIconImage;
             Appearance = Config.StartButtonAppearance;
         }
 
@@ -104,14 +80,16 @@ namespace SimpleClassicThemeTaskbar.UIElements.StartButton
             {
                 pressed = value;
                 style = pressed ? Border3DStyle.Sunken : Border3DStyle.Raised;
+                if (ApplicationEntryPoint.TrayNotificationService != null)
+				{
+                    ApplicationEntryPoint.TrayNotificationService.RegainTrayPriority();
+				}
                 Invalidate();
             }
         }
 
         public void DummySettings(string buttonImagePath, string iconImagePath, StartButtonAppearance mode)
         {
-            buttonImageFile = buttonImagePath;
-            iconImageFile = iconImagePath;
             Appearance = mode;
 
             Invalidate();

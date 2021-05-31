@@ -28,17 +28,15 @@ namespace SimpleClassicThemeTaskbar.Helpers.NativeMethods
      *       on 64-bit systems. This is because the value represents a 64-bit value
      *       and therefore the cast would result in the loss of information.
      *       
-     * Note: Integer may cause a runtime error when a 64-bit integer is being cast
-     *       to it on 32-bit systems. This is because the value represents a 32-bit
-     *       value and therefore the cast would result in the loss of information.
+     * Note: Integer may cause a runtime error when a long is being cast to Integer
+     *       on 32-bit systems. This is because Integer can only store a 32-bit value 
+     *       on 32-bit systems and because a long is 64-bits the cast would result
+     *       in the loss of information.
      * 
      */
 
     /// <summary>
     /// Integer class for use when a WinAPI function declaration specifies a handle
-    /// Note that if the value is 64-bit and you cast it to an int/uint this class
-    /// will throw and exception because you're incorrectly handling a value and
-    /// bits are being lost in the process of doing that.
     /// </summary>
     internal struct Integer
     {

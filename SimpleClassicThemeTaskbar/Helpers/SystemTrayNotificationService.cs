@@ -145,6 +145,11 @@ namespace SimpleClassicThemeTaskbar.Helpers
 			systemTrayNotification -= eventHandler;
 		}
 
+		public void RegainTrayPriority()
+		{
+			User32.BringWindowToTop(windowHandle);
+		}
+
 		[DllImport("SCTTTrayHelper.dll")]
 		static extern bool RegisterShellHook();
 		

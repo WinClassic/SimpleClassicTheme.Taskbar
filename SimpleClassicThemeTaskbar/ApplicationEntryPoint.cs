@@ -155,13 +155,8 @@ namespace SimpleClassicThemeTaskbar
                 Logger.Log(LoggerVerbosity.Detailed, "EntryPoint", "Attempted to start unmanaged SCTT. This is not supported anymore.");
                 Environment.Exit(/*d.UnmanagedSCTT()*/0);
             }
-            if (args.Contains("--sct"))
-            {
-                Logger.Log(LoggerVerbosity.Detailed, "EntryPoint", "Current instance is an SCT managed instance");
-                SCTCompatMode = true;
-            }
             if (args.Contains("--traydump"))
-			{
+            {
                 Logger.Log(LoggerVerbosity.Detailed, "EntryPoint", "Dumping system tray information to traydump.txt");
                 FileStream fs = new FileStream("traydump.txt", FileMode.Create, FileAccess.ReadWrite);
 
@@ -197,7 +192,11 @@ namespace SimpleClassicThemeTaskbar
                 fs.Close();
                 return;
             }
-
+            if (args.Contains("--sct"))
+            {
+                Logger.Log(LoggerVerbosity.Detailed, "EntryPoint", "Current instance is an SCT managed instance");
+                SCTCompatMode = true;
+            }
 #if DEBUG
 #else
             else
