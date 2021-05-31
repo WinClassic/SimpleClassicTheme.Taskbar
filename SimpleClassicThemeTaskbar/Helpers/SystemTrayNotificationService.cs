@@ -149,9 +149,6 @@ namespace SimpleClassicThemeTaskbar.Helpers
 		{
 			User32.BringWindowToTop(windowHandle);
 		}
-
-		[DllImport("SCTTTrayHelper.dll")]
-		static extern bool RegisterShellHook();
 		
 		[DllImport("user32.dll", CharSet = CharSet.Unicode)]
 		static extern IntPtr CreateWindowEx(int dwExStyle, UInt16 lpClassName, [MarshalAs(UnmanagedType.LPWStr)] string lpWindowName, int dwStyle, int x, int y, int nWidth, int nHeight, IntPtr hWndParent, IntPtr hMenu, IntPtr hInstance, IntPtr lpParam);

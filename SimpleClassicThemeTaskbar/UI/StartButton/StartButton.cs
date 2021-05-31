@@ -78,12 +78,12 @@ namespace SimpleClassicThemeTaskbar.UIElements.StartButton
             }
             set
             {
+                if (value && ApplicationEntryPoint.TrayNotificationService != null)
+                {
+                    ApplicationEntryPoint.TrayNotificationService.RegainTrayPriority();
+                }
                 pressed = value;
                 style = pressed ? Border3DStyle.Sunken : Border3DStyle.Raised;
-                if (ApplicationEntryPoint.TrayNotificationService != null)
-				{
-                    ApplicationEntryPoint.TrayNotificationService.RegainTrayPriority();
-				}
                 Invalidate();
             }
         }
