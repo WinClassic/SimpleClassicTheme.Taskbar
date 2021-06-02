@@ -35,7 +35,7 @@ namespace SimpleClassicThemeTaskbar.UIElements.SystemTray
             Size = new Size(16, 16);
 
             //Idk why, I just felt like it was needed
-            if (Config.EnableSystemTrayHover)
+            if (Config.Instance.EnableSystemTrayHover)
             {
                 MouseEnter += delegate { BackColor = Color.FromArgb(128, 128, 128, 128); };
                 MouseLeave += delegate { BackColor = Color.Transparent; };
@@ -94,7 +94,7 @@ namespace SimpleClassicThemeTaskbar.UIElements.SystemTray
                 {
                     string pName = Process.GetProcessById((int)PID).ProcessName.ToLower();
                     //20 lines of code just to get the explorer tray icons looking right
-                    if (Config.EnableSystemTrayColorChange &&
+                    if (Config.Instance.EnableSystemTrayColorChange &&
                         Environment.OSVersion.Version.Major == 10 &&
                         (pName == "explorer" ||
                         pName == "onedrive") &&

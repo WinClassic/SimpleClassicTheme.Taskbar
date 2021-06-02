@@ -14,28 +14,45 @@ namespace SimpleClassicThemeTaskbar.Helpers
     //Config class
     //TODO: Move more configurable settings to here
     //TODO: Make config menu
-    public static class Config
+    public class Config
     {
+        private static Config instance;
+        public static Config Instance
+        {
+            get
+            {
+                lock (instance)
+                {
+                    if (instance == null)
+                    {
+                        instance = new Config();
+                    }
+
+                    return instance;
+                }
+            }
+        }
+
         private const BindingFlags bindingFlags = BindingFlags.Static | BindingFlags.Public | BindingFlags.GetProperty | BindingFlags.SetProperty;
-        private static string rendererPath = "Internal/Classic";
-        public static bool ConfigChanged { get; set; } = true;
-        public static bool EnableDebugging { get; internal set; } = true;
-        public static bool EnablePassiveTaskbar { get; internal set; } = false;
-        public static bool EnableQuickLaunch { get; set; } = true;
-        public static bool EnableSystemTrayColorChange { get; set; } = true;
-        public static bool EnableSystemTrayHover { get; set; } = true;
-        public static ExitMenuItemCondition ExitMenuItemCondition { get; internal set; }
-        public static string Language { get; set; }
-        public static ProgramGroupCheck ProgramGroupCheck { get; set; } = ProgramGroupCheck.FileNameAndPath;
-        public static string QuickLaunchOrder { get; set; } = string.Empty;
-        public static BaseRenderer Renderer { get; set; } = new ClassicRenderer();
+        private string rendererPath = "Internal/Classic";
+        public bool ConfigChanged { get; set; } = true;
+        public bool EnableDebugging { get; internal set; } = true;
+        public bool EnablePassiveTaskbar { get; internal set; } = false;
+        public bool EnableQuickLaunch { get; set; } = true;
+        public bool EnableSystemTrayColorChange { get; set; } = true;
+        public bool EnableSystemTrayHover { get; set; } = true;
+        public ExitMenuItemCondition ExitMenuItemCondition { get; internal set; }
+        public string Language { get; set; }
+        public ProgramGroupCheck ProgramGroupCheck { get; set; } = ProgramGroupCheck.FileNameAndPath;
+        public string QuickLaunchOrder { get; set; } = string.Empty;
+        public BaseRenderer Renderer { get; set; } = new ClassicRenderer();
 
-        public static string VisualStylePath { get; set; } = string.Empty;
+        public string VisualStylePath { get; set; } = string.Empty;
 
-        public static string VisualStyleSize { get; set; } = string.Empty;
-        public static string VisualStyleColor { get; set; } = string.Empty;
+        public string VisualStyleSize { get; set; } = string.Empty;
+        public string VisualStyleColor { get; set; } = string.Empty;
 
-        public static string RendererPath
+        public string RendererPath
         {
             get => rendererPath;
             set
@@ -63,17 +80,17 @@ namespace SimpleClassicThemeTaskbar.Helpers
             }
         }
 
-        public static bool ShowTaskbarOnAllDesktops { get; set; } = true;
-        public static int SpaceBetweenQuickLaunchIcons { get; set; } = 2;
-        public static int SpaceBetweenTaskbarIcons { get; set; } = 2;
-        public static int SpaceBetweenTrayIcons { get; set; } = 2;
-        public static StartButtonAppearance StartButtonAppearance { get; set; } = StartButtonAppearance.Default;
-        public static string StartButtonIconImage { get; set; } = string.Empty;
-        public static string StartButtonImage { get; set; } = string.Empty;
-        public static string TaskbarProgramFilter { get; set; } = string.Empty;
-        public static int TaskbarProgramWidth { get; set; } = 160;
+        public bool ShowTaskbarOnAllDesktops { get; set; } = true;
+        public int SpaceBetweenQuickLaunchIcons { get; set; } = 2;
+        public int SpaceBetweenTaskbarIcons { get; set; } = 2;
+        public int SpaceBetweenTrayIcons { get; set; } = 2;
+        public StartButtonAppearance StartButtonAppearance { get; set; } = StartButtonAppearance.Default;
+        public string StartButtonIconImage { get; set; } = string.Empty;
+        public string StartButtonImage { get; set; } = string.Empty;
+        public string TaskbarProgramFilter { get; set; } = string.Empty;
+        public int TaskbarProgramWidth { get; set; } = 160;
 
-        public static void LoadFromRegistry()
+        public void LoadFromRegistry()
         {
             Language = Thread.CurrentThread.CurrentUICulture.Name;
             if (Language != "en-US" && Language != "nl-NL")
@@ -109,7 +126,7 @@ namespace SimpleClassicThemeTaskbar.Helpers
             Thread.CurrentThread.CurrentUICulture = new CultureInfo(Language);
         }
 
-        public static void SaveToRegistry()
+        public void SaveToRegistry()
         {
             Logger.Log(LoggerVerbosity.Verbose, "Config", "Saving to registry");
             using (var scttSubKey = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\1337ftw\SimpleClassicThemeTaskbar"))

@@ -97,6 +97,8 @@
             this.panelPreview = new System.Windows.Forms.Panel();
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
             this.customIconFileDialog = new System.Windows.Forms.OpenFileDialog();
+            this.tabTweaks = new System.Windows.Forms.TabPage();
+            this.tweaksPropertyGrid = new System.Windows.Forms.PropertyGrid();
             this.tabControl.SuspendLayout();
             this.tabGeneral.SuspendLayout();
             this.tabThemes.SuspendLayout();
@@ -116,6 +118,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.bannerPictureBox)).BeginInit();
             this.tabDebug.SuspendLayout();
             this.panelContent.SuspendLayout();
+            this.tabTweaks.SuspendLayout();
             this.SuspendLayout();
             // 
             // buttonApply
@@ -147,6 +150,7 @@
             this.tabControl.Controls.Add(this.tabQuickLaunch);
             this.tabControl.Controls.Add(this.tabTaskView);
             this.tabControl.Controls.Add(this.tabSystemTray);
+            this.tabControl.Controls.Add(this.tabTweaks);
             this.tabControl.Controls.Add(this.tabAbout);
             this.tabControl.Controls.Add(this.tabDebug);
             resources.ApplyResources(this.tabControl, "tabControl");
@@ -646,6 +650,19 @@
             resources.ApplyResources(this.customIconFileDialog, "customIconFileDialog");
             this.customIconFileDialog.FileOk += new System.ComponentModel.CancelEventHandler(this.CustomIconFileDialog_FileOk);
             // 
+            // tabTweaks
+            // 
+            this.tabTweaks.Controls.Add(this.tweaksPropertyGrid);
+            resources.ApplyResources(this.tabTweaks, "tabTweaks");
+            this.tabTweaks.Name = "tabTweaks";
+            this.tabTweaks.UseVisualStyleBackColor = true;
+            // 
+            // tweaksPropertyGrid
+            // 
+            resources.ApplyResources(this.tweaksPropertyGrid, "tweaksPropertyGrid");
+            this.tweaksPropertyGrid.Name = "tweaksPropertyGrid";
+            this.tweaksPropertyGrid.ToolbarVisible = false;
+            // 
             // Settings
             // 
             resources.ApplyResources(this, "$this");
@@ -683,6 +700,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.bannerPictureBox)).EndInit();
             this.tabDebug.ResumeLayout(false);
             this.panelContent.ResumeLayout(false);
+            this.tabTweaks.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -757,5 +775,7 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.ComboBox themeComboBox;
         private System.Windows.Forms.Label themeLabel;
+        private System.Windows.Forms.TabPage tabTweaks;
+        private System.Windows.Forms.PropertyGrid tweaksPropertyGrid;
     }
 }

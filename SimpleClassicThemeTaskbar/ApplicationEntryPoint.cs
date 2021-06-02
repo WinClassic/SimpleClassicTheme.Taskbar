@@ -28,7 +28,7 @@ namespace SimpleClassicThemeTaskbar
         internal static void ExitSCTT()
         {
             Logger.Log(LoggerVerbosity.Detailed, "TaskbarManager", $"Exit requested");
-            Config.SaveToRegistry();
+            Config.Instance.SaveToRegistry();
 
             var activeBars = Helpers.Helpers.GetOpenTaskbars();
 
@@ -72,7 +72,7 @@ namespace SimpleClassicThemeTaskbar
                 Taskbar taskbar = new(screen.Primary);
                 taskbar.ShowOnScreen(screen);
                 Logger.Log(LoggerVerbosity.Detailed, "TaskbarManager", $"Created taskbar in working area: {screen.Bounds}");
-                if (!Config.ShowTaskbarOnAllDesktops && !screen.Primary)
+                if (!Config.Instance.ShowTaskbarOnAllDesktops && !screen.Primary)
                     taskbar.NeverShow = true;
             }
             Logger.Log(LoggerVerbosity.Detailed, "TaskbarManager", $"Created {taskbars} taskbars in total");

@@ -52,9 +52,9 @@ namespace SimpleClassicThemeTaskbar.UIElements.StartButton
 
             Do3DBorder = true;
 
-            buttonImageFile = Config.StartButtonImage;
-            iconImageFile = Config.StartButtonIconImage;
-            Appearance = Config.StartButtonAppearance;
+            buttonImageFile = Config.Instance.StartButtonImage;
+            iconImageFile = Config.Instance.StartButtonIconImage;
+            Appearance = Config.Instance.StartButtonAppearance;
         }
 
         [Category("Appearance")]
@@ -195,7 +195,7 @@ namespace SimpleClassicThemeTaskbar.UIElements.StartButton
 
         private void OnPaint(object sender, PaintEventArgs e)
         {
-            Config.Renderer.DrawStartButton(this, e.Graphics);
+            Config.Instance.Renderer.DrawStartButton(this, e.Graphics);
         }
 
         private void StartButton_Click(object sender, EventArgs e)
