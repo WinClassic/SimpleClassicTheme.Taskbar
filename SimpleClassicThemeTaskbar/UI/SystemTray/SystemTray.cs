@@ -27,10 +27,10 @@ namespace SimpleClassicThemeTaskbar.UIElements.SystemTray
         public SystemTray()
         {
             InitializeComponent();
-            Point p = Config.Renderer.SystemTrayTimeLocation;
+            Point p = Config.Instance.Renderer.SystemTrayTimeLocation;
             labelTime.Location = new Point(Width + p.X, p.Y);
-            labelTime.Font = Config.Renderer.SystemTrayTimeFont;
-            labelTime.ForeColor = Config.Renderer.SystemTrayTimeColor;
+            labelTime.Font = Config.Instance.Renderer.SystemTrayTimeFont;
+            labelTime.ForeColor = Config.Instance.Renderer.SystemTrayTimeColor;
         }
 
         public void ClearButtons()
@@ -186,7 +186,7 @@ namespace SimpleClassicThemeTaskbar.UIElements.SystemTray
             }
 
             //Display all controls
-            int virtualWidth = 16 + Config.SpaceBetweenTrayIcons;
+            int virtualWidth = 16 + Config.Instance.SpaceBetweenTrayIcons;
 
             Invalidate();
             //betterBorderPanel1.Refresh();
@@ -194,7 +194,7 @@ namespace SimpleClassicThemeTaskbar.UIElements.SystemTray
 
             int startX = 3;
             int iconWidth = 16;
-            int iconSpacing = Config.SpaceBetweenTrayIcons;
+            int iconSpacing = Config.Instance.SpaceBetweenTrayIcons;
 
             //See if we're moving, if so calculate new position, if we finished calculate new position and finalize position values
             if (heldDownIcon != null)
@@ -229,7 +229,7 @@ namespace SimpleClassicThemeTaskbar.UIElements.SystemTray
                 sw.Start();
             }
 
-            Width = Config.Renderer.GetSystemTrayWidth(finalIconList.Count);
+            Width = Config.Instance.Renderer.GetSystemTrayWidth(finalIconList.Count);
 
             foreach (SystemTrayIcon icon in finalIconList)
             {
@@ -241,7 +241,7 @@ namespace SimpleClassicThemeTaskbar.UIElements.SystemTray
                 }
 
                 //Put the control at the correct position
-                icon.Location = Config.Renderer.GetSystemTrayIconLocation(finalIconList.IndexOf(icon));
+                icon.Location = Config.Instance.Renderer.GetSystemTrayIconLocation(finalIconList.IndexOf(icon));
             }
 
             if (!watchTray)
@@ -322,7 +322,7 @@ namespace SimpleClassicThemeTaskbar.UIElements.SystemTray
 
         private void SystemTray_Paint(object sender, System.Windows.Forms.PaintEventArgs e)
         {
-            Config.Renderer.DrawSystemTray(this, e.Graphics);
+            Config.Instance.Renderer.DrawSystemTray(this, e.Graphics);
         }
     }
 }

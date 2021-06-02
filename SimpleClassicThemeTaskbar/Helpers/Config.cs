@@ -4,6 +4,7 @@ using SimpleClassicThemeTaskbar.ThemeEngine;
 using SimpleClassicThemeTaskbar.ThemeEngine.VisualStyles;
 
 using System;
+using System.ComponentModel;
 using System.Globalization;
 using System.Reflection;
 using System.Resources;
@@ -11,31 +12,69 @@ using System.Threading;
 
 namespace SimpleClassicThemeTaskbar.Helpers
 {
-    public static class Config
+    public class Config
     {
+        private static Config instance;
+        private static object instanceLock = new();
+        public static Config Instance
+        {
+            get
+            {
+                lock (instanceLock)
+                {
+                    if (instance == null)
+                    {
+                        instance = new Config();
+                    }
+
+                    return instance;
+                }
+            }
+        }
+
         private const BindingFlags bindingFlags = BindingFlags.Static | BindingFlags.Public | BindingFlags.GetProperty | BindingFlags.SetProperty;
-        private static string rendererPath = "Internal/Classic";
-        public static bool ConfigChanged { get; set; } = true;
-        public static bool EnableDebugging { get; internal set; } = true;
-        public static bool EnablePassiveTaskbar { get; internal set; } = false;
-        public static bool EnableQuickLaunch { get; set; } = true;
-        public static bool EnableSystemTrayColorChange { get; set; } = true;
-        public static bool EnableSystemTrayHover { get; set; } = true;
-        public static ExitMenuItemCondition ExitMenuItemCondition { get; internal set; }
-        public static string Language { get; set; }
-        public static ProgramGroupCheck ProgramGroupCheck { get; set; } = ProgramGroupCheck.FileNameAndPath;
-        public static string QuickLaunchOrder { get; set; } = string.Empty;
-        public static BaseRenderer Renderer { get; set; } = new ClassicRenderer();
+        private string rendererPath = "Internal/Classic";
+
+
+        [Browsable(false)]
+        public bool ConfigChanged { get; set; } = true;
+
+        [Category("(Misc)")]
+        [DisplayName("Enable debugging options")]
+        public bool EnableDebugging { get; internal set; } = true;
+        public bool EnablePassiveTaskbar { get; internal set; } = false;
+
+        [Browsable(false)]
+        public bool EnableQuickLaunch { get; set; } = true;
+
+        public bool EnableSystemTrayColorChange { get; set; } = true;
+
+        public bool EnableSystemTrayHover { get; set; } = true;
+
+        [Browsable(false)]
+        public ExitMenuItemCondition ExitMenuItemCondition { get; internal set; }
+
+        [Browsable(false)]
+        public string Language { get; set; }
+        public ProgramGroupCheck ProgramGroupCheck { get; set; } = ProgramGroupCheck.FileNameAndPath;
+        [Browsable(false)]
+        public string QuickLaunchOrder { get; set; } = string.Empty;
+        [Browsable(false)]
+        public BaseRenderer Renderer { get; set; } = new ClassicRenderer();
 
         // VisualStyleRenderer settings
-        public static string VisualStylePath { get; set; } = string.Empty;
-        public static string VisualStyleSize { get; set; } = string.Empty;
-        public static string VisualStyleColor { get; set; } = string.Empty;
+        [Browsable(false)]
+        public string VisualStylePath { get; set; } = string.Empty;
+        [Browsable(false)]
+        public string VisualStyleSize { get; set; } = string.Empty;
+        [Browsable(false)]
+        public string VisualStyleColor { get; set; } = string.Empty;
 
         // ImageRenderer settings
         public static string ImageThemePath { get; set; } = string.Empty;
 
-        public static string RendererPath
+        [Browsable(false)]
+        public string RendererPath
         {
             get => rendererPath;
             set
@@ -65,17 +104,36 @@ namespace SimpleClassicThemeTaskbar.Helpers
             }
         }
 
-        public static bool ShowTaskbarOnAllDesktops { get; set; } = true;
-        public static int SpaceBetweenQuickLaunchIcons { get; set; } = 2;
-        public static int SpaceBetweenTaskbarIcons { get; set; } = 2;
-        public static int SpaceBetweenTrayIcons { get; set; } = 2;
-        public static StartButtonAppearance StartButtonAppearance { get; set; } = StartButtonAppearance.Default;
-        public static string StartButtonIconImage { get; set; } = string.Empty;
-        public static string StartButtonImage { get; set; } = string.Empty;
-        public static string TaskbarProgramFilter { get; set; } = string.Empty;
-        public static int TaskbarProgramWidth { get; set; } = 160;
+        [Browsable(false)]
+        public bool ShowTaskbarOnAllDesktops { get; set; } = true;
 
-        public static void LoadFromRegistry()
+        [Category("Spacing between items")]
+        [DisplayName("Spacing between Quick Launch icons")]
+        public int SpaceBetweenQuickLaunchIcons { get; set; } = 2;
+
+        [Category("Spacing between items")]
+        [DisplayName("Spacing between taskband buttons")]
+        public int SpaceBetweenTaskbarIcons { get; set; } = 2;
+
+        [Category("Spacing between items")]
+        [DisplayName("Spacing between tray icons")]
+        public int SpaceBetweenTrayIcons { get; set; } = 2;
+
+        [Browsable(false)]
+        public StartButtonAppearance StartButtonAppearance { get; set; } = StartButtonAppearance.Default;
+
+        [Browsable(false)]
+        public string StartButtonIconImage { get; set; } = string.Empty;
+
+        [Browsable(false)]
+        public string StartButtonImage { get; set; } = string.Empty;
+
+        [Browsable(false)]
+        public string TaskbarProgramFilter { get; set; } = string.Empty;
+        
+        public int TaskbarProgramWidth { get; set; } = 160;
+
+        public void LoadFromRegistry()
         {
             Language = Thread.CurrentThread.CurrentUICulture.Name;
             if (Language != "en-US" && Language != "nl-NL")
@@ -111,7 +169,7 @@ namespace SimpleClassicThemeTaskbar.Helpers
             Thread.CurrentThread.CurrentUICulture = new CultureInfo(Language);
         }
 
-        public static void SaveToRegistry()
+        public void SaveToRegistry()
         {
             Logger.Log(LoggerVerbosity.Verbose, "Config", "Saving to registry");
             using (var scttSubKey = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\1337ftw\SimpleClassicThemeTaskbar"))

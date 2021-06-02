@@ -51,7 +51,7 @@ namespace SimpleClassicThemeTaskbar
         }
 
         public override Image IconImage { get => iconImage;/* { try { return new Icon(Icon, 16, 16).ToBitmap(); } catch { return null; } } */}
-        public override int MinimumWidth => Helpers.Config.Renderer.TaskButtonMinimalWidth;
+        public override int MinimumWidth => Helpers.Config.Instance.Renderer.TaskButtonMinimalWidth;
         public override Process Process { get => process; set { process = value; /*MessageBox.Show(ApplicationEntryPoint.d.GetAppUserModelId(Process.Id));*/ } }
         public override string Title { get => window.Title; set => throw new NotImplementedException(); }
         public override Window Window { get => window; set => window = value; }

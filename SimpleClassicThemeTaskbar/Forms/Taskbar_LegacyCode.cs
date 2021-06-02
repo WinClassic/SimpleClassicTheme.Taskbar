@@ -253,7 +253,7 @@ namespace SimpleClassicThemeTaskbar
 
             //Create new list for finalized values
             List<BaseTaskbarProgram> programs = new();
-            if (Config.ProgramGroupCheck == ProgramGroupCheck.None)
+            if (Config.Instance.ProgramGroupCheck == ProgramGroupCheck.None)
                 goto addAllWindows;
 
             if (!watchLogic)
@@ -424,14 +424,14 @@ namespace SimpleClassicThemeTaskbar
 
             //Calculate availabe space in taskbar and then divide that space over all programs
             int startX = quickLaunch1.Location.X + quickLaunch1.Width + 4;
-            int programWidth = Primary ? Config.TaskbarProgramWidth + Config.SpaceBetweenTaskbarIcons : 24;
+            int programWidth = Primary ? Config.Instance.TaskbarProgramWidth + Config.Instance.SpaceBetweenTaskbarIcons : 24;
 
             int availableSpace = verticalDivider3.Location.X - startX - 6;
-            availableSpace += Config.SpaceBetweenTaskbarIcons;
+            availableSpace += Config.Instance.SpaceBetweenTaskbarIcons;
             if (icons.Count > 0 && availableSpace / icons.Count > programWidth)
                 availableSpace = icons.Count * programWidth;
             int x = startX;
-            int iconWidth = icons.Count > 0 ? (int)Math.Floor((double)availableSpace / icons.Count) - Config.SpaceBetweenTaskbarIcons : 01;
+            int iconWidth = icons.Count > 0 ? (int)Math.Floor((double)availableSpace / icons.Count) - Config.Instance.SpaceBetweenTaskbarIcons : 01;
             int maxX = verticalDivider3.Location.X - iconWidth;
 
             if (sender is Boolean a && a == true)
@@ -455,7 +455,7 @@ namespace SimpleClassicThemeTaskbar
                     icon.Width = Math.Max(icon.MinimumWidth, iconWidth);
                     if (icon == heldDownButton)
                     {
-                        x += icon.Width + Config.SpaceBetweenTaskbarIcons;
+                        x += icon.Width + Config.Instance.SpaceBetweenTaskbarIcons;
                         continue;
                     }
                     _ = icon.IsActiveWindow(ForegroundWindow);
@@ -468,7 +468,7 @@ namespace SimpleClassicThemeTaskbar
                         icon.Height = Height;
                         verticalDivider3.BringToFront();
                     }
-                    x += icon.Width + Config.SpaceBetweenTaskbarIcons;
+                    x += icon.Width + Config.Instance.SpaceBetweenTaskbarIcons;
                     icon.Visible = true;
                 }
             }
