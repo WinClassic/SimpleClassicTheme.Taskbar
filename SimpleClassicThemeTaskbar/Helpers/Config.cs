@@ -1,6 +1,7 @@
 ﻿using Microsoft.Win32;
 
 using SimpleClassicThemeTaskbar.ThemeEngine;
+using SimpleClassicThemeTaskbar.ThemeEngine.VisualStyles;
 
 using System;
 using System.Globalization;
@@ -29,6 +30,11 @@ namespace SimpleClassicThemeTaskbar.Helpers
         public static string QuickLaunchOrder { get; set; } = string.Empty;
         public static BaseRenderer Renderer { get; set; } = new ClassicRenderer();
 
+        public static string VisualStylePath { get; set; } = string.Empty;
+
+        public static string VisualStyleSize { get; set; } = string.Empty;
+        public static string VisualStyleColor { get; set; } = string.Empty;
+
         public static string RendererPath
         {
             get => rendererPath;
@@ -42,6 +48,12 @@ namespace SimpleClassicThemeTaskbar.Helpers
 
                     case "Internal/Luna":
                         Renderer = new ImageRenderer(new ResourceManager("SimpleClassicThemeTaskbar.ThemeEngine.Themes.Luna", typeof(Config).Assembly));
+                        break;
+
+                    case "Internal/VisualStyle":
+                        var visualStyle = new VisualStyle(VisualStylePath);
+                        var colorScheme = visualStyle.GetColorScheme(VisualStyleColor, VisualStyleSize);
+                        Renderer = new VisualStyleRenderer(colorScheme);
                         break;
 
                     default:
@@ -123,7 +135,7 @@ namespace SimpleClassicThemeTaskbar.Helpers
                             break;
 
                         default:
-                            Logger.Log(LoggerVerbosity.Basic, "Config", $"Ignoring property {property.Name} because {value.GetType()} is an unknown type");
+                            Logger.Log(LoggerVerbosity.Basic, "Config", $"Ignoring property {property.Name} because {value?.GetType()} is an unknown type");
                             break;
                     }
 

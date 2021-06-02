@@ -16,10 +16,10 @@ namespace SimpleClassicThemeTaskbar.Helpers.NativeMethods
         [DllImport("user32.dll")]
         internal static extern int DrawFrameControl(IntPtr hdc, ref RECT lpRect, uint un1, uint un2);
 
-        [DllImport("Shell32.dll", CharSet = CharSet.Unicode)]
+        [DllImport(nameof(Shell32), CharSet = CharSet.Unicode)]
         internal static extern int SHGetFileInfo(string pszPath, int dwFileAttributes, ref SHFILEINFO psfi, int cbFileInfo, uint uFlags);
 
-        [DllImport("shell32.dll")]
+        [DllImport(nameof(Shell32))]
         internal static extern int SHGetImageList(int iImageList, ref Guid riid, out IImageList ppv);
     }
 }

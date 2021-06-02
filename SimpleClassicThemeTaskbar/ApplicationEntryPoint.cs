@@ -7,8 +7,10 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
 namespace SimpleClassicThemeTaskbar
@@ -206,6 +208,8 @@ namespace SimpleClassicThemeTaskbar
             }
 
             Logger.Log(LoggerVerbosity.Detailed, "EntryPoint", "Main initialization done, passing execution to TaskbarManager");
+
+            Directory.CreateDirectory(Constants.VisualStyleDirectory);
 
             //Application.EnableVisualStyles();
             Application.VisualStyleState = System.Windows.Forms.VisualStyles.VisualStyleState.NoneEnabled;

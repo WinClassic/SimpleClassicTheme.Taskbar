@@ -25,6 +25,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="ini-parser" Version="2.5.2" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Reference Include="ManagedWifi">
       <HintPath>..\libraries\ManagedWifi.dll</HintPath>
     </Reference>

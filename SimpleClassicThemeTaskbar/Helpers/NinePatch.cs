@@ -1,11 +1,12 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace SimpleClassicThemeTaskbar.Helpers
 {
     public static class NinePatchExtensions
     {
-        public static void DrawNinePatch(this Graphics graphics, Image image, NinePatchGeometry geometry, Rectangle destinationRectangle)
+        public static void DrawNinePatch(this Graphics graphics, Image image, NinePatchGeometry geometry, Rectangle destinationRectangle, bool tile = false)
         {
             var srcRects = geometry.GetRectangles();
 
@@ -16,6 +17,11 @@ namespace SimpleClassicThemeTaskbar.Helpers
             {
                 var srcRect = srcRects[i];
                 var dstRect = dstRects[i];
+
+                if (srcRect.Width == 0 || srcRect.Height == 0)
+                {
+                    continue;
+                }
 
                 graphics.DrawImage(image, dstRect, srcRect);
             }
@@ -42,7 +48,7 @@ namespace SimpleClassicThemeTaskbar.Helpers
         {
             Rectangle.Y,
             Rectangle.Top + Padding.Top,
-            Rectangle.Bottom - Padding.Top,
+            Rectangle.Bottom - Padding.Bottom,
             Rectangle.Bottom
         };
 
@@ -62,7 +68,7 @@ namespace SimpleClassicThemeTaskbar.Helpers
             for (int y = 0; y < 3; y++)
                 for (int x = 0; x < 3; x++)
                 {
-                    rectangles[i] = Rectangle.FromLTRB(h[x], h[x + 1], v[y], v[y + 1]);
+                    rectangles[i] = Rectangle.FromLTRB(Math.Max(0, h[x]), Math.Max(0, v[y]), Math.Max(0, h[x + 1]), Math.Max(0, v[y + 1]));
                     i++;
                 }
 

@@ -1,5 +1,6 @@
 ﻿using SimpleClassicThemeTaskbar.Helpers;
 using SimpleClassicThemeTaskbar.Helpers.NativeMethods;
+using SimpleClassicThemeTaskbar.ThemeEngine.VisualStyles;
 
 using System;
 using System.Diagnostics;
@@ -15,7 +16,8 @@ namespace SimpleClassicThemeTaskbar
     {
         private Taskbar previewTaskbar;
         private System.ComponentModel.ComponentResourceManager Resources = new(typeof(Settings));
-
+        private VisualStyle[] visualStyles;
+        private string[] visualStylePaths;
         public Settings()
         {
             InitializeComponent();
@@ -62,6 +64,15 @@ namespace SimpleClassicThemeTaskbar
 
                 case "Luna":
                     Config.RendererPath = "Internal/Luna";
+                    break;
+
+                case "Visual Style":
+                    var visualStyle = visualStyles[visualStyleComboBox.SelectedIndex];
+                    Config.VisualStyleColor = visualStyle.ColorNames[colorSchemeComboBox.SelectedIndex];
+                    Config.VisualStyleSize = visualStyle.SizeNames[sizeComboBox.SelectedIndex];
+                    Config.VisualStylePath = visualStylePaths[visualStyleComboBox.SelectedIndex];
+
+                    Config.RendererPath = "Internal/VisualStyle";
                     break;
 
                 default:
@@ -126,28 +137,15 @@ namespace SimpleClassicThemeTaskbar
                         themeComboBox.Items.Clear();
                         themeComboBox.Items.Add("Classic");
                         themeComboBox.Items.Add("Luna");
+                        themeComboBox.Items.Add("Visual Style");
                         themeComboBox.Items.Add("Custom...");
                         themeComboBox.Items.Add(fbd.SelectedPath);
                         themeComboBox.SelectedItem = fbd.SelectedPath;
                         return;
                     }
                 }
-                // Detect renderer correctly
-                switch (Config.RendererPath)
-                {
-                    case "Internal/Classic":
-                        themeComboBox.SelectedItem = "Classic";
-                        break;
 
-                    case "Internal/Luna":
-                        themeComboBox.SelectedItem = "Luna";
-                        break;
-
-                    default:
-                        themeComboBox.Items.Add(Config.RendererPath);
-                        themeComboBox.SelectedItem = Config.RendererPath;
-                        break;
-                }
+                UpdateSelectedRenderer();
             }
         }
 
@@ -310,6 +308,14 @@ namespace SimpleClassicThemeTaskbar
                 if (filter != "")
                     _ = taskbarFilterListBox.Items.Add(filter);
 
+            UpdateSelectedRenderer();
+            PopulateVisualStyles();
+
+
+        }
+
+        private void UpdateSelectedRenderer()
+        {
             // Detect renderer correctly
             switch (Config.RendererPath)
             {
@@ -319,6 +325,10 @@ namespace SimpleClassicThemeTaskbar
 
                 case "Internal/Luna":
                     themeComboBox.SelectedItem = "Luna";
+                    break;
+
+                case "Internal/VisualStyle":
+                    themeComboBox.SelectedItem = "Visual Style";
                     break;
 
                 default:
@@ -401,5 +411,72 @@ namespace SimpleClassicThemeTaskbar
                     tabControl.TabPages.Remove(tabDebug);
 			}
 		}
-	}
+
+        private void manageStylesButton_Click(object sender, EventArgs e)
+        {
+            Process.Start(new ProcessStartInfo(Constants.VisualStyleDirectory)
+            {
+                UseShellExecute = true
+            });
+        }
+
+        private void themeComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            visualStyleGroupBox.Enabled = themeComboBox.SelectedItem is string label && label == "Visual Style";
+        }
+
+        private void PopulateVisualStyles()
+        {
+            visualStylePaths = Directory.GetFiles(Constants.VisualStyleDirectory, "*.msstyles");
+
+            if (visualStylePaths.Length != 0)
+            {
+
+                visualStyles = visualStylePaths
+                    .Select((path) => new VisualStyle(path))
+                    .ToArray();
+
+                visualStyleComboBox.Items.Clear();
+
+                var i = 0;
+                var selectedIndex = 0;
+                foreach (var vs in visualStyles)
+                {
+                    visualStyleComboBox.Items.Add(vs.DisplayName);
+
+                    if (Config.VisualStylePath == visualStylePaths[i])
+                    {
+                        selectedIndex = i;
+                    }
+
+                    i++;
+                }
+
+                visualStyleComboBox.SelectedIndex = selectedIndex;
+
+                PopulateVisualStyleCombos();
+            }
+        }
+
+        private void PopulateVisualStyleCombos()
+        {
+            var visualStyle = visualStyles[visualStyleComboBox.SelectedIndex];
+
+            var colorNames = visualStyle.ColorNames.Select((cn) => visualStyle.GetColorDisplay(cn).DisplayName).ToArray();
+            colorSchemeComboBox.Items.Clear();
+            colorSchemeComboBox.Items.AddRange(colorNames);
+
+            var sizeNames = visualStyle.SizeNames.Select((sn) => visualStyle.GetSizeDisplay(sn).DisplayName).ToArray();
+            sizeComboBox.Items.Clear();
+            sizeComboBox.Items.AddRange(sizeNames);
+
+            colorSchemeComboBox.SelectedIndex = Math.Max(0, Array.IndexOf(visualStyle.ColorNames, Config.VisualStyleColor));
+            sizeComboBox.SelectedIndex = Math.Max(0, Array.IndexOf(visualStyle.SizeNames, Config.VisualStyleSize));
+        }
+
+        private void visualStyleComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            PopulateVisualStyleCombos();
+        }
+    }
 }

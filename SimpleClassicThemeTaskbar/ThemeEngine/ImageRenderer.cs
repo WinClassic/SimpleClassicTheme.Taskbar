@@ -31,7 +31,7 @@ namespace SimpleClassicThemeTaskbar.ThemeEngine
 		private readonly Bitmap systemTrayBorder;
 		private readonly Bitmap startButton;
 
-		private readonly IniFile settings;
+		private readonly Helpers.IniFile settings;
 
 		private readonly int taskbarHeight;
 		private (int, int) taskbuttonTextureLocation;
@@ -56,7 +56,7 @@ namespace SimpleClassicThemeTaskbar.ThemeEngine
 			//try
 			if (true)
 			{
-				settings = new IniFile(Path.Combine(resourceDirectory, "Settings.txt"));
+				settings = new Helpers.IniFile(Path.Combine(resourceDirectory, "Settings.txt"));
 
 				string tH = settings.IniReadValue("TaskBar", "Height");
 				if (!Int32.TryParse(tH, out taskbarHeight))

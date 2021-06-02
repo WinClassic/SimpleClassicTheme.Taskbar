@@ -19,7 +19,7 @@ namespace SimpleClassicThemeTaskbar.Helpers.NativeMethods
         internal static extern bool CloseHandle(IntPtr hHandle);
 
         [DllImport(nameof(Kernel32), CharSet = CharSet.Unicode)]
-        internal static extern IntPtr FindResourceA(IntPtr hModule, string lpName, string lpType);
+        internal static extern IntPtr FindResourceW(IntPtr hModule, string lpName, string lpType);
 
         [DllImport(nameof(Kernel32), SetLastError = true)]
         internal static extern int GetApplicationUserModelId(IntPtr hProcess, ref UInt32 applicationUserModelIdLength, [MarshalAs(UnmanagedType.LPWStr)] StringBuilder applicationUserModelId);
@@ -33,7 +33,7 @@ namespace SimpleClassicThemeTaskbar.Helpers.NativeMethods
         [DllImport(nameof(Kernel32), CharSet = CharSet.Auto)]
         internal static extern int GetShortPathName([MarshalAs(UnmanagedType.LPWStr)] string path, [MarshalAs(UnmanagedType.LPWStr)] StringBuilder shortPath, int shortPathLength);
 
-        [DllImport(nameof(Kernel32), SetLastError = true, ExactSpelling = true, CharSet = CharSet.Unicode)]
+        [DllImport(nameof(Kernel32), SetLastError = true, ExactSpelling = true, CharSet = CharSet.Ansi)]
         internal static extern IntPtr LoadLibraryExA(string lpLibFileName, IntPtr hFile, uint dwFlags);
 
         [DllImport(nameof(Kernel32))]
@@ -50,5 +50,11 @@ namespace SimpleClassicThemeTaskbar.Helpers.NativeMethods
 
         [DllImport(nameof(Kernel32), CharSet = CharSet.Unicode)]
         internal static extern long WritePrivateProfileString(string section, string key, string val, string filePath);
+
+        [DllImport(nameof(Kernel32), CharSet = CharSet.Ansi, ExactSpelling = true)]
+        internal static extern IntPtr LoadResource(IntPtr hModule, IntPtr hResInfo);
+
+        [DllImport(nameof(Kernel32), ExactSpelling = true)]
+        internal static extern uint SizeofResource(IntPtr hModule, IntPtr hResInfo);
     }
 }
