@@ -3,7 +3,7 @@
     "SCTT (C#)": {
       "commandName": "Project",
       "commandLineArgs": "--sct",
-      "nativeDebugging": true
+      "nativeDebugging": false
     },
     "SCTT (C++)": {
       "commandName": "Project",
