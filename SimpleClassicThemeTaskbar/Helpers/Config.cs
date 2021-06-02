@@ -11,9 +11,6 @@ using System.Threading;
 
 namespace SimpleClassicThemeTaskbar.Helpers
 {
-    //Config class
-    //TODO: Move more configurable settings to here
-    //TODO: Make config menu
     public static class Config
     {
         private const BindingFlags bindingFlags = BindingFlags.Static | BindingFlags.Public | BindingFlags.GetProperty | BindingFlags.SetProperty;
@@ -30,10 +27,13 @@ namespace SimpleClassicThemeTaskbar.Helpers
         public static string QuickLaunchOrder { get; set; } = string.Empty;
         public static BaseRenderer Renderer { get; set; } = new ClassicRenderer();
 
+        // VisualStyleRenderer settings
         public static string VisualStylePath { get; set; } = string.Empty;
-
         public static string VisualStyleSize { get; set; } = string.Empty;
         public static string VisualStyleColor { get; set; } = string.Empty;
+
+        // ImageRenderer settings
+        public static string ImageThemePath { get; set; } = string.Empty;
 
         public static string RendererPath
         {
@@ -42,13 +42,14 @@ namespace SimpleClassicThemeTaskbar.Helpers
             {
                 switch (rendererPath = value)
                 {
-                    case "Internal/Classic":
-                        Renderer = new ClassicRenderer();
-                        break;
 
-                    case "Internal/Luna":
-                        Renderer = new ImageRenderer(new ResourceManager("SimpleClassicThemeTaskbar.ThemeEngine.Themes.Luna", typeof(Config).Assembly));
-                        break;
+                    case "Internal/ImageRenderer":
+						Renderer = ImageThemePath switch
+						{
+							"Internal/ImageRenderer/Luna" => new ImageRenderer(new ResourceManager("SimpleClassicThemeTaskbar.ThemeEngine.Themes.Luna", typeof(Config).Assembly)),
+							_ => new ImageRenderer(ImageThemePath),
+						};
+						break;
 
                     case "Internal/VisualStyle":
                         var visualStyle = new VisualStyle(VisualStylePath);
@@ -56,8 +57,9 @@ namespace SimpleClassicThemeTaskbar.Helpers
                         Renderer = new VisualStyleRenderer(colorScheme);
                         break;
 
+                    case "Internal/Classic":
                     default:
-                        Renderer = new ImageRenderer(RendererPath);
+                        Renderer = new ClassicRenderer();
                         break;
                 }
             }
