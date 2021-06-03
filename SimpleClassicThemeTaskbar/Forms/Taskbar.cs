@@ -731,13 +731,13 @@ namespace SimpleClassicThemeTaskbar
             rct.Height -= Height;
             Point desiredLocation = new(rct.Left, rct.Bottom);
 
-            if (screen.WorkingArea.ToString() != rct.ToString())
+            if (!screen.WorkingArea.Equals(rct))
             {
                 var windowHandles = windows.Select(a => a.Handle).ToArray();
                 UnmanagedCodeMigration.SetWorkingArea(new RECT(rct), Environment.OSVersion.Version.Major < 10, windowHandles);
             }
 
-            if (Location.ToString() != desiredLocation.ToString())
+            if (!Location.Equals(desiredLocation))
                 Location = desiredLocation;
 
             if (!watchLogic)
