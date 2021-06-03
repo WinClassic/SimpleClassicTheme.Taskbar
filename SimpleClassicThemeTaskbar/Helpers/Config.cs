@@ -183,12 +183,12 @@ namespace SimpleClassicThemeTaskbar.Helpers
                             valueKind = RegistryValueKind.String;
                             break;
 
-                        case int intValue:
-                        case Enum enumValue:
+                        case int:
+                        case Enum:
                             valueKind = RegistryValueKind.DWord;
                             break;
 
-                        case String stringValue:
+                        case string:
                             valueKind = RegistryValueKind.String;
                             break;
 
