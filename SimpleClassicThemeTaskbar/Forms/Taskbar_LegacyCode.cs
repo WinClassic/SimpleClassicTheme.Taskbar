@@ -316,6 +316,7 @@ namespace SimpleClassicThemeTaskbar
 
                         if (sameThing == null)
                         {
+                            programs.Add(icon);
                             continue;
                         }
 
