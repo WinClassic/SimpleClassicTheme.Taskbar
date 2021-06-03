@@ -9,7 +9,7 @@ namespace SimpleClassicThemeTaskbar.Helpers
     {
         public static void KeyDown(Keys vKey)
         {
-            User32.keybd_event((byte)vKey, 0, User32.KEYEVENTF_EXTENDEDKEY, 0);
+            User32.keybd_event((byte)vKey, 0, User32.KEYEVENTF_EXTENDEDKEY, UIntPtr.Zero);
         }
 
         public static void KeyPress(params Keys[] keys)
@@ -25,7 +25,7 @@ namespace SimpleClassicThemeTaskbar.Helpers
 
         public static void KeyUp(Keys vKey)
         {
-            User32.keybd_event((byte)vKey, 0, User32.KEYEVENTF_EXTENDEDKEY | User32.KEYEVENTF_KEYUP, 0);
+            User32.keybd_event((byte)vKey, 0, User32.KEYEVENTF_EXTENDEDKEY | User32.KEYEVENTF_KEYUP, UIntPtr.Zero);
         }
     }
 }

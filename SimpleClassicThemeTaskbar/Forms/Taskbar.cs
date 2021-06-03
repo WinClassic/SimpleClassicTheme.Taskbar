@@ -143,10 +143,10 @@ namespace SimpleClassicThemeTaskbar
         {
             switch (m.Msg)
 			{
-                case User32.WM_ENDSESSION:
+                case (int)User32.WM_ENDSESSION:
                     ApplicationEntryPoint.ExitSCTT();
                     break;
-                case User32.WM_QUERYENDSESSION:
+                case (int)User32.WM_QUERYENDSESSION:
                     m.Result = new IntPtr(1);
                     break;
                 case Constants.WM_SCT:
