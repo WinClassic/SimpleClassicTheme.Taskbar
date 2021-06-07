@@ -35,16 +35,12 @@ namespace SimpleClassicThemeTaskbar
             Config.Instance.ShowTaskbarOnAllDesktops = showTaskbarOnAllDesktops.Checked;
             Config.Instance.EnableQuickLaunch = enableQuickLaunchCheckBox.Checked;
             Config.Instance.TaskbarProgramWidth = (int)taskbarProgramWidth.Value;
-            Config.Instance.SpaceBetweenTrayIcons = (int)spaceBetweenTrayIcons.Value;
-            Config.Instance.SpaceBetweenTaskbarIcons = (int)spaceBetweenTaskbarIcons.Value;
-            Config.Instance.SpaceBetweenQuickLaunchIcons = (int)quickLaunchSpacingNumBox.Value;
             Config.Instance.StartButtonImage = customButtonTextBox.Text;
             Config.Instance.StartButtonIconImage = customIconTextBox.Text;
             Config.Instance.StartButtonAppearance = GetCurrentStartButtonAppearance();
             Config.Instance.Language = (string)languageComboBox.SelectedItem;
             Config.Instance.ProgramGroupCheck = (ProgramGroupCheck)comboBoxGroupingMethod.SelectedIndex;
             Config.Instance.ExitMenuItemCondition = (ExitMenuItemCondition)exitItemComboBox.SelectedIndex;
-            Config.Instance.EnableDebugging = enableDebuggingCheckBox.Checked;
             Config.Instance.EnablePassiveTaskbar = enablePassiveTaskbarCheckBox.Checked;
 
             // Save taskbar filter
@@ -215,11 +211,6 @@ namespace SimpleClassicThemeTaskbar
             UpdateStartButton();
         }
 
-        private void EnableQuickLaunchCheckBox_CheckedChanged(object sender, EventArgs e)
-        {
-            quickLaunchOptionsPanel.Enabled = enableQuickLaunchCheckBox.Checked;
-        }
-
         private StartButtonAppearance GetCurrentStartButtonAppearance()
         {
             if (radioStartDefault.Checked)
@@ -277,7 +268,6 @@ namespace SimpleClassicThemeTaskbar
             exitItemComboBox.SelectedIndex = (int)Config.Instance.ExitMenuItemCondition;
 
             enablePassiveTaskbarCheckBox.Checked = Config.Instance.EnablePassiveTaskbar;
-            enableDebuggingCheckBox.Checked = Config.Instance.EnableDebugging;
             enableSysTrayHover.Checked = Config.Instance.EnableSystemTrayHover;
             enableSysTrayColorChange.Checked = Config.Instance.EnableSystemTrayColorChange;
             showTaskbarOnAllDesktops.Checked = Config.Instance.ShowTaskbarOnAllDesktops;
@@ -291,9 +281,6 @@ namespace SimpleClassicThemeTaskbar
             customIconTextBox.Text = Config.Instance.StartButtonIconImage;
 
             taskbarProgramWidth.Value = Math.Min(Config.Instance.TaskbarProgramWidth, taskbarProgramWidth.Maximum);
-            spaceBetweenTrayIcons.Value = Math.Min(Config.Instance.SpaceBetweenTrayIcons, spaceBetweenTrayIcons.Maximum);
-            spaceBetweenTaskbarIcons.Value = Math.Min(Config.Instance.SpaceBetweenTaskbarIcons, spaceBetweenTaskbarIcons.Maximum);
-            quickLaunchSpacingNumBox.Value = Math.Min(Config.Instance.SpaceBetweenQuickLaunchIcons, quickLaunchSpacingNumBox.Maximum);
 
             taskbarProgramWidth.Maximum = Screen.PrimaryScreen.Bounds.Width;
             languageComboBox.SelectedItem = Config.Instance.Language;
@@ -399,20 +386,6 @@ namespace SimpleClassicThemeTaskbar
             // startButton.DummySettings(customButtonTextBox.Text, customIconTextBox.Text, appearance);
         }
 
-		private void enableDebuggingCheckBox_CheckedChanged(object sender, EventArgs e)
-		{
-            if (enableDebuggingCheckBox.Checked)
-			{
-                if (!tabControl.TabPages.Contains(tabDebug))
-                    tabControl.TabPages.Add(tabDebug);
-			}
-            else
-			{
-                if (tabControl.TabPages.Contains(tabDebug))
-                    tabControl.TabPages.Remove(tabDebug);
-			}
-		}
-
         private void manageStylesButton_Click(object sender, EventArgs e)
         {
             Process.Start(new ProcessStartInfo(Constants.VisualStyleDirectory)
@@ -478,6 +451,23 @@ namespace SimpleClassicThemeTaskbar
         private void visualStyleComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             PopulateVisualStyleCombos();
+        }
+
+        private void tweaksPropertyGrid_PropertyValueChanged(object s, PropertyValueChangedEventArgs e)
+        {
+            if (e.ChangedItem.PropertyDescriptor.Name == nameof(Config.Instance.EnableDebugging))
+            {
+                if (Config.Instance.EnableDebugging)
+                {
+                    if (!tabControl.TabPages.Contains(tabDebug))
+                        tabControl.TabPages.Add(tabDebug);
+                }
+                else
+                {
+                    if (tabControl.TabPages.Contains(tabDebug))
+                        tabControl.TabPages.Remove(tabDebug);
+                }
+            }
         }
     }
 }

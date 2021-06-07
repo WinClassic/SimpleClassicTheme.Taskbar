@@ -35,7 +35,6 @@
             this.buttonOK = new System.Windows.Forms.Button();
             this.tabControl = new System.Windows.Forms.TabControl();
             this.tabGeneral = new System.Windows.Forms.TabPage();
-            this.enableDebuggingCheckBox = new System.Windows.Forms.CheckBox();
             this.exitItemLabel = new System.Windows.Forms.Label();
             this.exitItemComboBox = new System.Windows.Forms.ComboBox();
             this.languageComboBox = new System.Windows.Forms.ComboBox();
@@ -60,9 +59,6 @@
             this.customButtonRadioButton = new System.Windows.Forms.RadioButton();
             this.customIconRadioButton = new System.Windows.Forms.RadioButton();
             this.tabQuickLaunch = new System.Windows.Forms.TabPage();
-            this.quickLaunchOptionsPanel = new System.Windows.Forms.Panel();
-            this.quickLaunchSpacingLabel = new System.Windows.Forms.Label();
-            this.quickLaunchSpacingNumBox = new System.Windows.Forms.NumericUpDown();
             this.quickLaunchLinkLabel = new System.Windows.Forms.Label();
             this.enableQuickLaunchCheckBox = new System.Windows.Forms.CheckBox();
             this.tabTaskView = new System.Windows.Forms.TabPage();
@@ -72,16 +68,14 @@
             this.removeElementButton = new System.Windows.Forms.Button();
             this.comboBoxGroupingMethod = new System.Windows.Forms.ComboBox();
             this.label9 = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
-            this.spaceBetweenTaskbarIcons = new System.Windows.Forms.NumericUpDown();
             this.showTaskbarOnAllDesktops = new System.Windows.Forms.CheckBox();
             this.taskbarProgramWidth = new System.Windows.Forms.NumericUpDown();
             this.label1 = new System.Windows.Forms.Label();
             this.tabSystemTray = new System.Windows.Forms.TabPage();
-            this.label2 = new System.Windows.Forms.Label();
-            this.spaceBetweenTrayIcons = new System.Windows.Forms.NumericUpDown();
             this.enableSysTrayColorChange = new System.Windows.Forms.CheckBox();
             this.enableSysTrayHover = new System.Windows.Forms.CheckBox();
+            this.tabTweaks = new System.Windows.Forms.TabPage();
+            this.tweaksPropertyGrid = new System.Windows.Forms.PropertyGrid();
             this.tabAbout = new System.Windows.Forms.TabPage();
             this.copyrightTablePanel = new System.Windows.Forms.TableLayoutPanel();
             this.labelCopyrightSCTT = new System.Windows.Forms.Label();
@@ -97,28 +91,22 @@
             this.panelPreview = new System.Windows.Forms.Panel();
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
             this.customIconFileDialog = new System.Windows.Forms.OpenFileDialog();
-            this.tabTweaks = new System.Windows.Forms.TabPage();
-            this.tweaksPropertyGrid = new System.Windows.Forms.PropertyGrid();
             this.tabControl.SuspendLayout();
             this.tabGeneral.SuspendLayout();
             this.tabThemes.SuspendLayout();
             this.visualStyleGroupBox.SuspendLayout();
             this.tabStartButton.SuspendLayout();
             this.tabQuickLaunch.SuspendLayout();
-            this.quickLaunchOptionsPanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.quickLaunchSpacingNumBox)).BeginInit();
             this.tabTaskView.SuspendLayout();
             this.groupBox1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.spaceBetweenTaskbarIcons)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.taskbarProgramWidth)).BeginInit();
             this.tabSystemTray.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.spaceBetweenTrayIcons)).BeginInit();
+            this.tabTweaks.SuspendLayout();
             this.tabAbout.SuspendLayout();
             this.copyrightTablePanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.bannerPictureBox)).BeginInit();
             this.tabDebug.SuspendLayout();
             this.panelContent.SuspendLayout();
-            this.tabTweaks.SuspendLayout();
             this.SuspendLayout();
             // 
             // buttonApply
@@ -162,7 +150,6 @@
             // 
             // tabGeneral
             // 
-            this.tabGeneral.Controls.Add(this.enableDebuggingCheckBox);
             this.tabGeneral.Controls.Add(this.exitItemLabel);
             this.tabGeneral.Controls.Add(this.exitItemComboBox);
             this.tabGeneral.Controls.Add(this.languageComboBox);
@@ -170,13 +157,6 @@
             resources.ApplyResources(this.tabGeneral, "tabGeneral");
             this.tabGeneral.Name = "tabGeneral";
             this.tabGeneral.UseVisualStyleBackColor = true;
-            // 
-            // enableDebuggingCheckBox
-            // 
-            resources.ApplyResources(this.enableDebuggingCheckBox, "enableDebuggingCheckBox");
-            this.enableDebuggingCheckBox.Name = "enableDebuggingCheckBox";
-            this.enableDebuggingCheckBox.UseVisualStyleBackColor = true;
-            this.enableDebuggingCheckBox.CheckedChanged += new System.EventHandler(this.enableDebuggingCheckBox_CheckedChanged);
             // 
             // exitItemLabel
             // 
@@ -358,39 +338,11 @@
             // 
             // tabQuickLaunch
             // 
-            this.tabQuickLaunch.Controls.Add(this.quickLaunchOptionsPanel);
             this.tabQuickLaunch.Controls.Add(this.quickLaunchLinkLabel);
             this.tabQuickLaunch.Controls.Add(this.enableQuickLaunchCheckBox);
             resources.ApplyResources(this.tabQuickLaunch, "tabQuickLaunch");
             this.tabQuickLaunch.Name = "tabQuickLaunch";
             this.tabQuickLaunch.UseVisualStyleBackColor = true;
-            // 
-            // quickLaunchOptionsPanel
-            // 
-            this.quickLaunchOptionsPanel.Controls.Add(this.quickLaunchSpacingLabel);
-            this.quickLaunchOptionsPanel.Controls.Add(this.quickLaunchSpacingNumBox);
-            resources.ApplyResources(this.quickLaunchOptionsPanel, "quickLaunchOptionsPanel");
-            this.quickLaunchOptionsPanel.Name = "quickLaunchOptionsPanel";
-            // 
-            // quickLaunchSpacingLabel
-            // 
-            resources.ApplyResources(this.quickLaunchSpacingLabel, "quickLaunchSpacingLabel");
-            this.quickLaunchSpacingLabel.Name = "quickLaunchSpacingLabel";
-            // 
-            // quickLaunchSpacingNumBox
-            // 
-            resources.ApplyResources(this.quickLaunchSpacingNumBox, "quickLaunchSpacingNumBox");
-            this.quickLaunchSpacingNumBox.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.quickLaunchSpacingNumBox.Name = "quickLaunchSpacingNumBox";
-            this.quickLaunchSpacingNumBox.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
             // 
             // quickLaunchLinkLabel
             // 
@@ -404,15 +356,12 @@
             resources.ApplyResources(this.enableQuickLaunchCheckBox, "enableQuickLaunchCheckBox");
             this.enableQuickLaunchCheckBox.Name = "enableQuickLaunchCheckBox";
             this.enableQuickLaunchCheckBox.UseVisualStyleBackColor = true;
-            this.enableQuickLaunchCheckBox.CheckedChanged += new System.EventHandler(this.EnableQuickLaunchCheckBox_CheckedChanged);
             // 
             // tabTaskView
             // 
             this.tabTaskView.Controls.Add(this.groupBox1);
             this.tabTaskView.Controls.Add(this.comboBoxGroupingMethod);
             this.tabTaskView.Controls.Add(this.label9);
-            this.tabTaskView.Controls.Add(this.label5);
-            this.tabTaskView.Controls.Add(this.spaceBetweenTaskbarIcons);
             this.tabTaskView.Controls.Add(this.showTaskbarOnAllDesktops);
             this.tabTaskView.Controls.Add(this.taskbarProgramWidth);
             this.tabTaskView.Controls.Add(this.label1);
@@ -466,26 +415,6 @@
             resources.ApplyResources(this.label9, "label9");
             this.label9.Name = "label9";
             // 
-            // label5
-            // 
-            resources.ApplyResources(this.label5, "label5");
-            this.label5.Name = "label5";
-            // 
-            // spaceBetweenTaskbarIcons
-            // 
-            resources.ApplyResources(this.spaceBetweenTaskbarIcons, "spaceBetweenTaskbarIcons");
-            this.spaceBetweenTaskbarIcons.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.spaceBetweenTaskbarIcons.Name = "spaceBetweenTaskbarIcons";
-            this.spaceBetweenTaskbarIcons.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            // 
             // showTaskbarOnAllDesktops
             // 
             resources.ApplyResources(this.showTaskbarOnAllDesktops, "showTaskbarOnAllDesktops");
@@ -519,33 +448,11 @@
             // 
             // tabSystemTray
             // 
-            this.tabSystemTray.Controls.Add(this.label2);
-            this.tabSystemTray.Controls.Add(this.spaceBetweenTrayIcons);
             this.tabSystemTray.Controls.Add(this.enableSysTrayColorChange);
             this.tabSystemTray.Controls.Add(this.enableSysTrayHover);
             resources.ApplyResources(this.tabSystemTray, "tabSystemTray");
             this.tabSystemTray.Name = "tabSystemTray";
             this.tabSystemTray.UseVisualStyleBackColor = true;
-            // 
-            // label2
-            // 
-            resources.ApplyResources(this.label2, "label2");
-            this.label2.Name = "label2";
-            // 
-            // spaceBetweenTrayIcons
-            // 
-            resources.ApplyResources(this.spaceBetweenTrayIcons, "spaceBetweenTrayIcons");
-            this.spaceBetweenTrayIcons.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.spaceBetweenTrayIcons.Name = "spaceBetweenTrayIcons";
-            this.spaceBetweenTrayIcons.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
             // 
             // enableSysTrayColorChange
             // 
@@ -557,6 +464,20 @@
             // 
             resources.ApplyResources(this.enableSysTrayHover, "enableSysTrayHover");
             this.enableSysTrayHover.Name = "enableSysTrayHover";
+            // 
+            // tabTweaks
+            // 
+            this.tabTweaks.Controls.Add(this.tweaksPropertyGrid);
+            resources.ApplyResources(this.tabTweaks, "tabTweaks");
+            this.tabTweaks.Name = "tabTweaks";
+            this.tabTweaks.UseVisualStyleBackColor = true;
+            // 
+            // tweaksPropertyGrid
+            // 
+            resources.ApplyResources(this.tweaksPropertyGrid, "tweaksPropertyGrid");
+            this.tweaksPropertyGrid.Name = "tweaksPropertyGrid";
+            this.tweaksPropertyGrid.ToolbarVisible = false;
+            this.tweaksPropertyGrid.PropertyValueChanged += new System.Windows.Forms.PropertyValueChangedEventHandler(this.tweaksPropertyGrid_PropertyValueChanged);
             // 
             // tabAbout
             // 
@@ -650,19 +571,6 @@
             resources.ApplyResources(this.customIconFileDialog, "customIconFileDialog");
             this.customIconFileDialog.FileOk += new System.ComponentModel.CancelEventHandler(this.CustomIconFileDialog_FileOk);
             // 
-            // tabTweaks
-            // 
-            this.tabTweaks.Controls.Add(this.tweaksPropertyGrid);
-            resources.ApplyResources(this.tabTweaks, "tabTweaks");
-            this.tabTweaks.Name = "tabTweaks";
-            this.tabTweaks.UseVisualStyleBackColor = true;
-            // 
-            // tweaksPropertyGrid
-            // 
-            resources.ApplyResources(this.tweaksPropertyGrid, "tweaksPropertyGrid");
-            this.tweaksPropertyGrid.Name = "tweaksPropertyGrid";
-            this.tweaksPropertyGrid.ToolbarVisible = false;
-            // 
             // Settings
             // 
             resources.ApplyResources(this, "$this");
@@ -685,22 +593,18 @@
             this.tabStartButton.PerformLayout();
             this.tabQuickLaunch.ResumeLayout(false);
             this.tabQuickLaunch.PerformLayout();
-            this.quickLaunchOptionsPanel.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.quickLaunchSpacingNumBox)).EndInit();
             this.tabTaskView.ResumeLayout(false);
             this.groupBox1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.spaceBetweenTaskbarIcons)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.taskbarProgramWidth)).EndInit();
             this.tabSystemTray.ResumeLayout(false);
             this.tabSystemTray.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.spaceBetweenTrayIcons)).EndInit();
+            this.tabTweaks.ResumeLayout(false);
             this.tabAbout.ResumeLayout(false);
             this.copyrightTablePanel.ResumeLayout(false);
             this.copyrightTablePanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.bannerPictureBox)).EndInit();
             this.tabDebug.ResumeLayout(false);
             this.panelContent.ResumeLayout(false);
-            this.tabTweaks.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -715,8 +619,6 @@
         private System.Windows.Forms.NumericUpDown taskbarProgramWidth;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.CheckBox showTaskbarOnAllDesktops;
-        private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.NumericUpDown spaceBetweenTaskbarIcons;
 		private System.Windows.Forms.TabPage tabAbout;
 		private System.Windows.Forms.Label labelCopyrightSCT;
 		private System.Windows.Forms.Label labelCopyrightSCTT;
@@ -731,8 +633,6 @@
 		private System.Windows.Forms.RadioButton customIconRadioButton;
 		private System.Windows.Forms.RadioButton radioStartDefault;
 		private System.Windows.Forms.TabPage tabSystemTray;
-		private System.Windows.Forms.Label label2;
-		private System.Windows.Forms.NumericUpDown spaceBetweenTrayIcons;
 		private System.Windows.Forms.CheckBox enableSysTrayColorChange;
 		private System.Windows.Forms.CheckBox enableSysTrayHover;
 		private System.Windows.Forms.ComboBox comboBoxGroupingMethod;
@@ -741,8 +641,6 @@
 		private System.Windows.Forms.ListBox taskbarFilterListBox;
         private System.Windows.Forms.TabPage tabQuickLaunch;
         private System.Windows.Forms.Label quickLaunchLinkLabel;
-        private System.Windows.Forms.NumericUpDown quickLaunchSpacingNumBox;
-        private System.Windows.Forms.Label quickLaunchSpacingLabel;
         private System.Windows.Forms.CheckBox enableQuickLaunchCheckBox;
         private System.Windows.Forms.LinkLabel aboutLabel;
         private System.Windows.Forms.Panel panelContent;
@@ -754,7 +652,6 @@
         private System.Windows.Forms.TabPage tabGeneral;
         private System.Windows.Forms.ComboBox languageComboBox;
         private System.Windows.Forms.Label languageLabel;
-        private System.Windows.Forms.Panel quickLaunchOptionsPanel;
         private System.Windows.Forms.NotifyIcon notifyIcon1;
         private System.Windows.Forms.OpenFileDialog customIconFileDialog;
         private System.Windows.Forms.Label bel;
@@ -763,7 +660,6 @@
         private System.Windows.Forms.GroupBox groupBox1;
 		private System.Windows.Forms.TabPage tabDebug;
 		private System.Windows.Forms.CheckBox enablePassiveTaskbarCheckBox;
-		private System.Windows.Forms.CheckBox enableDebuggingCheckBox;
         private System.Windows.Forms.TabPage tabThemes;
         private System.Windows.Forms.GroupBox visualStyleGroupBox;
         private System.Windows.Forms.ComboBox sizeComboBox;
