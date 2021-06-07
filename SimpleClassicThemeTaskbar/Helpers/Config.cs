@@ -163,7 +163,7 @@ namespace SimpleClassicThemeTaskbar.Helpers
                         registryValue = bool.Parse(boolString);
                     }
 
-                    Logger.Log(LoggerVerbosity.Verbose, "Config", $"Setting property: {property.Name} → {value} → {registryValue}");
+                    // Logger.Log(LoggerVerbosity.Verbose, "Config", $"Setting property: {property.Name} → {value} → {registryValue}");
                     try
                     {
                         property.SetValue(this, registryValue);
@@ -208,7 +208,7 @@ namespace SimpleClassicThemeTaskbar.Helpers
                             break;
                     }
 
-                    Logger.Log(LoggerVerbosity.Verbose, "Config", $"Setting registry key: {property.Name} ({valueKind}) → {value}");
+                    // Logger.Log(LoggerVerbosity.Verbose, "Config", $"Setting registry key: {property.Name} ({valueKind}) → {value}");
                     scttSubKey.SetValue(property.Name, value, valueKind);
                 }
             }
