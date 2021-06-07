@@ -145,7 +145,12 @@ namespace SimpleClassicThemeTaskbar.Helpers
             {
                 foreach (var property in typeof(Config).GetProperties(bindingFlags))
                 {
-                    object value = property.GetValue(null);
+                    if (!property.CanWrite)
+                    {
+                        continue;
+                    }
+
+                    object value = property.GetValue(this);
                     var registryValue = scttSubKey.GetValue(property.Name, value);
 
                     // string → bool
@@ -157,7 +162,7 @@ namespace SimpleClassicThemeTaskbar.Helpers
                     Logger.Log(LoggerVerbosity.Verbose, "Config", $"Setting property: {property.Name} → {value} → {registryValue}");
                     try
                     {
-                        property.SetValue(null, registryValue);
+                        property.SetValue(this, registryValue);
                     }
                     catch
                     {
@@ -177,7 +182,7 @@ namespace SimpleClassicThemeTaskbar.Helpers
                 foreach (var property in typeof(Config).GetProperties(bindingFlags))
                 {
                     RegistryValueKind valueKind = RegistryValueKind.Unknown;
-                    object value = property.GetValue(null);
+                    object value = property.GetValue(this);
                     switch (value)
                     {
                         case bool boolValue:
