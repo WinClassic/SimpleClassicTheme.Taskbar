@@ -35,30 +35,17 @@ namespace SimpleClassicThemeTaskbar.Helpers
         private const BindingFlags bindingFlags = BindingFlags.Static | BindingFlags.Public | BindingFlags.GetProperty | BindingFlags.SetProperty;
         private string rendererPath = "Internal/Classic";
 
-
+        #region Non-browsable properties
         [Browsable(false)]
         public bool ConfigChanged { get; set; } = true;
-
-        [Category("(Misc)")]
-        [DisplayName("Enable debugging options")]
-        public bool EnableDebugging { get; internal set; } = true;
-        public bool EnablePassiveTaskbar { get; internal set; } = false;
 
         [Browsable(false)]
         public bool EnableQuickLaunch { get; set; } = true;
 
-        public bool EnableSystemTrayColorChange { get; set; } = true;
 
-        public bool EnableSystemTrayHover { get; set; } = true;
-
-        [Browsable(false)]
-        public ExitMenuItemCondition ExitMenuItemCondition { get; internal set; }
-
-        [Browsable(false)]
-        public string Language { get; set; }
-        public ProgramGroupCheck ProgramGroupCheck { get; set; } = ProgramGroupCheck.FileNameAndPath;
         [Browsable(false)]
         public string QuickLaunchOrder { get; set; } = string.Empty;
+
         [Browsable(false)]
         public BaseRenderer Renderer { get; set; } = new ClassicRenderer();
 
@@ -69,10 +56,8 @@ namespace SimpleClassicThemeTaskbar.Helpers
         public string VisualStyleSize { get; set; } = string.Empty;
         [Browsable(false)]
         public string VisualStyleColor { get; set; } = string.Empty;
-
-        // ImageRenderer settings
-        public static string ImageThemePath { get; set; } = string.Empty;
-
+        [Browsable(false)]
+        public ExitMenuItemCondition ExitMenuItemCondition { get; internal set; }
         [Browsable(false)]
         public string RendererPath
         {
@@ -83,12 +68,12 @@ namespace SimpleClassicThemeTaskbar.Helpers
                 {
 
                     case "Internal/ImageRenderer":
-						Renderer = ImageThemePath switch
-						{
-							"Internal/ImageRenderer/Luna" => new ImageRenderer(new ResourceManager("SimpleClassicThemeTaskbar.ThemeEngine.Themes.Luna", typeof(Config).Assembly)),
-							_ => new ImageRenderer(ImageThemePath),
-						};
-						break;
+                        Renderer = ImageThemePath switch
+                        {
+                            "Internal/ImageRenderer/Luna" => new ImageRenderer(new ResourceManager("SimpleClassicThemeTaskbar.ThemeEngine.Themes.Luna", typeof(Config).Assembly)),
+                            _ => new ImageRenderer(ImageThemePath),
+                        };
+                        break;
 
                     case "Internal/VisualStyle":
                         var visualStyle = new VisualStyle(VisualStylePath);
@@ -105,8 +90,39 @@ namespace SimpleClassicThemeTaskbar.Helpers
         }
 
         [Browsable(false)]
+        public StartButtonAppearance StartButtonAppearance { get; set; } = StartButtonAppearance.Default;
+
+        [Browsable(false)]
+        public string StartButtonIconImage { get; set; } = string.Empty;
+
+        [Browsable(false)]
+        public string StartButtonImage { get; set; } = string.Empty;
+
+        [Browsable(false)]
+        public string TaskbarProgramFilter { get; set; } = string.Empty;
+
+        [Browsable(false)]
         public bool ShowTaskbarOnAllDesktops { get; set; } = true;
 
+        [Browsable(false)]
+        public string Language { get; set; }
+        #endregion
+
+        [Category("(Misc)")]
+        [DisplayName("Enable debugging options")]
+        public bool EnableDebugging { get; set; } = true;
+        public bool EnablePassiveTaskbar { get; internal set; } = false;
+
+        public bool EnableSystemTrayColorChange { get; set; } = true;
+
+        public bool EnableSystemTrayHover { get; set; } = true;
+
+        public ProgramGroupCheck ProgramGroupCheck { get; set; } = ProgramGroupCheck.FileNameAndPath;
+
+        // ImageRenderer settings
+        public static string ImageThemePath { get; set; } = string.Empty;
+
+       
         [Category("Spacing between items")]
         [DisplayName("Spacing between Quick Launch icons")]
         public int SpaceBetweenQuickLaunchIcons { get; set; } = 2;
@@ -119,18 +135,6 @@ namespace SimpleClassicThemeTaskbar.Helpers
         [DisplayName("Spacing between tray icons")]
         public int SpaceBetweenTrayIcons { get; set; } = 2;
 
-        [Browsable(false)]
-        public StartButtonAppearance StartButtonAppearance { get; set; } = StartButtonAppearance.Default;
-
-        [Browsable(false)]
-        public string StartButtonIconImage { get; set; } = string.Empty;
-
-        [Browsable(false)]
-        public string StartButtonImage { get; set; } = string.Empty;
-
-        [Browsable(false)]
-        public string TaskbarProgramFilter { get; set; } = string.Empty;
-        
         public int TaskbarProgramWidth { get; set; } = 160;
 
         public void LoadFromRegistry()
