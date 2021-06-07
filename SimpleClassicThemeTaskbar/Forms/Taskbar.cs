@@ -642,6 +642,11 @@ namespace SimpleClassicThemeTaskbar
         {
             try
             {
+                if (a.Process.HasExited || b.Process.HasExited)
+                {
+                    return false;
+                }
+
                 return Config.Instance.ProgramGroupCheck switch
                 {
                     ProgramGroupCheck.Process => a.Process.Id == b.Process.Id,
