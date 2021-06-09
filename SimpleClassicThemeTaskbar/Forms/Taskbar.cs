@@ -163,11 +163,16 @@ namespace SimpleClassicThemeTaskbar
                             return;
                     }
                     break;
-			}
-            if (m.Msg == WM_SHELLHOOKMESSAGE)
-			{
-                HookProcedure((User32.ShellEvents)m.WParam, m.LParam, IntPtr.Zero);
-			}
+
+                default:
+                    if (m.Msg == (int)WM_SHELLHOOKMESSAGE)
+                    {
+                        HookProcedure((User32.ShellEvents)m.WParam, m.LParam, IntPtr.Zero);
+                    }
+                    break;
+
+            }
+
             base.WndProc(ref m);
         }
 
