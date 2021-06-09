@@ -129,7 +129,7 @@ namespace SimpleClassicThemeTaskbar
 
         public bool RemoveWindow(IntPtr window)
 		{
-            List<SingleTaskbarProgram> referenceList = new List<SingleTaskbarProgram>(ProgramWindows);
+            List<SingleTaskbarProgram> referenceList = new(ProgramWindows);
             foreach (SingleTaskbarProgram program in referenceList)
 			{
                 if (program.Window.Handle == window)
@@ -142,7 +142,7 @@ namespace SimpleClassicThemeTaskbar
             return ProgramWindows.Count > 1;
 		}
 
-        public bool UpdateWindowList(List<Window> windows)
+        public bool UpdateWindowList(IEnumerable<Window> windows)
         {
             //The new list of icons
             List<SingleTaskbarProgram> newIcons = new();

@@ -1,4 +1,6 @@
-﻿using SimpleClassicThemeTaskbar.Helpers;
+﻿using Microsoft.VisualBasic;
+
+using SimpleClassicThemeTaskbar.Helpers;
 using SimpleClassicThemeTaskbar.Helpers.NativeMethods;
 
 using System;
@@ -6,6 +8,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
@@ -130,21 +133,12 @@ namespace SimpleClassicThemeTaskbar.UIElements.SystemTray
             foreach (UnmanagedCodeMigration.TBBUTTONINFO info in existingButtons)
             {
                 //By default we say the icon doesn't exist
-                bool exists = false;
-                SystemTrayIcon existingIcon = null;
-
-                //Then we loop through each control to see if it actually does exist
-                foreach (SystemTrayIcon icon in newIconList)
-                    if (icon.Handle == info.hwnd)
-                    {
-                        existingIcon = icon;
-                        exists = true;
-                    }
+                SystemTrayIcon existingIcon = newIconList.FirstOrDefault((i) => i.Handle == info.hwnd);
 
                 controlState = "updating existing tray icon";
                 culprit = existingIcon;
                 //If it does we just update it, else we create it
-                if (exists)
+                if (existingIcon != null)
                     existingIcon.UpdateTrayIcon(info);
                 else
                 {
