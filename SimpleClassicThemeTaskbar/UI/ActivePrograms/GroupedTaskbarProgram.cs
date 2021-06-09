@@ -31,7 +31,22 @@ namespace SimpleClassicThemeTaskbar
 
         public override Icon Icon { get => ProgramWindows[0].Icon; set => ProgramWindows[0].Icon = value; }
 
-        public override Image IconImage { get { try { return new Icon(Icon, 16, 16).ToBitmap(); } catch { return null; } } }
+        public override Image IconImage
+        {
+            get
+            {
+                try
+                {
+                    return new Icon(Icon, 16, 16).ToBitmap();
+                }
+                catch (ObjectDisposedException)
+                {
+                    // Ignore
+                }
+
+                return null;
+            }
+        }
 
         public override int MinimumWidth => Config.Instance.Renderer.TaskButtonMinimalWidth + 18;
 
