@@ -594,19 +594,32 @@ namespace SimpleClassicThemeTaskbar
 
         private static bool IsGroupConditionMet(BaseTaskbarProgram a, BaseTaskbarProgram b)
         {
+            var aKey = GetGroupKey(a.Window);
+            var bKey = GetGroupKey(b.Window);
+
+            if (aKey == null || bKey == null)
+            {
+                return false;
+            }
+
+            return aKey == bKey;
+        }
+
+        private static object GetGroupKey(Window window)
+        {
             try
             {
-                if (a.Process.HasExited || b.Process.HasExited)
+                if (window.Process.HasExited)
                 {
-                    return false;
+                    return null;
                 }
 
                 return Config.Instance.ProgramGroupCheck switch
                 {
-                    ProgramGroupCheck.Process => a.Process.Id == b.Process.Id,
-                    ProgramGroupCheck.FileNameAndPath => a.Process.MainModule.FileName == b.Process.MainModule.FileName,
-                    ProgramGroupCheck.ModuleName => a.Process.MainModule.ModuleName == b.Process.MainModule.ModuleName,
-                    _ => false,
+                    ProgramGroupCheck.Process => window.Process.Id,
+                    ProgramGroupCheck.FileNameAndPath => window.Process.MainModule.FileName,
+                    ProgramGroupCheck.ModuleName => window.Process.MainModule.ModuleName,
+                    _ => null,
                 };
             }
             catch (Win32Exception ex) when (ex.NativeErrorCode == 5)
