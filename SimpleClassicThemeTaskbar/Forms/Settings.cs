@@ -191,7 +191,7 @@ namespace SimpleClassicThemeTaskbar
             {
                 temp = Image.FromFile(customIconFileDialog.FileName);
             }
-            catch (Exception ex)
+            catch
             {
                 _ = MessageBox.Show(this, "The image you selected is invalid.", "SimpleClassicThemeTaskbar", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 e.Cancel = true;
