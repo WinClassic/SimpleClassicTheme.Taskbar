@@ -172,7 +172,7 @@ namespace SimpleClassicThemeTaskbar
         }
 
         //Initialize stuff
-        private void Form1_Load(object sender, EventArgs e)
+        private void Taskbar_Load(object sender, EventArgs e)
         {
             //TODO: Add an option to registry tweak classic alt+tab
             quickLaunch1.Disabled = (!Primary) || (!Config.Instance.EnableQuickLaunch);
