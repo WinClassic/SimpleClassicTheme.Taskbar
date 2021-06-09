@@ -78,34 +78,22 @@ namespace SimpleClassicThemeTaskbar
             return true;
         }
 
-        private bool EnumWind(IntPtr hWnd, int lParam)
+        private static IEnumerable<Window> GetTaskbarWindows()
         {
-            try
-            {
-                if (LookingForTray)
-                {
-                    //If looking for the taskbar, check if it is Shell_TrayWnd and if it is in the bound of the current desktop
-                    Window wi = new(hWnd);
-                    if (wi.ClassName == "Shell_TrayWnd" || wi.ClassName == "Shell_SecondaryTrayWnd")
-                        if (Screen.FromHandle(hWnd).Bounds == Screen.FromHandle(CrossThreadHandle).Bounds)
-                        {
-                            windows.Add(wi);
-                            return false;
-                        }
-                }
-                else
-                {
-                    //If you would show the window in alt+tab, show it on the custom taskbar
-                    if (IsAltTabWindow(hWnd))
-                        windows.Add(new Window(hWnd));
-                }
-            }
-            catch (Exception ex)
-            {
-                Logger.Log(LoggerVerbosity.Basic, "Taskbar/Legacy/EnumWind", $"Enumeration failed: {ex}");
-            }
+            var trayWindows = UnmanagedHelpers.FilterWindows(IsAltTabWindow);
+            return trayWindows.Select(hWnd => new Window(hWnd));
+        }
 
-            return true;
+        private IEnumerable<Window> GetTrayWindows()
+        {
+            var trayWindows = UnmanagedHelpers.FilterWindows((hWnd) =>
+            {
+                var window = new Window(hWnd);
+                var isTrayWindow = window.ClassName == "Shell_TrayWnd" || window.ClassName == "Shell_SecondaryTrayWnd";
+                return isTrayWindow && Screen.FromHandle(hWnd).Bounds == Screen.FromHandle(CrossThreadHandle).Bounds;
+            });
+
+            return trayWindows.Select(hWnd => new Window(hWnd));
         }
 
         private void timerUpdateInformation_Tick(object sender, EventArgs e)
@@ -119,13 +107,10 @@ namespace SimpleClassicThemeTaskbar
 
             //Hide explorer's taskbar(s)
             waitBeforeShow = false;
-            windows.Clear();
-            LookingForTray = true;
-            User32.EnumWindowsCallback callback = EnumWind;
-            User32.EnumWindows(callback, 0);
-            LookingForTray = false;
 
-            foreach (Window w in windows)
+            var enumTrayWindows = GetTrayWindows();
+
+            foreach (Window w in enumTrayWindows)
                 if ((w.WindowInfo.dwStyle & 0x10000000L) > 0)
                     User32.ShowWindow(w.Handle, 0);
 
@@ -150,19 +135,14 @@ namespace SimpleClassicThemeTaskbar
                 timingDebugger.FinishRegion("Hide if ForegroundWindow is fullscreen");
 
             //Obtain task list
-            windows.Clear();
-            User32.EnumWindowsCallback d = EnumWind;
-            User32.EnumWindows(d, 0);
+            var windows = GetTaskbarWindows();
 
             if (!watchLogic)
                 timingDebugger.FinishRegion("Get the task list");
 
             //Resize work area
+            if (!Dummy) ApplyWorkArea(windows);
 
-            if (!Dummy)
-            {
-                ApplyWorkArea();
-            }
 
             List<BaseTaskbarProgram> oldList = new();
             oldList.AddRange(icons);

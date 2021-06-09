@@ -37,14 +37,10 @@ namespace SimpleClassicThemeTaskbar
         private readonly Stopwatch sw = new();
         private readonly List<(string, TimeSpan)> times = new();
 
-        //Window handle list
-        private readonly List<Window> windows = new();
-
         //private Thread BackgroundThread;
         private IntPtr CrossThreadHandle;
         private bool dummy;
         private List<BaseTaskbarProgram> icons = new();
-        private bool LookingForTray = false;
         private Range taskArea;
         private int taskIconWidth;
         
@@ -127,8 +123,7 @@ namespace SimpleClassicThemeTaskbar
             //Make sure programs are aware of the new work area
             if (isPrimary)
             {
-                windows.Clear();
-                _ = User32.EnumWindows(EnumWind, 0);
+                var windows = GetTaskbarWindows();
                 foreach (Window w in windows)
                 {
                     //WM_WININICHANGE - SPI_SETWORKAREA
@@ -180,7 +175,6 @@ namespace SimpleClassicThemeTaskbar
         private void Form1_Load(object sender, EventArgs e)
         {
             //TODO: Add an option to registry tweak classic alt+tab
-            windows.Clear();
             quickLaunch1.Disabled = (!Primary) || (!Config.Instance.EnableQuickLaunch);
             quickLaunch1.UpdateIcons();
 
@@ -362,45 +356,8 @@ namespace SimpleClassicThemeTaskbar
         private void HandleWindowDestroyed(IntPtr wParam)
         {
             List<BaseTaskbarProgram> referenceList = new List<BaseTaskbarProgram>(icons);
-            foreach (BaseTaskbarProgram taskbarProgram in referenceList)
-            {
-                if (taskbarProgram is SingleTaskbarProgram singleProgram)
-                {
-                    if (singleProgram.Window.Handle == wParam)
-                    {
-                        Logger.Log(LoggerVerbosity.Verbose, "Taskbar/EnumerateWindows", $"Deleting window {singleProgram.Title}.");
-                        Controls.Remove(singleProgram);
-                        icons.Remove(singleProgram);
-                    }
-                }
-                else if (taskbarProgram is GroupedTaskbarProgram groupedProgram)
-                {
-                    if (!groupedProgram.RemoveWindow(wParam))
-                    {
-                        if (groupedProgram.ProgramWindows.Count == 1)
-                        {
-                            BaseTaskbarProgram seperatedProgram = new SingleTaskbarProgram
-                            {
-                                Window = groupedProgram.ProgramWindows[0].Window
-                            };
-                            seperatedProgram.MouseDown += Taskbar_IconDown;
-                            seperatedProgram.MouseMove += Taskbar_IconMove;
-                            seperatedProgram.MouseUp += Taskbar_IconUp;
-                            seperatedProgram.Height = Height;
-
-                            User32.GetWindowThreadProcessId(seperatedProgram.Window.Handle, out uint processId);
-                            Process process = Process.GetProcessById((int)processId);
-                            seperatedProgram.Process = process;
-
-                            icons.Insert(icons.IndexOf(groupedProgram), seperatedProgram);
-                        }
-                        icons.Remove(groupedProgram);
-                        Controls.Remove(groupedProgram);
-                        groupedProgram.Dispose();
-                    }
-                }
-            }
-
+            RemoveTaskbandButton(wParam);
+            
             UpdateUI();
             UpdateUI();
         }
@@ -461,27 +418,24 @@ namespace SimpleClassicThemeTaskbar
 
             //Put left side controls in the correct place
             quickLaunch1.Location = new Point(startButton1.Location.X + startButton1.Width + 2, 1);
+            // Obtain task list
+            var windows = GetTaskbarWindows();
 
             if (!Dummy)
 			{
                 // Hide explorer's taskbar(s)
                 waitBeforeShow = false;
-                windows.Clear();
-                LookingForTray = true;
-                User32.EnumWindows(EnumWind, 0);
-                LookingForTray = false;
 
-                foreach (Window w in windows)
+                var enumTrayWindows = GetTrayWindows();
+
+                foreach (Window w in enumTrayWindows)
                     if ((w.WindowInfo.dwStyle & 0x10000000L) > 0)
                         User32.ShowWindow(w.Handle, 0);
 
                 // Resize work area
-                ApplyWorkArea();
+                ApplyWorkArea(windows);
             }
 
-            // Obtain task list
-            windows.Clear();
-            _ = User32.EnumWindows(EnumWind, 0);
 
             // Clear icon list as this is a full enumeration
             icons.Clear();
@@ -729,7 +683,7 @@ namespace SimpleClassicThemeTaskbar
             quickLaunch1.Location = new Point(startButton1.Location.X + startButton1.Width + 2, 1);
         }
 
-        private void ApplyWorkArea()
+        private void ApplyWorkArea(IEnumerable<Window> windows)
         {
             Screen screen = Screen.FromHandle(CrossThreadHandle);
             Rectangle rct = screen.Bounds;

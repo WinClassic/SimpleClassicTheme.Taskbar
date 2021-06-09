@@ -2,10 +2,9 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.ComponentModel;
 using System.Runtime.InteropServices;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace SimpleClassicThemeTaskbar.Helpers
 {
@@ -24,6 +23,29 @@ namespace SimpleClassicThemeTaskbar.Helpers
 			handle.Free();
 
 			return @struct;
+		}
+
+		public static List<IntPtr> FilterWindows(Func<IntPtr, bool> predicate)
+		{
+			var windows = new List<IntPtr>();
+
+			bool callback(IntPtr window, int _)
+			{
+				bool addToList = predicate.Invoke(window);
+
+				if (addToList)
+					windows.Add(window);
+
+				return true;
+			}
+
+            if (User32.EnumWindows(callback, 0) == 0)
+            {
+				windows.Clear();
+				throw new Win32Exception(Marshal.GetLastWin32Error());
+			}
+
+			return windows;
 		}
 
 		/// <summary>
