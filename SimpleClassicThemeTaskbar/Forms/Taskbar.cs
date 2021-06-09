@@ -572,10 +572,7 @@ namespace SimpleClassicThemeTaskbar
             {
                 if (control is BaseTaskbarProgram taskbarProgram)
                 {
-                    Logger.Log(LoggerVerbosity.Verbose, "Taskbar/EnumerateWindows", $"Deleting window {taskbarProgram.Title}.");
-                    icons.Remove(taskbarProgram);
-                    Controls.Remove(taskbarProgram);
-                    taskbarProgram.Dispose();
+                    DisposeTaskbarProgram(taskbarProgram);
                 }
             }
         }
@@ -593,6 +590,14 @@ namespace SimpleClassicThemeTaskbar
             button.MouseUp += Taskbar_IconUp;
 
             return button;
+        }
+
+        private void DisposeTaskbarProgram(BaseTaskbarProgram program)
+        {
+            Logger.Log(LoggerVerbosity.Verbose, "Taskbar/EnumerateWindows", $"Deleting window {program.Title}.");
+            Controls.Remove(program);
+            icons.Remove(program);
+            program.Dispose();
         }
 
         private static bool IsGroupConditionMet(BaseTaskbarProgram a, BaseTaskbarProgram b)
