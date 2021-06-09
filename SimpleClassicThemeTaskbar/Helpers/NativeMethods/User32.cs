@@ -43,7 +43,7 @@ namespace SimpleClassicThemeTaskbar.Helpers.NativeMethods
         [DllImport(nameof(User32))]
         internal static extern bool EnumThreadWindows(int dwThreadId, EnumThreadDelegate lpfn, IntPtr lParam);
 
-        [DllImport(nameof(User32))]
+        [DllImport(nameof(User32), SetLastError = true)]
         internal static extern int EnumWindows(EnumWindowsCallback callPtr, int lParam);
 
         [DllImport(nameof(User32), CharSet = CharSet.Unicode)]
@@ -98,7 +98,7 @@ namespace SimpleClassicThemeTaskbar.Helpers.NativeMethods
         [DllImport(nameof(User32), CharSet = CharSet.Unicode)]
         internal static extern bool GetWindowTextW(IntPtr hWnd, StringBuilder lpString, int nMaxCount);
 
-        [DllImport(nameof(User32))]
+        [DllImport(nameof(User32), SetLastError = false)]
         internal static extern uint GetWindowThreadProcessId(IntPtr hWnd, out uint lpdwProcessId);
 
         [DllImport(nameof(User32), SetLastError = true)]
@@ -144,7 +144,7 @@ namespace SimpleClassicThemeTaskbar.Helpers.NativeMethods
         [DllImport(nameof(User32), CharSet = CharSet.Auto, SetLastError = true)]
         internal static extern IntPtr SetWindowsHookEx(ShellHookId idHook, WindowsHookProcedure lpfn, IntPtr hmod, uint dwThreadId);
 
-        [DllImport(nameof(User32), SetLastError = true)]
+        [DllImport(nameof(User32), SetLastError = true, CharSet = CharSet.Unicode)]
         internal static extern bool SetWindowTextW(IntPtr hWnd, string lpString);
 
         [DllImport(nameof(User32))]
