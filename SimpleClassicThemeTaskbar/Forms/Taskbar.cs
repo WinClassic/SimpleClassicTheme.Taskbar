@@ -405,7 +405,7 @@ namespace SimpleClassicThemeTaskbar
             }
 
             
-            var button = CreateTaskButton(window);
+            var button = CreateTaskbandButton(window);
             icons.Add(button);
             Logger.Log(LoggerVerbosity.Verbose, "Taskbar/EnumerateWindows", $"Adding window {button.Title}.");
 
@@ -451,7 +451,7 @@ namespace SimpleClassicThemeTaskbar
                     continue;
 
                 //Create the button
-                BaseTaskbarProgram button = CreateTaskButton(z);
+                BaseTaskbarProgram button = CreateTaskbandButton(z);
                 icons.Add(button);
                 Logger.Log(LoggerVerbosity.Verbose, "Taskbar/EnumerateWindows", $"Adding window {button.Title}.");
             }
@@ -555,7 +555,7 @@ namespace SimpleClassicThemeTaskbar
         {
             if (group.ProgramWindows.Count == 1)
             {
-                var button = CreateTaskButton(group.ProgramWindows[0].Window);
+                var button = CreateTaskbandButton(group.ProgramWindows[0].Window);
 
                 //Add it to the list
                 programs.Add(button);
@@ -580,7 +580,7 @@ namespace SimpleClassicThemeTaskbar
             }
         }
 
-        private SingleTaskbarProgram CreateTaskButton(Window window)
+        private SingleTaskbarProgram CreateTaskbandButton(Window window)
         {
             SingleTaskbarProgram button = new()
             {
