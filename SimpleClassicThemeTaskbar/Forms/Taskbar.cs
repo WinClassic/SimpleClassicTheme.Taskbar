@@ -209,10 +209,8 @@ namespace SimpleClassicThemeTaskbar
             if (!selfClose)
             {
                 //If we don't close ourselves, show the shutdown dialog
-                _ = User32.PostMessage(User32.FindWindowW("Shell_TrayWnd", ""), (int)User32.WM_KEYDOWN, (int)User32.VK_MENU, 0);
-                _ = User32.PostMessage(User32.FindWindowW("Shell_TrayWnd", ""), (int)User32.WM_KEYDOWN, (int)User32.VK_F4, 0);
-                _ = User32.SendMessage(User32.FindWindowW("Shell_TrayWnd", ""), (int)User32.WM_KEYUP, (int)User32.VK_F4, 0);
-                _ = User32.SendMessage(User32.FindWindowW("Shell_TrayWnd", ""), (int)User32.WM_KEYUP, (int)User32.VK_MENU, 0);
+                var hWnd = User32.FindWindowW("Shell_TrayWnd", "");
+                Keyboard.KeyPress(hWnd, Keys.Menu, Keys.F4);
                 e.Cancel = true;
             }
             else
