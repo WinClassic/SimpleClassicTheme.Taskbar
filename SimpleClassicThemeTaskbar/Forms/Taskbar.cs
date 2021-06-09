@@ -15,19 +15,12 @@ namespace SimpleClassicThemeTaskbar
     public partial class Taskbar : Form
     {
         public static IntPtr lastOpenWindow;
-
         public static bool waitBeforeShow = false;
-
         public bool busy = false;
-
         public bool CanInvoke = false;
-
         public BaseTaskbarProgram heldDownButton;
-
         public int heldDownOriginalX = 0;
-
         public int mouseOriginalX = 0;
-
         public bool NeverShow = false;
         public bool Primary = true;
         public bool selfClose = false;
