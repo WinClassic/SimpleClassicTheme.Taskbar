@@ -96,49 +96,51 @@ namespace SimpleClassicThemeTaskbar
         private void timerUpdateInformation_Tick(object sender, EventArgs e)
         {
             if (!watchLogic)
-                timingDebugger.Start();
+                logicTiming.Start();
 
-            //Get the forground window to check some stuff
-            IntPtr ForegroundWindow = User32.GetForegroundWindow();
-            Window wnd = new(ForegroundWindow);
+            IEnumerable<Window> windows;
+            Window fgWindow = new(User32.GetForegroundWindow());
 
             //Hide explorer's taskbar(s)
             waitBeforeShow = false;
 
-            var enumTrayWindows = GetTrayWindows();
+            using (var _ = logicTiming.StartRegion("Hide Shell_TrayWnd and Shell_SecondaryTrayWnd"))
+            {
+                var enumTrayWindows = GetTrayWindows();
 
-            foreach (Window w in enumTrayWindows)
-                if ((w.WindowInfo.dwStyle & 0x10000000L) > 0)
-                    User32.ShowWindow(w.Handle, 0);
+                foreach (Window w in enumTrayWindows)
+                    if ((w.WindowInfo.dwStyle & 0x10000000L) > 0)
+                        User32.ShowWindow(w.Handle, 0);
+            }
 
-            if (!watchLogic)
-                timingDebugger.FinishRegion("Hide Shell_TrayWnd and Shell_SecondaryTrayWnd");
+            using (var _ = logicTiming.StartRegion("Hide if ForegroundWindow is fullscreen"))
+            {
+                //The window should only be visible if the active window is not fullscreen (with the exception of the desktop window)
+                Screen scr = Screen.FromHandle(fgWindow.Handle);
+                User32.GetWindowRect(fgWindow.Handle, out RECT rect);
+                int width = rect.Right - rect.Left, height = rect.Bottom - rect.Top;
+                bool full = width >= scr.Bounds.Width && height >= scr.Bounds.Height;
+                if (NeverShow)
+                    Visible = false;
+                else
+                    Visible = !(full && fgWindow.ClassName != "Progman" && fgWindow.ClassName != "WorkerW");
 
-            //The window should only be visible if the active window is not fullscreen (with the exception of the desktop window)
-            Screen scr = Screen.FromHandle(wnd.Handle);
-            User32.GetWindowRect(wnd.Handle, out RECT rect);
-            int width = rect.Right - rect.Left, height = rect.Bottom - rect.Top;
-            bool full = width >= scr.Bounds.Width && height >= scr.Bounds.Height;
-            if (NeverShow)
-                Visible = false;
-            else
-                Visible = !(full && wnd.ClassName != "Progman" && wnd.ClassName != "WorkerW");
-
-            //If we're not visible, why do anything?
-            if (!Visible)
-                return;
-
-            if (!watchLogic)
-                timingDebugger.FinishRegion("Hide if ForegroundWindow is fullscreen");
+                //If we're not visible, why do anything?
+                if (!Visible)
+                    return;
+            }
 
             //Obtain task list
-            var windows = GetTaskbarWindows();
-
-            if (!watchLogic)
-                timingDebugger.FinishRegion("Get the task list");
+            using (var _ = logicTiming.StartRegion("Get the task list"))
+            {
+                windows = GetTaskbarWindows();
+            }
 
             //Resize work area
-            if (!Dummy) ApplyWorkArea(windows);
+            if (!Dummy)
+            {
+                ApplyWorkArea(windows);
+            }
 
             //Make a backup of the current icons
             List<BaseTaskbarProgram> oldList = new(icons);
@@ -159,17 +161,18 @@ namespace SimpleClassicThemeTaskbar
             if (!oldList.SequenceEqual(newIcons))
             {
                 //Remove controls of the windows that were removed from the list
-                RemoveRemainingPrograms(newIcons);
-
-                if (!watchLogic)
-                    timingDebugger.FinishRegion("Create controls for all tasks");
+                using (var _ = logicTiming.StartRegion("Remove outdated elements"))
+                {
+                    RemoveRemainingPrograms(newIcons);
+                }
 
                 //Create new list for finalized values
                 List<BaseTaskbarProgram> programs = new();
-                UpdateTaskbarButtons(newIcons, ref programs);
 
-                if (!watchLogic)
-                    timingDebugger.FinishRegion("Do grouping");
+                using (var _ = logicTiming.StartRegion("Do grouping"))
+                {
+                    UpdateTaskbarButtons(newIcons, ref programs);
+                }
 
                 icons = programs;
             }
@@ -184,8 +187,8 @@ namespace SimpleClassicThemeTaskbar
             if (!watchLogic)
             {
                 watchLogic = true;
-                timingDebugger.Stop();
-                MessageBox.Show(timingDebugger.ToString());
+                logicTiming.Stop();
+                logicTiming.Show();
             }
 
             //Update UI
@@ -196,8 +199,8 @@ namespace SimpleClassicThemeTaskbar
         {
             if (!watchUI)
             {
-                sw.Reset();
-                sw.Start();
+                uiTiming.Reset();
+                uiTiming.Start();
             }
 
             UpdateUI();
@@ -205,8 +208,8 @@ namespace SimpleClassicThemeTaskbar
             if (!watchUI)
             {
                 watchUI = true;
-                sw.Stop();
-                _ = MessageBox.Show($"Watch UI: {sw.Elapsed}");
+                uiTiming.Stop();
+                uiTiming.Show();
             }
         }
     }

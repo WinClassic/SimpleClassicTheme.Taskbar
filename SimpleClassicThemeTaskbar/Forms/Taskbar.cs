@@ -27,8 +27,6 @@ namespace SimpleClassicThemeTaskbar
         private readonly List<string> BlacklistedClassNames = new();
         private readonly List<string> BlacklistedProcessNames = new();
         private readonly List<string> BlacklistedWindowNames = new();
-        private readonly Stopwatch sw = new();
-        private readonly List<(string, TimeSpan)> times = new();
 
         //private Thread BackgroundThread;
         private IntPtr CrossThreadHandle;
@@ -37,7 +35,8 @@ namespace SimpleClassicThemeTaskbar
         private Range taskArea;
         private int taskIconWidth;
         
-        private TimingDebugger timingDebugger = new();
+        private readonly TimingDebugger uiTiming = new();
+        private readonly TimingDebugger logicTiming = new();
         private bool watchLogic = true;
         private bool watchUI = true;
         
@@ -315,20 +314,19 @@ namespace SimpleClassicThemeTaskbar
 
             debuggingItem.DropDownItems.Add(new ToolStripMenuItem("Watch UI", null, (_, __) =>
             {
-                times.Clear();
+                uiTiming.Reset();
                 watchUI = !watchUI;
             }));
 
             debuggingItem.DropDownItems.Add(new ToolStripMenuItem("Watch Logic", null, (_, __) =>
             {
-                times.Clear();
+                logicTiming.Reset();
                 watchLogic = !watchLogic;
             }));
 
             debuggingItem.DropDownItems.Add(new ToolStripMenuItem("Watch Tray", null, (_, __) =>
             {
-                times.Clear();
-                systemTray1.times.Clear();
+                systemTray1.trayTiming.Reset();
                 systemTray1.watchTray = !systemTray1.watchTray;
             }));
 
@@ -547,8 +545,7 @@ namespace SimpleClassicThemeTaskbar
             // Remove all currently displayed controls
             Clear();
 
-            if (!watchLogic)
-                timingDebugger.FinishRegion("Create controls for all tasks");
+            logicTiming.FinishRegion("Create controls for all tasks");
 
             //Create new list for finalized values
             List<BaseTaskbarProgram> programs = new();
@@ -850,13 +847,19 @@ namespace SimpleClassicThemeTaskbar
 
             if (Primary)
             {
-                systemTray1.UpdateIcons();
                 systemTray1.UpdateTime();
-                timingDebugger.FinishRegion("Systray");
+
+                using (uiTiming.StartRegion("Update System Tray icons"))
+                {
+                    systemTray1.UpdateIcons();
+                }
 
                 quickLaunch1.Location = new Point(startButton1.Location.X + startButton1.Width + 2, 1);
-                quickLaunch1.UpdateIcons();
-                timingDebugger.FinishRegion("Quick Launch");
+
+                using (uiTiming.StartRegion("Update Quick Launch icons"))
+                {
+                    quickLaunch1.UpdateIcons();
+                }
             }
 
             verticalDivider3.Location = new Point(systemTray1.Location.X - 9, verticalDivider3.Location.Y);
@@ -871,6 +874,8 @@ namespace SimpleClassicThemeTaskbar
 
         private void ApplyWorkArea(IEnumerable<Window> windows)
         {
+            using var _ = logicTiming.StartRegion("Resize work area");
+
             Screen screen = Screen.FromHandle(CrossThreadHandle);
             Rectangle rct = screen.Bounds;
             rct.Height -= Height;
@@ -884,9 +889,6 @@ namespace SimpleClassicThemeTaskbar
 
             if (!Location.Equals(desiredLocation))
                 Location = desiredLocation;
-
-            if (!watchLogic)
-                timingDebugger.FinishRegion("Resize work area");
         }
 
         private ContextMenuStrip ConstructTaskbarContextMenu()

@@ -22,9 +22,8 @@ namespace SimpleClassicThemeTaskbar.UIElements.SystemTray
         public int heldDownOriginalX = 0;
         public List<SystemTrayIcon> icons = new();
         public int mouseOriginalX = 0;
-        public List<(string, TimeSpan)> times = new();
+        public TimingDebugger trayTiming = new();
         public bool watchTray = true;
-        private readonly Stopwatch sw = new();
         private object culprit;
 
         public SystemTray()
@@ -79,8 +78,8 @@ namespace SimpleClassicThemeTaskbar.UIElements.SystemTray
         {
             if (!watchTray)
             {
-                sw.Reset();
-                sw.Start();
+                trayTiming.Reset();
+                trayTiming.Start();
             }
 
             //Lists that will receive all button information
@@ -89,94 +88,80 @@ namespace SimpleClassicThemeTaskbar.UIElements.SystemTray
             IntPtr tray = GetSystemTrayHandle();
 
             //Loop through all buttons
-            UnmanagedCodeMigration.TBBUTTONINFO[] bInfos = UnmanagedCodeMigration.GetTrayButtons(tray);
-            foreach (UnmanagedCodeMigration.TBBUTTONINFO bInfo in bInfos)
+            using (var _ = trayTiming.StartRegion("Get all TBUTTONINFO's"))
             {
-                //Save it
-                if (bInfo.visible)
+                UnmanagedCodeMigration.TBBUTTONINFO[] bInfos = UnmanagedCodeMigration.GetTrayButtons(tray);
+                foreach (UnmanagedCodeMigration.TBBUTTONINFO bInfo in bInfos)
                 {
-                    existingButtons.Add(bInfo);
-                    existingHWNDs.Add(bInfo.hwnd);
+                    //Save it
+                    if (bInfo.visible)
+                    {
+                        existingButtons.Add(bInfo);
+                        existingHWNDs.Add(bInfo.hwnd);
+                    }
                 }
-            }
-
-            if (!watchTray)
-            {
-                times.Add(("Get all TBUTTONINFO's", sw.Elapsed));
-                sw.Reset();
-                sw.Start();
             }
 
             //Remove any icons that are now invalid or hidden
             List<SystemTrayIcon> newIconList = new();
-            SystemTrayIcon[] enumerator = new SystemTrayIcon[icons.Count];
-            icons.CopyTo(enumerator);
-            foreach (SystemTrayIcon existingIco in enumerator)
-                if (existingIco is SystemTrayIcon existingIcon)
-                    if (existingHWNDs.Contains(existingIcon.Handle))
-                        newIconList.Add(existingIcon);
-                    else
-                    {
-                        _ = icons.Remove(existingIcon);
-                        Controls.Remove(existingIcon);
-                        existingIcon.Dispose();
-                    }
-
-            if (!watchTray)
+            using (var _ = trayTiming.StartRegion("Remove icons that are invalid"))
             {
-                times.Add(("Remove icons that are invalid", sw.Elapsed));
-                sw.Reset();
-                sw.Start();
+                SystemTrayIcon[] enumerator = new SystemTrayIcon[icons.Count];
+                icons.CopyTo(enumerator);
+                foreach (SystemTrayIcon existingIco in enumerator)
+                    if (existingIco is SystemTrayIcon existingIcon)
+                        if (existingHWNDs.Contains(existingIcon.Handle))
+                            newIconList.Add(existingIcon);
+                        else
+                        {
+                            icons.Remove(existingIcon);
+                            Controls.Remove(existingIcon);
+                            existingIcon.Dispose();
+                        }
             }
 
             //Add icons that didn't display before
-            foreach (UnmanagedCodeMigration.TBBUTTONINFO info in existingButtons)
+            using (var _ = trayTiming.StartRegion("Add icons that didn't display"))
             {
-                //By default we say the icon doesn't exist
-                SystemTrayIcon existingIcon = newIconList.FirstOrDefault((i) => i.Handle == info.hwnd);
-
-                controlState = "updating existing tray icon";
-                culprit = existingIcon;
-                //If it does we just update it, else we create it
-                if (existingIcon != null)
-                    existingIcon.UpdateTrayIcon(info);
-                else
+                foreach (UnmanagedCodeMigration.TBBUTTONINFO info in existingButtons)
                 {
-                    controlState = "creating new tray icon";
-                    culprit = info;
-                    SystemTrayIcon trayIcon = new(info);
-                    trayIcon.MouseDown += SystemTray_IconDown;
-                    newIconList.Add(trayIcon);
+                    //By default we say the icon doesn't exist
+                    SystemTrayIcon existingIcon = newIconList.FirstOrDefault((i) => i.Handle == info.hwnd);
+
+                    controlState = "updating existing tray icon";
+                    culprit = existingIcon;
+                    //If it does we just update it, else we create it
+                    if (existingIcon != null)
+                        existingIcon.UpdateTrayIcon(info);
+                    else
+                    {
+                        controlState = "creating new tray icon";
+                        culprit = info;
+                        SystemTrayIcon trayIcon = new(info);
+                        trayIcon.MouseDown += SystemTray_IconDown;
+                        newIconList.Add(trayIcon);
+                    }
                 }
             }
 
-            if (!watchTray)
-            {
-                times.Add(("Add icons that didn't display", sw.Elapsed));
-                sw.Reset();
-                sw.Start();
-            }
 
             //De-dupe all controls
             List<SystemTrayIcon> finalIconList = new();
-            List<IntPtr> pointers = new();
-            foreach (SystemTrayIcon icon in newIconList)
-            {
-                if (!pointers.Contains(icon.Handle))
-                    finalIconList.Add(icon);
-                else
-                    icon.Dispose();
-                pointers.Add(icon.Handle);
-            }
 
-            //Icons are drawn from right to left so we reverse it so we can draw left to right (probably as easy)
-            finalIconList.Reverse();
-
-            if (!watchTray)
+            using (var _ = trayTiming.StartRegion("De-dupe and display everything"))
             {
-                times.Add(("De-dupe and display everything", sw.Elapsed));
-                sw.Reset();
-                sw.Start();
+                List<IntPtr> pointers = new();
+                foreach (SystemTrayIcon icon in newIconList)
+                {
+                    if (!pointers.Contains(icon.Handle))
+                        finalIconList.Add(icon);
+                    else
+                        icon.Dispose();
+                    pointers.Add(icon.Handle);
+                }
+
+                //Icons are drawn from right to left so we reverse it so we can draw left to right (probably as easy)
+                finalIconList.Reverse();
             }
 
             //Display all controls
@@ -190,37 +175,40 @@ namespace SimpleClassicThemeTaskbar.UIElements.SystemTray
             int iconWidth = 16;
             int iconSpacing = Config.Instance.SpaceBetweenTrayIcons;
 
-            //See if we're moving, if so calculate new position, if we finished calculate new position and finalize position values
-            if (heldDownIcon != null)
+            using (var _ = trayTiming.StartRegion("Check moving"))
             {
-                if (Math.Abs(mouseOriginalX - Cursor.Position.X) > 3)
-                    heldDownIcon.IsMoving = true;
-                if ((MouseButtons & MouseButtons.Left) != 0)
+                //See if we're moving, if so calculate new position, if we finished calculate new position and finalize position values
+                if (heldDownIcon != null)
                 {
-                    Point p = new(heldDownOriginalX + (Cursor.Position.X - mouseOriginalX), heldDownIcon.Location.Y);
-                    int newIndex = (startX - p.X - ((iconWidth + iconSpacing) / 2)) / (iconWidth + iconSpacing) * -1;
-                    if (newIndex < 0) newIndex = 0;
-                    _ = finalIconList.Remove(heldDownIcon);
-                    finalIconList.Insert(Math.Min(finalIconList.Count, newIndex), heldDownIcon);
-                }
-                else
-                {
-                    Point p = new(heldDownOriginalX + (Cursor.Position.X - mouseOriginalX), heldDownIcon.Location.Y);
-                    int newIndex = (startX - p.X - ((iconWidth + iconSpacing) / 2)) / (iconWidth + iconSpacing) * -1;
-                    if (newIndex < 0) newIndex = 0;
-                    _ = finalIconList.Remove(heldDownIcon);
-                    finalIconList.Insert(Math.Min(finalIconList.Count, newIndex), heldDownIcon);
-                    _ = icons.Remove(heldDownIcon);
-                    icons.Insert(Math.Max(Math.Min(icons.Count, finalIconList.Count - newIndex - 1), 0), heldDownIcon);
-                    heldDownIcon = null;
-                }
-            }
+                    if (Math.Abs(mouseOriginalX - Cursor.Position.X) > 3)
+                        heldDownIcon.IsMoving = true;
 
-            if (!watchTray)
-            {
-                times.Add(("Check moving", sw.Elapsed));
-                sw.Reset();
-                sw.Start();
+                    if ((MouseButtons & MouseButtons.Left) != 0)
+                    {
+                        Point p = new(heldDownOriginalX + (Cursor.Position.X - mouseOriginalX), heldDownIcon.Location.Y);
+                        
+                        int newIndex = (startX - p.X - ((iconWidth + iconSpacing) / 2)) / (iconWidth + iconSpacing) * -1;
+                        if (newIndex < 0) newIndex = 0;
+                        
+                        finalIconList.Remove(heldDownIcon);
+                        finalIconList.Insert(Math.Min(finalIconList.Count, newIndex), heldDownIcon);
+                    }
+                    else
+                    {
+                        Point p = new(heldDownOriginalX + (Cursor.Position.X - mouseOriginalX), heldDownIcon.Location.Y);
+                       
+                        int newIndex = (startX - p.X - ((iconWidth + iconSpacing) / 2)) / (iconWidth + iconSpacing) * -1;
+                        if (newIndex < 0) newIndex = 0;
+                        
+                        finalIconList.Remove(heldDownIcon);
+                        finalIconList.Insert(Math.Min(finalIconList.Count, newIndex), heldDownIcon);
+                        
+                        icons.Remove(heldDownIcon);
+                        icons.Insert(Math.Max(Math.Min(icons.Count, finalIconList.Count - newIndex - 1), 0), heldDownIcon);
+                        
+                        heldDownIcon = null;
+                    }
+                }
             }
 
             Width = Config.Instance.Renderer.GetSystemTrayWidth(finalIconList.Count);
@@ -241,12 +229,8 @@ namespace SimpleClassicThemeTaskbar.UIElements.SystemTray
             if (!watchTray)
             {
                 watchTray = true;
-                sw.Stop();
-                string f = "Watch SystemTray: \n";
-                foreach ((string, TimeSpan) ts in times)
-                    f += $"{ts.Item2}\t{ts.Item1}\n";
-                f += $"{sw.Elapsed}\tFinal bit";
-                _ = MessageBox.Show(f);
+                trayTiming.Stop();
+                trayTiming.Show();
             }
 
             //Move to the left
