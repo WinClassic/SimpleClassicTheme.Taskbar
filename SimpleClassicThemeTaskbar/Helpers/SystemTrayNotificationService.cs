@@ -248,7 +248,6 @@ namespace SimpleClassicThemeTaskbar.Helpers
 
 		private Integer WindowProcedure(IntPtr hWnd, uint uMsg, IntPtr wParam, IntPtr lParam)
 		{
-			const int WS_EX_TOOLWINDOW = 0x00000080;
 			switch (uMsg)
 			{
 				case User32.WM_COPYDATA: //WM_COPYDATA
