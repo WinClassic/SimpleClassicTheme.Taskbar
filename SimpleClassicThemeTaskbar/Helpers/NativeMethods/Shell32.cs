@@ -13,7 +13,10 @@ namespace SimpleClassicThemeTaskbar.Helpers.NativeMethods
         [DllImport("Shell32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
         internal static extern int SHGetFileInfo(string pszPath, Integer32 dwFileAttributes, ref SHFILEINFO psfi, Integer32 cbFileInfo, Integer32 uFlags);
 
-        [DllImport("shell32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
-        internal static extern int SHGetImageList(Integer32 iImageList, ref Guid riid, out IImageList ppv);
+        [DllImport(nameof(Shell32), CharSet = CharSet.Unicode)]
+        internal static extern int SHGetFileInfo(string pszPath, int dwFileAttributes, ref SHFILEINFO psfi, int cbFileInfo, uint uFlags);
+
+        [DllImport(nameof(Shell32))]
+        internal static extern int SHGetImageList(int iImageList, ref Guid riid, out IImageList ppv);
     }
 }

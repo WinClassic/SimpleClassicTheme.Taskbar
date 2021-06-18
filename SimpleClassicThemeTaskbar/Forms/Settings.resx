@@ -66,14 +66,10 @@
   </data>
   <assembly alias="System.Drawing.Primitives" name="System.Drawing.Primitives, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="buttonApply.Location" type="System.Drawing.Point, System.Drawing.Primitives">
-    <value>370, 453</value>
-  </data>
-  <assembly alias="System.Windows.Forms.Primitives" name="System.Windows.Forms.Primitives, Version=5.0.6.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="buttonApply.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms.Primitives">
-    <value>4, 3, 4, 3</value>
+    <value>317, 393</value>
   </data>
   <data name="buttonApply.Size" type="System.Drawing.Size, System.Drawing.Primitives">
-    <value>88, 27</value>
+    <value>75, 23</value>
   </data>
   <assembly alias="System.Private.CoreLib" name="System.Private.CoreLib, Version=5.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e" />
   <data name="buttonApply.TabIndex" type="System.Int32, System.Private.CoreLib">
@@ -101,13 +97,10 @@
     <value>NoControl</value>
   </data>
   <data name="buttonCancel.Location" type="System.Drawing.Point, System.Drawing.Primitives">
-    <value>275, 453</value>
-  </data>
-  <data name="buttonCancel.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms.Primitives">
-    <value>4, 3, 4, 3</value>
+    <value>236, 393</value>
   </data>
   <data name="buttonCancel.Size" type="System.Drawing.Size, System.Drawing.Primitives">
-    <value>88, 27</value>
+    <value>75, 23</value>
   </data>
   <data name="buttonCancel.TabIndex" type="System.Int32, System.Private.CoreLib">
     <value>3</value>
@@ -134,13 +127,10 @@
     <value>NoControl</value>
   </data>
   <data name="buttonOK.Location" type="System.Drawing.Point, System.Drawing.Primitives">
-    <value>181, 453</value>
-  </data>
-  <data name="buttonOK.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms.Primitives">
-    <value>4, 3, 4, 3</value>
+    <value>155, 393</value>
   </data>
   <data name="buttonOK.Size" type="System.Drawing.Size, System.Drawing.Primitives">
-    <value>88, 27</value>
+    <value>75, 23</value>
   </data>
   <data name="buttonOK.TabIndex" type="System.Int32, System.Private.CoreLib">
     <value>4</value>
@@ -160,47 +150,222 @@
   <data name="&gt;&gt;buttonOK.ZOrder" xml:space="preserve">
     <value>2</value>
   </data>
-  <data name="enableDebuggingCheckBox.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
-  <data name="enableDebuggingCheckBox.Location" type="System.Drawing.Point, System.Drawing.Primitives">
-    <value>9, 120</value>
-  </data>
-  <data name="enableDebuggingCheckBox.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms.Primitives">
-    <value>4, 0, 4, 0</value>
-  </data>
-  <data name="enableDebuggingCheckBox.Size" type="System.Drawing.Size, System.Drawing.Primitives">
-    <value>416, 18</value>
-  </data>
-  <data name="enableDebuggingCheckBox.TabIndex" type="System.Int32, System.Private.CoreLib">
-    <value>30</value>
-  </data>
-  <data name="enableDebuggingCheckBox.Text" xml:space="preserve">
-    <value>Enable debug options</value>
-  </data>
-  <data name="&gt;&gt;enableDebuggingCheckBox.Name" xml:space="preserve">
-    <value>enableDebuggingCheckBox</value>
-  </data>
-  <data name="&gt;&gt;enableDebuggingCheckBox.Type" xml:space="preserve">
-    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=5.0.6.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;enableDebuggingCheckBox.Parent" xml:space="preserve">
+  <data name="&gt;&gt;tabGeneral.Name" xml:space="preserve">
     <value>tabGeneral</value>
   </data>
-  <data name="&gt;&gt;enableDebuggingCheckBox.ZOrder" xml:space="preserve">
+  <data name="&gt;&gt;tabGeneral.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Version=5.0.6.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tabGeneral.Parent" xml:space="preserve">
+    <value>tabControl</value>
+  </data>
+  <data name="&gt;&gt;tabGeneral.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;tabThemes.Name" xml:space="preserve">
+    <value>tabThemes</value>
+  </data>
+  <data name="&gt;&gt;tabThemes.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Version=5.0.6.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tabThemes.Parent" xml:space="preserve">
+    <value>tabControl</value>
+  </data>
+  <data name="&gt;&gt;tabThemes.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;tabStartButton.Name" xml:space="preserve">
+    <value>tabStartButton</value>
+  </data>
+  <data name="&gt;&gt;tabStartButton.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Version=5.0.6.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tabStartButton.Parent" xml:space="preserve">
+    <value>tabControl</value>
+  </data>
+  <data name="&gt;&gt;tabStartButton.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="&gt;&gt;tabQuickLaunch.Name" xml:space="preserve">
+    <value>tabQuickLaunch</value>
+  </data>
+  <data name="&gt;&gt;tabQuickLaunch.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Version=5.0.6.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tabQuickLaunch.Parent" xml:space="preserve">
+    <value>tabControl</value>
+  </data>
+  <data name="&gt;&gt;tabQuickLaunch.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="&gt;&gt;tabTaskView.Name" xml:space="preserve">
+    <value>tabTaskView</value>
+  </data>
+  <data name="&gt;&gt;tabTaskView.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Version=5.0.6.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tabTaskView.Parent" xml:space="preserve">
+    <value>tabControl</value>
+  </data>
+  <data name="&gt;&gt;tabTaskView.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="&gt;&gt;tabSystemTray.Name" xml:space="preserve">
+    <value>tabSystemTray</value>
+  </data>
+  <data name="&gt;&gt;tabSystemTray.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Version=5.0.6.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tabSystemTray.Parent" xml:space="preserve">
+    <value>tabControl</value>
+  </data>
+  <data name="&gt;&gt;tabSystemTray.ZOrder" xml:space="preserve">
+    <value>5</value>
+  </data>
+  <data name="&gt;&gt;tabTweaks.Name" xml:space="preserve">
+    <value>tabTweaks</value>
+  </data>
+  <data name="&gt;&gt;tabTweaks.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Version=5.0.6.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tabTweaks.Parent" xml:space="preserve">
+    <value>tabControl</value>
+  </data>
+  <data name="&gt;&gt;tabTweaks.ZOrder" xml:space="preserve">
+    <value>6</value>
+  </data>
+  <data name="&gt;&gt;tabAbout.Name" xml:space="preserve">
+    <value>tabAbout</value>
+  </data>
+  <data name="&gt;&gt;tabAbout.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Version=5.0.6.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tabAbout.Parent" xml:space="preserve">
+    <value>tabControl</value>
+  </data>
+  <data name="&gt;&gt;tabAbout.ZOrder" xml:space="preserve">
+    <value>7</value>
+  </data>
+  <data name="&gt;&gt;tabDebug.Name" xml:space="preserve">
+    <value>tabDebug</value>
+  </data>
+  <data name="&gt;&gt;tabDebug.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Version=5.0.6.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tabDebug.Parent" xml:space="preserve">
+    <value>tabControl</value>
+  </data>
+  <data name="&gt;&gt;tabDebug.ZOrder" xml:space="preserve">
+    <value>8</value>
+  </data>
+  <data name="tabControl.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="tabControl.Location" type="System.Drawing.Point, System.Drawing.Primitives">
+    <value>0, 100</value>
+  </data>
+  <data name="tabControl.Size" type="System.Drawing.Size, System.Drawing.Primitives">
+    <value>384, 276</value>
+  </data>
+  <data name="tabControl.TabIndex" type="System.Int32, System.Private.CoreLib">
+    <value>5</value>
+  </data>
+  <data name="&gt;&gt;tabControl.Name" xml:space="preserve">
+    <value>tabControl</value>
+  </data>
+  <data name="&gt;&gt;tabControl.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TabControl, System.Windows.Forms, Version=5.0.6.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tabControl.Parent" xml:space="preserve">
+    <value>panelContent</value>
+  </data>
+  <data name="&gt;&gt;tabControl.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;exitItemLabel.Name" xml:space="preserve">
+    <value>exitItemLabel</value>
+  </data>
+  <data name="&gt;&gt;exitItemLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=5.0.6.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;exitItemLabel.Parent" xml:space="preserve">
+    <value>tabGeneral</value>
+  </data>
+  <data name="&gt;&gt;exitItemLabel.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;exitItemComboBox.Name" xml:space="preserve">
+    <value>exitItemComboBox</value>
+  </data>
+  <data name="&gt;&gt;exitItemComboBox.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Version=5.0.6.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;exitItemComboBox.Parent" xml:space="preserve">
+    <value>tabGeneral</value>
+  </data>
+  <data name="&gt;&gt;exitItemComboBox.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;languageComboBox.Name" xml:space="preserve">
+    <value>languageComboBox</value>
+  </data>
+  <data name="&gt;&gt;languageComboBox.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Version=5.0.6.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;languageComboBox.Parent" xml:space="preserve">
+    <value>tabGeneral</value>
+  </data>
+  <data name="&gt;&gt;languageComboBox.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="&gt;&gt;languageLabel.Name" xml:space="preserve">
+    <value>languageLabel</value>
+  </data>
+  <data name="&gt;&gt;languageLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=5.0.6.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;languageLabel.Parent" xml:space="preserve">
+    <value>tabGeneral</value>
+  </data>
+  <data name="&gt;&gt;languageLabel.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="tabGeneral.Location" type="System.Drawing.Point, System.Drawing.Primitives">
+    <value>4, 40</value>
+  </data>
+  <assembly alias="System.Windows.Forms.Primitives" name="System.Windows.Forms.Primitives, Version=5.0.6.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="tabGeneral.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms.Primitives">
+    <value>3, 3, 3, 3</value>
+  </data>
+  <data name="tabGeneral.Size" type="System.Drawing.Size, System.Drawing.Primitives">
+    <value>376, 232</value>
+  </data>
+  <data name="tabGeneral.TabIndex" type="System.Int32, System.Private.CoreLib">
+    <value>5</value>
+  </data>
+  <data name="tabGeneral.Text" xml:space="preserve">
+    <value>General</value>
+  </data>
+  <data name="&gt;&gt;tabGeneral.Name" xml:space="preserve">
+    <value>tabGeneral</value>
+  </data>
+  <data name="&gt;&gt;tabGeneral.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Version=5.0.6.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tabGeneral.Parent" xml:space="preserve">
+    <value>tabControl</value>
+  </data>
+  <data name="&gt;&gt;tabGeneral.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
   <data name="exitItemLabel.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
   <data name="exitItemLabel.Location" type="System.Drawing.Point, System.Drawing.Primitives">
-    <value>9, 83</value>
-  </data>
-  <data name="exitItemLabel.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms.Primitives">
-    <value>4, 0, 4, 0</value>
+    <value>8, 40</value>
   </data>
   <data name="exitItemLabel.Size" type="System.Drawing.Size, System.Drawing.Primitives">
-    <value>205, 18</value>
+    <value>176, 16</value>
   </data>
   <data name="exitItemLabel.TabIndex" type="System.Int32, System.Private.CoreLib">
     <value>6</value>
@@ -222,7 +387,7 @@
     <value>tabGeneral</value>
   </data>
   <data name="&gt;&gt;exitItemLabel.ZOrder" xml:space="preserve">
-    <value>1</value>
+    <value>0</value>
   </data>
   <data name="exitItemComboBox.Items" xml:space="preserve">
     <value>Always</value>
@@ -231,13 +396,10 @@
     <value>When pressing Ctrl+Shift</value>
   </data>
   <data name="exitItemComboBox.Location" type="System.Drawing.Point, System.Drawing.Primitives">
-    <value>224, 83</value>
-  </data>
-  <data name="exitItemComboBox.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms.Primitives">
-    <value>4, 3, 4, 3</value>
+    <value>192, 40</value>
   </data>
   <data name="exitItemComboBox.Size" type="System.Drawing.Size, System.Drawing.Primitives">
-    <value>204, 23</value>
+    <value>175, 21</value>
   </data>
   <data name="exitItemComboBox.TabIndex" type="System.Int32, System.Private.CoreLib">
     <value>5</value>
@@ -252,73 +414,7 @@
     <value>tabGeneral</value>
   </data>
   <data name="&gt;&gt;exitItemComboBox.ZOrder" xml:space="preserve">
-    <value>2</value>
-  </data>
-  <data name="themeComboBox.Items" xml:space="preserve">
-    <value>Classic</value>
-  </data>
-  <data name="themeComboBox.Items1" xml:space="preserve">
-    <value>Luna</value>
-  </data>
-  <data name="themeComboBox.Items2" xml:space="preserve">
-    <value>Custom...</value>
-  </data>
-  <data name="themeComboBox.Location" type="System.Drawing.Point, System.Drawing.Primitives">
-    <value>224, 46</value>
-  </data>
-  <data name="themeComboBox.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms.Primitives">
-    <value>4, 3, 4, 3</value>
-  </data>
-  <data name="themeComboBox.Size" type="System.Drawing.Size, System.Drawing.Primitives">
-    <value>205, 23</value>
-  </data>
-  <data name="themeComboBox.TabIndex" type="System.Int32, System.Private.CoreLib">
-    <value>3</value>
-  </data>
-  <data name="&gt;&gt;themeComboBox.Name" xml:space="preserve">
-    <value>themeComboBox</value>
-  </data>
-  <data name="&gt;&gt;themeComboBox.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Version=5.0.6.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;themeComboBox.Parent" xml:space="preserve">
-    <value>tabGeneral</value>
-  </data>
-  <data name="&gt;&gt;themeComboBox.ZOrder" xml:space="preserve">
-    <value>3</value>
-  </data>
-  <data name="themeLabel.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
-  <data name="themeLabel.Location" type="System.Drawing.Point, System.Drawing.Primitives">
-    <value>9, 46</value>
-  </data>
-  <data name="themeLabel.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms.Primitives">
-    <value>4, 0, 4, 0</value>
-  </data>
-  <data name="themeLabel.Size" type="System.Drawing.Size, System.Drawing.Primitives">
-    <value>205, 18</value>
-  </data>
-  <data name="themeLabel.TabIndex" type="System.Int32, System.Private.CoreLib">
-    <value>2</value>
-  </data>
-  <data name="themeLabel.Text" xml:space="preserve">
-    <value>Theme:</value>
-  </data>
-  <data name="themeLabel.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing.Common">
-    <value>BottomLeft</value>
-  </data>
-  <data name="&gt;&gt;themeLabel.Name" xml:space="preserve">
-    <value>themeLabel</value>
-  </data>
-  <data name="&gt;&gt;themeLabel.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=5.0.6.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;themeLabel.Parent" xml:space="preserve">
-    <value>tabGeneral</value>
-  </data>
-  <data name="&gt;&gt;themeLabel.ZOrder" xml:space="preserve">
-    <value>4</value>
+    <value>1</value>
   </data>
   <data name="languageComboBox.Items" xml:space="preserve">
     <value>en-US</value>
@@ -327,13 +423,10 @@
     <value>nl-NL</value>
   </data>
   <data name="languageComboBox.Location" type="System.Drawing.Point, System.Drawing.Primitives">
-    <value>224, 9</value>
-  </data>
-  <data name="languageComboBox.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms.Primitives">
-    <value>4, 3, 4, 3</value>
+    <value>192, 8</value>
   </data>
   <data name="languageComboBox.Size" type="System.Drawing.Size, System.Drawing.Primitives">
-    <value>205, 23</value>
+    <value>176, 21</value>
   </data>
   <data name="languageComboBox.TabIndex" type="System.Int32, System.Private.CoreLib">
     <value>1</value>
@@ -348,16 +441,13 @@
     <value>tabGeneral</value>
   </data>
   <data name="&gt;&gt;languageComboBox.ZOrder" xml:space="preserve">
-    <value>5</value>
+    <value>2</value>
   </data>
   <data name="languageLabel.Location" type="System.Drawing.Point, System.Drawing.Primitives">
-    <value>9, 9</value>
-  </data>
-  <data name="languageLabel.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms.Primitives">
-    <value>4, 0, 4, 0</value>
+    <value>8, 8</value>
   </data>
   <data name="languageLabel.Size" type="System.Drawing.Size, System.Drawing.Primitives">
-    <value>205, 18</value>
+    <value>176, 16</value>
   </data>
   <data name="languageLabel.TabIndex" type="System.Int32, System.Private.CoreLib">
     <value>0</value>
@@ -378,49 +468,544 @@
     <value>tabGeneral</value>
   </data>
   <data name="&gt;&gt;languageLabel.ZOrder" xml:space="preserve">
-    <value>6</value>
+    <value>3</value>
   </data>
-  <data name="tabGeneral.Location" type="System.Drawing.Point, System.Drawing.Primitives">
-    <value>4, 44</value>
+  <data name="&gt;&gt;visualStyleGroupBox.Name" xml:space="preserve">
+    <value>visualStyleGroupBox</value>
   </data>
-  <data name="tabGeneral.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms.Primitives">
-    <value>4, 3, 4, 3</value>
+  <data name="&gt;&gt;visualStyleGroupBox.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=5.0.6.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="tabGeneral.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms.Primitives">
-    <value>4, 3, 4, 3</value>
+  <data name="&gt;&gt;visualStyleGroupBox.Parent" xml:space="preserve">
+    <value>tabThemes</value>
   </data>
-  <data name="tabGeneral.Size" type="System.Drawing.Size, System.Drawing.Primitives">
-    <value>440, 271</value>
+  <data name="&gt;&gt;visualStyleGroupBox.ZOrder" xml:space="preserve">
+    <value>0</value>
   </data>
-  <data name="tabGeneral.TabIndex" type="System.Int32, System.Private.CoreLib">
-    <value>5</value>
+  <data name="&gt;&gt;themeComboBox.Name" xml:space="preserve">
+    <value>themeComboBox</value>
   </data>
-  <data name="tabGeneral.Text" xml:space="preserve">
-    <value>General</value>
+  <data name="&gt;&gt;themeComboBox.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Version=5.0.6.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;tabGeneral.Name" xml:space="preserve">
-    <value>tabGeneral</value>
+  <data name="&gt;&gt;themeComboBox.Parent" xml:space="preserve">
+    <value>tabThemes</value>
   </data>
-  <data name="&gt;&gt;tabGeneral.Type" xml:space="preserve">
+  <data name="&gt;&gt;themeComboBox.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;themeLabel.Name" xml:space="preserve">
+    <value>themeLabel</value>
+  </data>
+  <data name="&gt;&gt;themeLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=5.0.6.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;themeLabel.Parent" xml:space="preserve">
+    <value>tabThemes</value>
+  </data>
+  <data name="&gt;&gt;themeLabel.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="tabThemes.Location" type="System.Drawing.Point, System.Drawing.Primitives">
+    <value>4, 40</value>
+  </data>
+  <data name="tabThemes.Size" type="System.Drawing.Size, System.Drawing.Primitives">
+    <value>376, 232</value>
+  </data>
+  <data name="tabThemes.TabIndex" type="System.Int32, System.Private.CoreLib">
+    <value>7</value>
+  </data>
+  <data name="tabThemes.Text" xml:space="preserve">
+    <value>Themes</value>
+  </data>
+  <data name="&gt;&gt;tabThemes.Name" xml:space="preserve">
+    <value>tabThemes</value>
+  </data>
+  <data name="&gt;&gt;tabThemes.Type" xml:space="preserve">
     <value>System.Windows.Forms.TabPage, System.Windows.Forms, Version=5.0.6.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;tabGeneral.Parent" xml:space="preserve">
+  <data name="&gt;&gt;tabThemes.Parent" xml:space="preserve">
     <value>tabControl</value>
   </data>
-  <data name="&gt;&gt;tabGeneral.ZOrder" xml:space="preserve">
+  <data name="&gt;&gt;tabThemes.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;sizeComboBox.Name" xml:space="preserve">
+    <value>sizeComboBox</value>
+  </data>
+  <data name="&gt;&gt;sizeComboBox.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Version=5.0.6.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;sizeComboBox.Parent" xml:space="preserve">
+    <value>visualStyleGroupBox</value>
+  </data>
+  <data name="&gt;&gt;sizeComboBox.ZOrder" xml:space="preserve">
     <value>0</value>
+  </data>
+  <data name="&gt;&gt;label6.Name" xml:space="preserve">
+    <value>label6</value>
+  </data>
+  <data name="&gt;&gt;label6.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=5.0.6.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;label6.Parent" xml:space="preserve">
+    <value>visualStyleGroupBox</value>
+  </data>
+  <data name="&gt;&gt;label6.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;colorSchemeComboBox.Name" xml:space="preserve">
+    <value>colorSchemeComboBox</value>
+  </data>
+  <data name="&gt;&gt;colorSchemeComboBox.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Version=5.0.6.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;colorSchemeComboBox.Parent" xml:space="preserve">
+    <value>visualStyleGroupBox</value>
+  </data>
+  <data name="&gt;&gt;colorSchemeComboBox.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="&gt;&gt;label4.Name" xml:space="preserve">
+    <value>label4</value>
+  </data>
+  <data name="&gt;&gt;label4.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=5.0.6.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;label4.Parent" xml:space="preserve">
+    <value>visualStyleGroupBox</value>
+  </data>
+  <data name="&gt;&gt;label4.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="&gt;&gt;visualStyleComboBox.Name" xml:space="preserve">
+    <value>visualStyleComboBox</value>
+  </data>
+  <data name="&gt;&gt;visualStyleComboBox.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Version=5.0.6.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;visualStyleComboBox.Parent" xml:space="preserve">
+    <value>visualStyleGroupBox</value>
+  </data>
+  <data name="&gt;&gt;visualStyleComboBox.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="&gt;&gt;manageStylesButton.Name" xml:space="preserve">
+    <value>manageStylesButton</value>
+  </data>
+  <data name="&gt;&gt;manageStylesButton.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=5.0.6.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;manageStylesButton.Parent" xml:space="preserve">
+    <value>visualStyleGroupBox</value>
+  </data>
+  <data name="&gt;&gt;manageStylesButton.ZOrder" xml:space="preserve">
+    <value>5</value>
+  </data>
+  <data name="&gt;&gt;label3.Name" xml:space="preserve">
+    <value>label3</value>
+  </data>
+  <data name="&gt;&gt;label3.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=5.0.6.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;label3.Parent" xml:space="preserve">
+    <value>visualStyleGroupBox</value>
+  </data>
+  <data name="&gt;&gt;label3.ZOrder" xml:space="preserve">
+    <value>6</value>
+  </data>
+  <data name="visualStyleGroupBox.Location" type="System.Drawing.Point, System.Drawing.Primitives">
+    <value>8, 72</value>
+  </data>
+  <data name="visualStyleGroupBox.Size" type="System.Drawing.Size, System.Drawing.Primitives">
+    <value>360, 152</value>
+  </data>
+  <data name="visualStyleGroupBox.TabIndex" type="System.Int32, System.Private.CoreLib">
+    <value>6</value>
+  </data>
+  <data name="visualStyleGroupBox.Text" xml:space="preserve">
+    <value>Visual Style settings</value>
+  </data>
+  <data name="&gt;&gt;visualStyleGroupBox.Name" xml:space="preserve">
+    <value>visualStyleGroupBox</value>
+  </data>
+  <data name="&gt;&gt;visualStyleGroupBox.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=5.0.6.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;visualStyleGroupBox.Parent" xml:space="preserve">
+    <value>tabThemes</value>
+  </data>
+  <data name="&gt;&gt;visualStyleGroupBox.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="sizeComboBox.Location" type="System.Drawing.Point, System.Drawing.Primitives">
+    <value>176, 88</value>
+  </data>
+  <data name="sizeComboBox.Size" type="System.Drawing.Size, System.Drawing.Primitives">
+    <value>176, 21</value>
+  </data>
+  <data name="sizeComboBox.TabIndex" type="System.Int32, System.Private.CoreLib">
+    <value>12</value>
+  </data>
+  <data name="&gt;&gt;sizeComboBox.Name" xml:space="preserve">
+    <value>sizeComboBox</value>
+  </data>
+  <data name="&gt;&gt;sizeComboBox.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Version=5.0.6.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;sizeComboBox.Parent" xml:space="preserve">
+    <value>visualStyleGroupBox</value>
+  </data>
+  <data name="&gt;&gt;sizeComboBox.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="label6.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="label6.Location" type="System.Drawing.Point, System.Drawing.Primitives">
+    <value>8, 88</value>
+  </data>
+  <data name="label6.Size" type="System.Drawing.Size, System.Drawing.Primitives">
+    <value>160, 16</value>
+  </data>
+  <data name="label6.TabIndex" type="System.Int32, System.Private.CoreLib">
+    <value>11</value>
+  </data>
+  <data name="label6.Text" xml:space="preserve">
+    <value>Font size:</value>
+  </data>
+  <data name="label6.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing.Common">
+    <value>BottomLeft</value>
+  </data>
+  <data name="&gt;&gt;label6.Name" xml:space="preserve">
+    <value>label6</value>
+  </data>
+  <data name="&gt;&gt;label6.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=5.0.6.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;label6.Parent" xml:space="preserve">
+    <value>visualStyleGroupBox</value>
+  </data>
+  <data name="&gt;&gt;label6.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="colorSchemeComboBox.Items" xml:space="preserve">
+    <value>Classic</value>
+  </data>
+  <data name="colorSchemeComboBox.Items1" xml:space="preserve">
+    <value>Luna</value>
+  </data>
+  <data name="colorSchemeComboBox.Items2" xml:space="preserve">
+    <value>Custom...</value>
+  </data>
+  <data name="colorSchemeComboBox.Location" type="System.Drawing.Point, System.Drawing.Primitives">
+    <value>176, 56</value>
+  </data>
+  <data name="colorSchemeComboBox.Size" type="System.Drawing.Size, System.Drawing.Primitives">
+    <value>176, 21</value>
+  </data>
+  <data name="colorSchemeComboBox.TabIndex" type="System.Int32, System.Private.CoreLib">
+    <value>10</value>
+  </data>
+  <data name="&gt;&gt;colorSchemeComboBox.Name" xml:space="preserve">
+    <value>colorSchemeComboBox</value>
+  </data>
+  <data name="&gt;&gt;colorSchemeComboBox.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Version=5.0.6.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;colorSchemeComboBox.Parent" xml:space="preserve">
+    <value>visualStyleGroupBox</value>
+  </data>
+  <data name="&gt;&gt;colorSchemeComboBox.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="label4.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="label4.Location" type="System.Drawing.Point, System.Drawing.Primitives">
+    <value>8, 56</value>
+  </data>
+  <data name="label4.Size" type="System.Drawing.Size, System.Drawing.Primitives">
+    <value>160, 16</value>
+  </data>
+  <data name="label4.TabIndex" type="System.Int32, System.Private.CoreLib">
+    <value>9</value>
+  </data>
+  <data name="label4.Text" xml:space="preserve">
+    <value>Color scheme:</value>
+  </data>
+  <data name="label4.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing.Common">
+    <value>BottomLeft</value>
+  </data>
+  <data name="&gt;&gt;label4.Name" xml:space="preserve">
+    <value>label4</value>
+  </data>
+  <data name="&gt;&gt;label4.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=5.0.6.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;label4.Parent" xml:space="preserve">
+    <value>visualStyleGroupBox</value>
+  </data>
+  <data name="&gt;&gt;label4.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="visualStyleComboBox.Location" type="System.Drawing.Point, System.Drawing.Primitives">
+    <value>176, 24</value>
+  </data>
+  <data name="visualStyleComboBox.Size" type="System.Drawing.Size, System.Drawing.Primitives">
+    <value>176, 21</value>
+  </data>
+  <data name="visualStyleComboBox.TabIndex" type="System.Int32, System.Private.CoreLib">
+    <value>8</value>
+  </data>
+  <data name="&gt;&gt;visualStyleComboBox.Name" xml:space="preserve">
+    <value>visualStyleComboBox</value>
+  </data>
+  <data name="&gt;&gt;visualStyleComboBox.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Version=5.0.6.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;visualStyleComboBox.Parent" xml:space="preserve">
+    <value>visualStyleGroupBox</value>
+  </data>
+  <data name="&gt;&gt;visualStyleComboBox.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="manageStylesButton.Location" type="System.Drawing.Point, System.Drawing.Primitives">
+    <value>176, 120</value>
+  </data>
+  <data name="manageStylesButton.Size" type="System.Drawing.Size, System.Drawing.Primitives">
+    <value>176, 23</value>
+  </data>
+  <data name="manageStylesButton.TabIndex" type="System.Int32, System.Private.CoreLib">
+    <value>0</value>
+  </data>
+  <data name="manageStylesButton.Text" xml:space="preserve">
+    <value>&amp;Manage installed styles</value>
+  </data>
+  <data name="&gt;&gt;manageStylesButton.Name" xml:space="preserve">
+    <value>manageStylesButton</value>
+  </data>
+  <data name="&gt;&gt;manageStylesButton.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=5.0.6.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;manageStylesButton.Parent" xml:space="preserve">
+    <value>visualStyleGroupBox</value>
+  </data>
+  <data name="&gt;&gt;manageStylesButton.ZOrder" xml:space="preserve">
+    <value>5</value>
+  </data>
+  <data name="label3.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="label3.Location" type="System.Drawing.Point, System.Drawing.Primitives">
+    <value>8, 24</value>
+  </data>
+  <data name="label3.Size" type="System.Drawing.Size, System.Drawing.Primitives">
+    <value>160, 16</value>
+  </data>
+  <data name="label3.TabIndex" type="System.Int32, System.Private.CoreLib">
+    <value>7</value>
+  </data>
+  <data name="label3.Text" xml:space="preserve">
+    <value>Visual style:</value>
+  </data>
+  <data name="label3.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing.Common">
+    <value>BottomLeft</value>
+  </data>
+  <data name="&gt;&gt;label3.Name" xml:space="preserve">
+    <value>label3</value>
+  </data>
+  <data name="&gt;&gt;label3.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=5.0.6.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;label3.Parent" xml:space="preserve">
+    <value>visualStyleGroupBox</value>
+  </data>
+  <data name="&gt;&gt;label3.ZOrder" xml:space="preserve">
+    <value>6</value>
+  </data>
+  <data name="themeComboBox.Items" xml:space="preserve">
+    <value>Classic</value>
+  </data>
+  <data name="themeComboBox.Items1" xml:space="preserve">
+    <value>Luna</value>
+  </data>
+  <data name="themeComboBox.Items2" xml:space="preserve">
+    <value>Visual Style</value>
+  </data>
+  <data name="themeComboBox.Items3" xml:space="preserve">
+    <value>Custom...</value>
+  </data>
+  <data name="themeComboBox.Location" type="System.Drawing.Point, System.Drawing.Primitives">
+    <value>184, 8</value>
+  </data>
+  <data name="themeComboBox.Size" type="System.Drawing.Size, System.Drawing.Primitives">
+    <value>176, 21</value>
+  </data>
+  <data name="themeComboBox.TabIndex" type="System.Int32, System.Private.CoreLib">
+    <value>5</value>
+  </data>
+  <data name="&gt;&gt;themeComboBox.Name" xml:space="preserve">
+    <value>themeComboBox</value>
+  </data>
+  <data name="&gt;&gt;themeComboBox.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Version=5.0.6.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;themeComboBox.Parent" xml:space="preserve">
+    <value>tabThemes</value>
+  </data>
+  <data name="&gt;&gt;themeComboBox.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="themeLabel.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="themeLabel.Location" type="System.Drawing.Point, System.Drawing.Primitives">
+    <value>16, 8</value>
+  </data>
+  <data name="themeLabel.Size" type="System.Drawing.Size, System.Drawing.Primitives">
+    <value>160, 16</value>
+  </data>
+  <data name="themeLabel.TabIndex" type="System.Int32, System.Private.CoreLib">
+    <value>4</value>
+  </data>
+  <data name="themeLabel.Text" xml:space="preserve">
+    <value>Renderer:</value>
+  </data>
+  <data name="themeLabel.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing.Common">
+    <value>BottomLeft</value>
+  </data>
+  <data name="&gt;&gt;themeLabel.Name" xml:space="preserve">
+    <value>themeLabel</value>
+  </data>
+  <data name="&gt;&gt;themeLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=5.0.6.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;themeLabel.Parent" xml:space="preserve">
+    <value>tabThemes</value>
+  </data>
+  <data name="&gt;&gt;themeLabel.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="&gt;&gt;customIconBrowseButton.Name" xml:space="preserve">
+    <value>customIconBrowseButton</value>
+  </data>
+  <data name="&gt;&gt;customIconBrowseButton.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=5.0.6.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;customIconBrowseButton.Parent" xml:space="preserve">
+    <value>tabStartButton</value>
+  </data>
+  <data name="&gt;&gt;customIconBrowseButton.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;customIconTextBox.Name" xml:space="preserve">
+    <value>customIconTextBox</value>
+  </data>
+  <data name="&gt;&gt;customIconTextBox.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=5.0.6.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;customIconTextBox.Parent" xml:space="preserve">
+    <value>tabStartButton</value>
+  </data>
+  <data name="&gt;&gt;customIconTextBox.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;customButtonBrowseButton.Name" xml:space="preserve">
+    <value>customButtonBrowseButton</value>
+  </data>
+  <data name="&gt;&gt;customButtonBrowseButton.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=5.0.6.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;customButtonBrowseButton.Parent" xml:space="preserve">
+    <value>tabStartButton</value>
+  </data>
+  <data name="&gt;&gt;customButtonBrowseButton.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="&gt;&gt;customButtonTextBox.Name" xml:space="preserve">
+    <value>customButtonTextBox</value>
+  </data>
+  <data name="&gt;&gt;customButtonTextBox.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=5.0.6.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;customButtonTextBox.Parent" xml:space="preserve">
+    <value>tabStartButton</value>
+  </data>
+  <data name="&gt;&gt;customButtonTextBox.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="&gt;&gt;radioStartDefault.Name" xml:space="preserve">
+    <value>radioStartDefault</value>
+  </data>
+  <data name="&gt;&gt;radioStartDefault.Type" xml:space="preserve">
+    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=5.0.6.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;radioStartDefault.Parent" xml:space="preserve">
+    <value>tabStartButton</value>
+  </data>
+  <data name="&gt;&gt;radioStartDefault.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="&gt;&gt;customButtonRadioButton.Name" xml:space="preserve">
+    <value>customButtonRadioButton</value>
+  </data>
+  <data name="&gt;&gt;customButtonRadioButton.Type" xml:space="preserve">
+    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=5.0.6.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;customButtonRadioButton.Parent" xml:space="preserve">
+    <value>tabStartButton</value>
+  </data>
+  <data name="&gt;&gt;customButtonRadioButton.ZOrder" xml:space="preserve">
+    <value>5</value>
+  </data>
+  <data name="&gt;&gt;customIconRadioButton.Name" xml:space="preserve">
+    <value>customIconRadioButton</value>
+  </data>
+  <data name="&gt;&gt;customIconRadioButton.Type" xml:space="preserve">
+    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=5.0.6.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;customIconRadioButton.Parent" xml:space="preserve">
+    <value>tabStartButton</value>
+  </data>
+  <data name="&gt;&gt;customIconRadioButton.ZOrder" xml:space="preserve">
+    <value>6</value>
+  </data>
+  <data name="tabStartButton.Location" type="System.Drawing.Point, System.Drawing.Primitives">
+    <value>4, 40</value>
+  </data>
+  <data name="tabStartButton.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms.Primitives">
+    <value>10, 10, 10, 10</value>
+  </data>
+  <data name="tabStartButton.Size" type="System.Drawing.Size, System.Drawing.Primitives">
+    <value>376, 232</value>
+  </data>
+  <data name="tabStartButton.TabIndex" type="System.Int32, System.Private.CoreLib">
+    <value>2</value>
+  </data>
+  <data name="tabStartButton.Text" xml:space="preserve">
+    <value>Start Button</value>
+  </data>
+  <data name="&gt;&gt;tabStartButton.Name" xml:space="preserve">
+    <value>tabStartButton</value>
+  </data>
+  <data name="&gt;&gt;tabStartButton.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Version=5.0.6.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tabStartButton.Parent" xml:space="preserve">
+    <value>tabControl</value>
+  </data>
+  <data name="&gt;&gt;tabStartButton.ZOrder" xml:space="preserve">
+    <value>2</value>
   </data>
   <data name="customIconBrowseButton.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
   <data name="customIconBrowseButton.Location" type="System.Drawing.Point, System.Drawing.Primitives">
-    <value>345, 62</value>
-  </data>
-  <data name="customIconBrowseButton.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms.Primitives">
-    <value>4, 3, 4, 3</value>
+    <value>296, 54</value>
   </data>
   <data name="customIconBrowseButton.Size" type="System.Drawing.Size, System.Drawing.Primitives">
-    <value>88, 27</value>
+    <value>75, 23</value>
   </data>
   <data name="customIconBrowseButton.TabIndex" type="System.Int32, System.Private.CoreLib">
     <value>6</value>
@@ -441,13 +1026,10 @@
     <value>0</value>
   </data>
   <data name="customIconTextBox.Location" type="System.Drawing.Point, System.Drawing.Primitives">
-    <value>28, 65</value>
-  </data>
-  <data name="customIconTextBox.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms.Primitives">
-    <value>4, 3, 4, 3</value>
+    <value>24, 56</value>
   </data>
   <data name="customIconTextBox.Size" type="System.Drawing.Size, System.Drawing.Primitives">
-    <value>307, 23</value>
+    <value>264, 21</value>
   </data>
   <data name="customIconTextBox.TabIndex" type="System.Int32, System.Private.CoreLib">
     <value>5</value>
@@ -468,13 +1050,10 @@
     <value>NoControl</value>
   </data>
   <data name="customButtonBrowseButton.Location" type="System.Drawing.Point, System.Drawing.Primitives">
-    <value>345, 118</value>
-  </data>
-  <data name="customButtonBrowseButton.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms.Primitives">
-    <value>4, 3, 4, 3</value>
+    <value>296, 102</value>
   </data>
   <data name="customButtonBrowseButton.Size" type="System.Drawing.Size, System.Drawing.Primitives">
-    <value>88, 27</value>
+    <value>75, 23</value>
   </data>
   <data name="customButtonBrowseButton.TabIndex" type="System.Int32, System.Private.CoreLib">
     <value>4</value>
@@ -495,13 +1074,10 @@
     <value>2</value>
   </data>
   <data name="customButtonTextBox.Location" type="System.Drawing.Point, System.Drawing.Primitives">
-    <value>28, 120</value>
-  </data>
-  <data name="customButtonTextBox.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms.Primitives">
-    <value>4, 3, 4, 3</value>
+    <value>24, 104</value>
   </data>
   <data name="customButtonTextBox.Size" type="System.Drawing.Size, System.Drawing.Primitives">
-    <value>307, 23</value>
+    <value>264, 21</value>
   </data>
   <data name="customButtonTextBox.TabIndex" type="System.Int32, System.Private.CoreLib">
     <value>3</value>
@@ -525,13 +1101,10 @@
     <value>NoControl</value>
   </data>
   <data name="radioStartDefault.Location" type="System.Drawing.Point, System.Drawing.Primitives">
-    <value>9, 9</value>
-  </data>
-  <data name="radioStartDefault.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms.Primitives">
-    <value>4, 3, 4, 3</value>
+    <value>8, 8</value>
   </data>
   <data name="radioStartDefault.Size" type="System.Drawing.Size, System.Drawing.Primitives">
-    <value>128, 19</value>
+    <value>121, 17</value>
   </data>
   <data name="radioStartDefault.TabIndex" type="System.Int32, System.Private.CoreLib">
     <value>0</value>
@@ -558,13 +1131,10 @@
     <value>NoControl</value>
   </data>
   <data name="customButtonRadioButton.Location" type="System.Drawing.Point, System.Drawing.Primitives">
-    <value>9, 92</value>
-  </data>
-  <data name="customButtonRadioButton.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms.Primitives">
-    <value>4, 3, 4, 3</value>
+    <value>8, 80</value>
   </data>
   <data name="customButtonRadioButton.Size" type="System.Drawing.Size, System.Drawing.Primitives">
-    <value>106, 19</value>
+    <value>96, 17</value>
   </data>
   <data name="customButtonRadioButton.TabIndex" type="System.Int32, System.Private.CoreLib">
     <value>2</value>
@@ -591,13 +1161,10 @@
     <value>NoControl</value>
   </data>
   <data name="customIconRadioButton.Location" type="System.Drawing.Point, System.Drawing.Primitives">
-    <value>9, 37</value>
-  </data>
-  <data name="customIconRadioButton.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms.Primitives">
-    <value>4, 3, 4, 3</value>
+    <value>8, 32</value>
   </data>
   <data name="customIconRadioButton.Size" type="System.Drawing.Size, System.Drawing.Primitives">
-    <value>93, 19</value>
+    <value>83, 17</value>
   </data>
   <data name="customIconRadioButton.TabIndex" type="System.Int32, System.Private.CoreLib">
     <value>1</value>
@@ -617,116 +1184,56 @@
   <data name="&gt;&gt;customIconRadioButton.ZOrder" xml:space="preserve">
     <value>6</value>
   </data>
-  <data name="tabStartButton.Location" type="System.Drawing.Point, System.Drawing.Primitives">
-    <value>4, 44</value>
+  <data name="&gt;&gt;quickLaunchLinkLabel.Name" xml:space="preserve">
+    <value>quickLaunchLinkLabel</value>
   </data>
-  <data name="tabStartButton.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms.Primitives">
-    <value>4, 3, 4, 3</value>
-  </data>
-  <data name="tabStartButton.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms.Primitives">
-    <value>12, 12, 12, 12</value>
-  </data>
-  <data name="tabStartButton.Size" type="System.Drawing.Size, System.Drawing.Primitives">
-    <value>440, 271</value>
-  </data>
-  <data name="tabStartButton.TabIndex" type="System.Int32, System.Private.CoreLib">
-    <value>2</value>
-  </data>
-  <data name="tabStartButton.Text" xml:space="preserve">
-    <value>Start Button</value>
-  </data>
-  <data name="&gt;&gt;tabStartButton.Name" xml:space="preserve">
-    <value>tabStartButton</value>
-  </data>
-  <data name="&gt;&gt;tabStartButton.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Version=5.0.6.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tabStartButton.Parent" xml:space="preserve">
-    <value>tabControl</value>
-  </data>
-  <data name="&gt;&gt;tabStartButton.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="quickLaunchSpacingLabel.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
-  <data name="quickLaunchSpacingLabel.Location" type="System.Drawing.Point, System.Drawing.Primitives">
-    <value>0, 0</value>
-  </data>
-  <data name="quickLaunchSpacingLabel.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms.Primitives">
-    <value>4, 0, 4, 0</value>
-  </data>
-  <data name="quickLaunchSpacingLabel.Size" type="System.Drawing.Size, System.Drawing.Primitives">
-    <value>252, 18</value>
-  </data>
-  <data name="quickLaunchSpacingLabel.TabIndex" type="System.Int32, System.Private.CoreLib">
-    <value>23</value>
-  </data>
-  <data name="quickLaunchSpacingLabel.Text" xml:space="preserve">
-    <value>Space between icons (px):</value>
-  </data>
-  <data name="quickLaunchSpacingLabel.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing.Common">
-    <value>BottomLeft</value>
-  </data>
-  <data name="&gt;&gt;quickLaunchSpacingLabel.Name" xml:space="preserve">
-    <value>quickLaunchSpacingLabel</value>
-  </data>
-  <data name="&gt;&gt;quickLaunchSpacingLabel.Type" xml:space="preserve">
+  <data name="&gt;&gt;quickLaunchLinkLabel.Type" xml:space="preserve">
     <value>System.Windows.Forms.Label, System.Windows.Forms, Version=5.0.6.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;quickLaunchSpacingLabel.Parent" xml:space="preserve">
-    <value>quickLaunchOptionsPanel</value>
-  </data>
-  <data name="&gt;&gt;quickLaunchSpacingLabel.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="quickLaunchSpacingNumBox.Location" type="System.Drawing.Point, System.Drawing.Primitives">
-    <value>252, 0</value>
-  </data>
-  <data name="quickLaunchSpacingNumBox.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms.Primitives">
-    <value>4, 3, 4, 3</value>
-  </data>
-  <data name="quickLaunchSpacingNumBox.Size" type="System.Drawing.Size, System.Drawing.Primitives">
-    <value>149, 23</value>
-  </data>
-  <data name="quickLaunchSpacingNumBox.TabIndex" type="System.Int32, System.Private.CoreLib">
-    <value>24</value>
-  </data>
-  <data name="&gt;&gt;quickLaunchSpacingNumBox.Name" xml:space="preserve">
-    <value>quickLaunchSpacingNumBox</value>
-  </data>
-  <data name="&gt;&gt;quickLaunchSpacingNumBox.Type" xml:space="preserve">
-    <value>System.Windows.Forms.NumericUpDown, System.Windows.Forms, Version=5.0.6.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;quickLaunchSpacingNumBox.Parent" xml:space="preserve">
-    <value>quickLaunchOptionsPanel</value>
-  </data>
-  <data name="&gt;&gt;quickLaunchSpacingNumBox.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="quickLaunchOptionsPanel.Location" type="System.Drawing.Point, System.Drawing.Primitives">
-    <value>28, 37</value>
-  </data>
-  <data name="quickLaunchOptionsPanel.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms.Primitives">
-    <value>4, 3, 4, 3</value>
-  </data>
-  <data name="quickLaunchOptionsPanel.Size" type="System.Drawing.Size, System.Drawing.Primitives">
-    <value>401, 222</value>
-  </data>
-  <data name="quickLaunchOptionsPanel.TabIndex" type="System.Int32, System.Private.CoreLib">
-    <value>26</value>
-  </data>
-  <data name="&gt;&gt;quickLaunchOptionsPanel.Name" xml:space="preserve">
-    <value>quickLaunchOptionsPanel</value>
-  </data>
-  <data name="&gt;&gt;quickLaunchOptionsPanel.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Panel, System.Windows.Forms, Version=5.0.6.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;quickLaunchOptionsPanel.Parent" xml:space="preserve">
+  <data name="&gt;&gt;quickLaunchLinkLabel.Parent" xml:space="preserve">
     <value>tabQuickLaunch</value>
   </data>
-  <data name="&gt;&gt;quickLaunchOptionsPanel.ZOrder" xml:space="preserve">
+  <data name="&gt;&gt;quickLaunchLinkLabel.ZOrder" xml:space="preserve">
     <value>0</value>
+  </data>
+  <data name="&gt;&gt;enableQuickLaunchCheckBox.Name" xml:space="preserve">
+    <value>enableQuickLaunchCheckBox</value>
+  </data>
+  <data name="&gt;&gt;enableQuickLaunchCheckBox.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=5.0.6.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;enableQuickLaunchCheckBox.Parent" xml:space="preserve">
+    <value>tabQuickLaunch</value>
+  </data>
+  <data name="&gt;&gt;enableQuickLaunchCheckBox.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="tabQuickLaunch.Location" type="System.Drawing.Point, System.Drawing.Primitives">
+    <value>4, 40</value>
+  </data>
+  <data name="tabQuickLaunch.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms.Primitives">
+    <value>3, 3, 3, 3</value>
+  </data>
+  <data name="tabQuickLaunch.Size" type="System.Drawing.Size, System.Drawing.Primitives">
+    <value>376, 232</value>
+  </data>
+  <data name="tabQuickLaunch.TabIndex" type="System.Int32, System.Private.CoreLib">
+    <value>4</value>
+  </data>
+  <data name="tabQuickLaunch.Text" xml:space="preserve">
+    <value>Quick Launch</value>
+  </data>
+  <data name="&gt;&gt;tabQuickLaunch.Name" xml:space="preserve">
+    <value>tabQuickLaunch</value>
+  </data>
+  <data name="&gt;&gt;tabQuickLaunch.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Version=5.0.6.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tabQuickLaunch.Parent" xml:space="preserve">
+    <value>tabControl</value>
+  </data>
+  <data name="&gt;&gt;tabQuickLaunch.ZOrder" xml:space="preserve">
+    <value>3</value>
   </data>
   <data name="quickLaunchLinkLabel.AutoSize" type="System.Boolean, System.Private.CoreLib">
     <value>True</value>
@@ -738,10 +1245,7 @@
     <value>NoControl</value>
   </data>
   <data name="quickLaunchLinkLabel.Location" type="System.Drawing.Point, System.Drawing.Primitives">
-    <value>272, 262</value>
-  </data>
-  <data name="quickLaunchLinkLabel.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms.Primitives">
-    <value>4, 0, 4, 0</value>
+    <value>24, 32</value>
   </data>
   <data name="quickLaunchLinkLabel.Size" type="System.Drawing.Size, System.Drawing.Primitives">
     <value>132, 13</value>
@@ -762,7 +1266,7 @@
     <value>tabQuickLaunch</value>
   </data>
   <data name="&gt;&gt;quickLaunchLinkLabel.ZOrder" xml:space="preserve">
-    <value>1</value>
+    <value>0</value>
   </data>
   <data name="enableQuickLaunchCheckBox.AutoSize" type="System.Boolean, System.Private.CoreLib">
     <value>True</value>
@@ -771,13 +1275,10 @@
     <value>NoControl</value>
   </data>
   <data name="enableQuickLaunchCheckBox.Location" type="System.Drawing.Point, System.Drawing.Primitives">
-    <value>9, 9</value>
-  </data>
-  <data name="enableQuickLaunchCheckBox.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms.Primitives">
-    <value>4, 3, 4, 3</value>
+    <value>8, 8</value>
   </data>
   <data name="enableQuickLaunchCheckBox.Size" type="System.Drawing.Size, System.Drawing.Primitives">
-    <value>172, 19</value>
+    <value>155, 17</value>
   </data>
   <data name="enableQuickLaunchCheckBox.TabIndex" type="System.Int32, System.Private.CoreLib">
     <value>15</value>
@@ -795,49 +1296,175 @@
     <value>tabQuickLaunch</value>
   </data>
   <data name="&gt;&gt;enableQuickLaunchCheckBox.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;groupBox1.Name" xml:space="preserve">
+    <value>groupBox1</value>
+  </data>
+  <data name="&gt;&gt;groupBox1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=5.0.6.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;groupBox1.Parent" xml:space="preserve">
+    <value>tabTaskView</value>
+  </data>
+  <data name="&gt;&gt;groupBox1.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;comboBoxGroupingMethod.Name" xml:space="preserve">
+    <value>comboBoxGroupingMethod</value>
+  </data>
+  <data name="&gt;&gt;comboBoxGroupingMethod.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Version=5.0.6.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;comboBoxGroupingMethod.Parent" xml:space="preserve">
+    <value>tabTaskView</value>
+  </data>
+  <data name="&gt;&gt;comboBoxGroupingMethod.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;label9.Name" xml:space="preserve">
+    <value>label9</value>
+  </data>
+  <data name="&gt;&gt;label9.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=5.0.6.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;label9.Parent" xml:space="preserve">
+    <value>tabTaskView</value>
+  </data>
+  <data name="&gt;&gt;label9.ZOrder" xml:space="preserve">
     <value>2</value>
   </data>
-  <data name="tabQuickLaunch.Location" type="System.Drawing.Point, System.Drawing.Primitives">
-    <value>4, 44</value>
+  <data name="&gt;&gt;showTaskbarOnAllDesktops.Name" xml:space="preserve">
+    <value>showTaskbarOnAllDesktops</value>
   </data>
-  <data name="tabQuickLaunch.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms.Primitives">
-    <value>4, 3, 4, 3</value>
+  <data name="&gt;&gt;showTaskbarOnAllDesktops.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=5.0.6.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="tabQuickLaunch.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms.Primitives">
-    <value>4, 3, 4, 3</value>
+  <data name="&gt;&gt;showTaskbarOnAllDesktops.Parent" xml:space="preserve">
+    <value>tabTaskView</value>
   </data>
-  <data name="tabQuickLaunch.Size" type="System.Drawing.Size, System.Drawing.Primitives">
-    <value>440, 271</value>
+  <data name="&gt;&gt;showTaskbarOnAllDesktops.ZOrder" xml:space="preserve">
+    <value>3</value>
   </data>
-  <data name="tabQuickLaunch.TabIndex" type="System.Int32, System.Private.CoreLib">
+  <data name="&gt;&gt;taskbarProgramWidth.Name" xml:space="preserve">
+    <value>taskbarProgramWidth</value>
+  </data>
+  <data name="&gt;&gt;taskbarProgramWidth.Type" xml:space="preserve">
+    <value>System.Windows.Forms.NumericUpDown, System.Windows.Forms, Version=5.0.6.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;taskbarProgramWidth.Parent" xml:space="preserve">
+    <value>tabTaskView</value>
+  </data>
+  <data name="&gt;&gt;taskbarProgramWidth.ZOrder" xml:space="preserve">
     <value>4</value>
   </data>
-  <data name="tabQuickLaunch.Text" xml:space="preserve">
-    <value>Quick Launch</value>
+  <data name="&gt;&gt;label1.Name" xml:space="preserve">
+    <value>label1</value>
   </data>
-  <data name="&gt;&gt;tabQuickLaunch.Name" xml:space="preserve">
-    <value>tabQuickLaunch</value>
+  <data name="&gt;&gt;label1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=5.0.6.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;tabQuickLaunch.Type" xml:space="preserve">
+  <data name="&gt;&gt;label1.Parent" xml:space="preserve">
+    <value>tabTaskView</value>
+  </data>
+  <data name="&gt;&gt;label1.ZOrder" xml:space="preserve">
+    <value>5</value>
+  </data>
+  <data name="tabTaskView.Location" type="System.Drawing.Point, System.Drawing.Primitives">
+    <value>4, 40</value>
+  </data>
+  <data name="tabTaskView.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms.Primitives">
+    <value>3, 3, 3, 3</value>
+  </data>
+  <data name="tabTaskView.Size" type="System.Drawing.Size, System.Drawing.Primitives">
+    <value>376, 232</value>
+  </data>
+  <data name="tabTaskView.TabIndex" type="System.Int32, System.Private.CoreLib">
+    <value>0</value>
+  </data>
+  <data name="tabTaskView.Text" xml:space="preserve">
+    <value>Task View</value>
+  </data>
+  <data name="&gt;&gt;tabTaskView.Name" xml:space="preserve">
+    <value>tabTaskView</value>
+  </data>
+  <data name="&gt;&gt;tabTaskView.Type" xml:space="preserve">
     <value>System.Windows.Forms.TabPage, System.Windows.Forms, Version=5.0.6.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;tabQuickLaunch.Parent" xml:space="preserve">
+  <data name="&gt;&gt;tabTaskView.Parent" xml:space="preserve">
     <value>tabControl</value>
   </data>
-  <data name="&gt;&gt;tabQuickLaunch.ZOrder" xml:space="preserve">
+  <data name="&gt;&gt;tabTaskView.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="&gt;&gt;addElementButton.Name" xml:space="preserve">
+    <value>addElementButton</value>
+  </data>
+  <data name="&gt;&gt;addElementButton.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=5.0.6.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;addElementButton.Parent" xml:space="preserve">
+    <value>groupBox1</value>
+  </data>
+  <data name="&gt;&gt;addElementButton.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;taskbarFilterListBox.Name" xml:space="preserve">
+    <value>taskbarFilterListBox</value>
+  </data>
+  <data name="&gt;&gt;taskbarFilterListBox.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ListBox, System.Windows.Forms, Version=5.0.6.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;taskbarFilterListBox.Parent" xml:space="preserve">
+    <value>groupBox1</value>
+  </data>
+  <data name="&gt;&gt;taskbarFilterListBox.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;removeElementButton.Name" xml:space="preserve">
+    <value>removeElementButton</value>
+  </data>
+  <data name="&gt;&gt;removeElementButton.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=5.0.6.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;removeElementButton.Parent" xml:space="preserve">
+    <value>groupBox1</value>
+  </data>
+  <data name="&gt;&gt;removeElementButton.ZOrder" xml:space="preserve">
     <value>2</value>
+  </data>
+  <data name="groupBox1.Location" type="System.Drawing.Point, System.Drawing.Primitives">
+    <value>8, 80</value>
+  </data>
+  <data name="groupBox1.Size" type="System.Drawing.Size, System.Drawing.Primitives">
+    <value>360, 136</value>
+  </data>
+  <data name="groupBox1.TabIndex" type="System.Int32, System.Private.CoreLib">
+    <value>37</value>
+  </data>
+  <data name="groupBox1.Text" xml:space="preserve">
+    <value>Hide elements in the taskbar</value>
+  </data>
+  <data name="&gt;&gt;groupBox1.Name" xml:space="preserve">
+    <value>groupBox1</value>
+  </data>
+  <data name="&gt;&gt;groupBox1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=5.0.6.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;groupBox1.Parent" xml:space="preserve">
+    <value>tabTaskView</value>
+  </data>
+  <data name="&gt;&gt;groupBox1.ZOrder" xml:space="preserve">
+    <value>0</value>
   </data>
   <data name="addElementButton.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
   <data name="addElementButton.Location" type="System.Drawing.Point, System.Drawing.Primitives">
-    <value>317, 18</value>
-  </data>
-  <data name="addElementButton.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms.Primitives">
-    <value>4, 3, 4, 3</value>
+    <value>272, 16</value>
   </data>
   <data name="addElementButton.Size" type="System.Drawing.Size, System.Drawing.Primitives">
-    <value>88, 28</value>
+    <value>75, 24</value>
   </data>
   <data name="addElementButton.TabIndex" type="System.Int32, System.Private.CoreLib">
     <value>35</value>
@@ -857,17 +1484,11 @@
   <data name="&gt;&gt;addElementButton.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
-  <data name="taskbarFilterListBox.ItemHeight" type="System.Int32, System.Private.CoreLib">
-    <value>15</value>
-  </data>
   <data name="taskbarFilterListBox.Location" type="System.Drawing.Point, System.Drawing.Primitives">
-    <value>9, 18</value>
-  </data>
-  <data name="taskbarFilterListBox.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms.Primitives">
-    <value>4, 3, 4, 3</value>
+    <value>8, 16</value>
   </data>
   <data name="taskbarFilterListBox.Size" type="System.Drawing.Size, System.Drawing.Primitives">
-    <value>298, 124</value>
+    <value>256, 108</value>
   </data>
   <data name="taskbarFilterListBox.TabIndex" type="System.Int32, System.Private.CoreLib">
     <value>33</value>
@@ -888,13 +1509,10 @@
     <value>NoControl</value>
   </data>
   <data name="removeElementButton.Location" type="System.Drawing.Point, System.Drawing.Primitives">
-    <value>317, 55</value>
-  </data>
-  <data name="removeElementButton.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms.Primitives">
-    <value>4, 3, 4, 3</value>
+    <value>272, 48</value>
   </data>
   <data name="removeElementButton.Size" type="System.Drawing.Size, System.Drawing.Primitives">
-    <value>88, 28</value>
+    <value>75, 24</value>
   </data>
   <data name="removeElementButton.TabIndex" type="System.Int32, System.Private.CoreLib">
     <value>36</value>
@@ -914,36 +1532,6 @@
   <data name="&gt;&gt;removeElementButton.ZOrder" xml:space="preserve">
     <value>2</value>
   </data>
-  <data name="groupBox1.Location" type="System.Drawing.Point, System.Drawing.Primitives">
-    <value>9, 120</value>
-  </data>
-  <data name="groupBox1.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms.Primitives">
-    <value>4, 3, 4, 3</value>
-  </data>
-  <data name="groupBox1.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms.Primitives">
-    <value>4, 3, 4, 3</value>
-  </data>
-  <data name="groupBox1.Size" type="System.Drawing.Size, System.Drawing.Primitives">
-    <value>420, 157</value>
-  </data>
-  <data name="groupBox1.TabIndex" type="System.Int32, System.Private.CoreLib">
-    <value>37</value>
-  </data>
-  <data name="groupBox1.Text" xml:space="preserve">
-    <value>Hide elements in the taskbar</value>
-  </data>
-  <data name="&gt;&gt;groupBox1.Name" xml:space="preserve">
-    <value>groupBox1</value>
-  </data>
-  <data name="&gt;&gt;groupBox1.Type" xml:space="preserve">
-    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=5.0.6.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;groupBox1.Parent" xml:space="preserve">
-    <value>tabTaskView</value>
-  </data>
-  <data name="&gt;&gt;groupBox1.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
   <data name="comboBoxGroupingMethod.Items" xml:space="preserve">
     <value>None</value>
   </data>
@@ -957,13 +1545,10 @@
     <value>Module Name</value>
   </data>
   <data name="comboBoxGroupingMethod.Location" type="System.Drawing.Point, System.Drawing.Primitives">
-    <value>289, 65</value>
-  </data>
-  <data name="comboBoxGroupingMethod.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms.Primitives">
-    <value>4, 3, 4, 3</value>
+    <value>248, 32</value>
   </data>
   <data name="comboBoxGroupingMethod.Size" type="System.Drawing.Size, System.Drawing.Primitives">
-    <value>139, 23</value>
+    <value>120, 21</value>
   </data>
   <data name="comboBoxGroupingMethod.TabIndex" type="System.Int32, System.Private.CoreLib">
     <value>32</value>
@@ -984,13 +1569,10 @@
     <value>NoControl</value>
   </data>
   <data name="label9.Location" type="System.Drawing.Point, System.Drawing.Primitives">
-    <value>9, 65</value>
-  </data>
-  <data name="label9.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms.Primitives">
-    <value>4, 0, 4, 0</value>
+    <value>8, 32</value>
   </data>
   <data name="label9.Size" type="System.Drawing.Size, System.Drawing.Primitives">
-    <value>271, 18</value>
+    <value>232, 16</value>
   </data>
   <data name="label9.TabIndex" type="System.Int32, System.Private.CoreLib">
     <value>31</value>
@@ -1013,74 +1595,14 @@
   <data name="&gt;&gt;label9.ZOrder" xml:space="preserve">
     <value>2</value>
   </data>
-  <data name="label5.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
-  <data name="label5.Location" type="System.Drawing.Point, System.Drawing.Primitives">
-    <value>9, 37</value>
-  </data>
-  <data name="label5.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms.Primitives">
-    <value>4, 0, 4, 0</value>
-  </data>
-  <data name="label5.Size" type="System.Drawing.Size, System.Drawing.Primitives">
-    <value>271, 18</value>
-  </data>
-  <data name="label5.TabIndex" type="System.Int32, System.Private.CoreLib">
-    <value>18</value>
-  </data>
-  <data name="label5.Text" xml:space="preserve">
-    <value>Space between programs:</value>
-  </data>
-  <data name="label5.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing.Common">
-    <value>BottomLeft</value>
-  </data>
-  <data name="&gt;&gt;label5.Name" xml:space="preserve">
-    <value>label5</value>
-  </data>
-  <data name="&gt;&gt;label5.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=5.0.6.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;label5.Parent" xml:space="preserve">
-    <value>tabTaskView</value>
-  </data>
-  <data name="&gt;&gt;label5.ZOrder" xml:space="preserve">
-    <value>3</value>
-  </data>
-  <data name="spaceBetweenTaskbarIcons.Location" type="System.Drawing.Point, System.Drawing.Primitives">
-    <value>289, 37</value>
-  </data>
-  <data name="spaceBetweenTaskbarIcons.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms.Primitives">
-    <value>4, 3, 4, 3</value>
-  </data>
-  <data name="spaceBetweenTaskbarIcons.Size" type="System.Drawing.Size, System.Drawing.Primitives">
-    <value>140, 23</value>
-  </data>
-  <data name="spaceBetweenTaskbarIcons.TabIndex" type="System.Int32, System.Private.CoreLib">
-    <value>17</value>
-  </data>
-  <data name="&gt;&gt;spaceBetweenTaskbarIcons.Name" xml:space="preserve">
-    <value>spaceBetweenTaskbarIcons</value>
-  </data>
-  <data name="&gt;&gt;spaceBetweenTaskbarIcons.Type" xml:space="preserve">
-    <value>System.Windows.Forms.NumericUpDown, System.Windows.Forms, Version=5.0.6.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;spaceBetweenTaskbarIcons.Parent" xml:space="preserve">
-    <value>tabTaskView</value>
-  </data>
-  <data name="&gt;&gt;spaceBetweenTaskbarIcons.ZOrder" xml:space="preserve">
-    <value>4</value>
-  </data>
   <data name="showTaskbarOnAllDesktops.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
   <data name="showTaskbarOnAllDesktops.Location" type="System.Drawing.Point, System.Drawing.Primitives">
-    <value>9, 92</value>
-  </data>
-  <data name="showTaskbarOnAllDesktops.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms.Primitives">
-    <value>4, 3, 4, 3</value>
+    <value>8, 56</value>
   </data>
   <data name="showTaskbarOnAllDesktops.Size" type="System.Drawing.Size, System.Drawing.Primitives">
-    <value>420, 20</value>
+    <value>360, 17</value>
   </data>
   <data name="showTaskbarOnAllDesktops.TabIndex" type="System.Int32, System.Private.CoreLib">
     <value>9</value>
@@ -1098,16 +1620,13 @@
     <value>tabTaskView</value>
   </data>
   <data name="&gt;&gt;showTaskbarOnAllDesktops.ZOrder" xml:space="preserve">
-    <value>5</value>
+    <value>3</value>
   </data>
   <data name="taskbarProgramWidth.Location" type="System.Drawing.Point, System.Drawing.Primitives">
-    <value>289, 9</value>
-  </data>
-  <data name="taskbarProgramWidth.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms.Primitives">
-    <value>4, 3, 4, 3</value>
+    <value>248, 8</value>
   </data>
   <data name="taskbarProgramWidth.Size" type="System.Drawing.Size, System.Drawing.Primitives">
-    <value>140, 23</value>
+    <value>121, 21</value>
   </data>
   <data name="taskbarProgramWidth.TabIndex" type="System.Int32, System.Private.CoreLib">
     <value>4</value>
@@ -1122,19 +1641,16 @@
     <value>tabTaskView</value>
   </data>
   <data name="&gt;&gt;taskbarProgramWidth.ZOrder" xml:space="preserve">
-    <value>6</value>
+    <value>4</value>
   </data>
   <data name="label1.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
   <data name="label1.Location" type="System.Drawing.Point, System.Drawing.Primitives">
-    <value>9, 9</value>
-  </data>
-  <data name="label1.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms.Primitives">
-    <value>4, 0, 4, 0</value>
+    <value>8, 8</value>
   </data>
   <data name="label1.Size" type="System.Drawing.Size, System.Drawing.Primitives">
-    <value>271, 18</value>
+    <value>232, 16</value>
   </data>
   <data name="label1.TabIndex" type="System.Int32, System.Private.CoreLib">
     <value>2</value>
@@ -1155,115 +1671,7 @@
     <value>tabTaskView</value>
   </data>
   <data name="&gt;&gt;label1.ZOrder" xml:space="preserve">
-    <value>7</value>
-  </data>
-  <data name="tabTaskView.Location" type="System.Drawing.Point, System.Drawing.Primitives">
-    <value>4, 44</value>
-  </data>
-  <data name="tabTaskView.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms.Primitives">
-    <value>4, 3, 4, 3</value>
-  </data>
-  <data name="tabTaskView.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms.Primitives">
-    <value>4, 3, 4, 3</value>
-  </data>
-  <data name="tabTaskView.Size" type="System.Drawing.Size, System.Drawing.Primitives">
-    <value>440, 271</value>
-  </data>
-  <data name="tabTaskView.TabIndex" type="System.Int32, System.Private.CoreLib">
-    <value>0</value>
-  </data>
-  <data name="tabTaskView.Text" xml:space="preserve">
-    <value>Task View</value>
-  </data>
-  <data name="&gt;&gt;tabTaskView.Name" xml:space="preserve">
-    <value>tabTaskView</value>
-  </data>
-  <data name="&gt;&gt;tabTaskView.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Version=5.0.6.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tabTaskView.Parent" xml:space="preserve">
-    <value>tabControl</value>
-  </data>
-  <data name="&gt;&gt;tabTaskView.ZOrder" xml:space="preserve">
-    <value>3</value>
-  </data>
-  <data name="label2.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
-  <data name="label2.Location" type="System.Drawing.Point, System.Drawing.Primitives">
-    <value>9, 9</value>
-  </data>
-  <data name="label2.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms.Primitives">
-    <value>4, 0, 4, 0</value>
-  </data>
-  <data name="label2.Size" type="System.Drawing.Size, System.Drawing.Primitives">
-    <value>261, 18</value>
-  </data>
-  <data name="label2.TabIndex" type="System.Int32, System.Private.CoreLib">
-    <value>33</value>
-  </data>
-  <data name="label2.Text" xml:space="preserve">
-    <value>Space between icons:</value>
-  </data>
-  <data name="label2.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing.Common">
-    <value>BottomLeft</value>
-  </data>
-  <data name="&gt;&gt;label2.Name" xml:space="preserve">
-    <value>label2</value>
-  </data>
-  <data name="&gt;&gt;label2.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=5.0.6.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;label2.Parent" xml:space="preserve">
-    <value>tabSystemTray</value>
-  </data>
-  <data name="&gt;&gt;label2.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="spaceBetweenTrayIcons.Location" type="System.Drawing.Point, System.Drawing.Primitives">
-    <value>280, 9</value>
-  </data>
-  <data name="spaceBetweenTrayIcons.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms.Primitives">
-    <value>4, 3, 4, 3</value>
-  </data>
-  <data name="spaceBetweenTrayIcons.Size" type="System.Drawing.Size, System.Drawing.Primitives">
-    <value>154, 23</value>
-  </data>
-  <data name="spaceBetweenTrayIcons.TabIndex" type="System.Int32, System.Private.CoreLib">
-    <value>32</value>
-  </data>
-  <data name="&gt;&gt;spaceBetweenTrayIcons.Name" xml:space="preserve">
-    <value>spaceBetweenTrayIcons</value>
-  </data>
-  <data name="&gt;&gt;spaceBetweenTrayIcons.Type" xml:space="preserve">
-    <value>System.Windows.Forms.NumericUpDown, System.Windows.Forms, Version=5.0.6.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;spaceBetweenTrayIcons.Parent" xml:space="preserve">
-    <value>tabSystemTray</value>
-  </data>
-  <data name="&gt;&gt;spaceBetweenTrayIcons.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="enableSysTrayColorChange.AutoSize" type="System.Boolean, System.Private.CoreLib">
-    <value>True</value>
-  </data>
-  <data name="enableSysTrayColorChange.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
-  <data name="enableSysTrayColorChange.Location" type="System.Drawing.Point, System.Drawing.Primitives">
-    <value>9, 63</value>
-  </data>
-  <data name="enableSysTrayColorChange.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms.Primitives">
-    <value>4, 3, 4, 3</value>
-  </data>
-  <data name="enableSysTrayColorChange.Size" type="System.Drawing.Size, System.Drawing.Primitives">
-    <value>211, 19</value>
-  </data>
-  <data name="enableSysTrayColorChange.TabIndex" type="System.Int32, System.Private.CoreLib">
-    <value>31</value>
-  </data>
-  <data name="enableSysTrayColorChange.Text" xml:space="preserve">
-    <value>Auto adjust system tray icon colors</value>
+    <value>5</value>
   </data>
   <data name="&gt;&gt;enableSysTrayColorChange.Name" xml:space="preserve">
     <value>enableSysTrayColorChange</value>
@@ -1275,28 +1683,7 @@
     <value>tabSystemTray</value>
   </data>
   <data name="&gt;&gt;enableSysTrayColorChange.ZOrder" xml:space="preserve">
-    <value>2</value>
-  </data>
-  <data name="enableSysTrayHover.AutoSize" type="System.Boolean, System.Private.CoreLib">
-    <value>True</value>
-  </data>
-  <data name="enableSysTrayHover.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
-  <data name="enableSysTrayHover.Location" type="System.Drawing.Point, System.Drawing.Primitives">
-    <value>9, 37</value>
-  </data>
-  <data name="enableSysTrayHover.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms.Primitives">
-    <value>4, 3, 4, 3</value>
-  </data>
-  <data name="enableSysTrayHover.Size" type="System.Drawing.Size, System.Drawing.Primitives">
-    <value>221, 19</value>
-  </data>
-  <data name="enableSysTrayHover.TabIndex" type="System.Int32, System.Private.CoreLib">
-    <value>30</value>
-  </data>
-  <data name="enableSysTrayHover.Text" xml:space="preserve">
-    <value>Enable hover highlight in system tray</value>
+    <value>0</value>
   </data>
   <data name="&gt;&gt;enableSysTrayHover.Name" xml:space="preserve">
     <value>enableSysTrayHover</value>
@@ -1308,16 +1695,13 @@
     <value>tabSystemTray</value>
   </data>
   <data name="&gt;&gt;enableSysTrayHover.ZOrder" xml:space="preserve">
-    <value>3</value>
+    <value>1</value>
   </data>
   <data name="tabSystemTray.Location" type="System.Drawing.Point, System.Drawing.Primitives">
-    <value>4, 44</value>
-  </data>
-  <data name="tabSystemTray.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms.Primitives">
-    <value>4, 3, 4, 3</value>
+    <value>4, 40</value>
   </data>
   <data name="tabSystemTray.Size" type="System.Drawing.Size, System.Drawing.Primitives">
-    <value>440, 271</value>
+    <value>376, 232</value>
   </data>
   <data name="tabSystemTray.TabIndex" type="System.Int32, System.Private.CoreLib">
     <value>3</value>
@@ -1335,10 +1719,265 @@
     <value>tabControl</value>
   </data>
   <data name="&gt;&gt;tabSystemTray.ZOrder" xml:space="preserve">
-    <value>4</value>
+    <value>5</value>
+  </data>
+  <data name="enableSysTrayColorChange.AutoSize" type="System.Boolean, System.Private.CoreLib">
+    <value>True</value>
+  </data>
+  <data name="enableSysTrayColorChange.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="enableSysTrayColorChange.Location" type="System.Drawing.Point, System.Drawing.Primitives">
+    <value>8, 31</value>
+  </data>
+  <data name="enableSysTrayColorChange.Size" type="System.Drawing.Size, System.Drawing.Primitives">
+    <value>195, 17</value>
+  </data>
+  <data name="enableSysTrayColorChange.TabIndex" type="System.Int32, System.Private.CoreLib">
+    <value>31</value>
+  </data>
+  <data name="enableSysTrayColorChange.Text" xml:space="preserve">
+    <value>Auto adjust system tray icon colors</value>
+  </data>
+  <data name="&gt;&gt;enableSysTrayColorChange.Name" xml:space="preserve">
+    <value>enableSysTrayColorChange</value>
+  </data>
+  <data name="&gt;&gt;enableSysTrayColorChange.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=5.0.6.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;enableSysTrayColorChange.Parent" xml:space="preserve">
+    <value>tabSystemTray</value>
+  </data>
+  <data name="&gt;&gt;enableSysTrayColorChange.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="enableSysTrayHover.AutoSize" type="System.Boolean, System.Private.CoreLib">
+    <value>True</value>
+  </data>
+  <data name="enableSysTrayHover.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="enableSysTrayHover.Location" type="System.Drawing.Point, System.Drawing.Primitives">
+    <value>8, 8</value>
+  </data>
+  <data name="enableSysTrayHover.Size" type="System.Drawing.Size, System.Drawing.Primitives">
+    <value>203, 17</value>
+  </data>
+  <data name="enableSysTrayHover.TabIndex" type="System.Int32, System.Private.CoreLib">
+    <value>30</value>
+  </data>
+  <data name="enableSysTrayHover.Text" xml:space="preserve">
+    <value>Enable hover highlight in system tray</value>
+  </data>
+  <data name="&gt;&gt;enableSysTrayHover.Name" xml:space="preserve">
+    <value>enableSysTrayHover</value>
+  </data>
+  <data name="&gt;&gt;enableSysTrayHover.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=5.0.6.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;enableSysTrayHover.Parent" xml:space="preserve">
+    <value>tabSystemTray</value>
+  </data>
+  <data name="&gt;&gt;enableSysTrayHover.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;tweaksPropertyGrid.Name" xml:space="preserve">
+    <value>tweaksPropertyGrid</value>
+  </data>
+  <data name="&gt;&gt;tweaksPropertyGrid.Type" xml:space="preserve">
+    <value>System.Windows.Forms.PropertyGrid, System.Windows.Forms, Version=5.0.6.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tweaksPropertyGrid.Parent" xml:space="preserve">
+    <value>tabTweaks</value>
+  </data>
+  <data name="&gt;&gt;tweaksPropertyGrid.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="tabTweaks.Location" type="System.Drawing.Point, System.Drawing.Primitives">
+    <value>4, 40</value>
+  </data>
+  <data name="tabTweaks.Size" type="System.Drawing.Size, System.Drawing.Primitives">
+    <value>376, 232</value>
+  </data>
+  <data name="tabTweaks.TabIndex" type="System.Int32, System.Private.CoreLib">
+    <value>8</value>
+  </data>
+  <data name="tabTweaks.Text" xml:space="preserve">
+    <value>Tweaks</value>
+  </data>
+  <data name="&gt;&gt;tabTweaks.Name" xml:space="preserve">
+    <value>tabTweaks</value>
+  </data>
+  <data name="&gt;&gt;tabTweaks.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Version=5.0.6.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tabTweaks.Parent" xml:space="preserve">
+    <value>tabControl</value>
+  </data>
+  <data name="&gt;&gt;tabTweaks.ZOrder" xml:space="preserve">
+    <value>6</value>
+  </data>
+  <data name="tweaksPropertyGrid.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="tweaksPropertyGrid.Location" type="System.Drawing.Point, System.Drawing.Primitives">
+    <value>0, 0</value>
+  </data>
+  <data name="tweaksPropertyGrid.Size" type="System.Drawing.Size, System.Drawing.Primitives">
+    <value>376, 232</value>
+  </data>
+  <data name="tweaksPropertyGrid.TabIndex" type="System.Int32, System.Private.CoreLib">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;tweaksPropertyGrid.Name" xml:space="preserve">
+    <value>tweaksPropertyGrid</value>
+  </data>
+  <data name="&gt;&gt;tweaksPropertyGrid.Type" xml:space="preserve">
+    <value>System.Windows.Forms.PropertyGrid, System.Windows.Forms, Version=5.0.6.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tweaksPropertyGrid.Parent" xml:space="preserve">
+    <value>tabTweaks</value>
+  </data>
+  <data name="&gt;&gt;tweaksPropertyGrid.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;copyrightTablePanel.Name" xml:space="preserve">
+    <value>copyrightTablePanel</value>
+  </data>
+  <data name="&gt;&gt;copyrightTablePanel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=5.0.6.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;copyrightTablePanel.Parent" xml:space="preserve">
+    <value>tabAbout</value>
+  </data>
+  <data name="&gt;&gt;copyrightTablePanel.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="copyrightTablePanel.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="labelCopyrightSCTT" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="labelCopyrightWindows" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="labelCopyrightSCT" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="label7" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,50,Percent,50" /&gt;&lt;Rows Styles="AutoSize,0,AutoSize,0" /&gt;&lt;/TableLayoutSettings&gt;</value>
+  </data>
+  <data name="&gt;&gt;bannerPictureBox.Name" xml:space="preserve">
+    <value>bannerPictureBox</value>
+  </data>
+  <data name="&gt;&gt;bannerPictureBox.Type" xml:space="preserve">
+    <value>System.Windows.Forms.PictureBox, System.Windows.Forms, Version=5.0.6.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;bannerPictureBox.Parent" xml:space="preserve">
+    <value>tabAbout</value>
+  </data>
+  <data name="&gt;&gt;bannerPictureBox.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="tabAbout.Location" type="System.Drawing.Point, System.Drawing.Primitives">
+    <value>4, 40</value>
+  </data>
+  <data name="tabAbout.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms.Primitives">
+    <value>3, 3, 3, 3</value>
+  </data>
+  <data name="tabAbout.Size" type="System.Drawing.Size, System.Drawing.Primitives">
+    <value>376, 232</value>
+  </data>
+  <data name="tabAbout.TabIndex" type="System.Int32, System.Private.CoreLib">
+    <value>1</value>
+  </data>
+  <data name="tabAbout.Text" xml:space="preserve">
+    <value>About</value>
+  </data>
+  <data name="&gt;&gt;tabAbout.Name" xml:space="preserve">
+    <value>tabAbout</value>
+  </data>
+  <data name="&gt;&gt;tabAbout.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Version=5.0.6.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tabAbout.Parent" xml:space="preserve">
+    <value>tabControl</value>
+  </data>
+  <data name="&gt;&gt;tabAbout.ZOrder" xml:space="preserve">
+    <value>7</value>
   </data>
   <data name="copyrightTablePanel.ColumnCount" type="System.Int32, System.Private.CoreLib">
     <value>2</value>
+  </data>
+  <data name="&gt;&gt;labelCopyrightSCTT.Name" xml:space="preserve">
+    <value>labelCopyrightSCTT</value>
+  </data>
+  <data name="&gt;&gt;labelCopyrightSCTT.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=5.0.6.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;labelCopyrightSCTT.Parent" xml:space="preserve">
+    <value>copyrightTablePanel</value>
+  </data>
+  <data name="&gt;&gt;labelCopyrightSCTT.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;labelCopyrightWindows.Name" xml:space="preserve">
+    <value>labelCopyrightWindows</value>
+  </data>
+  <data name="&gt;&gt;labelCopyrightWindows.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=5.0.6.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;labelCopyrightWindows.Parent" xml:space="preserve">
+    <value>copyrightTablePanel</value>
+  </data>
+  <data name="&gt;&gt;labelCopyrightWindows.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;labelCopyrightSCT.Name" xml:space="preserve">
+    <value>labelCopyrightSCT</value>
+  </data>
+  <data name="&gt;&gt;labelCopyrightSCT.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=5.0.6.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;labelCopyrightSCT.Parent" xml:space="preserve">
+    <value>copyrightTablePanel</value>
+  </data>
+  <data name="&gt;&gt;labelCopyrightSCT.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="&gt;&gt;label7.Name" xml:space="preserve">
+    <value>label7</value>
+  </data>
+  <data name="&gt;&gt;label7.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=5.0.6.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;label7.Parent" xml:space="preserve">
+    <value>copyrightTablePanel</value>
+  </data>
+  <data name="&gt;&gt;label7.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="copyrightTablePanel.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="copyrightTablePanel.Location" type="System.Drawing.Point, System.Drawing.Primitives">
+    <value>3, 60</value>
+  </data>
+  <data name="copyrightTablePanel.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms.Primitives">
+    <value>0, 10, 0, 0</value>
+  </data>
+  <data name="copyrightTablePanel.RowCount" type="System.Int32, System.Private.CoreLib">
+    <value>2</value>
+  </data>
+  <data name="copyrightTablePanel.Size" type="System.Drawing.Size, System.Drawing.Primitives">
+    <value>370, 169</value>
+  </data>
+  <data name="copyrightTablePanel.TabIndex" type="System.Int32, System.Private.CoreLib">
+    <value>28</value>
+  </data>
+  <data name="&gt;&gt;copyrightTablePanel.Name" xml:space="preserve">
+    <value>copyrightTablePanel</value>
+  </data>
+  <data name="&gt;&gt;copyrightTablePanel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=5.0.6.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;copyrightTablePanel.Parent" xml:space="preserve">
+    <value>tabAbout</value>
+  </data>
+  <data name="&gt;&gt;copyrightTablePanel.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="copyrightTablePanel.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="labelCopyrightSCTT" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="labelCopyrightWindows" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="labelCopyrightSCT" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="label7" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,50,Percent,50" /&gt;&lt;Rows Styles="AutoSize,0,AutoSize,0" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
   <data name="labelCopyrightSCTT.AutoSize" type="System.Boolean, System.Private.CoreLib">
     <value>True</value>
@@ -1350,13 +1989,13 @@
     <value>NoControl</value>
   </data>
   <data name="labelCopyrightSCTT.Location" type="System.Drawing.Point, System.Drawing.Primitives">
-    <value>4, 15</value>
+    <value>3, 13</value>
   </data>
   <data name="labelCopyrightSCTT.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms.Primitives">
-    <value>4, 3, 4, 3</value>
+    <value>3, 3, 3, 3</value>
   </data>
   <data name="labelCopyrightSCTT.Size" type="System.Drawing.Size, System.Drawing.Primitives">
-    <value>208, 60</value>
+    <value>179, 52</value>
   </data>
   <data name="labelCopyrightSCTT.TabIndex" type="System.Int32, System.Private.CoreLib">
     <value>23</value>
@@ -1389,13 +2028,13 @@ All rights reserved</value>
     <value>NoControl</value>
   </data>
   <data name="labelCopyrightWindows.Location" type="System.Drawing.Point, System.Drawing.Primitives">
-    <value>4, 81</value>
+    <value>3, 71</value>
   </data>
   <data name="labelCopyrightWindows.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms.Primitives">
-    <value>4, 3, 4, 3</value>
+    <value>3, 3, 3, 3</value>
   </data>
   <data name="labelCopyrightWindows.Size" type="System.Drawing.Size, System.Drawing.Primitives">
-    <value>208, 115</value>
+    <value>179, 95</value>
   </data>
   <data name="labelCopyrightWindows.TabIndex" type="System.Int32, System.Private.CoreLib">
     <value>27</value>
@@ -1427,13 +2066,13 @@ All rights reserved</value>
     <value>NoControl</value>
   </data>
   <data name="labelCopyrightSCT.Location" type="System.Drawing.Point, System.Drawing.Primitives">
-    <value>220, 15</value>
+    <value>188, 13</value>
   </data>
   <data name="labelCopyrightSCT.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms.Primitives">
-    <value>4, 3, 4, 3</value>
+    <value>3, 3, 3, 3</value>
   </data>
   <data name="labelCopyrightSCT.Size" type="System.Drawing.Size, System.Drawing.Primitives">
-    <value>208, 60</value>
+    <value>179, 52</value>
   </data>
   <data name="labelCopyrightSCT.TabIndex" type="System.Int32, System.Private.CoreLib">
     <value>25</value>
@@ -1469,13 +2108,13 @@ All rights reserved</value>
     <value>Fill</value>
   </data>
   <data name="label7.Location" type="System.Drawing.Point, System.Drawing.Primitives">
-    <value>220, 81</value>
+    <value>188, 71</value>
   </data>
   <data name="label7.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms.Primitives">
-    <value>4, 3, 4, 3</value>
+    <value>3, 3, 3, 3</value>
   </data>
   <data name="label7.Size" type="System.Drawing.Size, System.Drawing.Primitives">
-    <value>208, 115</value>
+    <value>179, 95</value>
   </data>
   <data name="label7.TabIndex" type="System.Int32, System.Private.CoreLib">
     <value>28</value>
@@ -1501,42 +2140,6 @@ no warranty what so ever.</value>
   <data name="&gt;&gt;label7.ZOrder" xml:space="preserve">
     <value>3</value>
   </data>
-  <data name="copyrightTablePanel.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="copyrightTablePanel.Location" type="System.Drawing.Point, System.Drawing.Primitives">
-    <value>4, 69</value>
-  </data>
-  <data name="copyrightTablePanel.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms.Primitives">
-    <value>4, 3, 4, 3</value>
-  </data>
-  <data name="copyrightTablePanel.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms.Primitives">
-    <value>0, 12, 0, 0</value>
-  </data>
-  <data name="copyrightTablePanel.RowCount" type="System.Int32, System.Private.CoreLib">
-    <value>2</value>
-  </data>
-  <data name="copyrightTablePanel.Size" type="System.Drawing.Size, System.Drawing.Primitives">
-    <value>432, 199</value>
-  </data>
-  <data name="copyrightTablePanel.TabIndex" type="System.Int32, System.Private.CoreLib">
-    <value>28</value>
-  </data>
-  <data name="&gt;&gt;copyrightTablePanel.Name" xml:space="preserve">
-    <value>copyrightTablePanel</value>
-  </data>
-  <data name="&gt;&gt;copyrightTablePanel.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=5.0.6.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;copyrightTablePanel.Parent" xml:space="preserve">
-    <value>tabAbout</value>
-  </data>
-  <data name="&gt;&gt;copyrightTablePanel.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="copyrightTablePanel.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="labelCopyrightSCTT" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="labelCopyrightWindows" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="labelCopyrightSCT" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="label7" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,50,Percent,50" /&gt;&lt;Rows Styles="AutoSize,0,AutoSize,0" /&gt;&lt;/TableLayoutSettings&gt;</value>
-  </data>
   <data name="bannerPictureBox.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Top</value>
   </data>
@@ -1544,13 +2147,10 @@ no warranty what so ever.</value>
     <value>NoControl</value>
   </data>
   <data name="bannerPictureBox.Location" type="System.Drawing.Point, System.Drawing.Primitives">
-    <value>4, 3</value>
-  </data>
-  <data name="bannerPictureBox.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms.Primitives">
-    <value>4, 3, 4, 3</value>
+    <value>3, 3</value>
   </data>
   <data name="bannerPictureBox.Size" type="System.Drawing.Size, System.Drawing.Primitives">
-    <value>432, 66</value>
+    <value>370, 57</value>
   </data>
   <data name="bannerPictureBox.SizeMode" type="System.Windows.Forms.PictureBoxSizeMode, System.Windows.Forms">
     <value>StretchImage</value>
@@ -1570,47 +2170,53 @@ no warranty what so ever.</value>
   <data name="&gt;&gt;bannerPictureBox.ZOrder" xml:space="preserve">
     <value>1</value>
   </data>
-  <data name="tabAbout.Location" type="System.Drawing.Point, System.Drawing.Primitives">
-    <value>4, 44</value>
+  <data name="&gt;&gt;enablePassiveTaskbarCheckBox.Name" xml:space="preserve">
+    <value>enablePassiveTaskbarCheckBox</value>
   </data>
-  <data name="tabAbout.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms.Primitives">
-    <value>4, 3, 4, 3</value>
+  <data name="&gt;&gt;enablePassiveTaskbarCheckBox.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=5.0.6.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="tabAbout.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms.Primitives">
-    <value>4, 3, 4, 3</value>
+  <data name="&gt;&gt;enablePassiveTaskbarCheckBox.Parent" xml:space="preserve">
+    <value>tabDebug</value>
   </data>
-  <data name="tabAbout.Size" type="System.Drawing.Size, System.Drawing.Primitives">
-    <value>440, 271</value>
+  <data name="&gt;&gt;enablePassiveTaskbarCheckBox.ZOrder" xml:space="preserve">
+    <value>0</value>
   </data>
-  <data name="tabAbout.TabIndex" type="System.Int32, System.Private.CoreLib">
-    <value>1</value>
+  <data name="tabDebug.Location" type="System.Drawing.Point, System.Drawing.Primitives">
+    <value>4, 40</value>
   </data>
-  <data name="tabAbout.Text" xml:space="preserve">
-    <value>About</value>
+  <data name="tabDebug.Size" type="System.Drawing.Size, System.Drawing.Primitives">
+    <value>376, 232</value>
   </data>
-  <data name="&gt;&gt;tabAbout.Name" xml:space="preserve">
-    <value>tabAbout</value>
+  <data name="tabDebug.TabIndex" type="System.Int32, System.Private.CoreLib">
+    <value>6</value>
   </data>
-  <data name="&gt;&gt;tabAbout.Type" xml:space="preserve">
+  <data name="tabDebug.Text" xml:space="preserve">
+    <value>DEBUG</value>
+  </data>
+  <data name="&gt;&gt;tabDebug.Name" xml:space="preserve">
+    <value>tabDebug</value>
+  </data>
+  <data name="&gt;&gt;tabDebug.Type" xml:space="preserve">
     <value>System.Windows.Forms.TabPage, System.Windows.Forms, Version=5.0.6.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;tabAbout.Parent" xml:space="preserve">
+  <data name="&gt;&gt;tabDebug.Parent" xml:space="preserve">
     <value>tabControl</value>
   </data>
-  <data name="&gt;&gt;tabAbout.ZOrder" xml:space="preserve">
-    <value>5</value>
+  <data name="&gt;&gt;tabDebug.ZOrder" xml:space="preserve">
+    <value>8</value>
   </data>
   <data name="enablePassiveTaskbarCheckBox.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
   <data name="enablePassiveTaskbarCheckBox.Location" type="System.Drawing.Point, System.Drawing.Primitives">
-    <value>9, 9</value>
+    <value>8, 8</value>
   </data>
   <data name="enablePassiveTaskbarCheckBox.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms.Primitives">
-    <value>4, 0, 4, 0</value>
+    <value>3, 0, 3, 0</value>
   </data>
   <data name="enablePassiveTaskbarCheckBox.Size" type="System.Drawing.Size, System.Drawing.Primitives">
-    <value>416, 18</value>
+    <value>357, 16</value>
   </data>
   <data name="enablePassiveTaskbarCheckBox.TabIndex" type="System.Int32, System.Private.CoreLib">
     <value>9</value>
@@ -1630,57 +2236,6 @@ no warranty what so ever.</value>
   <data name="&gt;&gt;enablePassiveTaskbarCheckBox.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
-  <data name="tabDebug.Location" type="System.Drawing.Point, System.Drawing.Primitives">
-    <value>4, 44</value>
-  </data>
-  <data name="tabDebug.Size" type="System.Drawing.Size, System.Drawing.Primitives">
-    <value>440, 271</value>
-  </data>
-  <data name="tabDebug.TabIndex" type="System.Int32, System.Private.CoreLib">
-    <value>6</value>
-  </data>
-  <data name="tabDebug.Text" xml:space="preserve">
-    <value>DEBUG</value>
-  </data>
-  <data name="&gt;&gt;tabDebug.Name" xml:space="preserve">
-    <value>tabDebug</value>
-  </data>
-  <data name="&gt;&gt;tabDebug.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Version=5.0.6.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tabDebug.Parent" xml:space="preserve">
-    <value>tabControl</value>
-  </data>
-  <data name="&gt;&gt;tabDebug.ZOrder" xml:space="preserve">
-    <value>6</value>
-  </data>
-  <data name="tabControl.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="tabControl.Location" type="System.Drawing.Point, System.Drawing.Primitives">
-    <value>0, 115</value>
-  </data>
-  <data name="tabControl.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms.Primitives">
-    <value>4, 3, 4, 3</value>
-  </data>
-  <data name="tabControl.Size" type="System.Drawing.Size, System.Drawing.Primitives">
-    <value>448, 319</value>
-  </data>
-  <data name="tabControl.TabIndex" type="System.Int32, System.Private.CoreLib">
-    <value>5</value>
-  </data>
-  <data name="&gt;&gt;tabControl.Name" xml:space="preserve">
-    <value>tabControl</value>
-  </data>
-  <data name="&gt;&gt;tabControl.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TabControl, System.Windows.Forms, Version=5.0.6.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tabControl.Parent" xml:space="preserve">
-    <value>panelContent</value>
-  </data>
-  <data name="&gt;&gt;tabControl.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
   <data name="customButtonFileDialog.Filter" xml:space="preserve">
     <value>Compatible image files|*.jpg;*.jpeg;*.png;*.bmp</value>
   </data>
@@ -1694,10 +2249,7 @@ no warranty what so ever.</value>
     <value>Tahoma, 8.25pt, style=Bold</value>
   </data>
   <data name="aboutLabel.Location" type="System.Drawing.Point, System.Drawing.Primitives">
-    <value>12, 507</value>
-  </data>
-  <data name="aboutLabel.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms.Primitives">
-    <value>4, 0, 4, 0</value>
+    <value>10, 439</value>
   </data>
   <data name="aboutLabel.Size" type="System.Drawing.Size, System.Drawing.Primitives">
     <value>181, 13</value>
@@ -1720,21 +2272,6 @@ no warranty what so ever.</value>
   <data name="&gt;&gt;aboutLabel.ZOrder" xml:space="preserve">
     <value>1</value>
   </data>
-  <data name="panelPreview.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Top</value>
-  </data>
-  <data name="panelPreview.Location" type="System.Drawing.Point, System.Drawing.Primitives">
-    <value>0, 0</value>
-  </data>
-  <data name="panelPreview.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms.Primitives">
-    <value>4, 3, 4, 3</value>
-  </data>
-  <data name="panelPreview.Size" type="System.Drawing.Size, System.Drawing.Primitives">
-    <value>448, 115</value>
-  </data>
-  <data name="panelPreview.TabIndex" type="System.Int32, System.Private.CoreLib">
-    <value>6</value>
-  </data>
   <data name="&gt;&gt;panelPreview.Name" xml:space="preserve">
     <value>panelPreview</value>
   </data>
@@ -1748,13 +2285,10 @@ no warranty what so ever.</value>
     <value>1</value>
   </data>
   <data name="panelContent.Location" type="System.Drawing.Point, System.Drawing.Primitives">
-    <value>9, 9</value>
-  </data>
-  <data name="panelContent.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms.Primitives">
-    <value>4, 3, 4, 3</value>
+    <value>8, 8</value>
   </data>
   <data name="panelContent.Size" type="System.Drawing.Size, System.Drawing.Primitives">
-    <value>448, 434</value>
+    <value>384, 376</value>
   </data>
   <data name="panelContent.TabIndex" type="System.Int32, System.Private.CoreLib">
     <value>29</value>
@@ -1770,6 +2304,30 @@ no warranty what so ever.</value>
   </data>
   <data name="&gt;&gt;panelContent.ZOrder" xml:space="preserve">
     <value>0</value>
+  </data>
+  <data name="panelPreview.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Top</value>
+  </data>
+  <data name="panelPreview.Location" type="System.Drawing.Point, System.Drawing.Primitives">
+    <value>0, 0</value>
+  </data>
+  <data name="panelPreview.Size" type="System.Drawing.Size, System.Drawing.Primitives">
+    <value>384, 100</value>
+  </data>
+  <data name="panelPreview.TabIndex" type="System.Int32, System.Private.CoreLib">
+    <value>6</value>
+  </data>
+  <data name="&gt;&gt;panelPreview.Name" xml:space="preserve">
+    <value>panelPreview</value>
+  </data>
+  <data name="&gt;&gt;panelPreview.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Panel, System.Windows.Forms, Version=5.0.6.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;panelPreview.Parent" xml:space="preserve">
+    <value>panelContent</value>
+  </data>
+  <data name="&gt;&gt;panelPreview.ZOrder" xml:space="preserve">
+    <value>1</value>
   </data>
   <data name="notifyIcon1.Text" xml:space="preserve">
     <value>notifyIcon1</value>
@@ -1787,10 +2345,10 @@ no warranty what so ever.</value>
     <value>True</value>
   </metadata>
   <data name="$this.AutoScaleDimensions" type="System.Drawing.SizeF, System.Drawing.Primitives">
-    <value>7, 15</value>
+    <value>6, 13</value>
   </data>
   <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing.Primitives">
-    <value>464, 488</value>
+    <value>398, 423</value>
   </data>
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing.Common" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -5742,11 +6300,8 @@ no warranty what so ever.</value>
         Kaf+Px253tMGUJiFAAAAAElFTkSuQmCC
 </value>
   </data>
-  <data name="$this.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms.Primitives">
-    <value>4, 3, 4, 3</value>
-  </data>
   <data name="$this.MinimumSize" type="System.Drawing.Size, System.Drawing.Primitives">
-    <value>467, 509</value>
+    <value>401, 444</value>
   </data>
   <data name="$this.Text" xml:space="preserve">
     <value>SimpleClassicTheme Taskbar - Control Panel</value>

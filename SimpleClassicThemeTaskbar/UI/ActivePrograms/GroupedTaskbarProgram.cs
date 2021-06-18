@@ -31,9 +31,24 @@ namespace SimpleClassicThemeTaskbar
 
         public override Icon Icon { get => ProgramWindows[0].Icon; set => ProgramWindows[0].Icon = value; }
 
-        public override Image IconImage { get { try { return new Icon(Icon, 16, 16).ToBitmap(); } catch { return null; } } }
+        public override Image IconImage
+        {
+            get
+            {
+                try
+                {
+                    return new Icon(Icon, 16, 16).ToBitmap();
+                }
+                catch (ObjectDisposedException)
+                {
+                    // Ignore
+                }
 
-        public override int MinimumWidth => Config.Renderer.TaskButtonMinimalWidth + 18;
+                return null;
+            }
+        }
+
+        public override int MinimumWidth => Config.Instance.Renderer.TaskButtonMinimalWidth + 18;
 
         public override Process Process { get => ProgramWindows[0].Process; set => ProgramWindows[0].Process = value; }
 
@@ -54,7 +69,7 @@ namespace SimpleClassicThemeTaskbar
             ApplicationEntryPoint.ErrorSource = this;
             controlState = "painting grouped window extension";
 
-            Config.Renderer.DrawTaskButtonGroupButton(this, e.Graphics);
+            Config.Instance.Renderer.DrawTaskButtonGroupButton(this, e.Graphics);
         }
 
         public override string GetErrorString()
@@ -112,15 +127,15 @@ namespace SimpleClassicThemeTaskbar
 
         public override string ToString()
         {
-            if (Config.ProgramGroupCheck == ProgramGroupCheck.Process)
+            if (Config.Instance.ProgramGroupCheck == ProgramGroupCheck.Process)
             {
                 return $"Process - ID: {Process.Id}, Name: {Process.ProcessName}";
             }
-            else if (Config.ProgramGroupCheck == ProgramGroupCheck.FileNameAndPath)
+            else if (Config.Instance.ProgramGroupCheck == ProgramGroupCheck.FileNameAndPath)
             {
                 return $"Filepath - {GetShortPath(Process.MainModule.FileName)}";
             }
-            else if (Config.ProgramGroupCheck == ProgramGroupCheck.ModuleName)
+            else if (Config.Instance.ProgramGroupCheck == ProgramGroupCheck.ModuleName)
             {
                 return $"Filename - {Process.MainModule.ModuleName}";
             }
@@ -129,7 +144,7 @@ namespace SimpleClassicThemeTaskbar
 
         public bool RemoveWindow(IntPtr window)
 		{
-            List<SingleTaskbarProgram> referenceList = new List<SingleTaskbarProgram>(ProgramWindows);
+            List<SingleTaskbarProgram> referenceList = new(ProgramWindows);
             foreach (SingleTaskbarProgram program in referenceList)
 			{
                 if (program.Window.Handle == window)
@@ -142,7 +157,7 @@ namespace SimpleClassicThemeTaskbar
             return ProgramWindows.Count > 1;
 		}
 
-        public bool UpdateWindowList(List<Window> windows)
+        public bool UpdateWindowList(IEnumerable<Window> windows)
         {
             //The new list of icons
             List<SingleTaskbarProgram> newIcons = new();

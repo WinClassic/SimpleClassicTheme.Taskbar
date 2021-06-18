@@ -1,5 +1,6 @@
 ﻿using SimpleClassicThemeTaskbar.Helpers;
 using SimpleClassicThemeTaskbar.Helpers.NativeMethods;
+using SimpleClassicThemeTaskbar.ThemeEngine.VisualStyles;
 
 using System;
 using System.Diagnostics;
@@ -15,6 +16,8 @@ namespace SimpleClassicThemeTaskbar
     {
         private Taskbar previewTaskbar;
         private System.ComponentModel.ComponentResourceManager Resources = new(typeof(Settings));
+        private VisualStyle[] visualStyles;
+        private string[] visualStylePaths;
 
         public Settings()
         {
@@ -27,22 +30,18 @@ namespace SimpleClassicThemeTaskbar
 
         public void SaveSettings()
         {
-            Config.EnableSystemTrayHover = enableSysTrayHover.Checked;
-            Config.EnableSystemTrayColorChange = enableSysTrayColorChange.Checked;
-            Config.ShowTaskbarOnAllDesktops = showTaskbarOnAllDesktops.Checked;
-            Config.EnableQuickLaunch = enableQuickLaunchCheckBox.Checked;
-            Config.TaskbarProgramWidth = (int)taskbarProgramWidth.Value;
-            Config.SpaceBetweenTrayIcons = (int)spaceBetweenTrayIcons.Value;
-            Config.SpaceBetweenTaskbarIcons = (int)spaceBetweenTaskbarIcons.Value;
-            Config.SpaceBetweenQuickLaunchIcons = (int)quickLaunchSpacingNumBox.Value;
-            Config.StartButtonImage = customButtonTextBox.Text;
-            Config.StartButtonIconImage = customIconTextBox.Text;
-            Config.StartButtonAppearance = GetCurrentStartButtonAppearance();
-            Config.Language = (string)languageComboBox.SelectedItem;
-            Config.ProgramGroupCheck = (ProgramGroupCheck)comboBoxGroupingMethod.SelectedIndex;
-            Config.ExitMenuItemCondition = (ExitMenuItemCondition)exitItemComboBox.SelectedIndex;
-            Config.EnableDebugging = enableDebuggingCheckBox.Checked;
-            Config.EnablePassiveTaskbar = enablePassiveTaskbarCheckBox.Checked;
+            Config.Instance.EnableSystemTrayHover = enableSysTrayHover.Checked;
+            Config.Instance.EnableSystemTrayColorChange = enableSysTrayColorChange.Checked;
+            Config.Instance.ShowTaskbarOnAllDesktops = showTaskbarOnAllDesktops.Checked;
+            Config.Instance.EnableQuickLaunch = enableQuickLaunchCheckBox.Checked;
+            Config.Instance.TaskbarProgramWidth = (int)taskbarProgramWidth.Value;
+            Config.Instance.StartButtonImage = customButtonTextBox.Text;
+            Config.Instance.StartButtonIconImage = customIconTextBox.Text;
+            Config.Instance.StartButtonAppearance = GetCurrentStartButtonAppearance();
+            Config.Instance.Language = (string)languageComboBox.SelectedItem;
+            Config.Instance.ProgramGroupCheck = (ProgramGroupCheck)comboBoxGroupingMethod.SelectedIndex;
+            Config.Instance.ExitMenuItemCondition = (ExitMenuItemCondition)exitItemComboBox.SelectedIndex;
+            Config.Instance.EnablePassiveTaskbar = enablePassiveTaskbarCheckBox.Checked;
 
             // Save taskbar filter
             string taskbarFilter = "";
@@ -51,29 +50,38 @@ namespace SimpleClassicThemeTaskbar
                 string filter = f.ToString();
                 taskbarFilter += filter + "*";
             }
-            Config.TaskbarProgramFilter = taskbarFilter;
+            Config.Instance.TaskbarProgramFilter = taskbarFilter;
 
             // Save renderer path
             switch (themeComboBox.SelectedItem)
             {
                 case "Classic":
-                    Config.RendererPath = "Internal/Classic";
+                    Config.Instance.RendererPath = "Internal/Classic";
                     break;
 
                 case "Luna":
-                    Config.RendererPath = "Internal/Luna";
+                    Config.Instance.RendererPath = "Internal/Luna";
+                    break;
+
+                case "Visual Style":
+                    var visualStyle = visualStyles[visualStyleComboBox.SelectedIndex];
+                    Config.Instance.VisualStyleColor = visualStyle.ColorNames[colorSchemeComboBox.SelectedIndex];
+                    Config.Instance.VisualStyleSize = visualStyle.SizeNames[sizeComboBox.SelectedIndex];
+                    Config.Instance.VisualStylePath = visualStylePaths[visualStyleComboBox.SelectedIndex];
+
+                    Config.Instance.RendererPath = "Internal/VisualStyle";
                     break;
 
                 default:
-                    Config.RendererPath = (string)themeComboBox.SelectedItem;
+                    Config.Instance.RendererPath = (string)themeComboBox.SelectedItem;
                     break;
             }
 
-            Config.ConfigChanged = true;
-            Config.SaveToRegistry();
+            Config.Instance.ConfigChanged = true;
+            Config.Instance.SaveToRegistry();
             ApplicationEntryPoint.NewTaskbars();
 
-            previewTaskbar.Height = Config.Renderer.TaskbarHeight;
+            previewTaskbar.Height = Config.Instance.Renderer.TaskbarHeight;
             previewTaskbar.EnumerateWindows();
         }
 
@@ -126,28 +134,15 @@ namespace SimpleClassicThemeTaskbar
                         themeComboBox.Items.Clear();
                         themeComboBox.Items.Add("Classic");
                         themeComboBox.Items.Add("Luna");
+                        themeComboBox.Items.Add("Visual Style");
                         themeComboBox.Items.Add("Custom...");
                         themeComboBox.Items.Add(fbd.SelectedPath);
                         themeComboBox.SelectedItem = fbd.SelectedPath;
                         return;
                     }
                 }
-                // Detect renderer correctly
-                switch (Config.RendererPath)
-                {
-                    case "Internal/Classic":
-                        themeComboBox.SelectedItem = "Classic";
-                        break;
 
-                    case "Internal/Luna":
-                        themeComboBox.SelectedItem = "Luna";
-                        break;
-
-                    default:
-                        themeComboBox.Items.Add(Config.RendererPath);
-                        themeComboBox.SelectedItem = Config.RendererPath;
-                        break;
-                }
+                UpdateSelectedRenderer();
             }
         }
 
@@ -196,7 +191,7 @@ namespace SimpleClassicThemeTaskbar
             {
                 temp = Image.FromFile(customIconFileDialog.FileName);
             }
-            catch (Exception ex)
+            catch
             {
                 _ = MessageBox.Show(this, "The image you selected is invalid.", "SimpleClassicThemeTaskbar", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 e.Cancel = true;
@@ -214,11 +209,6 @@ namespace SimpleClassicThemeTaskbar
             temp.Dispose();
 
             UpdateStartButton();
-        }
-
-        private void EnableQuickLaunchCheckBox_CheckedChanged(object sender, EventArgs e)
-        {
-            quickLaunchOptionsPanel.Enabled = enableQuickLaunchCheckBox.Checked;
         }
 
         private StartButtonAppearance GetCurrentStartButtonAppearance()
@@ -274,44 +264,48 @@ namespace SimpleClassicThemeTaskbar
 
         private void LoadSettings()
         {
-            comboBoxGroupingMethod.SelectedIndex = (int)Config.ProgramGroupCheck;
-            exitItemComboBox.SelectedIndex = (int)Config.ExitMenuItemCondition;
+            comboBoxGroupingMethod.SelectedIndex = (int)Config.Instance.ProgramGroupCheck;
+            exitItemComboBox.SelectedIndex = (int)Config.Instance.ExitMenuItemCondition;
 
-            enablePassiveTaskbarCheckBox.Checked = Config.EnablePassiveTaskbar;
-            enableDebuggingCheckBox.Checked = Config.EnableDebugging;
-            enableSysTrayHover.Checked = Config.EnableSystemTrayHover;
-            enableSysTrayColorChange.Checked = Config.EnableSystemTrayColorChange;
-            showTaskbarOnAllDesktops.Checked = Config.ShowTaskbarOnAllDesktops;
-            enableQuickLaunchCheckBox.Checked = Config.EnableQuickLaunch;
+            enablePassiveTaskbarCheckBox.Checked = Config.Instance.EnablePassiveTaskbar;
+            enableSysTrayHover.Checked = Config.Instance.EnableSystemTrayHover;
+            enableSysTrayColorChange.Checked = Config.Instance.EnableSystemTrayColorChange;
+            showTaskbarOnAllDesktops.Checked = Config.Instance.ShowTaskbarOnAllDesktops;
+            enableQuickLaunchCheckBox.Checked = Config.Instance.EnableQuickLaunch;
 
             // Start button
-            customIconRadioButton.Checked = Config.StartButtonAppearance == StartButtonAppearance.CustomIcon;
-            customButtonRadioButton.Checked = Config.StartButtonAppearance == StartButtonAppearance.CustomButton;
-            radioStartDefault.Checked = Config.StartButtonAppearance == StartButtonAppearance.Default;
-            customButtonTextBox.Text = Config.StartButtonImage;
-            customIconTextBox.Text = Config.StartButtonIconImage;
+            customIconRadioButton.Checked = Config.Instance.StartButtonAppearance == StartButtonAppearance.CustomIcon;
+            customButtonRadioButton.Checked = Config.Instance.StartButtonAppearance == StartButtonAppearance.CustomButton;
+            radioStartDefault.Checked = Config.Instance.StartButtonAppearance == StartButtonAppearance.Default;
+            customButtonTextBox.Text = Config.Instance.StartButtonImage;
+            customIconTextBox.Text = Config.Instance.StartButtonIconImage;
 
-            taskbarProgramWidth.Value = Math.Min(Config.TaskbarProgramWidth, taskbarProgramWidth.Maximum);
-            spaceBetweenTrayIcons.Value = Math.Min(Config.SpaceBetweenTrayIcons, spaceBetweenTrayIcons.Maximum);
-            spaceBetweenTaskbarIcons.Value = Math.Min(Config.SpaceBetweenTaskbarIcons, spaceBetweenTaskbarIcons.Maximum);
-            quickLaunchSpacingNumBox.Value = Math.Min(Config.SpaceBetweenQuickLaunchIcons, quickLaunchSpacingNumBox.Maximum);
+            taskbarProgramWidth.Value = Math.Min(Config.Instance.TaskbarProgramWidth, taskbarProgramWidth.Maximum);
 
             taskbarProgramWidth.Maximum = Screen.PrimaryScreen.Bounds.Width;
-            languageComboBox.SelectedItem = Config.Language;
+            languageComboBox.SelectedItem = Config.Instance.Language;
 
-            if (!Config.EnableDebugging)
+            if (!Config.Instance.EnableDebugging)
             {
                 tabControl.TabPages.Remove(tabDebug);
             }
 
             // Load taskbar filter
-            string taskbarFilter = Config.TaskbarProgramFilter;
+            string taskbarFilter = Config.Instance.TaskbarProgramFilter;
             foreach (string filter in taskbarFilter.Split('*'))
                 if (filter != "")
                     _ = taskbarFilterListBox.Items.Add(filter);
 
+            UpdateSelectedRenderer();
+            PopulateVisualStyles();
+
+            tweaksPropertyGrid.SelectedObject = Config.Instance;
+        }
+
+        private void UpdateSelectedRenderer()
+        {
             // Detect renderer correctly
-            switch (Config.RendererPath)
+            switch (Config.Instance.RendererPath)
             {
                 case "Internal/Classic":
                     themeComboBox.SelectedItem = "Classic";
@@ -321,9 +315,13 @@ namespace SimpleClassicThemeTaskbar
                     themeComboBox.SelectedItem = "Luna";
                     break;
 
+                case "Internal/VisualStyle":
+                    themeComboBox.SelectedItem = "Visual Style";
+                    break;
+
                 default:
-                    themeComboBox.Items.Add(Config.RendererPath);
-                    themeComboBox.SelectedItem = Config.RendererPath;
+                    themeComboBox.Items.Add(Config.Instance.RendererPath);
+                    themeComboBox.SelectedItem = Config.Instance.RendererPath;
                     break;
             }
         }
@@ -388,18 +386,88 @@ namespace SimpleClassicThemeTaskbar
             // startButton.DummySettings(customButtonTextBox.Text, customIconTextBox.Text, appearance);
         }
 
-		private void enableDebuggingCheckBox_CheckedChanged(object sender, EventArgs e)
-		{
-            if (enableDebuggingCheckBox.Checked)
-			{
-                if (!tabControl.TabPages.Contains(tabDebug))
-                    tabControl.TabPages.Add(tabDebug);
-			}
-            else
-			{
-                if (tabControl.TabPages.Contains(tabDebug))
-                    tabControl.TabPages.Remove(tabDebug);
-			}
-		}
-	}
+        private void manageStylesButton_Click(object sender, EventArgs e)
+        {
+            Process.Start(new ProcessStartInfo(Constants.VisualStyleDirectory)
+            {
+                UseShellExecute = true
+            });
+        }
+
+        private void themeComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            visualStyleGroupBox.Enabled = themeComboBox.SelectedItem is string label && label == "Visual Style";
+        }
+
+        private void PopulateVisualStyles()
+        {
+            visualStylePaths = Directory.GetFiles(Constants.VisualStyleDirectory, "*.msstyles");
+
+            if (visualStylePaths.Length != 0)
+            {
+
+                visualStyles = visualStylePaths
+                    .Select((path) => new VisualStyle(path))
+                    .ToArray();
+
+                visualStyleComboBox.Items.Clear();
+
+                var i = 0;
+                var selectedIndex = 0;
+                foreach (var vs in visualStyles)
+                {
+                    visualStyleComboBox.Items.Add(vs.DisplayName);
+
+                    if (Config.Instance.VisualStylePath == visualStylePaths[i])
+                    {
+                        selectedIndex = i;
+                    }
+
+                    i++;
+                }
+
+                visualStyleComboBox.SelectedIndex = selectedIndex;
+
+                PopulateVisualStyleCombos();
+            }
+        }
+
+        private void PopulateVisualStyleCombos()
+        {
+            var visualStyle = visualStyles[visualStyleComboBox.SelectedIndex];
+
+            var colorNames = visualStyle.ColorNames.Select((cn) => visualStyle.GetColorDisplay(cn).DisplayName).ToArray();
+            colorSchemeComboBox.Items.Clear();
+            colorSchemeComboBox.Items.AddRange(colorNames);
+
+            var sizeNames = visualStyle.SizeNames.Select((sn) => visualStyle.GetSizeDisplay(sn).DisplayName).ToArray();
+            sizeComboBox.Items.Clear();
+            sizeComboBox.Items.AddRange(sizeNames);
+
+            colorSchemeComboBox.SelectedIndex = Math.Max(0, Array.IndexOf(visualStyle.ColorNames, Config.Instance.VisualStyleColor));
+            sizeComboBox.SelectedIndex = Math.Max(0, Array.IndexOf(visualStyle.SizeNames, Config.Instance.VisualStyleSize));
+        }
+
+        private void visualStyleComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            PopulateVisualStyleCombos();
+        }
+
+        private void tweaksPropertyGrid_PropertyValueChanged(object s, PropertyValueChangedEventArgs e)
+        {
+            if (e.ChangedItem.PropertyDescriptor.Name == nameof(Config.Instance.EnableDebugging))
+            {
+                if (Config.Instance.EnableDebugging)
+                {
+                    if (!tabControl.TabPages.Contains(tabDebug))
+                        tabControl.TabPages.Add(tabDebug);
+                }
+                else
+                {
+                    if (tabControl.TabPages.Contains(tabDebug))
+                        tabControl.TabPages.Remove(tabDebug);
+                }
+            }
+        }
+    }
 }

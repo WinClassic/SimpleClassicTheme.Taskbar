@@ -120,7 +120,7 @@ namespace SimpleClassicThemeTaskbar
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.TopMost = true;
 			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Taskbar_FormClosing);
-			this.Load += new System.EventHandler(this.Form1_Load);
+			this.Load += new System.EventHandler(this.Taskbar_Load);
 			this.MouseClick += new System.Windows.Forms.MouseEventHandler(this.Taskbar_MouseClick);
 			this.ResumeLayout(false);
 

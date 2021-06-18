@@ -1,8 +1,10 @@
 ﻿using Microsoft.Win32;
 
 using SimpleClassicThemeTaskbar.ThemeEngine;
+using SimpleClassicThemeTaskbar.ThemeEngine.VisualStyles;
 
 using System;
+using System.ComponentModel;
 using System.Globalization;
 using System.Reflection;
 using System.Resources;
@@ -10,58 +12,132 @@ using System.Threading;
 
 namespace SimpleClassicThemeTaskbar.Helpers
 {
-    //Config class
-    //TODO: Move more configurable settings to here
-    //TODO: Make config menu
-    public static class Config
+    public class Config
     {
-        private const BindingFlags bindingFlags = BindingFlags.Static | BindingFlags.Public | BindingFlags.GetProperty | BindingFlags.SetProperty;
-        private static string rendererPath = "Internal/Classic";
-        public static bool ConfigChanged { get; set; } = true;
-        public static bool EnableDebugging { get; internal set; } = true;
-        public static bool EnablePassiveTaskbar { get; internal set; } = false;
-        public static bool EnableQuickLaunch { get; set; } = true;
-        public static bool EnableSystemTrayColorChange { get; set; } = true;
-        public static bool EnableSystemTrayHover { get; set; } = true;
-        public static ExitMenuItemCondition ExitMenuItemCondition { get; internal set; }
-        public static string Language { get; set; }
-        public static ProgramGroupCheck ProgramGroupCheck { get; set; } = ProgramGroupCheck.FileNameAndPath;
-        public static string QuickLaunchOrder { get; set; } = string.Empty;
-        public static BaseRenderer Renderer { get; set; } = new ClassicRenderer();
+        private static Config instance;
+        private static object instanceLock = new();
+        public static Config Instance
+        {
+            get
+            {
+                lock (instanceLock)
+                {
+                    if (instance == null)
+                    {
+                        instance = new Config();
+                    }
 
-        public static string RendererPath
+                    return instance;
+                }
+            }
+        }
+
+        private const BindingFlags bindingFlags = BindingFlags.Static | BindingFlags.Public | BindingFlags.GetProperty | BindingFlags.SetProperty;
+        private string rendererPath = "Internal/Classic";
+
+        #region Non-browsable properties
+        [Browsable(false)]
+        public bool ConfigChanged { get; set; } = true;
+
+        [Browsable(false)]
+        public bool EnableQuickLaunch { get; set; } = true;
+
+
+        [Browsable(false)]
+        public string QuickLaunchOrder { get; set; } = string.Empty;
+
+        [Browsable(false)]
+        public BaseRenderer Renderer { get; set; } = new ClassicRenderer();
+
+        // VisualStyleRenderer settings
+        [Browsable(false)]
+        public string VisualStylePath { get; set; } = string.Empty;
+        [Browsable(false)]
+        public string VisualStyleSize { get; set; } = string.Empty;
+        [Browsable(false)]
+        public string VisualStyleColor { get; set; } = string.Empty;
+        [Browsable(false)]
+        public ExitMenuItemCondition ExitMenuItemCondition { get; internal set; }
+        [Browsable(false)]
+        public string RendererPath
         {
             get => rendererPath;
             set
             {
                 switch (rendererPath = value)
                 {
+
+                    case "Internal/ImageRenderer":
+                        Renderer = ImageThemePath switch
+                        {
+                            "Internal/ImageRenderer/Luna" => new ImageRenderer(new ResourceManager("SimpleClassicThemeTaskbar.ThemeEngine.Themes.Luna", typeof(Config).Assembly)),
+                            _ => new ImageRenderer(ImageThemePath),
+                        };
+                        break;
+
+                    case "Internal/VisualStyle":
+                        var visualStyle = new VisualStyle(VisualStylePath);
+                        var colorScheme = visualStyle.GetColorScheme(VisualStyleColor, VisualStyleSize);
+                        Renderer = new VisualStyleRenderer(colorScheme);
+                        break;
+
                     case "Internal/Classic":
-                        Renderer = new ClassicRenderer();
-                        break;
-
-                    case "Internal/Luna":
-                        Renderer = new ImageRenderer(new ResourceManager("SimpleClassicThemeTaskbar.ThemeEngine.Themes.Luna", typeof(Config).Assembly));
-                        break;
-
                     default:
-                        Renderer = new ImageRenderer(RendererPath);
+                        Renderer = new ClassicRenderer();
                         break;
                 }
             }
         }
 
-        public static bool ShowTaskbarOnAllDesktops { get; set; } = true;
-        public static int SpaceBetweenQuickLaunchIcons { get; set; } = 2;
-        public static int SpaceBetweenTaskbarIcons { get; set; } = 2;
-        public static int SpaceBetweenTrayIcons { get; set; } = 2;
-        public static StartButtonAppearance StartButtonAppearance { get; set; } = StartButtonAppearance.Default;
-        public static string StartButtonIconImage { get; set; } = string.Empty;
-        public static string StartButtonImage { get; set; } = string.Empty;
-        public static string TaskbarProgramFilter { get; set; } = string.Empty;
-        public static int TaskbarProgramWidth { get; set; } = 160;
+        [Browsable(false)]
+        public StartButtonAppearance StartButtonAppearance { get; set; } = StartButtonAppearance.Default;
 
-        public static void LoadFromRegistry()
+        [Browsable(false)]
+        public string StartButtonIconImage { get; set; } = string.Empty;
+
+        [Browsable(false)]
+        public string StartButtonImage { get; set; } = string.Empty;
+
+        [Browsable(false)]
+        public string TaskbarProgramFilter { get; set; } = string.Empty;
+
+        [Browsable(false)]
+        public bool ShowTaskbarOnAllDesktops { get; set; } = true;
+
+        [Browsable(false)]
+        public string Language { get; set; }
+        #endregion
+
+        [Category("(Misc)")]
+        [DisplayName("Enable debugging options")]
+        public bool EnableDebugging { get; set; } = true;
+        public bool EnablePassiveTaskbar { get; internal set; } = false;
+
+        public bool EnableSystemTrayColorChange { get; set; } = true;
+
+        public bool EnableSystemTrayHover { get; set; } = true;
+
+        public ProgramGroupCheck ProgramGroupCheck { get; set; } = ProgramGroupCheck.FileNameAndPath;
+
+        // ImageRenderer settings
+        public static string ImageThemePath { get; set; } = string.Empty;
+
+       
+        [Category("Spacing between items")]
+        [DisplayName("Spacing between Quick Launch icons")]
+        public int SpaceBetweenQuickLaunchIcons { get; set; } = 2;
+
+        [Category("Spacing between items")]
+        [DisplayName("Spacing between taskband buttons")]
+        public int SpaceBetweenTaskbarIcons { get; set; } = 2;
+
+        [Category("Spacing between items")]
+        [DisplayName("Spacing between tray icons")]
+        public int SpaceBetweenTrayIcons { get; set; } = 2;
+
+        public int TaskbarProgramWidth { get; set; } = 160;
+
+        public void LoadFromRegistry()
         {
             Language = Thread.CurrentThread.CurrentUICulture.Name;
             if (Language != "en-US" && Language != "nl-NL")
@@ -73,7 +149,12 @@ namespace SimpleClassicThemeTaskbar.Helpers
             {
                 foreach (var property in typeof(Config).GetProperties(bindingFlags))
                 {
-                    object value = property.GetValue(null);
+                    if (!property.CanWrite)
+                    {
+                        continue;
+                    }
+
+                    object value = property.GetValue(this);
                     var registryValue = scttSubKey.GetValue(property.Name, value);
 
                     // string → bool
@@ -82,10 +163,10 @@ namespace SimpleClassicThemeTaskbar.Helpers
                         registryValue = bool.Parse(boolString);
                     }
 
-                    Logger.Log(LoggerVerbosity.Verbose, "Config", $"Setting property: {property.Name} → {value} → {registryValue}");
+                    // Logger.Log(LoggerVerbosity.Verbose, "Config", $"Setting property: {property.Name} → {value} → {registryValue}");
                     try
                     {
-                        property.SetValue(null, registryValue);
+                        property.SetValue(this, registryValue);
                     }
                     catch
                     {
@@ -97,7 +178,7 @@ namespace SimpleClassicThemeTaskbar.Helpers
             Thread.CurrentThread.CurrentUICulture = new CultureInfo(Language);
         }
 
-        public static void SaveToRegistry()
+        public void SaveToRegistry()
         {
             Logger.Log(LoggerVerbosity.Verbose, "Config", "Saving to registry");
             using (var scttSubKey = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\1337ftw\SimpleClassicThemeTaskbar"))
@@ -105,7 +186,7 @@ namespace SimpleClassicThemeTaskbar.Helpers
                 foreach (var property in typeof(Config).GetProperties(bindingFlags))
                 {
                     RegistryValueKind valueKind = RegistryValueKind.Unknown;
-                    object value = property.GetValue(null);
+                    object value = property.GetValue(this);
                     switch (value)
                     {
                         case bool boolValue:
@@ -113,21 +194,21 @@ namespace SimpleClassicThemeTaskbar.Helpers
                             valueKind = RegistryValueKind.String;
                             break;
 
-                        case int intValue:
-                        case Enum enumValue:
+                        case int:
+                        case Enum:
                             valueKind = RegistryValueKind.DWord;
                             break;
 
-                        case String stringValue:
+                        case string:
                             valueKind = RegistryValueKind.String;
                             break;
 
                         default:
-                            Logger.Log(LoggerVerbosity.Basic, "Config", $"Ignoring property {property.Name} because {value.GetType()} is an unknown type");
+                            Logger.Log(LoggerVerbosity.Basic, "Config", $"Ignoring property {property.Name} because {value?.GetType()} is an unknown type");
                             break;
                     }
 
-                    Logger.Log(LoggerVerbosity.Verbose, "Config", $"Setting registry key: {property.Name} ({valueKind}) → {value}");
+                    // Logger.Log(LoggerVerbosity.Verbose, "Config", $"Setting registry key: {property.Name} ({valueKind}) → {value}");
                     scttSubKey.SetValue(property.Name, value, valueKind);
                 }
             }

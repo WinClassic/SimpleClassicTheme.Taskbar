@@ -1,4 +1,7 @@
-﻿namespace SimpleClassicThemeTaskbar.Helpers
+﻿using System;
+using System.IO;
+
+namespace SimpleClassicThemeTaskbar.Helpers
 {
     public static class Constants
     {
@@ -14,6 +17,8 @@
         /// The only true window message™
         /// </summary>
         public const int WM_SCT = 0x0420;
+
+        public static string VisualStyleDirectory => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "1337ftw", "SimpleClassicThemeTaskbar", "VisualStyles");
 
         public static readonly string[] HiddenClassNames = new string[]
         {

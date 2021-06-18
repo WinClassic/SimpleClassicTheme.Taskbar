@@ -7,8 +7,10 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
 namespace SimpleClassicThemeTaskbar
@@ -27,7 +29,7 @@ namespace SimpleClassicThemeTaskbar
         internal static void ExitSCTT()
         {
             Logger.Log(LoggerVerbosity.Detailed, "TaskbarManager", $"Exit requested");
-            Config.SaveToRegistry();
+            Config.Instance.SaveToRegistry();
 
             var activeBars = HelperFunctions.GetOpenTaskbars();
 
@@ -78,7 +80,7 @@ namespace SimpleClassicThemeTaskbar
                 Taskbar taskbar = new(screen.Primary);
                 taskbar.ShowOnScreen(screen);
                 Logger.Log(LoggerVerbosity.Detailed, "TaskbarManager", $"Created taskbar in working area: {screen.Bounds}");
-                if (!Config.ShowTaskbarOnAllDesktops && !screen.Primary)
+                if (!Config.Instance.ShowTaskbarOnAllDesktops && !screen.Primary)
                     taskbar.NeverShow = true;
             }
             Logger.Log(LoggerVerbosity.Detailed, "TaskbarManager", $"Created {taskbars} taskbars in total");
@@ -253,6 +255,8 @@ namespace SimpleClassicThemeTaskbar
             TrayNotificationService = new();
 
             Logger.Log(LoggerVerbosity.Detailed, "EntryPoint", "Main initialization done, passing execution to TaskbarManager");
+
+            Directory.CreateDirectory(Constants.VisualStyleDirectory);
 
             //Application.EnableVisualStyles();
             Application.VisualStyleState = System.Windows.Forms.VisualStyles.VisualStyleState.NoneEnabled;

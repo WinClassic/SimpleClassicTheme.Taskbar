@@ -1,4 +1,6 @@
-﻿using SimpleClassicThemeTaskbar.Helpers;
+﻿using Microsoft.VisualBasic;
+
+using SimpleClassicThemeTaskbar.Helpers;
 using SimpleClassicThemeTaskbar.Helpers.NativeMethods;
 
 using System;
@@ -6,6 +8,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
@@ -186,7 +189,7 @@ namespace SimpleClassicThemeTaskbar.UIElements.SystemTray
 
         private void SystemTray_Paint(object sender, System.Windows.Forms.PaintEventArgs e)
         {
-            Config.Renderer.DrawSystemTray(this, e.Graphics);
+            Config.Instance.Renderer.DrawSystemTray(this, e.Graphics);
         }
     }
 }

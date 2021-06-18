@@ -2,9 +2,12 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
+using System.Xml.Linq;
 
 namespace SimpleClassicThemeTaskbar.Helpers
 {
@@ -89,6 +92,46 @@ namespace SimpleClassicThemeTaskbar.Helpers
                         break;
                 }
             });
+        }
+
+        public static Bitmap RemoveTransparencyKey(this Bitmap bitmap, Color? transparencyKey = null)
+        {
+            if (!transparencyKey.HasValue)
+            {
+                transparencyKey = Color.Magenta;
+            }
+
+            var rect = new Rectangle(Point.Empty, bitmap.Size);
+            bitmap = bitmap.Clone(rect, PixelFormat.Format32bppArgb);
+            var bitmapData = bitmap.LockBits(rect, ImageLockMode.ReadWrite, bitmap.PixelFormat);
+            var bitsPerPixel = Image.GetPixelFormatSize(bitmapData.PixelFormat);
+            var size = bitmapData.Stride * bitmapData.Height;
+            var data = new byte[size];
+
+            Marshal.Copy(bitmapData.Scan0, data, 0, size);
+
+            for (int i = 0; i < size; i += bitsPerPixel / 8)
+            {
+                // var magnitude = 1 / 3d * (data[i] + data[i + 1] + data[i + 2]);
+
+                //data[i] is the first of 3 bytes of color
+                if (transparencyKey.Value.B == data[i] &&
+                    transparencyKey.Value.G == data[i + 1] &&
+                    transparencyKey.Value.R == data[i + 2])
+                {
+                    data[i + 3] = 0;
+                }
+            }
+
+            Marshal.Copy(data, 0, bitmapData.Scan0, data.Length);
+            bitmap.UnlockBits(bitmapData);
+
+            return bitmap;
+        }
+
+        public static void DrawImage(this Graphics graphics, Image image, Rectangle destRect, Rectangle srcRect)
+        {
+            graphics.DrawImage(image, destRect, srcRect, GraphicsUnit.Pixel);
         }
     }
 }

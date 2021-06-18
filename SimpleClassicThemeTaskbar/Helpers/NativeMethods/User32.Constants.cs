@@ -1,0 +1,74 @@
+﻿namespace SimpleClassicThemeTaskbar.Helpers.NativeMethods
+{
+    internal static partial class User32
+    {
+        internal const uint DFC_BUTTON = 4;
+        internal const uint DFCS_BUTTONPUSH = 0x10;
+        internal const uint DFCS_PUSHED = 512;
+        internal const int GCL_HICON = -14;
+        internal const int GCL_HICONSM = -34;
+        internal const uint ICON_BIG = 1;
+        internal const uint ICON_SMALL = 0;
+        internal const uint ICON_SMALL2 = 2;
+        internal const uint KEYEVENTF_EXTENDEDKEY = 1;
+        internal const uint KEYEVENTF_KEYUP = 2;
+        internal const uint MDITILE_HORIZONTAL = 0x0001;
+        internal const uint MDITILE_VERTICAL = 0x0000;
+        internal const uint MDITILE_ZORDER = 0x0004;
+        internal const uint MF_BITMAP = 0x00000004;
+        internal const uint MF_CHECKED = 0x00000008;
+        internal const uint MF_DISABLED = 0x00000002;
+        internal const uint MF_ENABLED = 0x00000000;
+        internal const uint MF_GRAYED = 0x00000001;
+        internal const uint MF_MENUBARBREAK = 0x00000020;
+        internal const uint MF_MENUBREAK = 0x00000040;
+        internal const uint MF_OWNERDRAW = 0x00000100;
+        internal const uint MF_POPUP = 0x00000010;
+        internal const uint MF_SEPARATOR = 0x00000800;
+        internal const uint MF_STRING = 0x00000000;
+        internal const uint MF_UNCHECKED = 0x00000000;
+        internal const uint SC_MAXIMIZE = 0xF030;
+        internal const uint SC_RESTORE = 0xF120;
+        internal const uint SPI_SETWORKAREA = 0x002F;
+        internal const uint SPIF_SENDCHANGE = 0x02;
+        internal const uint SPIF_SENDWININICHANGE = SPIF_UPDATEINIFILE | SPIF_SENDCHANGE;
+        internal const uint SPIF_UPDATEINIFILE = 0x01;
+        internal const int SW_HIDE = 0;
+        internal const int SW_SHOWNORMAL = 1;
+        internal const int SW_SHOWMINIMIZED = 2;
+        internal const int SW_SHOWMAXIMIZED = 3;
+        internal const int SW_SHOW = 5;
+        internal const int SW_MINIMIZE = 6;
+        internal const uint TB_BUTTONCOUNT = 0x0418;
+        internal const uint TB_GETBUTTON = 0x0417;
+        internal const uint TBSTATE_HIDDEN = 0x0008;
+        internal const uint TPM_BOTTOMALIGN = 0x0020;
+        internal const uint TPM_CENTERALIGN = 0x0004;
+        internal const uint TPM_HORNEGANIMATION = 0x0800;
+        internal const uint TPM_HORPOSANIMATION = 0x0400;
+        internal const uint TPM_LEFTALIGN = 0x0000;
+        internal const uint TPM_LEFTBUTTON = 0x0000;
+        internal const uint TPM_NOANIMATION = 0x4000;
+        internal const uint TPM_NONOTIFY = 0x0080;
+        internal const uint TPM_RETURNCMD = 0x0100;
+        internal const uint TPM_RIGHTALIGN = 0x0008;
+        internal const uint TPM_RIGHTBUTTON = 0x0002;
+        internal const uint TPM_TOPALIGN = 0x0000;
+        internal const uint TPM_VCENTERALIGN = 0x0010;
+        internal const uint TPM_VERNEGANIMATION = 0x2000;
+        internal const uint TPM_VERPOSANIMATION = 0x2000;
+        internal const uint VK_F4 = 0x73;
+        internal const uint VK_MENU = 0x12;
+        internal const uint WM_CLOSE = 0x0010;
+        internal const uint WM_ENDSESSION = 0x0016;
+        internal const uint WM_GETICON = 0x007F;
+        internal const uint WM_KEYDOWN = 0x0100;
+        internal const uint WM_KEYUP = 0x0101;
+        internal const uint WM_LBUTTONDOWN = 0x0201;
+        internal const uint WM_LBUTTONUP = 0x0202;
+        internal const uint WM_QUERYENDSESSION = 0x0011;
+        internal const uint WM_RBUTTONDOWN = 0x0204;
+        internal const uint WM_RBUTTONUP = 0x0205;
+        internal const uint WM_SYSCOMMAND = 0x0112;
+    }
+}
