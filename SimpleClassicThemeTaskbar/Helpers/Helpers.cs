@@ -54,7 +54,7 @@ namespace SimpleClassicThemeTaskbar.Helpers
                 else
                     return new IntPtr(0);
             }
-            return User32.CallNextHookEx(hhk, nCode, wParam, lParam); ;
+            return User32.CallNextHookEx(hhk, (User32.ShellEvents)nCode, wParam, lParam); ;
         }
 
         public static void OpenQuickLaunchFolder()

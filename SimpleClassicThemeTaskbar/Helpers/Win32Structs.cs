@@ -51,8 +51,8 @@ namespace SimpleClassicThemeTaskbar
         {
             get
             {
-                _ = User32.GetWindowThreadProcessId(Handle, out Integer32 pid);
-                return Process.GetProcessById(pid);
+                _ = User32.GetWindowThreadProcessId(Handle, out uint pid);
+                return Process.GetProcessById((int)pid);
             }
         }
 

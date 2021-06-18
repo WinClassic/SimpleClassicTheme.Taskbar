@@ -223,7 +223,7 @@ namespace SimpleClassicThemeTaskbar
             if (!selfClose)
             {
                 //If we don't close ourselves, show the shutdown dialog
-                var hWnd = User32.FindWindowW("Shell_TrayWnd", "");
+                var hWnd = User32.FindWindow("Shell_TrayWnd", "");
                 Keyboard.KeyPress(hWnd, Keys.Menu, Keys.F4);
                 e.Cancel = true;
             }
@@ -325,12 +325,6 @@ namespace SimpleClassicThemeTaskbar
                 watchLogic = !watchLogic;
             }));
 
-            debuggingItem.DropDownItems.Add(new ToolStripMenuItem("Watch Tray", null, (_, __) =>
-            {
-                systemTray1.trayTiming.Reset();
-                systemTray1.watchTray = !systemTray1.watchTray;
-            }));
-
             return debuggingItem;
         }
 
@@ -352,7 +346,7 @@ namespace SimpleClassicThemeTaskbar
             Logger.Log(LoggerVerbosity.Verbose, "Taskbar/HookProcedure", $"Call parameters: {nCode}, {wParam:X8}, {lParam:X8}");
 
             if (nCode < 0)
-                return User32.CallNextHookEx(IntPtr.Zero, (int)nCode, wParam, lParam);
+                return User32.CallNextHookEx(IntPtr.Zero, (User32.ShellEvents)nCode, wParam, lParam);
 
             switch (nCode)
             {
@@ -374,7 +368,7 @@ namespace SimpleClassicThemeTaskbar
                     break;
             }
 
-            return User32.CallNextHookEx(IntPtr.Zero, (int)nCode, wParam, lParam);
+            return User32.CallNextHookEx(IntPtr.Zero, (User32.ShellEvents)nCode, wParam, lParam);
         }
 
         private void HandleWindowDestroyed(IntPtr wParam)
@@ -849,11 +843,6 @@ namespace SimpleClassicThemeTaskbar
             if (Primary)
             {
                 systemTray1.UpdateTime();
-
-                using (uiTiming.StartRegion("Update System Tray icons"))
-                {
-                    systemTray1.UpdateIcons();
-                }
 
                 quickLaunch1.Location = new Point(startButton1.Location.X + startButton1.Width + 2, 1);
 

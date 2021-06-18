@@ -144,8 +144,8 @@ namespace SimpleClassicThemeTaskbar.Helpers.NativeMethods
 		[InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
 		public interface IVirtualDesktopNotificationService
 		{
-			int Register(IVirtualDesktopNotification pNotification, out IntPtr dwCookie);
-			int Unregister(IntPtr dwCookie);
+			int Register(IVirtualDesktopNotification pNotification, out uint dwCookie);
+			int Unregister(uint dwCookie);
 		}
 
 		[ComImport]
@@ -183,7 +183,7 @@ namespace SimpleClassicThemeTaskbar.Helpers.NativeMethods
 			if (process == IntPtr.Zero)
 				return "Couldn't open process";
 
-			Integer32 size = 64;
+			uint size = 64;
 		callGetApplicationUserModelId:
 			StringBuilder buffer = new((int)size);
 			int result = Kernel32.GetApplicationUserModelId(process, ref size, buffer);
@@ -206,7 +206,7 @@ namespace SimpleClassicThemeTaskbar.Helpers.NativeMethods
 			bool Is64Bit = IntPtr.Size == 8;
 			int tbButtonSize = Marshal.SizeOf(Is64Bit ? new TBBUTTON64().GetType() : new TBBUTTON32().GetType());
 
-			User32.GetWindowThreadProcessId(sysTray, out Integer32 trayProcess);
+			User32.GetWindowThreadProcessId(sysTray, out uint trayProcess);
 			IntPtr hProcess = Kernel32.OpenProcess(Kernel32.PROCESS_ALL_ACCESS, false, (int)trayProcess);
 			if (hProcess == IntPtr.Zero)
 			{
@@ -243,7 +243,7 @@ namespace SimpleClassicThemeTaskbar.Helpers.NativeMethods
 					trData = (TRAYDATA) Marshal.PtrToStructure(trDataHandle.AddrOfPinnedObject(), trData.GetType());
 					trDataHandle.Free();
 
-					User32.GetWindowThreadProcessId(trData.hwnd, out Integer32 iconPid);
+					User32.GetWindowThreadProcessId(trData.hwnd, out uint iconPid);
 
 					byte[] buffer = new byte[2];
 					StringBuilder toolTip = new(1024);
@@ -292,7 +292,7 @@ namespace SimpleClassicThemeTaskbar.Helpers.NativeMethods
 					trData = (TRAYDATA)Marshal.PtrToStructure(trDataHandle.AddrOfPinnedObject(), trData.GetType());
 					trDataHandle.Free();
 
-					User32.GetWindowThreadProcessId(trData.hwnd, out Integer32 iconPid);
+					User32.GetWindowThreadProcessId(trData.hwnd, out uint iconPid);
 
 					byte[] buffer = new byte[1];
 					StringBuilder toolTip = new(1024);
@@ -329,7 +329,7 @@ namespace SimpleClassicThemeTaskbar.Helpers.NativeMethods
 
 		internal static int GetTrayButtonCount(IntPtr sysTray)
 		{
-			return User32.SendMessage(sysTray, User32.TB_BUTTONCOUNT, 0, 0);
+			return (int)User32.SendMessage(sysTray, User32.TB_BUTTONCOUNT, 0, 0);
 		}
 
 		internal static void InitializeVdmInterface()
@@ -343,13 +343,14 @@ namespace SimpleClassicThemeTaskbar.Helpers.NativeMethods
 			virtualDesktopNotificationService = (IVirtualDesktopNotificationService)ppvObject;
 		}
 		
-		internal static IntPtr RegisterVdmNotification(IVirtualDesktopNotification notification)
+		internal static uint RegisterVdmNotification(IVirtualDesktopNotification notification)
 		{
-			virtualDesktopNotificationService.Register(notification, out IntPtr cookie);
+			return 0U;
+			virtualDesktopNotificationService.Register(notification, out uint cookie);
 			return cookie;
 		}
 
-		internal static void UnregisterVdmNotification(IntPtr notificationCookie)
+		internal static void UnregisterVdmNotification(uint notificationCookie)
 		{
 			virtualDesktopNotificationService.Unregister(notificationCookie);
 		}

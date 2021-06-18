@@ -69,7 +69,7 @@ namespace SimpleClassicThemeTaskbar.UIElements.SystemTray
             Size = new Size(16, 16);
             ResumeLayout();
 
-            if (Config.EnableSystemTrayHover)
+            if (Config.Instance.EnableSystemTrayHover)
             {
                 MouseEnter += delegate { BackColor = Color.FromArgb(128, 128, 128, 128); };
                 MouseLeave += delegate { BackColor = Color.Transparent; };

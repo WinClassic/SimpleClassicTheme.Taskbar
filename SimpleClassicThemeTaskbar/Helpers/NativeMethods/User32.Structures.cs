@@ -49,5 +49,5 @@ namespace SimpleClassicThemeTaskbar.Helpers.NativeMethods
             /// </summary>
             internal IntPtr hbmColor;
         }
-    }
+	}
 }

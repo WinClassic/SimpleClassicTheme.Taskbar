@@ -369,7 +369,7 @@ namespace SimpleClassicThemeTaskbar.ThemeEngine
 			g.DrawImage(image, new Rectangle(0, 0, image.Width, taskbarHeight), new Rectangle(0, startButton.Pressed ? (taskbarHeight*2) : startButton.ClientRectangle.Contains(startButton.PointToClient(Control.MousePosition)) ? taskbarHeight : 0, image.Width, taskbarHeight), GraphicsUnit.Pixel);
 		}
 
-		public override void DrawSystemTray(SystemTray systemTray, Graphics g)
+		public override void DrawSystemTray(System.Windows.Forms.Control systemTray, Graphics g)
 		{
 			using (TextureBrush brush = new(systemTrayTexture, WrapMode.Tile))
 				g.FillRectangle(brush, systemTray.ClientRectangle);

@@ -133,8 +133,8 @@ namespace SimpleClassicThemeTaskbar.Helpers
 		{
 			systemTrayNotification += eventHandler; 
 			User32.ShowWindow(oldTaskbar, 0);
-			User32.SetWindowPos(windowHandle, 0, 0, 0, 0, 0, 0x0010 | 0x0002 | 0x0008 | 0x0400 | 0x0001);
-			if (!User32.PostMessage(HWND_BROADCAST, WM_TASKBARCREATED, 0, 0))
+			User32.SetWindowPos(windowHandle, new(0), 0, 0, 0, 0, 0x0010 | 0x0002 | 0x0008 | 0x0400 | 0x0001);
+			if (!User32.PostMessage(new(HWND_BROADCAST), (uint)WM_TASKBARCREATED, 0, 0))
 			{
 				Debugger.Break();
 			}
@@ -233,9 +233,9 @@ namespace SimpleClassicThemeTaskbar.Helpers
 				Debugger.Break();
 			}
 
-			User32.SetWindowPos(windowHandle, -1, 0, 0, 0, 0, 0x0010 | 0x0002 | 0x0008 | 0x0400 | 0x0001);
+			User32.SetWindowPos(windowHandle, new(-1), 0, 0, 0, 0, 0x0010 | 0x0002 | 0x0008 | 0x0400 | 0x0001);
 
-			if (!User32.PostMessage(HWND_BROADCAST, WM_TASKBARCREATED, 0, 0))
+			if (!User32.PostMessage((IntPtr)HWND_BROADCAST, (uint)WM_TASKBARCREATED, 0, 0))
 			{
 				Debugger.Break();
 			}

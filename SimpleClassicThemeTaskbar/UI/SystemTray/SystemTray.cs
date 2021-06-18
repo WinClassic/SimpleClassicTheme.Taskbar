@@ -29,10 +29,10 @@ namespace SimpleClassicThemeTaskbar.UIElements.SystemTray
         {
             InitializeComponent();
 
-            Point p = Config.Renderer.SystemTrayTimeLocation;
+            Point p = Config.Instance.Renderer.SystemTrayTimeLocation;
             labelTime.Location = new Point(Width + p.X, p.Y);
-            labelTime.Font = Config.Renderer.SystemTrayTimeFont;
-            labelTime.ForeColor = Config.Renderer.SystemTrayTimeColor;
+            labelTime.Font = Config.Instance.Renderer.SystemTrayTimeFont;
+            labelTime.ForeColor = Config.Instance.Renderer.SystemTrayTimeColor;
 
             ApplicationEntryPoint.TrayNotificationService.RegisterNotificationEvent(TrayNotified);
             Disposed += delegate { ApplicationEntryPoint.TrayNotificationService.UnregisterNotificationEvent(TrayNotified); };
@@ -153,21 +153,21 @@ namespace SimpleClassicThemeTaskbar.UIElements.SystemTray
             Controls.CopyTo(icons, 0);
 
             // Set the width and position of the tray
-            Width = Config.Renderer.GetSystemTrayWidth(icons.Length - 1);
+            Width = Config.Instance.Renderer.GetSystemTrayWidth(icons.Length - 1);
             if (Parent != null)
                 Location = new Point(Parent.Width - Width, 0);
             foreach (Control control in icons)
             {
                 // Put the control at the correct position
                 if (control is SystemTrayIcon icon)
-                    icon.Location = Config.Renderer.GetSystemTrayIconLocation(Array.IndexOf(icons, icon) - 1);
+                    icon.Location = Config.Instance.Renderer.GetSystemTrayIconLocation(Array.IndexOf(icons, icon) - 1);
             }
 
             // Fix tray clock
-            Point p = Config.Renderer.SystemTrayTimeLocation;
+            Point p = Config.Instance.Renderer.SystemTrayTimeLocation;
             labelTime.Location = new Point(Width + p.X, p.Y);
-            labelTime.Font = Config.Renderer.SystemTrayTimeFont;
-            labelTime.ForeColor = Config.Renderer.SystemTrayTimeColor;
+            labelTime.Font = Config.Instance.Renderer.SystemTrayTimeFont;
+            labelTime.ForeColor = Config.Instance.Renderer.SystemTrayTimeColor;
         }
 
         public void UpdateTime()

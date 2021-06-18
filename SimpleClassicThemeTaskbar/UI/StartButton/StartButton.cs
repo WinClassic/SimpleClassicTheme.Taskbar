@@ -30,8 +30,6 @@ namespace SimpleClassicThemeTaskbar.UIElements.StartButton
 
             Do3DBorder = true;
 
-            buttonImageFile = Config.Instance.StartButtonImage;
-            iconImageFile = Config.Instance.StartButtonIconImage;
             Appearance = Config.Instance.StartButtonAppearance;
         }
 

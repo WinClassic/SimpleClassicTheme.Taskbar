@@ -98,7 +98,7 @@ namespace SimpleClassicThemeTaskbar.ThemeEngine
             }
         }
 
-        public override void DrawSystemTray(SystemTray systemTray, Graphics g)
+        public override void DrawSystemTray(System.Windows.Forms.Control systemTray, Graphics g)
         {
             Rectangle rect = systemTray.ClientRectangle;
             rect.Location = new Point(0, 4);

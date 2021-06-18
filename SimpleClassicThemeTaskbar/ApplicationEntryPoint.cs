@@ -24,7 +24,7 @@ namespace SimpleClassicThemeTaskbar
 
         public static SystemTrayNotificationService TrayNotificationService;
         static UnmanagedCodeMigration.VirtualDesktopNotification VirtualDesktopNotification;
-        static IntPtr virtualDesktopNotificationCookie;
+        static uint virtualDesktopNotificationCookie;
 
         internal static void ExitSCTT()
         {
@@ -44,7 +44,7 @@ namespace SimpleClassicThemeTaskbar
             // Taskbar randomBar = activeBars.FirstOrDefault();
             Logger.Log(LoggerVerbosity.Detailed, "TaskbarManager", $"Killed all taskbars");
 
-            if (Environment.OSVersion.Version.Major == 10 && virtualDesktopNotificationCookie != IntPtr.Zero)
+            if (Environment.OSVersion.Version.Major == 10 && virtualDesktopNotificationCookie != 0)
             {
                 Logger.Log(LoggerVerbosity.Detailed, "TaskbarManager", "Unregistered virtual desktop notify serivce");
                 UnmanagedCodeMigration.UnregisterVdmNotification(virtualDesktopNotificationCookie);
