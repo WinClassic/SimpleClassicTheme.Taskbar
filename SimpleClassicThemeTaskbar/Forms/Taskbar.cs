@@ -1,4 +1,6 @@
-﻿using SimpleClassicThemeTaskbar.Helpers;
+﻿using Microsoft.Win32;
+
+using SimpleClassicThemeTaskbar.Helpers;
 using SimpleClassicThemeTaskbar.Helpers.NativeMethods;
 
 using System;
@@ -884,7 +886,7 @@ namespace SimpleClassicThemeTaskbar
             if (!screen.WorkingArea.Equals(rct))
             {
                 var windowHandles = windows.Select(a => a.Handle).ToArray();
-                UnmanagedCodeMigration.SetWorkingArea(new RECT(rct), Environment.OSVersion.Version.Major < 10, windowHandles);
+                UnmanagedCodeMigration.SetWorkingArea(rct, Environment.OSVersion.Version.Major < 10, windowHandles);
             }
 
             if (!Location.Equals(desiredLocation))

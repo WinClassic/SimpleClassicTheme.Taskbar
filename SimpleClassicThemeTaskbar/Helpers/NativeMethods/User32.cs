@@ -2,6 +2,8 @@
 using System.Runtime.InteropServices;
 using System.Text;
 
+using static SimpleClassicThemeTaskbar.Helpers.NativeMethods.WinDef;
+
 namespace SimpleClassicThemeTaskbar.Helpers.NativeMethods
 {
     internal static partial class User32
@@ -90,7 +92,7 @@ namespace SimpleClassicThemeTaskbar.Helpers.NativeMethods
         internal static extern bool GetWindowRect(IntPtr hwnd, out RECT lpRect);
 
         [DllImport(nameof(User32), EntryPoint = "GetWindowTextA", CharSet = CharSet.Unicode, SetLastError = true, ExactSpelling = true)]
-        internal static extern int GetWindowText(IntPtr hwnd, System.Text.StringBuilder lpString, int cch);
+        internal static extern int GetWindowText(IntPtr hwnd, StringBuilder lpString, int cch);
 
         [DllImport(nameof(User32), EntryPoint = "GetWindowTextLengthA", CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true)]
         internal static extern int GetWindowTextLength(IntPtr hwnd);

@@ -1,12 +1,13 @@
-﻿using System;
+﻿using SimpleClassicThemeTaskbar.Helpers.NativeMethods;
+
+using System;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Text;
-using System.Runtime.InteropServices;
 using System.Windows.Forms;
-using System.Collections.Generic;
-using System.Diagnostics;
-using SimpleClassicThemeTaskbar.Helpers.NativeMethods;
+
+using static SimpleClassicThemeTaskbar.Helpers.NativeMethods.WinDef;
 
 namespace SimpleClassicThemeTaskbar
 {
@@ -156,7 +157,7 @@ namespace SimpleClassicThemeTaskbar
             newRect.Y += 4;
             newRect.Height -= 6;
             //ControlPaint.DrawBorder3D(e.Graphics, newRect, style);
-            RECT rect = new(newRect);
+            RECT rect = newRect;
             uint buttonStyle = style == Border3DStyle.Raised ? DFCS_BUTTONPUSH : DFCS_BUTTONPUSH | DFCS_PUSHED;
             _ = User32.DrawFrameControl(e.Graphics.GetHdc(), ref rect, DFC_BUTTON, buttonStyle);
             e.Graphics.ReleaseHdc();

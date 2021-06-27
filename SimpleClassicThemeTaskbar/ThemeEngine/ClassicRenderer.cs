@@ -10,6 +10,8 @@ using System.Drawing.Drawing2D;
 using System.Drawing.Text;
 using System.Windows.Forms;
 
+using static SimpleClassicThemeTaskbar.Helpers.NativeMethods.WinDef;
+
 namespace SimpleClassicThemeTaskbar.ThemeEngine
 {
     internal class ClassicRenderer : BaseRenderer
@@ -71,7 +73,7 @@ namespace SimpleClassicThemeTaskbar.ThemeEngine
                 }
                 if (startButton.Width != 57)
                     startButton.Width = 57;
-                RECT rect = new(startButton.ClientRectangle);
+                RECT rect = startButton.ClientRectangle;
                 rect.Left += 2;
                 rect.Top += 4;
                 rect.Bottom -= 2;
@@ -126,7 +128,7 @@ namespace SimpleClassicThemeTaskbar.ThemeEngine
             Rectangle newRect = taskbarProgram.ClientRectangle;
             newRect.Y += 4;
             newRect.Height -= 6;
-            RECT rect = new(newRect);
+            RECT rect = newRect;
             uint buttonStyle = User32.DFCS_BUTTONPUSH;
 
             if (taskbarProgram.IsPushed)
@@ -179,7 +181,7 @@ namespace SimpleClassicThemeTaskbar.ThemeEngine
             newRect.Width -= taskbarProgram.Width - 19 + 3;
             newRect.Y += 7;
             newRect.Height -= 12;
-            RECT rect = new(newRect);
+            RECT rect = newRect;
 
             uint buttonStyle = User32.DFCS_BUTTONPUSH;
 
@@ -211,7 +213,7 @@ namespace SimpleClassicThemeTaskbar.ThemeEngine
             const uint DFCS_BUTTONPUSH = 0x10;
 
             Rectangle newRect = taskbarGroup.ClientRectangle;
-            RECT rect = new(newRect);
+            RECT rect = newRect;
             uint buttonStyle = DFCS_BUTTONPUSH;
             _ = User32.DrawFrameControl(g.GetHdc(), ref rect, DFC_BUTTON, buttonStyle);
             g.ReleaseHdc();
