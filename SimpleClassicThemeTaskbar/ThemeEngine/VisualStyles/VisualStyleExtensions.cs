@@ -6,6 +6,8 @@ using System.Drawing;
 using System.Windows.Forms;
 using System.Xml.Linq;
 
+using static SimpleClassicThemeTaskbar.Helpers.NativeMethods.WinDef;
+
 namespace SimpleClassicThemeTaskbar.ThemeEngine.VisualStyles
 {
     public static class VisualStyleExtensions

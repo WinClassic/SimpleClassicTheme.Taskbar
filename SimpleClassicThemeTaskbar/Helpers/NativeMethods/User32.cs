@@ -3,6 +3,8 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text;
 
+using static SimpleClassicThemeTaskbar.Helpers.NativeMethods.WinDef;
+
 namespace SimpleClassicThemeTaskbar.Helpers.NativeMethods
 {
     internal static partial class User32

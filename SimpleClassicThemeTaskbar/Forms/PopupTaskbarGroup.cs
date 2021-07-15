@@ -12,6 +12,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
+using static SimpleClassicThemeTaskbar.Helpers.NativeMethods.WinDef;
+
 namespace SimpleClassicThemeTaskbar
 {
     public partial class PopupTaskbarGroup : Form
@@ -78,7 +80,7 @@ namespace SimpleClassicThemeTaskbar
             return;
 
             Rectangle newRect = ClientRectangle;
-            RECT rect = new(newRect);
+            RECT rect = newRect;
             uint buttonStyle = DFCS_BUTTONPUSH;
             _ = User32.DrawFrameControl(e.Graphics.GetHdc(), ref rect, DFC_BUTTON, buttonStyle);
             e.Graphics.ReleaseHdc();

@@ -18,6 +18,8 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
+using static SimpleClassicThemeTaskbar.Helpers.NativeMethods.WinDef;
+
 namespace SimpleClassicThemeTaskbar
 {
     public partial class Taskbar : Form

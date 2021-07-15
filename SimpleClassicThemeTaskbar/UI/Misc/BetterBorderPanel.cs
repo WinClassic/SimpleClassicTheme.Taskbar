@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using System.Runtime.InteropServices;
 using System.Drawing.Drawing2D;
 using SimpleClassicThemeTaskbar.Helpers.NativeMethods;
+using static SimpleClassicThemeTaskbar.Helpers.NativeMethods.WinDef;
 
 namespace SimpleClassicThemeTaskbar.UIElements.Misc
 {
@@ -60,7 +61,7 @@ namespace SimpleClassicThemeTaskbar.UIElements.Misc
             {
                 if (isButton)
                 {
-                    RECT rect = new(ClientRectangle);
+                    RECT rect = ClientRectangle;
                     uint buttonStyle = style == Border3DStyle.Raised ? DFCS_BUTTONPUSH : DFCS_BUTTONPUSH | DFCS_PUSHED;
                     _ = User32.DrawFrameControl(e.Graphics.GetHdc(), ref rect, DFC_BUTTON, buttonStyle);
                     e.Graphics.ReleaseHdc();

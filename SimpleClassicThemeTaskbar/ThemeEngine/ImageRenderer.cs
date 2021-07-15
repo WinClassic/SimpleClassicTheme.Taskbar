@@ -13,6 +13,8 @@ using System.Resources;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
+using static SimpleClassicThemeTaskbar.Helpers.NativeMethods.WinDef;
+
 namespace SimpleClassicThemeTaskbar.ThemeEngine
 {
     class ImageRenderer : BaseRenderer
