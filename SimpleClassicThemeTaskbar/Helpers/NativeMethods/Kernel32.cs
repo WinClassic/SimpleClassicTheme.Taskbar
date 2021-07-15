@@ -14,6 +14,10 @@ namespace SimpleClassicThemeTaskbar.Helpers.NativeMethods
         internal const int PAGE_READWRITE = 0x00000004;
         internal const int PROCESS_ALL_ACCESS = 0x001FFFFF;
         internal const int PROCESS_QUERY_LIMITED_INFORMATION = 0x00001000;
+        internal const int ATTACH_PARENT_PROCESS = -1;
+
+        [DllImport(nameof(Kernel32))]
+        internal static extern bool AttachConsole(int dwProcessId);
 
         [DllImport(nameof(Kernel32))]
         internal static extern bool CloseHandle(IntPtr hHandle);
