@@ -25,6 +25,20 @@ namespace SimpleClassicThemeTaskbar.Helpers
 			return @struct;
 		}
 
+		public static T GetStruct<T>(byte[] bytes)
+		{
+			var handle = GCHandle.Alloc(bytes, GCHandleType.Pinned);
+
+			try
+            {
+				return Marshal.PtrToStructure<T>(handle.AddrOfPinnedObject());
+			}
+            finally
+			{
+				handle.Free();
+			}
+		}
+
 		public static List<IntPtr> FilterWindows(Func<IntPtr, bool> predicate)
 		{
 			var windows = new List<IntPtr>();

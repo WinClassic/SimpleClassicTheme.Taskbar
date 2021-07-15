@@ -42,6 +42,7 @@ namespace SimpleClassicThemeTaskbar
             Config.Instance.ProgramGroupCheck = (ProgramGroupCheck)comboBoxGroupingMethod.SelectedIndex;
             Config.Instance.ExitMenuItemCondition = (ExitMenuItemCondition)exitItemComboBox.SelectedIndex;
             Config.Instance.EnablePassiveTaskbar = enablePassiveTaskbarCheckBox.Checked;
+            Config.Instance.UseExplorerTaskbarPosition = stuckRectsCheckBox.Checked;
 
             // Save taskbar filter
             string taskbarFilter = "";
@@ -272,6 +273,7 @@ namespace SimpleClassicThemeTaskbar
             enableSysTrayColorChange.Checked = Config.Instance.EnableSystemTrayColorChange;
             showTaskbarOnAllDesktops.Checked = Config.Instance.ShowTaskbarOnAllDesktops;
             enableQuickLaunchCheckBox.Checked = Config.Instance.EnableQuickLaunch;
+            stuckRectsCheckBox.Checked = Config.Instance.UseExplorerTaskbarPosition;
 
             // Start button
             customIconRadioButton.Checked = Config.Instance.StartButtonAppearance == StartButtonAppearance.CustomIcon;

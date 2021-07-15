@@ -55,6 +55,28 @@ namespace SimpleClassicThemeTaskbar
         }
     }
 
+    // http://en.verysource.com/code/281806_1/tray.c.html
+    [StructLayout(LayoutKind.Sequential)]
+    public struct _TVSD
+    {
+        public uint dwSize;
+        public int lSignature;        // signature (must be negative)
+        public TvsdFlags dwFlags;          // TVSD_ flags
+        public uint uStuckPlace;      // current stuck edge
+        public SIZE sStuckWidths;      // widths of stuck rects (BUGBUG: in tbd units)
+        public RECT rcLastStuck;       // last stuck position in pixels
+    }
+
+    [Flags]
+    public enum TvsdFlags : uint
+    {
+        None = 0,
+        AutoHide = 1,
+        TopMost = 2,
+        SmallIcons = 4,
+        HideClock = 8,
+    }
+
     [StructLayout(LayoutKind.Sequential)]
     public struct WINDOWINFO
     {

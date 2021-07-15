@@ -2170,6 +2170,18 @@ no warranty what so ever.</value>
   <data name="&gt;&gt;bannerPictureBox.ZOrder" xml:space="preserve">
     <value>1</value>
   </data>
+  <data name="&gt;&gt;stuckRectsCheckBox.Name" xml:space="preserve">
+    <value>stuckRectsCheckBox</value>
+  </data>
+  <data name="&gt;&gt;stuckRectsCheckBox.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;stuckRectsCheckBox.Parent" xml:space="preserve">
+    <value>tabDebug</value>
+  </data>
+  <data name="&gt;&gt;stuckRectsCheckBox.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
   <data name="&gt;&gt;enablePassiveTaskbarCheckBox.Name" xml:space="preserve">
     <value>enablePassiveTaskbarCheckBox</value>
   </data>
@@ -2205,6 +2217,33 @@ no warranty what so ever.</value>
   </data>
   <data name="&gt;&gt;tabDebug.ZOrder" xml:space="preserve">
     <value>8</value>
+  </data>
+  <data name="stuckRectsCheckBox.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="stuckRectsCheckBox.Location" type="System.Drawing.Point, System.Drawing">
+    <value>8, 32</value>
+  </data>
+  <data name="stuckRectsCheckBox.Size" type="System.Drawing.Size, System.Drawing">
+    <value>215, 17</value>
+  </data>
+  <data name="stuckRectsCheckBox.TabIndex" type="System.Int32, mscorlib">
+    <value>10</value>
+  </data>
+  <data name="stuckRectsCheckBox.Text" xml:space="preserve">
+    <value>Place taskbars on Explorer's stuck rects</value>
+  </data>
+  <data name="&gt;&gt;stuckRectsCheckBox.Name" xml:space="preserve">
+    <value>stuckRectsCheckBox</value>
+  </data>
+  <data name="&gt;&gt;stuckRectsCheckBox.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;stuckRectsCheckBox.Parent" xml:space="preserve">
+    <value>tabDebug</value>
+  </data>
+  <data name="&gt;&gt;stuckRectsCheckBox.ZOrder" xml:space="preserve">
+    <value>0</value>
   </data>
   <data name="enablePassiveTaskbarCheckBox.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>

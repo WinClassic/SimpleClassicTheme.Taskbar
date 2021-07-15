@@ -122,8 +122,17 @@ namespace SimpleClassicThemeTaskbar
             HandleCreated += delegate { CrossThreadHandle = Handle; };
             TopLevel = true;
 
-            //Fix height according to renderers preferences
-            Height = Config.Instance.Renderer.TaskbarHeight;
+            if (Config.Instance.UseExplorerTaskbarPosition)
+            {
+                var tvsd = GetSystemTaskbarData();
+                Height = tvsd.rcLastStuck.Bottom - tvsd.rcLastStuck.Top;
+            }
+            else
+            {
+                //Fix height according to renderers preferences
+                Height = Config.Instance.Renderer.TaskbarHeight;
+            }
+            
             startButton1.Height = Height;
             systemTray1.Height = Height;
             quickLaunch1.Height = Height;
@@ -184,6 +193,15 @@ namespace SimpleClassicThemeTaskbar
             }
 
             base.WndProc(ref m);
+        }
+
+        private static _TVSD GetSystemTaskbarData()
+        {
+            using (var key = Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Explorer\StuckRects3"))
+            {
+                var data = (byte[])key.GetValue("Settings", null);
+                return UnmanagedHelpers.GetStruct<_TVSD>(data);
+            }
         }
 
         //Initialize stuff
@@ -878,15 +896,28 @@ namespace SimpleClassicThemeTaskbar
         {
             using var _ = logicTiming.StartRegion("Resize work area");
 
-            Screen screen = Screen.FromHandle(CrossThreadHandle);
-            Rectangle rct = screen.Bounds;
-            rct.Height -= Height;
-            Point desiredLocation = new(rct.Left, rct.Bottom);
+            var screen = Screen.FromHandle(CrossThreadHandle);
+            var workArea = screen.Bounds;
+            Rectangle rect;
+            Point desiredLocation;
 
-            if (!screen.WorkingArea.Equals(rct))
+            if (Config.Instance.UseExplorerTaskbarPosition)
+            {
+                var tvsd = GetSystemTaskbarData();
+                rect = tvsd.rcLastStuck;
+                desiredLocation = rect.Location;
+            }
+            else
+            {
+                workArea.Height -= Height;
+                desiredLocation = new(workArea.Left, workArea.Bottom);
+            }
+
+            if (!screen.WorkingArea.Equals(workArea))
             {
                 var windowHandles = windows.Select(a => a.Handle).ToArray();
-                UnmanagedCodeMigration.SetWorkingArea(rct, Environment.OSVersion.Version.Major < 10, windowHandles);
+                var isBelowWin10 = Environment.OSVersion.Version.Major < 10;
+                UnmanagedCodeMigration.SetWorkingArea(workArea, isBelowWin10, windowHandles);
             }
 
             if (!Location.Equals(desiredLocation))

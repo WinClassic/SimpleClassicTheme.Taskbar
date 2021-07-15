@@ -106,6 +106,10 @@ namespace SimpleClassicThemeTaskbar.Helpers
 
         [Browsable(false)]
         public string Language { get; set; }
+
+        [Browsable(false)]
+        public bool UseExplorerTaskbarPosition { get; internal set; }
+
         #endregion
 
         [Category("(Misc)")]

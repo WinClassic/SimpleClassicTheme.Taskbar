@@ -84,6 +84,7 @@
             this.label7 = new System.Windows.Forms.Label();
             this.bannerPictureBox = new System.Windows.Forms.PictureBox();
             this.tabDebug = new System.Windows.Forms.TabPage();
+            this.stuckRectsCheckBox = new System.Windows.Forms.CheckBox();
             this.enablePassiveTaskbarCheckBox = new System.Windows.Forms.CheckBox();
             this.customButtonFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.aboutLabel = new System.Windows.Forms.LinkLabel();
@@ -359,6 +360,7 @@
             // 
             // tabTaskView
             // 
+            this.tabTaskView.Controls.Add(this.enableGroupingCheckBox);
             this.tabTaskView.Controls.Add(this.groupBox1);
             this.tabTaskView.Controls.Add(this.comboBoxGroupingMethod);
             this.tabTaskView.Controls.Add(this.label9);
@@ -368,6 +370,12 @@
             resources.ApplyResources(this.tabTaskView, "tabTaskView");
             this.tabTaskView.Name = "tabTaskView";
             this.tabTaskView.UseVisualStyleBackColor = true;
+            // 
+            // enableGroupingCheckBox
+            // 
+            resources.ApplyResources(this.enableGroupingCheckBox, "enableGroupingCheckBox");
+            this.enableGroupingCheckBox.Name = "enableGroupingCheckBox";
+            this.enableGroupingCheckBox.UseVisualStyleBackColor = true;
             // 
             // groupBox1
             // 
@@ -525,10 +533,17 @@
             // 
             // tabDebug
             // 
+            this.tabDebug.Controls.Add(this.stuckRectsCheckBox);
             this.tabDebug.Controls.Add(this.enablePassiveTaskbarCheckBox);
             resources.ApplyResources(this.tabDebug, "tabDebug");
             this.tabDebug.Name = "tabDebug";
             this.tabDebug.UseVisualStyleBackColor = true;
+            // 
+            // stuckRectsCheckBox
+            // 
+            resources.ApplyResources(this.stuckRectsCheckBox, "stuckRectsCheckBox");
+            this.stuckRectsCheckBox.Name = "stuckRectsCheckBox";
+            this.stuckRectsCheckBox.UseVisualStyleBackColor = true;
             // 
             // enablePassiveTaskbarCheckBox
             // 
