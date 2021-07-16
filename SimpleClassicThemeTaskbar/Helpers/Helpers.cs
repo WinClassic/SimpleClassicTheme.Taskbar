@@ -1,12 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Text;
 using System.Windows.Forms;
 using System.Xml.Linq;
+
+using static SimpleClassicThemeTaskbar.Helpers.NativeMethods.Kernel32;
 
 namespace SimpleClassicThemeTaskbar.Helpers
 {
@@ -113,6 +117,31 @@ namespace SimpleClassicThemeTaskbar.Helpers
         public static void DrawImage(this Graphics graphics, Image image, Rectangle destRect, Rectangle srcRect)
         {
             graphics.DrawImage(image, destRect, srcRect, GraphicsUnit.Pixel);
+        }
+
+        public static string GetMainModuleFileName(this Process process, int buffer = 1024)
+        {
+            var fileNameBuilder = new StringBuilder(buffer);
+            var bufferLength = (uint)fileNameBuilder.Capacity + 1;
+
+            var handle = OpenProcess(0x0400,false, process.Id);
+
+            if (handle == IntPtr.Zero)
+            {
+                return null;
+                //throw new Win32Exception(Marshal.GetLastWin32Error());
+            }
+
+            if (QueryFullProcessImageNameW(handle, 0, fileNameBuilder, ref bufferLength))
+            {
+                return fileNameBuilder.ToString();
+            }
+            else
+            {
+                //throw new Win32Exception(Marshal.GetLastWin32Error());
+            }
+
+            return null;
         }
     }
 }

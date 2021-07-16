@@ -32,10 +32,19 @@ namespace SimpleClassicThemeTaskbar
             set
             {
                 icon = value;
-                if (icon != null)
-                    iconImage = new Icon(icon, 16, 16).ToBitmap();
-                else
-                    iconImage = null;
+
+                iconImage = null;
+
+                try
+                {
+                    if (icon != null)
+                        iconImage = new Icon(icon, 16, 16).ToBitmap();
+                }
+                catch (Exception ex)
+                {
+                    Logger.Log(LoggerVerbosity.Verbose, "TaskbarProgram/Icon", "Failed to set icon");
+                }
+                    
                 /*if (icon == null)
                     return;
                 ICONINFO ii;

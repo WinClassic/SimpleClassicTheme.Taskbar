@@ -1,0 +1,4 @@
+﻿[*.cs]
+
+# IDE0004: Remove Unnecessary Cast
+dotnet_diagnostic.IDE0004.severity = suggestion

@@ -52,14 +52,17 @@ namespace SimpleClassicThemeTaskbar.Helpers
 
         public static void Log(LoggerVerbosity verbosity, string source, string text)
         {
-            if (Config.Instance.EnableDebugging)
+            if (Config.Instance.Tweaks.EnableDebugging)
                 Debug.WriteLine(text, source);
 
             text.Replace("\n", "".PadLeft(38));
             if (loggerOff) return;
             if (verbosity <= verb)
             {
-                string toWrite = $"[{verbosity,-8}][{source,-24}]: {text}\n";
+                string toWrite = $"[{verbosity,-8}][{source,-24}]: {text}" + Environment.NewLine;
+
+                Console.Write(toWrite);
+
                 byte[] bytes = Encoding.UTF8.GetBytes(toWrite);
                 fs.Write(bytes, 0, bytes.Length);
                 fs.Flush();

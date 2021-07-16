@@ -220,16 +220,16 @@ namespace SimpleClassicThemeTaskbar.ThemeEngine
             g.ResetTransform();
         }
 
-        public override Point GetQuickLaunchIconLocation(int index) => new(16 + (index * (16 + Config.Instance.SpaceBetweenQuickLaunchIcons)), 7);
+        public override Point GetQuickLaunchIconLocation(int index) => new(16 + (index * (16 + Config.Instance.Tweaks.SpaceBetweenQuickLaunchIcons)), 7);
 
-        public override int GetQuickLaunchWidth(int iconCount) => (iconCount * 16) + (Config.Instance.SpaceBetweenQuickLaunchIcons * (iconCount - 1));
+        public override int GetQuickLaunchWidth(int iconCount) => (iconCount * 16) + (Config.Instance.Tweaks.SpaceBetweenQuickLaunchIcons * (iconCount - 1));
 
-        public override Point GetSystemTrayIconLocation(int index) => new(3 + (index * (16 + Config.Instance.SpaceBetweenTrayIcons)), 7);
+        public override Point GetSystemTrayIconLocation(int index) => new(3 + (index * (16 + Config.Instance.Tweaks.SpaceBetweenTrayIcons)), 7);
 
-        public override int GetSystemTrayWidth(int iconCount) => 63 + (iconCount * (16 + Config.Instance.SpaceBetweenTrayIcons));
+        public override int GetSystemTrayWidth(int iconCount) => 63 + (iconCount * (16 + Config.Instance.Tweaks.SpaceBetweenTrayIcons));
 
         public override Point GetTaskButtonGroupWindowButtonLocation(int index) => new(4, (index - 1) * 24);
 
-        public override Size GetTaskButtonGroupWindowSize(int buttonCount) => new(Config.Instance.TaskbarProgramWidth + 8, ((buttonCount - 1) * 24) + 6);
+        public override Size GetTaskButtonGroupWindowSize(int buttonCount) => new(Config.Instance.Tweaks.TaskbarProgramWidth + 8, ((buttonCount - 1) * 24) + 6);
     }
 }

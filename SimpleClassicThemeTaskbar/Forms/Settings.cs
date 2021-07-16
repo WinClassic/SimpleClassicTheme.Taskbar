@@ -34,12 +34,11 @@ namespace SimpleClassicThemeTaskbar
             Config.Instance.EnableSystemTrayColorChange = enableSysTrayColorChange.Checked;
             Config.Instance.ShowTaskbarOnAllDesktops = showTaskbarOnAllDesktops.Checked;
             Config.Instance.EnableQuickLaunch = enableQuickLaunchCheckBox.Checked;
-            Config.Instance.TaskbarProgramWidth = (int)taskbarProgramWidth.Value;
             Config.Instance.StartButtonImage = customButtonTextBox.Text;
             Config.Instance.StartButtonIconImage = customIconTextBox.Text;
             Config.Instance.StartButtonAppearance = GetCurrentStartButtonAppearance();
             Config.Instance.Language = (string)languageComboBox.SelectedItem;
-            Config.Instance.ProgramGroupCheck = (ProgramGroupCheck)comboBoxGroupingMethod.SelectedIndex;
+            Config.Instance.EnableGrouping = enableGroupingCheckBox.Checked;
             Config.Instance.ExitMenuItemCondition = (ExitMenuItemCondition)exitItemComboBox.SelectedIndex;
             Config.Instance.EnablePassiveTaskbar = enablePassiveTaskbarCheckBox.Checked;
             Config.Instance.UseExplorerTaskbarPosition = stuckRectsCheckBox.Checked;
@@ -80,7 +79,7 @@ namespace SimpleClassicThemeTaskbar
 
             Config.Instance.ConfigChanged = true;
             Config.Instance.SaveToRegistry();
-            ApplicationEntryPoint.NewTaskbars();
+            ApplicationEntryPoint.GenerateNewTaskbars();
 
             previewTaskbar.Height = Config.Instance.Renderer.TaskbarHeight;
             previewTaskbar.EnumerateWindows();
@@ -265,7 +264,6 @@ namespace SimpleClassicThemeTaskbar
 
         private void LoadSettings()
         {
-            comboBoxGroupingMethod.SelectedIndex = (int)Config.Instance.ProgramGroupCheck;
             exitItemComboBox.SelectedIndex = (int)Config.Instance.ExitMenuItemCondition;
 
             enablePassiveTaskbarCheckBox.Checked = Config.Instance.EnablePassiveTaskbar;
@@ -273,6 +271,7 @@ namespace SimpleClassicThemeTaskbar
             enableSysTrayColorChange.Checked = Config.Instance.EnableSystemTrayColorChange;
             showTaskbarOnAllDesktops.Checked = Config.Instance.ShowTaskbarOnAllDesktops;
             enableQuickLaunchCheckBox.Checked = Config.Instance.EnableQuickLaunch;
+            enableGroupingCheckBox.Checked = Config.Instance.EnableGrouping;
             stuckRectsCheckBox.Checked = Config.Instance.UseExplorerTaskbarPosition;
 
             // Start button
@@ -282,12 +281,9 @@ namespace SimpleClassicThemeTaskbar
             customButtonTextBox.Text = Config.Instance.StartButtonImage;
             customIconTextBox.Text = Config.Instance.StartButtonIconImage;
 
-            taskbarProgramWidth.Value = Math.Min(Config.Instance.TaskbarProgramWidth, taskbarProgramWidth.Maximum);
-
-            taskbarProgramWidth.Maximum = Screen.PrimaryScreen.Bounds.Width;
             languageComboBox.SelectedItem = Config.Instance.Language;
 
-            if (!Config.Instance.EnableDebugging)
+            if (!Config.Instance.Tweaks.EnableDebugging)
             {
                 tabControl.TabPages.Remove(tabDebug);
             }
@@ -301,7 +297,7 @@ namespace SimpleClassicThemeTaskbar
             UpdateSelectedRenderer();
             PopulateVisualStyles();
 
-            tweaksPropertyGrid.SelectedObject = Config.Instance;
+            tweaksPropertyGrid.SelectedObject = Config.Instance.Tweaks;
         }
 
         private void UpdateSelectedRenderer()
@@ -457,9 +453,9 @@ namespace SimpleClassicThemeTaskbar
 
         private void tweaksPropertyGrid_PropertyValueChanged(object s, PropertyValueChangedEventArgs e)
         {
-            if (e.ChangedItem.PropertyDescriptor.Name == nameof(Config.Instance.EnableDebugging))
+            if (e.ChangedItem.PropertyDescriptor.Name == nameof(Config.Instance.Tweaks.EnableDebugging))
             {
-                if (Config.Instance.EnableDebugging)
+                if (Config.Instance.Tweaks.EnableDebugging)
                 {
                     if (!tabControl.TabPages.Contains(tabDebug))
                         tabControl.TabPages.Add(tabDebug);

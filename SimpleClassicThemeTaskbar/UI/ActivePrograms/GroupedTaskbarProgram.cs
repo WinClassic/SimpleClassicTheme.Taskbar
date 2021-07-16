@@ -127,15 +127,15 @@ namespace SimpleClassicThemeTaskbar
 
         public override string ToString()
         {
-            if (Config.Instance.ProgramGroupCheck == ProgramGroupCheck.Process)
+            if (Config.Instance.Tweaks.ProgramGroupCheck == ProgramGroupCheck.Process)
             {
                 return $"Process - ID: {Process.Id}, Name: {Process.ProcessName}";
             }
-            else if (Config.Instance.ProgramGroupCheck == ProgramGroupCheck.FileNameAndPath)
+            else if (Config.Instance.Tweaks.ProgramGroupCheck == ProgramGroupCheck.FileNameAndPath)
             {
                 return $"Filepath - {GetShortPath(Process.MainModule.FileName)}";
             }
-            else if (Config.Instance.ProgramGroupCheck == ProgramGroupCheck.ModuleName)
+            else if (Config.Instance.Tweaks.ProgramGroupCheck == ProgramGroupCheck.ModuleName)
             {
                 return $"Filename - {Process.MainModule.ModuleName}";
             }

@@ -58,7 +58,7 @@ namespace SimpleClassicThemeTaskbar
                 SingleTaskbarProgram program = parent.ProgramWindows[i];
                 program.Parent = this;
                 program.Location = Config.Instance.Renderer.GetTaskButtonGroupWindowButtonLocation(i);
-                program.Width = Config.Instance.TaskbarProgramWidth;
+                program.Width = Config.Instance.Tweaks.TaskbarProgramWidth;
                 program.Visible = true;
                 //program.MouseClick += delegate (object sender, MouseEventArgs e) {  };
             }

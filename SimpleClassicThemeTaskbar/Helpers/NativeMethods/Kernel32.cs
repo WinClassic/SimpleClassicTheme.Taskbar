@@ -40,11 +40,20 @@ namespace SimpleClassicThemeTaskbar.Helpers.NativeMethods
         [DllImport(nameof(Kernel32), SetLastError = true, ExactSpelling = true, CharSet = CharSet.Ansi)]
         internal static extern IntPtr LoadLibraryExA(string lpLibFileName, IntPtr hFile, uint dwFlags);
 
+        [DllImport(nameof(Kernel32), CharSet = CharSet.Ansi, ExactSpelling = true)]
+        internal static extern IntPtr LoadResource(IntPtr hModule, IntPtr hResInfo);
+
         [DllImport(nameof(Kernel32))]
         internal static extern IntPtr OpenProcess(int dwDesiredAccess, bool bInheritHandle, int dwProcessId);
 
+        [DllImport(nameof(Kernel32), CharSet = CharSet.Unicode, ExactSpelling = true, SetLastError = true)]
+        internal static extern bool QueryFullProcessImageNameW([In] IntPtr hProcess, [In] uint dwFlags, [Out] StringBuilder lpExeName, [In, Out] ref uint lpdwSize);
+
         [DllImport(nameof(Kernel32))]
         internal static extern bool ReadProcessMemory(IntPtr hProcess, IntPtr lpBaseAddress, [Out] byte[] buffer, int dwSize, out int lpNumberOfBytesRead);
+
+        [DllImport(nameof(Kernel32), ExactSpelling = true)]
+        internal static extern uint SizeofResource(IntPtr hModule, IntPtr hResInfo);
 
         [DllImport(nameof(Kernel32), SetLastError = true, ExactSpelling = true)]
         internal static extern IntPtr VirtualAllocEx(IntPtr hProcess, IntPtr lpAddress, uint dwSize, int flAllocationType, int flProtect);
@@ -54,11 +63,5 @@ namespace SimpleClassicThemeTaskbar.Helpers.NativeMethods
 
         [DllImport(nameof(Kernel32), CharSet = CharSet.Unicode)]
         internal static extern long WritePrivateProfileString(string section, string key, string val, string filePath);
-
-        [DllImport(nameof(Kernel32), CharSet = CharSet.Ansi, ExactSpelling = true)]
-        internal static extern IntPtr LoadResource(IntPtr hModule, IntPtr hResInfo);
-
-        [DllImport(nameof(Kernel32), ExactSpelling = true)]
-        internal static extern uint SizeofResource(IntPtr hModule, IntPtr hResInfo);
     }
 }

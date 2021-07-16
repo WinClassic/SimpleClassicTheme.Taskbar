@@ -3,10 +3,8 @@
 using SimpleClassicThemeTaskbar.ThemeEngine;
 using SimpleClassicThemeTaskbar.ThemeEngine.VisualStyles;
 
-using System;
 using System.ComponentModel;
 using System.Globalization;
-using System.Reflection;
 using System.Resources;
 using System.Threading;
 
@@ -14,8 +12,12 @@ namespace SimpleClassicThemeTaskbar.Helpers
 {
     public class Config
     {
+        private static readonly object instanceLock = new();
         private static Config instance;
-        private static object instanceLock = new();
+        private string rendererPath = "Internal/Classic";
+
+        public static string ImageThemePath { get; set; } = string.Empty;
+
         public static Config Instance
         {
             get
@@ -32,33 +34,17 @@ namespace SimpleClassicThemeTaskbar.Helpers
             }
         }
 
-        private const BindingFlags bindingFlags = BindingFlags.Static | BindingFlags.Public | BindingFlags.GetProperty | BindingFlags.SetProperty;
-        private string rendererPath = "Internal/Classic";
-
-        #region Non-browsable properties
-        [Browsable(false)]
         public bool ConfigChanged { get; set; } = true;
-
-        [Browsable(false)]
+        public bool EnableGrouping { get; set; } = true;
+        public bool EnablePassiveTaskbar { get; internal set; } = false;
         public bool EnableQuickLaunch { get; set; } = true;
-
-
-        [Browsable(false)]
+        public bool EnableSystemTrayColorChange { get; set; } = true;
+        public bool EnableSystemTrayHover { get; set; } = true;
+        public ExitMenuItemCondition ExitMenuItemCondition { get; internal set; }
+        public string Language { get; set; }
         public string QuickLaunchOrder { get; set; } = string.Empty;
-
-        [Browsable(false)]
         public BaseRenderer Renderer { get; set; } = new ClassicRenderer();
 
-        // VisualStyleRenderer settings
-        [Browsable(false)]
-        public string VisualStylePath { get; set; } = string.Empty;
-        [Browsable(false)]
-        public string VisualStyleSize { get; set; } = string.Empty;
-        [Browsable(false)]
-        public string VisualStyleColor { get; set; } = string.Empty;
-        [Browsable(false)]
-        public ExitMenuItemCondition ExitMenuItemCondition { get; internal set; }
-        [Browsable(false)]
         public string RendererPath
         {
             get => rendererPath;
@@ -66,7 +52,6 @@ namespace SimpleClassicThemeTaskbar.Helpers
             {
                 switch (rendererPath = value)
                 {
-
                     case "Internal/ImageRenderer":
                         Renderer = ImageThemePath switch
                         {
@@ -89,57 +74,16 @@ namespace SimpleClassicThemeTaskbar.Helpers
             }
         }
 
-        [Browsable(false)]
-        public StartButtonAppearance StartButtonAppearance { get; set; } = StartButtonAppearance.Default;
-
-        [Browsable(false)]
-        public string StartButtonIconImage { get; set; } = string.Empty;
-
-        [Browsable(false)]
-        public string StartButtonImage { get; set; } = string.Empty;
-
-        [Browsable(false)]
-        public string TaskbarProgramFilter { get; set; } = string.Empty;
-
-        [Browsable(false)]
         public bool ShowTaskbarOnAllDesktops { get; set; } = true;
-
-        [Browsable(false)]
-        public string Language { get; set; }
-
-        [Browsable(false)]
+        public StartButtonAppearance StartButtonAppearance { get; set; } = StartButtonAppearance.Default;
+        public string StartButtonIconImage { get; set; } = string.Empty;
+        public string StartButtonImage { get; set; } = string.Empty;
+        public string TaskbarProgramFilter { get; set; } = string.Empty;
+        public TweaksConfig Tweaks { get; set; } = new();
         public bool UseExplorerTaskbarPosition { get; internal set; }
-
-        #endregion
-
-        [Category("(Misc)")]
-        [DisplayName("Enable debugging options")]
-        public bool EnableDebugging { get; set; } = true;
-        public bool EnablePassiveTaskbar { get; internal set; } = false;
-
-        public bool EnableSystemTrayColorChange { get; set; } = true;
-
-        public bool EnableSystemTrayHover { get; set; } = true;
-
-        public ProgramGroupCheck ProgramGroupCheck { get; set; } = ProgramGroupCheck.FileNameAndPath;
-
-        // ImageRenderer settings
-        public static string ImageThemePath { get; set; } = string.Empty;
-
-       
-        [Category("Spacing between items")]
-        [DisplayName("Spacing between Quick Launch icons")]
-        public int SpaceBetweenQuickLaunchIcons { get; set; } = 2;
-
-        [Category("Spacing between items")]
-        [DisplayName("Spacing between taskband buttons")]
-        public int SpaceBetweenTaskbarIcons { get; set; } = 2;
-
-        [Category("Spacing between items")]
-        [DisplayName("Spacing between tray icons")]
-        public int SpaceBetweenTrayIcons { get; set; } = 2;
-
-        public int TaskbarProgramWidth { get; set; } = 160;
+        public string VisualStyleColor { get; set; } = string.Empty;
+        public string VisualStylePath { get; set; } = string.Empty;
+        public string VisualStyleSize { get; set; } = string.Empty;
 
         public void LoadFromRegistry()
         {
@@ -166,5 +110,31 @@ namespace SimpleClassicThemeTaskbar.Helpers
                 RegistrySerializer.SerializeToRegistry(scttSubKey, this);
             }
         }
+    }
+
+    public class TweaksConfig
+    {
+        [DisplayName("Enable debugging options")]
+        public bool EnableDebugging { get; set; } = true;
+
+        [Category("Task View")]
+        [DisplayName("Grouping method")]
+        public ProgramGroupCheck ProgramGroupCheck { get; set; } = ProgramGroupCheck.FileNameAndPath;
+
+        [Category("Spacing between items")]
+        [DisplayName("Spacing between Quick Launch icons")]
+        public int SpaceBetweenQuickLaunchIcons { get; set; } = 2;
+
+        [Category("Spacing between items")]
+        [DisplayName("Spacing between taskband buttons")]
+        public int SpaceBetweenTaskbarIcons { get; set; } = 2;
+
+        [Category("Spacing between items")]
+        [DisplayName("Spacing between tray icons")]
+        public int SpaceBetweenTrayIcons { get; set; } = 2;
+
+        [Category("Task View")]
+        [DisplayName("Program width")]
+        public int TaskbarProgramWidth { get; set; } = 160;
     }
 }

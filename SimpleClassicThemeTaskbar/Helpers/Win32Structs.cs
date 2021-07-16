@@ -14,6 +14,7 @@ namespace SimpleClassicThemeTaskbar
     {
         public IntPtr Handle;
         public WINDOWINFO WindowInfo;
+        public string GroupingKey;
 
         public Window(IntPtr handle) : this()
         {

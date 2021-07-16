@@ -165,7 +165,7 @@ namespace SimpleClassicThemeTaskbar.UIElements.SystemTray
             }
 
             //Display all controls
-            int virtualWidth = 16 + Config.Instance.SpaceBetweenTrayIcons;
+            int virtualWidth = 16 + Config.Instance.Tweaks.SpaceBetweenTrayIcons;
 
             Invalidate();
             //betterBorderPanel1.Refresh();
@@ -173,7 +173,7 @@ namespace SimpleClassicThemeTaskbar.UIElements.SystemTray
 
             int startX = 3;
             int iconWidth = 16;
-            int iconSpacing = Config.Instance.SpaceBetweenTrayIcons;
+            int iconSpacing = Config.Instance.Tweaks.SpaceBetweenTrayIcons;
 
             using (var _ = trayTiming.StartRegion("Check moving"))
             {
