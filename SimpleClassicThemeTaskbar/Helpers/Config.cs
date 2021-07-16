@@ -151,31 +151,7 @@ namespace SimpleClassicThemeTaskbar.Helpers
 
             using (var scttSubKey = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\1337ftw\SimpleClassicThemeTaskbar"))
             {
-                foreach (var property in typeof(Config).GetProperties(bindingFlags))
-                {
-                    if (!property.CanWrite)
-                    {
-                        continue;
-                    }
-
-                    object value = property.GetValue(this);
-                    var registryValue = scttSubKey.GetValue(property.Name, value);
-
-                    // string → bool
-                    if (registryValue is string boolString && property.PropertyType == typeof(bool))
-                    {
-                        registryValue = bool.Parse(boolString);
-                    }
-
-                    // Logger.Log(LoggerVerbosity.Verbose, "Config", $"Setting property: {property.Name} → {value} → {registryValue}");
-                    try
-                    {
-                        property.SetValue(this, registryValue);
-                    }
-                    catch
-                    {
-                    }
-                }
+                RegistrySerializer.DeserializeFromRegistry(scttSubKey, this);
             }
 
             Thread.CurrentThread.CurrentCulture = new CultureInfo(Language);
@@ -187,34 +163,7 @@ namespace SimpleClassicThemeTaskbar.Helpers
             Logger.Log(LoggerVerbosity.Verbose, "Config", "Saving to registry");
             using (var scttSubKey = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\1337ftw\SimpleClassicThemeTaskbar"))
             {
-                foreach (var property in typeof(Config).GetProperties(bindingFlags))
-                {
-                    RegistryValueKind valueKind = RegistryValueKind.Unknown;
-                    object value = property.GetValue(this);
-                    switch (value)
-                    {
-                        case bool boolValue:
-                            value = boolValue.ToString();
-                            valueKind = RegistryValueKind.String;
-                            break;
-
-                        case int:
-                        case Enum:
-                            valueKind = RegistryValueKind.DWord;
-                            break;
-
-                        case string:
-                            valueKind = RegistryValueKind.String;
-                            break;
-
-                        default:
-                            Logger.Log(LoggerVerbosity.Basic, "Config", $"Ignoring property {property.Name} because {value?.GetType()} is an unknown type");
-                            break;
-                    }
-
-                    // Logger.Log(LoggerVerbosity.Verbose, "Config", $"Setting registry key: {property.Name} ({valueKind}) → {value}");
-                    scttSubKey.SetValue(property.Name, value, valueKind);
-                }
+                RegistrySerializer.SerializeToRegistry(scttSubKey, this);
             }
         }
     }
