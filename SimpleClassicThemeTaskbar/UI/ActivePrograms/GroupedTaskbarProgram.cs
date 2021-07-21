@@ -35,13 +35,16 @@ namespace SimpleClassicThemeTaskbar
         {
             get
             {
-                try
+                if (Icon != null)
                 {
-                    return new Icon(Icon, 16, 16).ToBitmap();
-                }
-                catch (ObjectDisposedException)
-                {
-                    // Ignore
+                    try
+                    {
+                        return new Icon(Icon, 16, 16).ToBitmap();
+                    }
+                    catch (ObjectDisposedException)
+                    {
+                        // Ignore
+                    }
                 }
 
                 return null;
