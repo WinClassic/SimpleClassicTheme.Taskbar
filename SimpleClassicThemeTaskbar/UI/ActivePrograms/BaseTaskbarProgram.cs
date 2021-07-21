@@ -133,6 +133,7 @@ namespace SimpleClassicThemeTaskbar
                 Invalidate();
             };
             MouseClick += OnClick;
+            MouseDoubleClick += OnDoubleClick;
 
             ClientSizeChanged += delegate { if (Height == 24) Logger.Log(LoggerVerbosity.Verbose, "BaseTaskbarProgram", $"Size changed to {ClientRectangle}"); };
         }
@@ -143,6 +144,7 @@ namespace SimpleClassicThemeTaskbar
         public abstract bool IsActiveWindow(IntPtr activeWindow);
 
         public abstract void OnClick(object sender, MouseEventArgs e);
+        public abstract void OnDoubleClick(object sender, MouseEventArgs e);
 
         public void OnPaint(object sender, PaintEventArgs e)
         {

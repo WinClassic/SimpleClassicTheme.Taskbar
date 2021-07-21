@@ -5,12 +5,19 @@ using SimpleClassicThemeTaskbar.Helpers.NativeMethods;
 using System;
 using System.Diagnostics;
 using System.Drawing;
-using System.Drawing.Imaging;
-using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 namespace SimpleClassicThemeTaskbar
 {
+    public enum TaskbarProgramClickAction
+	{
+        None,
+        ShowHide,
+        Close,
+        ContextMenu,
+        NewInstance,
+	}
+
     public class SingleTaskbarProgram : BaseTaskbarProgram
     {
         private Icon icon;
@@ -75,19 +82,40 @@ namespace SimpleClassicThemeTaskbar
             return result;
         }
 
-        public override void OnClick(object sender, MouseEventArgs e)
-        {
-            ApplicationEntryPoint.ErrorSource = this;
-            controlState = "handling mouse click";
+        public void PerformClickAction(TaskbarProgramClickAction action, MouseEventArgs e)
+		{
+            switch (action)
+			{
+                case TaskbarProgramClickAction.ShowHide:
+                    if (ActiveWindow)
+                    {
+                        _ = User32.ShowWindow(Window.Handle, User32.SW_MINIMIZE);
+                    }
+                    else
+                    {
+                        if ((Window.WindowInfo.dwStyle & 0x20000000) > 0)
+                            _ = User32.ShowWindow(Window.Handle, 9);
 
-            if (e.Button == MouseButtons.Right)
-            {
-                if (ModifierKeys == (Keys.Control | Keys.Shift | Keys.Alt))
-                {
-                    new IconTest(Window).Show();
-                }
-                else
-                {
+                        _ = User32.SetForegroundWindow(Window.Handle);
+
+                        if (Parent is Taskbar)
+                        {
+                            foreach (Control control in Parent.Controls)
+                            {
+                                if (control is BaseTaskbarProgram program)
+                                {
+                                    program.ActiveWindow = false;
+                                }
+                            }
+                        }
+
+                        ActiveWindow = true;
+                    }
+                    break;
+                case TaskbarProgramClickAction.Close:
+                    User32.SendMessage(Window.Handle, User32.WM_CLOSE, 0, 0);
+                    break;
+                case TaskbarProgramClickAction.ContextMenu:
                     var systemMenu = User32.GetSystemMenu(Window.Handle, false);
 
                     if (systemMenu == IntPtr.Zero)
@@ -112,39 +140,43 @@ namespace SimpleClassicThemeTaskbar
                     ActiveWindow = false;
 
                     User32.SendMessage(Window.Handle, User32.WM_SYSCOMMAND, cmd, 0);
-                }
-            }
+                    break;
+                case TaskbarProgramClickAction.NewInstance:
+                    Process.Start(Window.Process.MainModule.FileName);
+                    break;
+			}
+		}
+
+		public override void OnDoubleClick(object sender, MouseEventArgs e)
+        {
+            ApplicationEntryPoint.ErrorSource = this;
+            controlState = "handling mouse double click";
+
+            if (IsMoving)
+                IsMoving = false;
+            else if (e.Button == MouseButtons.Left)
+                PerformClickAction(Config.Instance.TaskbarProgramLeftDoubleClickAction, e);
+            else if (e.Button == MouseButtons.Middle)
+                PerformClickAction(Config.Instance.TaskbarProgramMiddleDoubleClickAction, e);
             else
-            {
-                if (IsMoving)
-                {
-                    IsMoving = false;
-                }
-                else if (ActiveWindow)
-                {
-                    _ = User32.ShowWindow(Window.Handle, 6);
-                }
-                else
-                {
-                    if ((Window.WindowInfo.dwStyle & 0x20000000) > 0)
-                        _ = User32.ShowWindow(Window.Handle, 9);
+                PerformClickAction(Config.Instance.TaskbarProgramRightDoubleClickAction, e);
+        }
 
-                    _ = User32.SetForegroundWindow(Window.Handle);
+		public override void OnClick(object sender, MouseEventArgs e)
+        {
+            ApplicationEntryPoint.ErrorSource = this;
+            controlState = "handling mouse click";
 
-                    if (Parent is Taskbar)
-                    {
-                        foreach (Control control in Parent.Controls)
-                        {
-                            if (control is TaskbarProgram program)
-                            {
-                                program.ActiveWindow = false;
-                            }
-                        }
-                    }
-
-                    ActiveWindow = true;
-                }
-            }
+            if (IsMoving)
+                IsMoving = false;
+            else if (ModifierKeys == (Keys.Control | Keys.Shift | Keys.Alt) && e.Button == MouseButtons.Right)
+                new IconTest(Window).Show();
+            else if (e.Button == MouseButtons.Left)
+                PerformClickAction(Config.Instance.TaskbarProgramLeftClickAction, e);
+            else if (e.Button == MouseButtons.Middle)
+                PerformClickAction(Config.Instance.TaskbarProgramMiddleClickAction, e);
+            else
+                PerformClickAction(Config.Instance.TaskbarProgramRightClickAction, e);
         }
 
         public override string ToString() => $"Handle: {Window.Handle}, Title: {Title}";

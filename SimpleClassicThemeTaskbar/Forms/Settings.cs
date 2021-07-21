@@ -41,7 +41,7 @@ namespace SimpleClassicThemeTaskbar
             Config.Instance.Language = (string)languageComboBox.SelectedItem;
             Config.Instance.ProgramGroupCheck = (ProgramGroupCheck)comboBoxGroupingMethod.SelectedIndex;
             Config.Instance.ExitMenuItemCondition = (ExitMenuItemCondition)exitItemComboBox.SelectedIndex;
-            Config.Instance.EnablePassiveTaskbar = enablePassiveTaskbarCheckBox.Checked;
+            Config.Instance.EnableActiveTaskbar = enableActiveTaskbarCheckBox.Checked;
 
             // Save taskbar filter
             string taskbarFilter = "";
@@ -267,7 +267,7 @@ namespace SimpleClassicThemeTaskbar
             comboBoxGroupingMethod.SelectedIndex = (int)Config.Instance.ProgramGroupCheck;
             exitItemComboBox.SelectedIndex = (int)Config.Instance.ExitMenuItemCondition;
 
-            enablePassiveTaskbarCheckBox.Checked = Config.Instance.EnablePassiveTaskbar;
+            enableActiveTaskbarCheckBox.Checked = Config.Instance.EnableActiveTaskbar;
             enableSysTrayHover.Checked = Config.Instance.EnableSystemTrayHover;
             enableSysTrayColorChange.Checked = Config.Instance.EnableSystemTrayColorChange;
             showTaskbarOnAllDesktops.Checked = Config.Instance.ShowTaskbarOnAllDesktops;

@@ -72,7 +72,7 @@ namespace SimpleClassicThemeTaskbar.Helpers
             {
                 fs.Flush();
                 fs.Close();
-                Process.Start(fs.Name);
+                Process.Start("C:\\Windows\\system32\\notepad.exe", fs.Name);
                 fs = new FileStream("latest.log", FileMode.Append, FileAccess.Write, FileShare.Read);
             }
         }

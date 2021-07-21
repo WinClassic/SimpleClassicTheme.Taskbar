@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Text;
 
@@ -14,6 +15,7 @@ namespace SimpleClassicThemeTaskbar.Helpers.NativeMethods
         internal const int PAGE_READWRITE = 0x00000004;
         internal const int PROCESS_ALL_ACCESS = 0x001FFFFF;
         internal const int PROCESS_QUERY_LIMITED_INFORMATION = 0x00001000;
+        internal const int PROCESS_VM_READ = 0x10;
 
         [DllImport(nameof(Kernel32))]
         internal static extern bool CloseHandle(IntPtr hHandle);
@@ -56,5 +58,39 @@ namespace SimpleClassicThemeTaskbar.Helpers.NativeMethods
 
         [DllImport(nameof(Kernel32), ExactSpelling = true)]
         internal static extern uint SizeofResource(IntPtr hModule, IntPtr hResInfo);
+
+        [DllImport(nameof(Kernel32), SetLastError = true)]
+        internal static extern bool QueryFullProcessImageName([In] IntPtr hProcess, [In] int dwFlags, [Out] StringBuilder lpExeName, ref int lpdwSize);
+
+        [DllImport(nameof(Kernel32), CharSet = CharSet.Unicode, SetLastError = true)]
+        internal static extern bool GetModuleBaseName(IntPtr hProcess, IntPtr hModule, [MarshalAs(UnmanagedType.LPWStr)] StringBuilder lpBaseName, int nSize);
+
+        internal static string GetProcessFileName(int pid)
+        {
+            int capacity = 2000;
+            StringBuilder builder = new(capacity);
+            IntPtr hProcess = OpenProcess(PROCESS_QUERY_LIMITED_INFORMATION, false, pid);
+            if (!QueryFullProcessImageName(hProcess, 0, builder, ref capacity))
+            {
+                CloseHandle(hProcess);
+                return String.Empty;
+            }
+            CloseHandle(hProcess);
+            return builder.ToString();
+        }
+
+        internal static string GetProcessModuleName(int pid)
+        {
+            int capacity = 2000;
+            StringBuilder builder = new(capacity);
+            IntPtr hProcess = OpenProcess(PROCESS_QUERY_LIMITED_INFORMATION | PROCESS_VM_READ, false, pid);
+            if (!GetModuleBaseName(hProcess, IntPtr.Zero, builder, capacity))
+            {
+                CloseHandle(hProcess);
+                return String.Empty;
+			}
+            CloseHandle(hProcess);
+            return builder.ToString();
+        }
     }
 }

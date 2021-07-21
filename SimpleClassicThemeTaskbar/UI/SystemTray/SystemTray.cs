@@ -2,21 +2,17 @@
 
 using SimpleClassicThemeTaskbar.Helpers;
 using SimpleClassicThemeTaskbar.Helpers.NativeMethods;
-
+using SimpleClassicThemeTaskbar.UI.Misc;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
-using System.Linq;
-using System.Runtime.InteropServices;
 using System.Text;
-using System.Threading;
 using System.Windows.Forms;
 
 namespace SimpleClassicThemeTaskbar.UIElements.SystemTray
 {
-    public partial class SystemTray : UserControl
+    public partial class SystemTray : SystemTrayBase
     {
         private SystemTrayIcon heldDownIcon = null;
         private int heldDownOriginalX = 0;
@@ -131,6 +127,8 @@ namespace SimpleClassicThemeTaskbar.UIElements.SystemTray
 
         internal void RemoveIcon(SystemTrayNotificationEventArgs e)
         {
+            controlState = "removing icon";
+
             // Look for the icon and remove it from the reference list
             SystemTrayIcon icon;
             if (e.Data.Guid != Guid.Empty && lookupGuid.ContainsKey(e.Data.Guid))
@@ -148,6 +146,8 @@ namespace SimpleClassicThemeTaskbar.UIElements.SystemTray
 
         public void RepositionIcons()
 		{
+            controlState = "respositioning icons";
+
             // Get an array so we can obtain the index
             Control[] icons = new Control[Controls.Count];
             Controls.CopyTo(icons, 0);
@@ -170,12 +170,28 @@ namespace SimpleClassicThemeTaskbar.UIElements.SystemTray
             labelTime.ForeColor = Config.Instance.Renderer.SystemTrayTimeColor;
         }
 
-        public void UpdateTime()
+        public override void UpdateIcons()
+        {
+            
+        }
+
+		public override void UpdateTime()
         {
             labelTime.Text = DateTime.Now.ToString(CultureInfo.CurrentCulture.DateTimeFormat.ShortTimePattern);
         }
 
-        private void labelTime_MouseHover(object sender, EventArgs e)
+		public override string GetErrorString()
+		{
+            var sb = new StringBuilder();
+
+            sb.AppendLine(GetBaseErrorString());
+            sb.AppendLine("Unexpected error occured while " + controlState);
+            sb.AppendLine("If you're seeing this message tell Leet that he should remove this scuffed message.");
+
+            return sb.ToString();
+        }
+
+		private void labelTime_MouseHover(object sender, EventArgs e)
         {
             toolTip1.SetToolTip(labelTime, DateTime.Now.ToShortDateString());
         }

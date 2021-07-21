@@ -244,6 +244,7 @@ namespace SimpleClassicThemeTaskbar.Helpers
 		private void Uninitialize()
 		{
 			// Destroy window
+			User32.DestroyWindow(windowHandle);
 		}
 
 		private Integer WindowProcedure(IntPtr hWnd, uint uMsg, IntPtr wParam, IntPtr lParam)

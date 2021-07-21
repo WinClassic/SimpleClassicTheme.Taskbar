@@ -8,9 +8,9 @@ using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
-namespace SimpleClassicThemeTaskbar.UIElements.SystemTray.OldTray
+namespace SimpleClassicThemeTaskbar.UIElements.OldSystemTray
 {
-    public class OldTrayIcon : PictureBox
+    public class SystemTrayIcon : PictureBox
     {
         public new IntPtr Handle;
 
@@ -24,7 +24,7 @@ namespace SimpleClassicThemeTaskbar.UIElements.SystemTray.OldTray
 
         public Misc.BetterToolTip toolTip;
 
-        internal OldTrayIcon(UnmanagedCodeMigration.TBBUTTONINFO button)
+        internal SystemTrayIcon(UnmanagedCodeMigration.TBBUTTONINFO button)
         {
             Handle = button.hwnd;
             Text = button.toolTip;
@@ -95,7 +95,7 @@ namespace SimpleClassicThemeTaskbar.UIElements.SystemTray.OldTray
                     string pName = Process.GetProcessById((int)PID).ProcessName.ToLower();
                     //20 lines of code just to get the explorer tray icons looking right
                     if (Config.Instance.EnableSystemTrayColorChange &&
-                        Environment.OSVersion.Version.Major >= 10 &&
+                        Environment.OSVersion.Version.Major == 10 &&
                         (pName == "explorer" ||
                         pName == "onedrive") &&
                         (button.callbackMessage == 1120 || //Volume icon callback

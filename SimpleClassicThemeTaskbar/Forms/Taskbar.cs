@@ -195,7 +195,7 @@ namespace SimpleClassicThemeTaskbar
             quickLaunch1.UpdateIcons();
 
             // Create shell hook
-            if (Config.Instance.EnablePassiveTaskbar)
+            if (!Config.Instance.EnableActiveTaskbar)
             {
                 if (!User32.RegisterShellHookWindow(Handle))
                 //hookProcedure = new User32.WindowsHookProcedure(HookProcedure);
@@ -340,9 +340,27 @@ namespace SimpleClassicThemeTaskbar
             // Check if the foreground window was the start menu
             startButton1.UpdateState(new Window(ForegroundWindow));
 
+            if (Primary)
+            {
+                systemTray1.UpdateTime();
+
+                using (uiTiming.StartRegion("Updating System Tray icons"))
+                {
+                    systemTray1.UpdateIcons();
+                }
+
+                quickLaunch1.Location = new Point(startButton1.Location.X + startButton1.Width + 2, 1);
+
+                using (uiTiming.StartRegion("Update Quick Launch icons"))
+                {
+                    quickLaunch1.UpdateIcons();
+                }
+            }
+
             //Put left side controls in the correct place
             quickLaunch1.Location = new Point(startButton1.Location.X + startButton1.Width + 2, 1);
         }
+
         private IntPtr HookProcedure(User32.ShellEvents nCode, IntPtr wParam, IntPtr lParam)
         {
             Logger.Log(LoggerVerbosity.Verbose, "Taskbar/HookProcedure", $"Call parameters: {nCode}, {wParam:X8}, {lParam:X8}");
@@ -354,7 +372,7 @@ namespace SimpleClassicThemeTaskbar
             {
                 // Create a button for the new window
                 case User32.ShellEvents.HSHELL_WINDOWCREATED:
-                    HandleWindowCreated(lParam);
+                    HandleWindowCreated(wParam);
                     break;
                 
                 case User32.ShellEvents.HSHELL_WINDOWACTIVATED:
@@ -393,7 +411,10 @@ namespace SimpleClassicThemeTaskbar
         {
             foreach (BaseTaskbarProgram taskbarProgram in icons)
             {
-                taskbarProgram.ActiveWindow = taskbarProgram.Window.Handle == hWnd;
+                if (taskbarProgram is GroupedTaskbarProgram programGroup)
+                    programGroup.IsActiveWindow(hWnd);
+                else
+                    taskbarProgram.ActiveWindow = taskbarProgram.Window.Handle == hWnd;
             }
         }
 
@@ -414,6 +435,19 @@ namespace SimpleClassicThemeTaskbar
                 return true;
             }
 
+            // UWP app
+            if (window.ClassName == "ApplicationFrameWindow")
+            {
+                //Do an API call to see if app isn't cloaked
+                _ = DwmApi.DwmGetWindowAttribute(window.Handle, DwmApi.DWMWINDOWATTRIBUTE.Cloaked, out var d, Marshal.SizeOf(0));
+
+                //If returned value is not 0, the window is cloaked
+                if (d > 0)
+                {
+                    return false;
+                }
+            }
+
             return false;
         }
 
@@ -430,45 +464,39 @@ namespace SimpleClassicThemeTaskbar
                 return;
             }
 
-            var button = CreateTaskbandButton(window);
-            icons.Add(button);
-            Logger.Log(LoggerVerbosity.Verbose, "Taskbar/EnumerateWindows", $"Adding window {button.Title}.");
+            var icon = CreateTaskbandButton(window);
+            Logger.Log(LoggerVerbosity.Verbose, "Taskbar/EnumerateWindows", $"Adding window {icon.Title}.");
+            BaseTaskbarProgram sameThing = icons.Where((p) => IsGroupConditionMet(p, icon)).FirstOrDefault();
 
-            UpdateUI();
-            UpdateUI();
-        }
-
-        private void NewEnumerateWindows()
-        {
-            var windows = GetTaskbarWindows();
-            var groups = windows.GroupBy(GetGroupKey);
-            var buttons = groups.Select(GenerateTaskbandButtons);
-
-            icons = buttons.ToList();
-            Clear();
-
-            UpdateUI();
-            UpdateUI();
-        }
-
-        private BaseTaskbarProgram GenerateTaskbandButtons(IGrouping<object, Window> group)
-        {
-            var count = group.Count();
-            var buttons = group.Select(CreateTaskbandButton);
-            if (count < 2)
+            // No group
+            if (sameThing == null)
             {
-                return buttons.First();
+                icons.Add(icon);
+            }
+            else if (sameThing is GroupedTaskbarProgram group)
+            {
+                if (!group.ProgramWindows.Contains(icon))
+                {
+                    icon.IsMoving = false;
+                    group.ProgramWindows.Add(icon);
+                }
             }
             else
             {
                 GroupedTaskbarProgram newGroup = new();
-                newGroup.MouseDown += Taskbar_IconDown;
+                Controls.Remove(sameThing);
+                icons.Remove(sameThing);
                 newGroup.MouseMove += Taskbar_IconMove;
+                newGroup.MouseDown += Taskbar_IconDown;
                 newGroup.MouseUp += Taskbar_IconUp;
-                newGroup.Height = Height;
-                newGroup.ProgramWindows.AddRange(buttons);
-                return newGroup;
+                newGroup.ProgramWindows.Add(sameThing as SingleTaskbarProgram);
+                newGroup.ProgramWindows.Add(icon);
+                icon.IsMoving = false;
+                icons.Add(newGroup);
             }
+
+            UpdateUI();
+            UpdateUI();
         }
 
         private static IEnumerable<BaseTaskbarProgram> GetValidWindows(IEnumerable<BaseTaskbarProgram> icons, IEnumerable<Window> windows)
@@ -500,7 +528,6 @@ namespace SimpleClassicThemeTaskbar
 
         internal void EnumerateWindows()
 		{
-
             // Obtain task list
             var windows = GetTaskbarWindows();
 
@@ -547,14 +574,14 @@ namespace SimpleClassicThemeTaskbar
             //Create new list for finalized values
             List<BaseTaskbarProgram> programs = new();
 
-            UpdateTaskbarButtons(newIcons, ref programs);
+            UpdateTaskbarButtons(newIcons, programs);
 
             UpdateUI();
             UpdateUI();
         }
 
         // HACK: This is ref based for now since I have no idea what can go away or how it should be changed.
-        private void UpdateTaskbarButtons(IEnumerable<BaseTaskbarProgram> newIcons, ref List<BaseTaskbarProgram> programs)
+        private void UpdateTaskbarButtons(IEnumerable<BaseTaskbarProgram> newIcons, List<BaseTaskbarProgram> programs)
         {
             if (Config.Instance.ProgramGroupCheck == ProgramGroupCheck.None)
             {
@@ -572,7 +599,7 @@ namespace SimpleClassicThemeTaskbar
                 }
                 else if (taskbarProgram is SingleTaskbarProgram icon)
                 {
-                    BaseTaskbarProgram sameThing = programs.FirstOrDefault((p) => IsGroupConditionMet(p, icon));
+                    BaseTaskbarProgram sameThing = programs.Where((p) => IsGroupConditionMet(p, icon)).FirstOrDefault();
 
                     // No group
                     if (sameThing == null)
@@ -594,7 +621,9 @@ namespace SimpleClassicThemeTaskbar
                         GroupedTaskbarProgram newGroup = new();
                         Controls.Remove(sameThing);
                         programs.Remove(sameThing);
+                        newGroup.MouseMove += Taskbar_IconMove;
                         newGroup.MouseDown += Taskbar_IconDown;
+                        newGroup.MouseUp += Taskbar_IconUp;
                         newGroup.ProgramWindows.Add(sameThing as SingleTaskbarProgram);
                         newGroup.ProgramWindows.Add(icon);
                         icon.IsMoving = false;
@@ -756,7 +785,7 @@ namespace SimpleClassicThemeTaskbar
             return aKey == bKey;
         }
 
-        private static object GetGroupKey(Window window)
+        private static string GetGroupKey(Window window)
         {
             try
             {
@@ -767,10 +796,9 @@ namespace SimpleClassicThemeTaskbar
 
                 return Config.Instance.ProgramGroupCheck switch
                 {
-                    ProgramGroupCheck.Process => window.Process.Id,
-                    ProgramGroupCheck.FileNameAndPath => window.Process.MainModule.FileName,
-                    ProgramGroupCheck.ModuleName => window.Process.MainModule.ModuleName,
-                    _ => null,
+                    ProgramGroupCheck.Process => window.Process.Id.ToString(),
+                    ProgramGroupCheck.FileNameAndPath => Kernel32.GetProcessFileName(window.Process.Id),
+                    ProgramGroupCheck.ModuleName => Kernel32.GetProcessModuleName(window.Process.Id),
                 };
             }
             catch (Win32Exception ex) when (ex.NativeErrorCode == 5)
@@ -778,7 +806,7 @@ namespace SimpleClassicThemeTaskbar
                 // If we got an access denied exception we catch it and return false.
                 // Otherwise we re-throw the exception
                 Logger.Log(LoggerVerbosity.Basic, "Taskbar/Groups", $"Failed to compare taskbar programs: {ex}");
-                return false;
+                return null;
             }
         }
 
@@ -845,6 +873,11 @@ namespace SimpleClassicThemeTaskbar
             if (Primary)
             {
                 systemTray1.UpdateTime();
+
+                using (uiTiming.StartRegion("Updating System Tray icons"))
+                {
+                    systemTray1.UpdateIcons();
+                }
 
                 quickLaunch1.Location = new Point(startButton1.Location.X + startButton1.Width + 2, 1);
 

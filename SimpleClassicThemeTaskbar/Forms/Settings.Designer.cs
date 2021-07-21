@@ -84,7 +84,7 @@
             this.label7 = new System.Windows.Forms.Label();
             this.bannerPictureBox = new System.Windows.Forms.PictureBox();
             this.tabDebug = new System.Windows.Forms.TabPage();
-            this.enablePassiveTaskbarCheckBox = new System.Windows.Forms.CheckBox();
+            this.enableActiveTaskbarCheckBox = new System.Windows.Forms.CheckBox();
             this.customButtonFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.aboutLabel = new System.Windows.Forms.LinkLabel();
             this.panelContent = new System.Windows.Forms.Panel();
@@ -525,16 +525,16 @@
             // 
             // tabDebug
             // 
-            this.tabDebug.Controls.Add(this.enablePassiveTaskbarCheckBox);
+            this.tabDebug.Controls.Add(this.enableActiveTaskbarCheckBox);
             resources.ApplyResources(this.tabDebug, "tabDebug");
             this.tabDebug.Name = "tabDebug";
             this.tabDebug.UseVisualStyleBackColor = true;
             // 
-            // enablePassiveTaskbarCheckBox
+            // enableActiveTaskbarCheckBox
             // 
-            resources.ApplyResources(this.enablePassiveTaskbarCheckBox, "enablePassiveTaskbarCheckBox");
-            this.enablePassiveTaskbarCheckBox.Name = "enablePassiveTaskbarCheckBox";
-            this.enablePassiveTaskbarCheckBox.UseVisualStyleBackColor = true;
+            resources.ApplyResources(this.enableActiveTaskbarCheckBox, "enableActiveTaskbarCheckBox");
+            this.enableActiveTaskbarCheckBox.Name = "enableActiveTaskbarCheckBox";
+            this.enableActiveTaskbarCheckBox.UseVisualStyleBackColor = true;
             // 
             // customButtonFileDialog
             // 
@@ -659,7 +659,7 @@
         private System.Windows.Forms.ComboBox exitItemComboBox;
         private System.Windows.Forms.GroupBox groupBox1;
 		private System.Windows.Forms.TabPage tabDebug;
-		private System.Windows.Forms.CheckBox enablePassiveTaskbarCheckBox;
+		private System.Windows.Forms.CheckBox enableActiveTaskbarCheckBox;
         private System.Windows.Forms.TabPage tabThemes;
         private System.Windows.Forms.GroupBox visualStyleGroupBox;
         private System.Windows.Forms.ComboBox sizeComboBox;

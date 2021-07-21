@@ -25,6 +25,7 @@ namespace SimpleClassicThemeTaskbar.Helpers
                     if (instance == null)
                     {
                         instance = new Config();
+                        instance.LoadFromRegistry();
                     }
 
                     return instance;
@@ -111,7 +112,9 @@ namespace SimpleClassicThemeTaskbar.Helpers
         [Category("(Misc)")]
         [DisplayName("Enable debugging options")]
         public bool EnableDebugging { get; set; } = true;
-        public bool EnablePassiveTaskbar { get; internal set; } = false;
+
+        public bool EnableActiveTaskbar { get; internal set; } = true;
+        public bool EnablePassiveTray { get; set; } = false;
 
         public bool EnableSystemTrayColorChange { get; set; } = true;
 
@@ -122,13 +125,36 @@ namespace SimpleClassicThemeTaskbar.Helpers
         // ImageRenderer settings
         public static string ImageThemePath { get; set; } = string.Empty;
 
-       
+        [Category("Task view click actions")]
+        [DisplayName("Left click")]
+        public TaskbarProgramClickAction TaskbarProgramLeftClickAction { get; set; } = TaskbarProgramClickAction.ShowHide;
+
+        [Category("Task view click actions")]
+        [DisplayName("Right click")]
+        public TaskbarProgramClickAction TaskbarProgramRightClickAction { get; set; } = TaskbarProgramClickAction.ContextMenu;
+
+        [Category("Task view click actions")]
+        [DisplayName("Middle click")]
+        public TaskbarProgramClickAction TaskbarProgramMiddleClickAction { get; set; } = TaskbarProgramClickAction.NewInstance;
+
+        [Category("Task view click actions")]
+        [DisplayName("Left double click")]
+        public TaskbarProgramClickAction TaskbarProgramLeftDoubleClickAction { get; set; } = TaskbarProgramClickAction.None;
+
+        [Category("Task view click actions")]
+        [DisplayName("Right double click")]
+        public TaskbarProgramClickAction TaskbarProgramRightDoubleClickAction { get; set; } = TaskbarProgramClickAction.Close;
+
+        [Category("Task view click actions")]
+        [DisplayName("Middle double click")]
+        public TaskbarProgramClickAction TaskbarProgramMiddleDoubleClickAction { get; set; } = TaskbarProgramClickAction.None;
+
         [Category("Spacing between items")]
         [DisplayName("Spacing between Quick Launch icons")]
         public int SpaceBetweenQuickLaunchIcons { get; set; } = 2;
 
         [Category("Spacing between items")]
-        [DisplayName("Spacing between taskband buttons")]
+        [DisplayName("Spacing between task view items")]
         public int SpaceBetweenTaskbarIcons { get; set; } = 2;
 
         [Category("Spacing between items")]
@@ -147,7 +173,7 @@ namespace SimpleClassicThemeTaskbar.Helpers
 
             using (var scttSubKey = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\1337ftw\SimpleClassicThemeTaskbar"))
             {
-                foreach (var property in typeof(Config).GetProperties(bindingFlags))
+                foreach (var property in typeof(Config).GetProperties(BindingFlags.Instance | BindingFlags.Public))
                 {
                     if (!property.CanWrite)
                     {
@@ -183,7 +209,7 @@ namespace SimpleClassicThemeTaskbar.Helpers
             Logger.Log(LoggerVerbosity.Verbose, "Config", "Saving to registry");
             using (var scttSubKey = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\1337ftw\SimpleClassicThemeTaskbar"))
             {
-                foreach (var property in typeof(Config).GetProperties(bindingFlags))
+                foreach (var property in typeof(Config).GetProperties(BindingFlags.Instance | BindingFlags.Public))
                 {
                     RegistryValueKind valueKind = RegistryValueKind.Unknown;
                     object value = property.GetValue(this);

@@ -14,19 +14,19 @@ using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 
-namespace SimpleClassicThemeTaskbar.UIElements.SystemTray.OldTray
+namespace SimpleClassicThemeTaskbar.UIElements.OldSystemTray
 {
-    public partial class OldTray : UserControlEx
-    {
-        public OldTrayIcon heldDownIcon = null;
+    public partial class SystemTray : UI.Misc.SystemTrayBase
+	{
+        public SystemTrayIcon heldDownIcon = null;
         public int heldDownOriginalX = 0;
-        public List<OldTrayIcon> icons = new();
+        public List<SystemTrayIcon> icons = new();
         public int mouseOriginalX = 0;
         public TimingDebugger trayTiming = new();
         public bool watchTray = true;
         private object culprit;
 
-        public OldTray()
+        public SystemTray()
         {
             InitializeComponent();
             Point p = Config.Instance.Renderer.SystemTrayTimeLocation;
@@ -41,7 +41,7 @@ namespace SimpleClassicThemeTaskbar.UIElements.SystemTray.OldTray
             Controls.CopyTo(controls, 0);
             foreach (Control d in controls)
             {
-                if (d is OldTrayIcon)
+                if (d is SystemTrayIcon)
                 {
                     Controls.Remove(d);
                     d.Dispose();
@@ -74,7 +74,7 @@ namespace SimpleClassicThemeTaskbar.UIElements.SystemTray.OldTray
             return sb.ToString();
         }
 
-        public void UpdateIcons()
+        public override void UpdateIcons()
         {
             if (!watchTray)
             {
@@ -103,13 +103,13 @@ namespace SimpleClassicThemeTaskbar.UIElements.SystemTray.OldTray
             }
 
             //Remove any icons that are now invalid or hidden
-            List<OldTrayIcon> newIconList = new();
+            List<SystemTrayIcon> newIconList = new();
             using (var _ = trayTiming.StartRegion("Remove icons that are invalid"))
             {
-                OldTrayIcon[] enumerator = new OldTrayIcon[icons.Count];
+                SystemTrayIcon[] enumerator = new SystemTrayIcon[icons.Count];
                 icons.CopyTo(enumerator);
-                foreach (OldTrayIcon existingIco in enumerator)
-                    if (existingIco is OldTrayIcon existingIcon)
+                foreach (SystemTrayIcon existingIco in enumerator)
+                    if (existingIco is SystemTrayIcon existingIcon)
                         if (existingHWNDs.Contains(existingIcon.Handle))
                             newIconList.Add(existingIcon);
                         else
@@ -126,7 +126,7 @@ namespace SimpleClassicThemeTaskbar.UIElements.SystemTray.OldTray
                 foreach (UnmanagedCodeMigration.TBBUTTONINFO info in existingButtons)
                 {
                     //By default we say the icon doesn't exist
-                    OldTrayIcon existingIcon = newIconList.FirstOrDefault((i) => i.Handle == info.hwnd);
+                    SystemTrayIcon existingIcon = newIconList.FirstOrDefault((i) => i.Handle == info.hwnd);
 
                     controlState = "updating existing tray icon";
                     culprit = existingIcon;
@@ -137,7 +137,7 @@ namespace SimpleClassicThemeTaskbar.UIElements.SystemTray.OldTray
                     {
                         controlState = "creating new tray icon";
                         culprit = info;
-                        OldTrayIcon trayIcon = new(info);
+                        SystemTrayIcon trayIcon = new(info);
                         trayIcon.MouseDown += SystemTray_IconDown;
                         newIconList.Add(trayIcon);
                     }
@@ -146,12 +146,12 @@ namespace SimpleClassicThemeTaskbar.UIElements.SystemTray.OldTray
 
 
             //De-dupe all controls
-            List<OldTrayIcon> finalIconList = new();
+            List<SystemTrayIcon> finalIconList = new();
 
             using (var _ = trayTiming.StartRegion("De-dupe and display everything"))
             {
                 List<IntPtr> pointers = new();
-                foreach (OldTrayIcon icon in newIconList)
+                foreach (SystemTrayIcon icon in newIconList)
                 {
                     if (!pointers.Contains(icon.Handle))
                         finalIconList.Add(icon);
@@ -186,26 +186,26 @@ namespace SimpleClassicThemeTaskbar.UIElements.SystemTray.OldTray
                     if ((MouseButtons & MouseButtons.Left) != 0)
                     {
                         Point p = new(heldDownOriginalX + (Cursor.Position.X - mouseOriginalX), heldDownIcon.Location.Y);
-
+                        
                         int newIndex = (startX - p.X - ((iconWidth + iconSpacing) / 2)) / (iconWidth + iconSpacing) * -1;
                         if (newIndex < 0) newIndex = 0;
-
+                        
                         finalIconList.Remove(heldDownIcon);
                         finalIconList.Insert(Math.Min(finalIconList.Count, newIndex), heldDownIcon);
                     }
                     else
                     {
                         Point p = new(heldDownOriginalX + (Cursor.Position.X - mouseOriginalX), heldDownIcon.Location.Y);
-
+                       
                         int newIndex = (startX - p.X - ((iconWidth + iconSpacing) / 2)) / (iconWidth + iconSpacing) * -1;
                         if (newIndex < 0) newIndex = 0;
-
+                        
                         finalIconList.Remove(heldDownIcon);
                         finalIconList.Insert(Math.Min(finalIconList.Count, newIndex), heldDownIcon);
-
+                        
                         icons.Remove(heldDownIcon);
                         icons.Insert(Math.Max(Math.Min(icons.Count, finalIconList.Count - newIndex - 1), 0), heldDownIcon);
-
+                        
                         heldDownIcon = null;
                     }
                 }
@@ -213,7 +213,7 @@ namespace SimpleClassicThemeTaskbar.UIElements.SystemTray.OldTray
 
             Width = Config.Instance.Renderer.GetSystemTrayWidth(finalIconList.Count);
 
-            foreach (OldTrayIcon icon in finalIconList)
+            foreach (SystemTrayIcon icon in finalIconList)
             {
                 //Add the control
                 if (icon.Parent != this)
@@ -240,7 +240,7 @@ namespace SimpleClassicThemeTaskbar.UIElements.SystemTray.OldTray
             Location = new Point(X, Y);
         }
 
-        public void UpdateTime()
+        public override void UpdateTime()
         {
             labelTime.Text = DateTime.Now.ToString(CultureInfo.CurrentCulture.DateTimeFormat.ShortTimePattern);
         }
@@ -272,7 +272,7 @@ namespace SimpleClassicThemeTaskbar.UIElements.SystemTray.OldTray
 
         private UnmanagedCodeMigration.TBBUTTONINFO GetCulpritButtonInfo()
         {
-            if (culprit is OldTrayIcon trayIcon)
+            if (culprit is SystemTrayIcon trayIcon)
             {
                 return trayIcon.TBUTTONINFO_Struct;
             }
@@ -293,7 +293,7 @@ namespace SimpleClassicThemeTaskbar.UIElements.SystemTray.OldTray
 
         private void SystemTray_IconDown(object sender, MouseEventArgs e)
         {
-            heldDownIcon = (OldTrayIcon)sender;
+            heldDownIcon = (SystemTrayIcon)sender;
             heldDownOriginalX = heldDownIcon.Location.X;
             mouseOriginalX = Cursor.Position.X;
         }

@@ -105,7 +105,27 @@ namespace SimpleClassicThemeTaskbar
             return false;
         }
 
-        public override void OnClick(object sender, MouseEventArgs e)
+		public override void OnDoubleClick(object sender, MouseEventArgs e)
+		{
+            if (e.X > Width - 19 &&
+                e.X < Width - 3 &&
+                e.Y > 7 &&
+                e.Y < 24)
+            {
+                GroupWindow.Show(PointToScreen(new Point(0, 0)));
+            }
+            else if (IsMoving)
+            {
+                IsMoving = false;
+            }
+            else
+            {
+                ProgramWindows[0].OnDoubleClick(sender, e);
+                ActiveWindow = ProgramWindows[0].ActiveWindow;
+            }
+        }
+
+		public override void OnClick(object sender, MouseEventArgs e)
         {
             if (e.X > Width - 19 &&
                 e.X < Width - 3 &&

@@ -165,11 +165,11 @@ namespace SimpleClassicThemeTaskbar.ThemeEngine
                 g.DrawImage(taskbarProgram.IconImage, isPushed ? new Rectangle(5, 8, 16, 16) : new Rectangle(4, 7, 16, 16));
 
                 if (taskbarProgram.Width >= 60)
-                    g.DrawString(taskbarProgram.Title, font, SystemBrushes.ControlText, isPushed ? new Rectangle(21, 11, taskbarProgram.Width - 21 - 3 - taskbarProgram.SpaceNeededNextToText, 10) : new Rectangle(20, 10, taskbarProgram.Width - 20 - 3 - taskbarProgram.SpaceNeededNextToText, 11), format);
+                    g.DrawString(taskbarProgram.Title, font, SystemBrushes.ControlText, isPushed ? new Rectangle(21, 9, taskbarProgram.Width - 21 - 3 - taskbarProgram.SpaceNeededNextToText, 14) : new Rectangle(20, 8, taskbarProgram.Width - 20 - 3 - taskbarProgram.SpaceNeededNextToText, 15), format);
             }
             else
             {
-                g.DrawString(taskbarProgram.Title, font, SystemBrushes.ControlText, isPushed ? new Rectangle(5, 11, taskbarProgram.Width - 5 - 3 - taskbarProgram.SpaceNeededNextToText, 10) : new Rectangle(4, 10, taskbarProgram.Width - 4 - 3 - taskbarProgram.SpaceNeededNextToText, 11), format);
+                g.DrawString(taskbarProgram.Title, font, SystemBrushes.ControlText, isPushed ? new Rectangle(5, 9, taskbarProgram.Width - 5 - 3 - taskbarProgram.SpaceNeededNextToText, 14) : new Rectangle(4, 8, taskbarProgram.Width - 4 - 3 - taskbarProgram.SpaceNeededNextToText, 15), format);
             }
         }
 
@@ -203,7 +203,9 @@ namespace SimpleClassicThemeTaskbar.ThemeEngine
             format.Alignment = StringAlignment.Near;
             format.LineAlignment = StringAlignment.Center;
             format.Trimming = StringTrimming.EllipsisCharacter;
-            g.DrawString(taskbarProgram.ProgramWindows.Count.ToString(), font, SystemBrushes.ControlText, taskbarProgram.GroupWindow.Visible ? new Rectangle(taskbarProgram.Width - 15, 11, 7, 10) : new Rectangle(taskbarProgram.Width - 16, 10, 7, 11), format);
+            newRect.Inflate(new Size(-2, -2));
+            //g.DrawString(taskbarProgram.ProgramWindows.Count.ToString(), font, SystemBrushes.ControlText, taskbarProgram.GroupWindow.Visible ? new Rectangle(taskbarProgram.Width - 15, 9, 7, 14) : new Rectangle(taskbarProgram.Width - 16, 8, 7, 15), format);
+            g.DrawString(taskbarProgram.ProgramWindows.Count.ToString(), font, SystemBrushes.ControlText, newRect, format);
         }
 
         public override void DrawTaskButtonGroupWindow(PopupTaskbarGroup taskbarGroup, Graphics g)

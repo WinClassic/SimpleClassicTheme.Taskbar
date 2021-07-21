@@ -173,7 +173,7 @@ namespace SimpleClassicThemeTaskbar
 
                 using (var _ = logicTiming.StartRegion("Do grouping"))
                 {
-                    UpdateTaskbarButtons(newIcons, ref programs);
+                    UpdateTaskbarButtons(newIcons, programs);
                 }
 
                 icons = programs;

@@ -72,6 +72,15 @@ namespace SimpleClassicThemeTaskbar
                 bar.Close();
                 bar.Dispose();
             }
+
+            if (Config.Instance.EnablePassiveTray && TrayNotificationService == null)
+                TrayNotificationService = new();
+            else if (!Config.Instance.EnablePassiveTray && TrayNotificationService is not null)
+            {
+                TrayNotificationService.Dispose();
+                TrayNotificationService = null;
+            }
+            
             int taskbars = 0;
             foreach (Screen screen in Screen.AllScreens)
             {
@@ -251,8 +260,11 @@ namespace SimpleClassicThemeTaskbar
                 virtualDesktopNotificationCookie = UnmanagedCodeMigration.RegisterVdmNotification(VirtualDesktopNotification);
             }
 
-            Logger.Log(LoggerVerbosity.Detailed, "EntryPoint", "Initializing new SystemTrayNotificationService");
-            TrayNotificationService = new();
+            if (Config.Instance.EnablePassiveTray)
+            {
+                Logger.Log(LoggerVerbosity.Detailed, "EntryPoint", "Initializing new SystemTrayNotificationService");
+                TrayNotificationService = new();
+            }
 
             //TODO: Put TaskbarManager into a seperate class
             Logger.Log(LoggerVerbosity.Detailed, "EntryPoint", "Main initialization done, passing execution to TaskbarManager");

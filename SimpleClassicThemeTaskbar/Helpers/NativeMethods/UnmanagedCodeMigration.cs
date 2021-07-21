@@ -229,7 +229,7 @@ namespace SimpleClassicThemeTaskbar.Helpers.NativeMethods
 					TBBUTTON64 tbButton = new();
 					TRAYDATA trData = new();
 
-					User32.SendMessage(sysTray, User32.TB_GETBUTTON, i, (int)dataPtr);
+					User32.SendMessage(sysTray, User32.TB_GETBUTTON, new(i), dataPtr);
 
 					byte[] tbButtonBytes = new byte[tbButtonSize];
 					Kernel32.ReadProcessMemory(hProcess, dataPtr, tbButtonBytes, tbButtonSize, out var bytesRead);

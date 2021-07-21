@@ -2170,16 +2170,16 @@ no warranty what so ever.</value>
   <data name="&gt;&gt;bannerPictureBox.ZOrder" xml:space="preserve">
     <value>1</value>
   </data>
-  <data name="&gt;&gt;enablePassiveTaskbarCheckBox.Name" xml:space="preserve">
-    <value>enablePassiveTaskbarCheckBox</value>
+  <data name="&gt;&gt;enableActiveTaskbarCheckBox.Name" xml:space="preserve">
+    <value>enableActiveTaskbarCheckBox</value>
   </data>
-  <data name="&gt;&gt;enablePassiveTaskbarCheckBox.Type" xml:space="preserve">
+  <data name="&gt;&gt;enableActiveTaskbarCheckBox.Type" xml:space="preserve">
     <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=5.0.6.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;enablePassiveTaskbarCheckBox.Parent" xml:space="preserve">
+  <data name="&gt;&gt;enableActiveTaskbarCheckBox.Parent" xml:space="preserve">
     <value>tabDebug</value>
   </data>
-  <data name="&gt;&gt;enablePassiveTaskbarCheckBox.ZOrder" xml:space="preserve">
+  <data name="&gt;&gt;enableActiveTaskbarCheckBox.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
   <data name="tabDebug.Location" type="System.Drawing.Point, System.Drawing.Primitives">
@@ -2206,34 +2206,34 @@ no warranty what so ever.</value>
   <data name="&gt;&gt;tabDebug.ZOrder" xml:space="preserve">
     <value>8</value>
   </data>
-  <data name="enablePassiveTaskbarCheckBox.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+  <data name="enableActiveTaskbarCheckBox.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
-  <data name="enablePassiveTaskbarCheckBox.Location" type="System.Drawing.Point, System.Drawing.Primitives">
+  <data name="enableActiveTaskbarCheckBox.Location" type="System.Drawing.Point, System.Drawing.Primitives">
     <value>8, 8</value>
   </data>
-  <data name="enablePassiveTaskbarCheckBox.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms.Primitives">
+  <data name="enableActiveTaskbarCheckBox.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms.Primitives">
     <value>3, 0, 3, 0</value>
   </data>
-  <data name="enablePassiveTaskbarCheckBox.Size" type="System.Drawing.Size, System.Drawing.Primitives">
+  <data name="enableActiveTaskbarCheckBox.Size" type="System.Drawing.Size, System.Drawing.Primitives">
     <value>357, 16</value>
   </data>
-  <data name="enablePassiveTaskbarCheckBox.TabIndex" type="System.Int32, System.Private.CoreLib">
+  <data name="enableActiveTaskbarCheckBox.TabIndex" type="System.Int32, System.Private.CoreLib">
     <value>9</value>
   </data>
-  <data name="enablePassiveTaskbarCheckBox.Text" xml:space="preserve">
-    <value>Enable new taskbar item collection</value>
+  <data name="enableActiveTaskbarCheckBox.Text" xml:space="preserve">
+    <value>Enable old active task view collection system</value>
   </data>
-  <data name="&gt;&gt;enablePassiveTaskbarCheckBox.Name" xml:space="preserve">
-    <value>enablePassiveTaskbarCheckBox</value>
+  <data name="&gt;&gt;enableActiveTaskbarCheckBox.Name" xml:space="preserve">
+    <value>enableActiveTaskbarCheckBox</value>
   </data>
-  <data name="&gt;&gt;enablePassiveTaskbarCheckBox.Type" xml:space="preserve">
+  <data name="&gt;&gt;enableActiveTaskbarCheckBox.Type" xml:space="preserve">
     <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=5.0.6.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;enablePassiveTaskbarCheckBox.Parent" xml:space="preserve">
+  <data name="&gt;&gt;enableActiveTaskbarCheckBox.Parent" xml:space="preserve">
     <value>tabDebug</value>
   </data>
-  <data name="&gt;&gt;enablePassiveTaskbarCheckBox.ZOrder" xml:space="preserve">
+  <data name="&gt;&gt;enableActiveTaskbarCheckBox.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
   <data name="customButtonFileDialog.Filter" xml:space="preserve">
