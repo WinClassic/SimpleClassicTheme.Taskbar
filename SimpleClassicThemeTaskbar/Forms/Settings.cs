@@ -394,7 +394,7 @@ namespace SimpleClassicThemeTaskbar
 
         private void themeComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            visualStyleGroupBox.Enabled = themeComboBox.SelectedItem is string label && label == "Visual Style";
+            visualStyleTab.Enabled = themeComboBox.SelectedItem is string label && label == "Visual Style";
         }
 
         private void PopulateVisualStyles()

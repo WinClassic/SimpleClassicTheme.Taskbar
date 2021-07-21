@@ -40,13 +40,15 @@
             this.languageComboBox = new System.Windows.Forms.ComboBox();
             this.languageLabel = new System.Windows.Forms.Label();
             this.tabThemes = new System.Windows.Forms.TabPage();
+            this.themesTabControl = new System.Windows.Forms.TabControl();
+            this.visualStyleTab = new System.Windows.Forms.TabPage();
             this.sizeComboBox = new System.Windows.Forms.ComboBox();
-            this.label6 = new System.Windows.Forms.Label();
-            this.colorSchemeComboBox = new System.Windows.Forms.ComboBox();
-            this.label4 = new System.Windows.Forms.Label();
-            this.visualStyleComboBox = new System.Windows.Forms.ComboBox();
-            this.manageStylesButton = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
+            this.manageStylesButton = new System.Windows.Forms.Button();
+            this.colorSchemeComboBox = new System.Windows.Forms.ComboBox();
+            this.visualStyleComboBox = new System.Windows.Forms.ComboBox();
+            this.label4 = new System.Windows.Forms.Label();
             this.themeComboBox = new System.Windows.Forms.ComboBox();
             this.themeLabel = new System.Windows.Forms.Label();
             this.tabStartButton = new System.Windows.Forms.TabPage();
@@ -88,11 +90,11 @@
             this.panelPreview = new System.Windows.Forms.Panel();
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
             this.customIconFileDialog = new System.Windows.Forms.OpenFileDialog();
-            this.themesTabControl = new System.Windows.Forms.TabControl();
-            this.visualStyleTab = new System.Windows.Forms.TabPage();
             this.tabControl.SuspendLayout();
             this.tabGeneral.SuspendLayout();
             this.tabThemes.SuspendLayout();
+            this.themesTabControl.SuspendLayout();
+            this.visualStyleTab.SuspendLayout();
             this.tabStartButton.SuspendLayout();
             this.tabQuickLaunch.SuspendLayout();
             this.tabTaskView.SuspendLayout();
@@ -104,8 +106,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.bannerPictureBox)).BeginInit();
             this.tabDebug.SuspendLayout();
             this.panelContent.SuspendLayout();
-            this.themesTabControl.SuspendLayout();
-            this.visualStyleTab.SuspendLayout();
             this.SuspendLayout();
             // 
             // buttonApply
@@ -196,6 +196,26 @@
             this.tabThemes.Name = "tabThemes";
             this.tabThemes.UseVisualStyleBackColor = true;
             // 
+            // themesTabControl
+            // 
+            resources.ApplyResources(this.themesTabControl, "themesTabControl");
+            this.themesTabControl.Controls.Add(this.visualStyleTab);
+            this.themesTabControl.Name = "themesTabControl";
+            this.themesTabControl.SelectedIndex = 0;
+            // 
+            // visualStyleTab
+            // 
+            this.visualStyleTab.Controls.Add(this.sizeComboBox);
+            this.visualStyleTab.Controls.Add(this.label3);
+            this.visualStyleTab.Controls.Add(this.label6);
+            this.visualStyleTab.Controls.Add(this.manageStylesButton);
+            this.visualStyleTab.Controls.Add(this.colorSchemeComboBox);
+            this.visualStyleTab.Controls.Add(this.visualStyleComboBox);
+            this.visualStyleTab.Controls.Add(this.label4);
+            resources.ApplyResources(this.visualStyleTab, "visualStyleTab");
+            this.visualStyleTab.Name = "visualStyleTab";
+            this.visualStyleTab.UseVisualStyleBackColor = true;
+            // 
             // sizeComboBox
             // 
             this.sizeComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
@@ -203,10 +223,22 @@
             resources.ApplyResources(this.sizeComboBox, "sizeComboBox");
             this.sizeComboBox.Name = "sizeComboBox";
             // 
+            // label3
+            // 
+            resources.ApplyResources(this.label3, "label3");
+            this.label3.Name = "label3";
+            // 
             // label6
             // 
             resources.ApplyResources(this.label6, "label6");
             this.label6.Name = "label6";
+            // 
+            // manageStylesButton
+            // 
+            resources.ApplyResources(this.manageStylesButton, "manageStylesButton");
+            this.manageStylesButton.Name = "manageStylesButton";
+            this.manageStylesButton.UseVisualStyleBackColor = true;
+            this.manageStylesButton.Click += new System.EventHandler(this.manageStylesButton_Click);
             // 
             // colorSchemeComboBox
             // 
@@ -219,11 +251,6 @@
             resources.ApplyResources(this.colorSchemeComboBox, "colorSchemeComboBox");
             this.colorSchemeComboBox.Name = "colorSchemeComboBox";
             // 
-            // label4
-            // 
-            resources.ApplyResources(this.label4, "label4");
-            this.label4.Name = "label4";
-            // 
             // visualStyleComboBox
             // 
             this.visualStyleComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
@@ -232,17 +259,10 @@
             this.visualStyleComboBox.Name = "visualStyleComboBox";
             this.visualStyleComboBox.SelectedIndexChanged += new System.EventHandler(this.visualStyleComboBox_SelectedIndexChanged);
             // 
-            // manageStylesButton
+            // label4
             // 
-            resources.ApplyResources(this.manageStylesButton, "manageStylesButton");
-            this.manageStylesButton.Name = "manageStylesButton";
-            this.manageStylesButton.UseVisualStyleBackColor = true;
-            this.manageStylesButton.Click += new System.EventHandler(this.manageStylesButton_Click);
-            // 
-            // label3
-            // 
-            resources.ApplyResources(this.label3, "label3");
-            this.label3.Name = "label3";
+            resources.ApplyResources(this.label4, "label4");
+            this.label4.Name = "label4";
             // 
             // themeComboBox
             // 
@@ -525,26 +545,6 @@
             resources.ApplyResources(this.customIconFileDialog, "customIconFileDialog");
             this.customIconFileDialog.FileOk += new System.ComponentModel.CancelEventHandler(this.CustomIconFileDialog_FileOk);
             // 
-            // themesTabControl
-            // 
-            resources.ApplyResources(this.themesTabControl, "themesTabControl");
-            this.themesTabControl.Controls.Add(this.visualStyleTab);
-            this.themesTabControl.Name = "themesTabControl";
-            this.themesTabControl.SelectedIndex = 0;
-            // 
-            // visualStyleTab
-            // 
-            this.visualStyleTab.Controls.Add(this.sizeComboBox);
-            this.visualStyleTab.Controls.Add(this.label3);
-            this.visualStyleTab.Controls.Add(this.label6);
-            this.visualStyleTab.Controls.Add(this.manageStylesButton);
-            this.visualStyleTab.Controls.Add(this.colorSchemeComboBox);
-            this.visualStyleTab.Controls.Add(this.visualStyleComboBox);
-            this.visualStyleTab.Controls.Add(this.label4);
-            resources.ApplyResources(this.visualStyleTab, "visualStyleTab");
-            this.visualStyleTab.Name = "visualStyleTab";
-            this.visualStyleTab.UseVisualStyleBackColor = true;
-            // 
             // Settings
             // 
             resources.ApplyResources(this, "$this");
@@ -562,6 +562,9 @@
             this.tabControl.ResumeLayout(false);
             this.tabGeneral.ResumeLayout(false);
             this.tabThemes.ResumeLayout(false);
+            this.themesTabControl.ResumeLayout(false);
+            this.visualStyleTab.ResumeLayout(false);
+            this.visualStyleTab.PerformLayout();
             this.tabStartButton.ResumeLayout(false);
             this.tabStartButton.PerformLayout();
             this.tabQuickLaunch.ResumeLayout(false);
@@ -579,8 +582,6 @@
             this.tabDebug.ResumeLayout(false);
             this.tabDebug.PerformLayout();
             this.panelContent.ResumeLayout(false);
-            this.themesTabControl.ResumeLayout(false);
-            this.visualStyleTab.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
