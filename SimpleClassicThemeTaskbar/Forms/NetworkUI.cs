@@ -24,8 +24,7 @@ namespace SimpleClassicThemeTaskbar.Forms
         {
 #if DEBUG
 #else
-            MessageBox.Show("The requested UI is not finished yet.", "UI Inaccessible");
-            return;
+            MessageBox.Show("NOTE: This part of the SCTT UI is unfinished.", "'Dummy' UI");
 #endif
             InitializeComponent();
 

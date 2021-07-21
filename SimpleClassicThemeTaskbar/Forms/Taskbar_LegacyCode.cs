@@ -31,8 +31,8 @@ namespace SimpleClassicThemeTaskbar
             if (!User32.IsWindowVisible(hwnd))
                 return false;
 
-            //Check if the OS is Windows 10
-            if (Environment.OSVersion.Version.Major == 10)
+            //Check if the OS is Windows 10 or higher
+            if (Environment.OSVersion.Version.Major >= 10)
                 //Check if the window is on the current Desktop
                 if (!UnmanagedCodeMigration.IsWindowOnCurrentVirtualDesktop(hwnd))
                     return false;

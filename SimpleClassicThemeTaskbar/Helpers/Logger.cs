@@ -70,7 +70,10 @@ namespace SimpleClassicThemeTaskbar.Helpers
         {
             if (fs != null)
             {
+                fs.Flush();
+                fs.Close();
                 Process.Start(fs.Name);
+                fs = new FileStream("latest.log", FileMode.Append, FileAccess.Write, FileShare.Read);
             }
         }
 

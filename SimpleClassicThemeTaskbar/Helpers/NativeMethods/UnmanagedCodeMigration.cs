@@ -345,9 +345,17 @@ namespace SimpleClassicThemeTaskbar.Helpers.NativeMethods
 		
 		internal static uint RegisterVdmNotification(IVirtualDesktopNotification notification)
 		{
-			return 0U;
-			virtualDesktopNotificationService.Register(notification, out uint cookie);
-			return cookie;
+			//return 0U;
+			try
+			{
+				virtualDesktopNotificationService.Register(notification, out uint cookie);
+				return cookie;
+			}
+			catch (Exception e)
+			{
+				Logger.Log(LoggerVerbosity.Basic, "VDMService", "Failed to register VDM Notification. Reason: " + e.Message);
+				return 0U;
+			}
 		}
 
 		internal static void UnregisterVdmNotification(uint notificationCookie)

@@ -44,7 +44,7 @@ namespace SimpleClassicThemeTaskbar
             // Taskbar randomBar = activeBars.FirstOrDefault();
             Logger.Log(LoggerVerbosity.Detailed, "TaskbarManager", $"Killed all taskbars");
 
-            if (Environment.OSVersion.Version.Major == 10 && virtualDesktopNotificationCookie != 0)
+            if (Environment.OSVersion.Version.Major >= 10 && virtualDesktopNotificationCookie != 0)
             {
                 Logger.Log(LoggerVerbosity.Detailed, "TaskbarManager", "Unregistered virtual desktop notify serivce");
                 UnmanagedCodeMigration.UnregisterVdmNotification(virtualDesktopNotificationCookie);
@@ -242,9 +242,9 @@ namespace SimpleClassicThemeTaskbar
                 Logger.Log(LoggerVerbosity.Detailed, "EntryPoint", "Debug instance, ignoring incorrect architecture");
             }
 
-            if (Environment.OSVersion.Version.Major == 10 && Process.GetProcessesByName("explorer").Length > 0)
+            if (Environment.OSVersion.Version.Major >= 10 && Process.GetProcessesByName("explorer").Length > 0)
             {
-                Logger.Log(LoggerVerbosity.Detailed, "EntryPoint", "OSVersion.Major is above 10. Initializing IVirtualDesktopManager");
+                Logger.Log(LoggerVerbosity.Detailed, "EntryPoint", "OSVersion.Major is equal or above 10. Initializing IVirtualDesktopManager");
                 UnmanagedCodeMigration.InitializeVdmInterface();
                 VirtualDesktopNotification = new();
                 VirtualDesktopNotification.CurrentDesktopChanged += VirtualDesktopNotifcation_CurrentDesktopChanged;
@@ -254,6 +254,7 @@ namespace SimpleClassicThemeTaskbar
             Logger.Log(LoggerVerbosity.Detailed, "EntryPoint", "Initializing new SystemTrayNotificationService");
             TrayNotificationService = new();
 
+            //TODO: Put TaskbarManager into a seperate class
             Logger.Log(LoggerVerbosity.Detailed, "EntryPoint", "Main initialization done, passing execution to TaskbarManager");
 
             Directory.CreateDirectory(Constants.VisualStyleDirectory);
