@@ -1,4 +1,5 @@
-﻿using SimpleClassicThemeTaskbar.Helpers;
+﻿using SimpleClassicThemeTaskbar.Forms;
+using SimpleClassicThemeTaskbar.Helpers;
 using SimpleClassicThemeTaskbar.Helpers.NativeMethods;
 
 using System;
@@ -23,8 +24,20 @@ namespace SimpleClassicThemeTaskbar
         public static bool SCTCompatMode = false;
 
         public static SystemTrayNotificationService TrayNotificationService;
-        static UnmanagedCodeMigration.VirtualDesktopNotification VirtualDesktopNotification;
-        static uint virtualDesktopNotificationCookie;
+        private static UnmanagedCodeMigration.VirtualDesktopNotification VirtualDesktopNotification;
+        private static uint virtualDesktopNotificationCookie;
+
+        public static void VirtualDesktopNotifcation_CurrentDesktopChanged(object sender, EventArgs e)
+        {
+            Logger.Log(LoggerVerbosity.Detailed, "TaskbarManager", "Current virtual desktop changed, sending notification to all Taskbars.");
+            var activeBars = HelperFunctions.GetOpenTaskbars();
+
+            foreach (Taskbar bar in activeBars)
+            {
+                // Redo the enumeration because the open windows are completely different
+                bar.Invoke(new Action(() => { bar.EnumerateWindows(); }));
+            }
+        }
 
         internal static void ExitSCTT()
         {
@@ -84,6 +97,18 @@ namespace SimpleClassicThemeTaskbar
                     taskbar.NeverShow = true;
             }
             Logger.Log(LoggerVerbosity.Detailed, "TaskbarManager", $"Created {taskbars} taskbars in total");
+        }
+
+        private static void HandleException(Exception ex)
+        {
+            Logger.Log(LoggerVerbosity.Basic, "ExceptionHandler", $"An exception of type {ex.GetType().FullName} has occured.");
+            Logger.Log(LoggerVerbosity.Detailed, "ExceptionHandler", $"Exception details:\nMessage: {ex.Message}\nException location: {ex.TargetSite}\nStack trace: {ex.StackTrace}");
+            Logger.Uninitialize();
+
+            using (var crashForm = new CrashForm(ex))
+            {
+                crashForm.ShowDialog();
+            }
         }
 
         /// <summary>
@@ -209,26 +234,9 @@ namespace SimpleClassicThemeTaskbar
 #endif
 
             //Setup crash reports
-#if DEBUG
-#else
             Logger.Log(LoggerVerbosity.Detailed, "EntryPoint", "Release instance, enabling error handler");
-            Application.ThreadException += (sender, arg) =>
-            {
-                Logger.Log(LoggerVerbosity.Basic, "ExceptionHandler", $"An exception of type {arg.Exception.GetType().FullName} has occured.");
-                Logger.Log(LoggerVerbosity.Detailed, "ExceptionHandler", $"Exception details:\nMessage: {arg.Exception.Message}\nException location: {arg.Exception.TargetSite}\nStack trace: {arg.Exception.StackTrace}");
-                if (Logger.GetVerbosity() == LoggerVerbosity.None)
-				{
-                    MessageBox.Show("Unhandled exception ocurred. For more information logging must be enabled.", "Something has gone wrong");
-                }
-                else
-				{
-                    if (MessageBox.Show("Unhandled exception ocurred. More information is available in the log file. Would you like to open the log file now?", "Something has gone wrong", MessageBoxButtons.YesNo) == DialogResult.Yes)
-					{
-                        Logger.OpenLog();
-					}
-				}
-            };
-#endif
+            RegisterExceptionHandlers();
+
             //Check if system/program architecture matches
             if (Environment.Is64BitOperatingSystem != Environment.Is64BitProcess)
             {
@@ -267,20 +275,22 @@ namespace SimpleClassicThemeTaskbar
                 NewTaskbars();
             };
             NewTaskbars();
+
             Application.Run();
+
             ExitSCTT();
         }
 
-        public static void VirtualDesktopNotifcation_CurrentDesktopChanged(object sender, EventArgs e)
-		{
-            Logger.Log(LoggerVerbosity.Detailed, "TaskbarManager", "Current virtual desktop changed, sending notification to all Taskbars.");
-            var activeBars = HelperFunctions.GetOpenTaskbars();
-
-            foreach (Taskbar bar in activeBars)
+        private static void RegisterExceptionHandlers()
+        {
+            Application.ThreadException += (sender, e) => HandleException(e.Exception);
+            Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
+            AppDomain.CurrentDomain.UnhandledException += (sender, e) =>
             {
-                // Redo the enumeration because the open windows are completely different
-                bar.Invoke(new Action(() => { bar.EnumerateWindows(); }));
-            }
+                if (e.IsTerminating && e.ExceptionObject is Exception ex)
+                    HandleException(ex);
+            };
+            // AppDomain.CurrentDomain.FirstChanceException += (sender, e) => HandleException(e.Exception);
         }
     }
 }

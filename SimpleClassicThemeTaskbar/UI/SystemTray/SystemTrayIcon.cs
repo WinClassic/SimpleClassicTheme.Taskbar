@@ -39,7 +39,9 @@ namespace SimpleClassicThemeTaskbar.UIElements.SystemTray
                 {
                     Image = value.ToBitmap();
                 }
-                catch { }
+                catch
+                {
+                }
                 value.Dispose();
             }
         }
