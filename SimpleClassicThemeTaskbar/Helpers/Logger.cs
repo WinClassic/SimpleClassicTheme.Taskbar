@@ -53,7 +53,6 @@ namespace SimpleClassicThemeTaskbar.Helpers
             Log(LoggerVerbosity.Detailed, "SystemDump", "Performing quick system dump");
             Log(LoggerVerbosity.Detailed, "SystemDump", $"OS: {RuntimeInformation.OSDescription} {RuntimeInformation.OSArchitecture}");
 
-            // HACK: This uses a fixed path, this needs to be replaced
             if (ApplicationEntryPoint.SCTCompatMode)
                 Log(LoggerVerbosity.Detailed, "SystemDump", $"SCT version: {Assembly.LoadFrom("C:\\SCT\\SCT.exe").GetName().Version}");
 
