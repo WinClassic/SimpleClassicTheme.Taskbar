@@ -103,7 +103,7 @@ namespace SimpleClassicThemeTaskbar.Forms
 • Current application log
     • OS version
     • SCT and application version
-    • Potentially currently running depending on debug output
+    • Depending on the problem, this might also include information about open windows
 
 • Stack trace (information about where the program crashed)
 
