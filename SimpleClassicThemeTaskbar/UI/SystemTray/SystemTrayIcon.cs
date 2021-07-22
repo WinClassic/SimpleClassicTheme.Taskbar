@@ -35,7 +35,13 @@ namespace SimpleClassicThemeTaskbar.UIElements.SystemTray
             get => Icon.FromHandle(((Bitmap)Image).GetHicon());
             set
             {
-                Image = value.ToBitmap();
+                try
+                {
+                    Image = value.ToBitmap();
+                }
+                catch
+                {
+                }
                 value.Dispose();
             }
         }
