@@ -111,7 +111,7 @@ namespace SimpleClassicThemeTaskbar.Forms
     • OS version (e.g. Microsoft Windows 10.0.22000)
     • .NET runtime version
     • SCT application version
-    • Senty SDK version (Error reporting SDK version)
+    • Sentry SDK version (SDK version of the error reporting library)
     • Loaded assemblies (i.e. libraries)
 
 • Locale information
