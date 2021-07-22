@@ -46,6 +46,8 @@ namespace SimpleClassicThemeTaskbar.Forms
                 {
                     SentrySdk.ConfigureScope(scope =>
                     {
+                        scope.Level = SentryLevel.Fatal;
+
                         if (submitLogCheckBox.Checked)
                         {
                             scope.AddAttachment(Logger.FilePath, AttachmentType.Default);
