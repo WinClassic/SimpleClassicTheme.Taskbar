@@ -87,10 +87,10 @@
             this.enableActiveTaskbarCheckBox = new System.Windows.Forms.CheckBox();
             this.customButtonFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.aboutLabel = new System.Windows.Forms.LinkLabel();
-            this.panelContent = new System.Windows.Forms.Panel();
             this.panelPreview = new System.Windows.Forms.Panel();
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
             this.customIconFileDialog = new System.Windows.Forms.OpenFileDialog();
+            this.contentSplitContainer = new System.Windows.Forms.SplitContainer();
             this.tabControl.SuspendLayout();
             this.tabGeneral.SuspendLayout();
             this.tabThemes.SuspendLayout();
@@ -106,7 +106,10 @@
             this.copyrightTablePanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.bannerPictureBox)).BeginInit();
             this.tabDebug.SuspendLayout();
-            this.panelContent.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.contentSplitContainer)).BeginInit();
+            this.contentSplitContainer.Panel1.SuspendLayout();
+            this.contentSplitContainer.Panel2.SuspendLayout();
+            this.contentSplitContainer.SuspendLayout();
             this.SuspendLayout();
             // 
             // buttonApply
@@ -548,13 +551,6 @@
             this.aboutLabel.Name = "aboutLabel";
             this.aboutLabel.TabStop = true;
             // 
-            // panelContent
-            // 
-            this.panelContent.Controls.Add(this.tabControl);
-            this.panelContent.Controls.Add(this.panelPreview);
-            resources.ApplyResources(this.panelContent, "panelContent");
-            this.panelContent.Name = "panelContent";
-            // 
             // panelPreview
             // 
             this.panelPreview.BackColor = System.Drawing.SystemColors.Desktop;
@@ -571,11 +567,25 @@
             resources.ApplyResources(this.customIconFileDialog, "customIconFileDialog");
             this.customIconFileDialog.FileOk += new System.ComponentModel.CancelEventHandler(this.CustomIconFileDialog_FileOk);
             // 
+            // contentSplitContainer
+            // 
+            this.contentSplitContainer.Cursor = System.Windows.Forms.Cursors.HSplit;
+            resources.ApplyResources(this.contentSplitContainer, "contentSplitContainer");
+            this.contentSplitContainer.Name = "contentSplitContainer";
+            // 
+            // contentSplitContainer.Panel1
+            // 
+            this.contentSplitContainer.Panel1.Controls.Add(this.panelPreview);
+            // 
+            // contentSplitContainer.Panel2
+            // 
+            this.contentSplitContainer.Panel2.Controls.Add(this.tabControl);
+            // 
             // Settings
             // 
             resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.panelContent);
+            this.Controls.Add(this.contentSplitContainer);
             this.Controls.Add(this.aboutLabel);
             this.Controls.Add(this.buttonOK);
             this.Controls.Add(this.buttonCancel);
@@ -604,7 +614,10 @@
             this.copyrightTablePanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.bannerPictureBox)).EndInit();
             this.tabDebug.ResumeLayout(false);
-            this.panelContent.ResumeLayout(false);
+            this.contentSplitContainer.Panel1.ResumeLayout(false);
+            this.contentSplitContainer.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.contentSplitContainer)).EndInit();
+            this.contentSplitContainer.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -643,7 +656,6 @@
         private System.Windows.Forms.Label quickLaunchLinkLabel;
         private System.Windows.Forms.CheckBox enableQuickLaunchCheckBox;
         private System.Windows.Forms.LinkLabel aboutLabel;
-        private System.Windows.Forms.Panel panelContent;
         private System.Windows.Forms.Panel panelPreview;
         private System.Windows.Forms.Button customIconBrowseButton;
         private System.Windows.Forms.TextBox customIconTextBox;
@@ -673,5 +685,6 @@
         private System.Windows.Forms.Label themeLabel;
         private System.Windows.Forms.TabPage tabTweaks;
         private System.Windows.Forms.PropertyGrid tweaksPropertyGrid;
+        private System.Windows.Forms.SplitContainer contentSplitContainer;
     }
 }
