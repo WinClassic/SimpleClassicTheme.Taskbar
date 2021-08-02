@@ -177,6 +177,8 @@ namespace SimpleClassicThemeTaskbar.Helpers.NativeMethods
 	    static IVirtualDesktopNotificationService virtualDesktopNotificationService;
 		static IVirtualDesktopManager virtualDesktopManager;
 
+		static bool s_isVdmInitialized;
+
 		internal static string GetAppUserModelId(int pid)
 		{
 			IntPtr process = Kernel32.OpenProcess(Kernel32.PROCESS_QUERY_LIMITED_INFORMATION, false, pid);
@@ -341,11 +343,12 @@ namespace SimpleClassicThemeTaskbar.Helpers.NativeMethods
 			IServiceProvider serviceProvider = (IServiceProvider) Activator.CreateInstance(spType);
 			serviceProvider.QueryService(new Guid("a501fdec-4a09-464c-ae4e-1b9c21b84918"), typeof(IVirtualDesktopNotificationService).GUID, out object ppvObject);
 			virtualDesktopNotificationService = (IVirtualDesktopNotificationService)ppvObject;
+
+			s_isVdmInitialized = virtualDesktopManager is not null;
 		}
 		
 		internal static uint RegisterVdmNotification(IVirtualDesktopNotification notification)
 		{
-			//return 0U;
 			try
 			{
 				virtualDesktopNotificationService.Register(notification, out uint cookie);
@@ -360,12 +363,15 @@ namespace SimpleClassicThemeTaskbar.Helpers.NativeMethods
 
 		internal static void UnregisterVdmNotification(uint notificationCookie)
 		{
-			virtualDesktopNotificationService.Unregister(notificationCookie);
+            if (s_isVdmInitialized)
+            {
+				virtualDesktopNotificationService.Unregister(notificationCookie);
+            }
 		}
 
 		internal static bool IsWindowOnCurrentVirtualDesktop(IntPtr window)
 		{
-			if (virtualDesktopManager is not null)
+			if (s_isVdmInitialized)
 			{
 				return virtualDesktopManager.IsWindowOnCurrentVirtualDesktop(window);
 				//bool isWndOnDekstop = false;

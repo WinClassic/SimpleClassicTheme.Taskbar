@@ -262,10 +262,18 @@ namespace SimpleClassicThemeTaskbar
             if (Environment.OSVersion.Version.Major >= 10 && Process.GetProcessesByName("explorer").Length > 0)
             {
                 Logger.Log(LoggerVerbosity.Detailed, "EntryPoint", "OSVersion.Major is equal or above 10. Initializing IVirtualDesktopManager");
-                UnmanagedCodeMigration.InitializeVdmInterface();
-                VirtualDesktopNotification = new();
-                VirtualDesktopNotification.CurrentDesktopChanged += VirtualDesktopNotifcation_CurrentDesktopChanged;
-                virtualDesktopNotificationCookie = UnmanagedCodeMigration.RegisterVdmNotification(VirtualDesktopNotification);
+                
+                try
+                {
+                    UnmanagedCodeMigration.InitializeVdmInterface();
+                    VirtualDesktopNotification = new();
+                    VirtualDesktopNotification.CurrentDesktopChanged += VirtualDesktopNotifcation_CurrentDesktopChanged;
+                    virtualDesktopNotificationCookie = UnmanagedCodeMigration.RegisterVdmNotification(VirtualDesktopNotification);
+                }
+                catch (Exception ex)
+                {
+                    Logger.Log(LoggerVerbosity.Detailed, "EntryPoint", "Failed to initialize VDM!\n" + ex.ToString());
+                }
             }
 
             if (Config.Instance.EnablePassiveTray)
