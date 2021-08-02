@@ -64,7 +64,7 @@ namespace SimpleClassicThemeTaskbar
             }
 
             Logger.Log(LoggerVerbosity.Detailed, "TaskbarManager", "Unitializing SystemTrayNotificationService");
-            TrayNotificationService.Dispose();
+            TrayNotificationService?.Dispose();
 
             Logger.Log(LoggerVerbosity.Detailed, "TaskbarManager", "Uninitialization sequence completed, exiting");
             Logger.Uninitialize();
