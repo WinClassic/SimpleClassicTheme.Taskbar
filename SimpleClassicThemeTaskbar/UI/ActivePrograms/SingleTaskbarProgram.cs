@@ -155,11 +155,11 @@ namespace SimpleClassicThemeTaskbar
             if (IsMoving)
                 IsMoving = false;
             else if (e.Button == MouseButtons.Left)
-                PerformClickAction(Config.Default.TaskbarProgramLeftDoubleClickAction, e);
+                PerformClickAction(Config.Default.Tweaks.TaskbarProgramLeftDoubleClickAction, e);
             else if (e.Button == MouseButtons.Middle)
-                PerformClickAction(Config.Default.TaskbarProgramMiddleDoubleClickAction, e);
+                PerformClickAction(Config.Default.Tweaks.TaskbarProgramMiddleDoubleClickAction, e);
             else
-                PerformClickAction(Config.Default.TaskbarProgramRightDoubleClickAction, e);
+                PerformClickAction(Config.Default.Tweaks.TaskbarProgramRightDoubleClickAction, e);
         }
 
 		public override void OnClick(object sender, MouseEventArgs e)
@@ -172,11 +172,11 @@ namespace SimpleClassicThemeTaskbar
             else if (ModifierKeys == (Keys.Control | Keys.Shift | Keys.Alt) && e.Button == MouseButtons.Right)
                 new IconTest(Window).Show();
             else if (e.Button == MouseButtons.Left)
-                PerformClickAction(Config.Default.TaskbarProgramLeftClickAction, e);
+                PerformClickAction(Config.Default.Tweaks.TaskbarProgramLeftClickAction, e);
             else if (e.Button == MouseButtons.Middle)
-                PerformClickAction(Config.Default.TaskbarProgramMiddleClickAction, e);
+                PerformClickAction(Config.Default.Tweaks.TaskbarProgramMiddleClickAction, e);
             else
-                PerformClickAction(Config.Default.TaskbarProgramRightClickAction, e);
+                PerformClickAction(Config.Default.Tweaks.TaskbarProgramRightClickAction, e);
         }
 
         public override string ToString() => $"Handle: {Window.Handle}, Title: {Title}";

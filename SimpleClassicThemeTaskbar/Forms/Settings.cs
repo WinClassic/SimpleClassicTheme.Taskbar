@@ -34,12 +34,12 @@ namespace SimpleClassicThemeTaskbar
             Config.Default.EnableSystemTrayColorChange = enableSysTrayColorChange.Checked;
             Config.Default.ShowTaskbarOnAllDesktops = showTaskbarOnAllDesktops.Checked;
             Config.Default.EnableQuickLaunch = enableQuickLaunchCheckBox.Checked;
-            Config.Default.TaskbarProgramWidth = (int)taskbarProgramWidth.Value;
+            Config.Default.Tweaks.TaskbarProgramWidth = (int)taskbarProgramWidth.Value;
             Config.Default.StartButtonImage = customButtonTextBox.Text;
             Config.Default.StartButtonIconImage = customIconTextBox.Text;
             Config.Default.StartButtonAppearance = GetCurrentStartButtonAppearance();
             Config.Default.Language = (string)languageComboBox.SelectedItem;
-            Config.Default.ProgramGroupCheck = (ProgramGroupCheck)comboBoxGroupingMethod.SelectedIndex;
+            Config.Default.Tweaks.ProgramGroupCheck = (ProgramGroupCheck)comboBoxGroupingMethod.SelectedIndex;
             Config.Default.ExitMenuItemCondition = (ExitMenuItemCondition)exitItemComboBox.SelectedIndex;
             Config.Default.EnableActiveTaskbar = enableActiveTaskbarCheckBox.Checked;
 
@@ -264,7 +264,7 @@ namespace SimpleClassicThemeTaskbar
 
         private void LoadSettings()
         {
-            comboBoxGroupingMethod.SelectedIndex = (int)Config.Default.ProgramGroupCheck;
+            comboBoxGroupingMethod.SelectedIndex = (int)Config.Default.Tweaks.ProgramGroupCheck;
             exitItemComboBox.SelectedIndex = (int)Config.Default.ExitMenuItemCondition;
 
             enableActiveTaskbarCheckBox.Checked = Config.Default.EnableActiveTaskbar;
@@ -280,12 +280,12 @@ namespace SimpleClassicThemeTaskbar
             customButtonTextBox.Text = Config.Default.StartButtonImage;
             customIconTextBox.Text = Config.Default.StartButtonIconImage;
 
-            taskbarProgramWidth.Value = Math.Min(Config.Default.TaskbarProgramWidth, taskbarProgramWidth.Maximum);
+            taskbarProgramWidth.Value = Math.Min(Config.Default.Tweaks.TaskbarProgramWidth, taskbarProgramWidth.Maximum);
 
             taskbarProgramWidth.Maximum = Screen.PrimaryScreen.Bounds.Width;
             languageComboBox.SelectedItem = Config.Default.Language;
 
-            if (!Config.Default.EnableDebugging)
+            if (!Config.Default.Tweaks.EnableDebugging)
             {
                 tabControl.TabPages.Remove(tabDebug);
             }
@@ -299,7 +299,7 @@ namespace SimpleClassicThemeTaskbar
             UpdateSelectedRenderer();
             PopulateVisualStyles();
 
-            tweaksPropertyGrid.SelectedObject = Config.Default;
+            tweaksPropertyGrid.SelectedObject = Config.Default.Tweaks;
         }
 
         private void UpdateSelectedRenderer()
@@ -455,9 +455,9 @@ namespace SimpleClassicThemeTaskbar
 
         private void tweaksPropertyGrid_PropertyValueChanged(object s, PropertyValueChangedEventArgs e)
         {
-            if (e.ChangedItem.PropertyDescriptor.Name == nameof(Config.Default.EnableDebugging))
+            if (e.ChangedItem.PropertyDescriptor.Name == nameof(Config.Default.Tweaks.EnableDebugging))
             {
-                if (Config.Default.EnableDebugging)
+                if (Config.Default.Tweaks.EnableDebugging)
                 {
                     if (!tabControl.TabPages.Contains(tabDebug))
                         tabControl.TabPages.Add(tabDebug);

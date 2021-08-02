@@ -255,7 +255,7 @@ namespace SimpleClassicThemeTaskbar
 
                 Point p = new(heldDownOriginalX + (Cursor.Position.X - mouseOriginalX), heldDownButton.Location.Y);
                 heldDownButton.Location = new Point(Math.Max(taskArea.Start.Value, Math.Min(p.X, taskArea.End.Value)), p.Y);
-                int newIndex = (taskArea.Start.Value - heldDownButton.Location.X - ((taskIconWidth + Config.Default.SpaceBetweenTaskbarIcons) / 2)) / (taskIconWidth + Config.Default.SpaceBetweenTaskbarIcons) * -1;
+                int newIndex = (taskArea.Start.Value - heldDownButton.Location.X - ((taskIconWidth + Config.Default.Tweaks.SpaceBetweenTaskbarIcons) / 2)) / (taskIconWidth + Config.Default.Tweaks.SpaceBetweenTaskbarIcons) * -1;
                 if (newIndex < 0) newIndex = 0;
                 if (newIndex != icons.IndexOf(heldDownButton))
                 {
@@ -273,11 +273,11 @@ namespace SimpleClassicThemeTaskbar
                 {
                     if (icon == heldDownButton)
                     {
-                        x += icon.Width + Config.Default.SpaceBetweenTaskbarIcons;
+                        x += icon.Width + Config.Default.Tweaks.SpaceBetweenTaskbarIcons;
                         continue;
                     }
                     icon.Location = new Point(x, 0);
-                    x += icon.Width + Config.Default.SpaceBetweenTaskbarIcons;
+                    x += icon.Width + Config.Default.Tweaks.SpaceBetweenTaskbarIcons;
                 }
             }
         }
@@ -582,7 +582,7 @@ namespace SimpleClassicThemeTaskbar
         // HACK: This is ref based for now since I have no idea what can go away or how it should be changed.
         private void UpdateTaskbarButtons(IEnumerable<BaseTaskbarProgram> newIcons, List<BaseTaskbarProgram> programs)
         {
-            if (Config.Default.ProgramGroupCheck == ProgramGroupCheck.None)
+            if (Config.Default.Tweaks.ProgramGroupCheck == ProgramGroupCheck.None)
             {
                 icons = newIcons.ToList();
                 return;
@@ -793,7 +793,7 @@ namespace SimpleClassicThemeTaskbar
                     return null;
                 }
 
-                return Config.Default.ProgramGroupCheck switch
+                return Config.Default.Tweaks.ProgramGroupCheck switch
                 {
                     ProgramGroupCheck.Process => window.Process.Id.ToString(),
                     ProgramGroupCheck.FileNameAndPath => Kernel32.GetProcessFileName(window.Process.Id),
@@ -813,16 +813,16 @@ namespace SimpleClassicThemeTaskbar
         {
             // Calculate availabe space in taskbar and then divide that space over all programs
             int startX = quickLaunch1.Location.X + quickLaunch1.Width + 4;
-            int programWidth = Primary ? Config.Default.TaskbarProgramWidth + Config.Default.SpaceBetweenTaskbarIcons : 24;
+            int programWidth = Primary ? Config.Default.Tweaks.TaskbarProgramWidth + Config.Default.Tweaks.SpaceBetweenTaskbarIcons : 24;
 
             int availableSpace = verticalDivider3.Location.X - startX - 6;
-            availableSpace += Config.Default.SpaceBetweenTaskbarIcons;
+            availableSpace += Config.Default.Tweaks.SpaceBetweenTaskbarIcons;
 
             if (icons.Count > 0 && availableSpace / icons.Count > programWidth)
                 availableSpace = icons.Count * programWidth;
 
             int x = startX;
-            int iconWidth = icons.Any() ? (int)Math.Floor((double)availableSpace / icons.Count) - Config.Default.SpaceBetweenTaskbarIcons : 1;
+            int iconWidth = icons.Any() ? (int)Math.Floor((double)availableSpace / icons.Count) - Config.Default.Tweaks.SpaceBetweenTaskbarIcons : 1;
             int maxX = verticalDivider3.Location.X - iconWidth;
 
             // Re-display all windows (except heldDownButton)
@@ -831,7 +831,7 @@ namespace SimpleClassicThemeTaskbar
                 icon.Width = Math.Max(icon.MinimumWidth, iconWidth);
                 if (icon == heldDownButton)
                 {
-                    x += icon.Width + Config.Default.SpaceBetweenTaskbarIcons;
+                    x += icon.Width + Config.Default.Tweaks.SpaceBetweenTaskbarIcons;
                     continue;
                 }
 
@@ -843,7 +843,7 @@ namespace SimpleClassicThemeTaskbar
 
                 verticalDivider3.BringToFront();
 
-                x += icon.Width + Config.Default.SpaceBetweenTaskbarIcons;
+                x += icon.Width + Config.Default.Tweaks.SpaceBetweenTaskbarIcons;
 
                 if (!Controls.Contains(icon))
                 {
@@ -919,7 +919,7 @@ namespace SimpleClassicThemeTaskbar
         {
             ContextMenuStrip contextMenu = new();
 
-            if (Config.Default.EnableDebugging)
+            if (Config.Default.Tweaks.EnableDebugging)
             {
                 contextMenu.Items.Add(ConstructDebuggingMenu());
             }

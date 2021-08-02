@@ -113,12 +113,12 @@ namespace SimpleClassicThemeTaskbar.UIElements.QuickLaunch
             }
 
             //Display everything
-            Width = 32 + (icons.Count * 16) + (Config.Default.SpaceBetweenQuickLaunchIcons * (icons.Count - 1));
+            Width = 32 + (icons.Count * 16) + (Config.Default.Tweaks.SpaceBetweenQuickLaunchIcons * (icons.Count - 1));
             int x = 16;
 
             int startX = x;
             int iconWidth = 16;
-            int iconSpacing = Config.Default.SpaceBetweenQuickLaunchIcons;
+            int iconSpacing = Config.Default.Tweaks.SpaceBetweenQuickLaunchIcons;
 
             //See if we're moving, if so calculate new position, if we finished calculate new position and finalize position values
             if (heldDownIcon != null)
@@ -159,7 +159,7 @@ namespace SimpleClassicThemeTaskbar.UIElements.QuickLaunch
                 icon.Location = new Point(x, 0);
                 if (!Controls.Contains(icon))
                     Controls.Add(icon);
-                x += 16 + Config.Default.SpaceBetweenQuickLaunchIcons;
+                x += 16 + Config.Default.Tweaks.SpaceBetweenQuickLaunchIcons;
             }
 
             if (heldDownIcon != null)

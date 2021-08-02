@@ -1,16 +1,12 @@
-﻿using Microsoft.Win32;
-
+﻿
 using SimpleClassicTheme.Common.Configuration;
+using SimpleClassicTheme.Common.Serialization;
 
 using SimpleClassicThemeTaskbar.ThemeEngine;
 using SimpleClassicThemeTaskbar.ThemeEngine.VisualStyles;
 
-using System;
 using System.ComponentModel;
-using System.Globalization;
-using System.Reflection;
 using System.Resources;
-using System.Threading;
 
 namespace SimpleClassicThemeTaskbar.Helpers
 {
@@ -22,30 +18,33 @@ namespace SimpleClassicThemeTaskbar.Helpers
         {
         }
 
-        #region Non-browsable properties
-        [Browsable(false)]
+        [RegistryIgnore]
         public bool ConfigChanged { get; set; } = true;
 
-        [Browsable(false)]
+        public bool EnableActiveTaskbar { get; internal set; } = true;
+
         public bool EnableQuickLaunch { get; set; } = true;
 
+        public bool EnableSystemTrayColorChange { get; set; } = true;
 
-        [Browsable(false)]
+        public bool EnableSystemTrayHover { get; set; } = true;
+
+        public bool EnablePassiveTray { get; set; } = false;
+
         public string QuickLaunchOrder { get; set; } = string.Empty;
 
-        [Browsable(false)]
+        [RegistryIgnore]        
         public BaseRenderer Renderer { get; set; } = new ClassicRenderer();
 
         // VisualStyleRenderer settings
-        [Browsable(false)]
         public string VisualStylePath { get; set; } = string.Empty;
-        [Browsable(false)]
+        
         public string VisualStyleSize { get; set; } = string.Empty;
-        [Browsable(false)]
+        
         public string VisualStyleColor { get; set; } = string.Empty;
-        [Browsable(false)]
+        
         public ExitMenuItemCondition ExitMenuItemCondition { get; internal set; }
-        [Browsable(false)]
+        
         public string RendererPath
         {
             get => rendererPath;
@@ -75,41 +74,30 @@ namespace SimpleClassicThemeTaskbar.Helpers
                 }
             }
         }
-
-        [Browsable(false)]
+        
         public StartButtonAppearance StartButtonAppearance { get; set; } = StartButtonAppearance.Default;
-
-        [Browsable(false)]
+        
         public string StartButtonIconImage { get; set; } = string.Empty;
-
-        [Browsable(false)]
+        
         public string StartButtonImage { get; set; } = string.Empty;
-
-        [Browsable(false)]
+        
         public string TaskbarProgramFilter { get; set; } = string.Empty;
 
-        [Browsable(false)]
         public bool ShowTaskbarOnAllDesktops { get; set; } = true;
-
-        [Browsable(false)]
+        
         public string Language { get; set; }
-        #endregion
 
-        [Category("(Misc)")]
+        public static string ImageThemePath { get; set; } = string.Empty;
+
+        public Tweaks Tweaks { get; set; } = new();
+    }
+
+    public class Tweaks
+    {
         [DisplayName("Enable debugging options")]
         public bool EnableDebugging { get; set; } = true;
 
-        public bool EnableActiveTaskbar { get; internal set; } = true;
-        public bool EnablePassiveTray { get; set; } = false;
-
-        public bool EnableSystemTrayColorChange { get; set; } = true;
-
-        public bool EnableSystemTrayHover { get; set; } = true;
-
         public ProgramGroupCheck ProgramGroupCheck { get; set; } = ProgramGroupCheck.FileNameAndPath;
-
-        // ImageRenderer settings
-        public static string ImageThemePath { get; set; } = string.Empty;
 
         [Category("Task view click actions")]
         [DisplayName("Left click")]
