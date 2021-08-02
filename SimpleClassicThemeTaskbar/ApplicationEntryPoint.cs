@@ -42,7 +42,7 @@ namespace SimpleClassicThemeTaskbar
         internal static void ExitSCTT()
         {
             Logger.Log(LoggerVerbosity.Detailed, "TaskbarManager", $"Exit requested");
-            Config.Instance.SaveToRegistry();
+            Config.Default.WriteToRegistry();
 
             var activeBars = HelperFunctions.GetOpenTaskbars();
 
@@ -86,9 +86,9 @@ namespace SimpleClassicThemeTaskbar
                 bar.Dispose();
             }
 
-            if (Config.Instance.EnablePassiveTray && TrayNotificationService == null)
+            if (Config.Default.EnablePassiveTray && TrayNotificationService == null)
                 TrayNotificationService = new();
-            else if (!Config.Instance.EnablePassiveTray && TrayNotificationService is not null)
+            else if (!Config.Default.EnablePassiveTray && TrayNotificationService is not null)
             {
                 TrayNotificationService.Dispose();
                 TrayNotificationService = null;
@@ -102,7 +102,7 @@ namespace SimpleClassicThemeTaskbar
                 Taskbar taskbar = new(screen.Primary);
                 taskbar.ShowOnScreen(screen);
                 Logger.Log(LoggerVerbosity.Detailed, "TaskbarManager", $"Created taskbar in working area: {screen.Bounds}");
-                if (!Config.Instance.ShowTaskbarOnAllDesktops && !screen.Primary)
+                if (!Config.Default.ShowTaskbarOnAllDesktops && !screen.Primary)
                     taskbar.NeverShow = true;
             }
             Logger.Log(LoggerVerbosity.Detailed, "TaskbarManager", $"Created {taskbars} taskbars in total");
@@ -276,7 +276,7 @@ namespace SimpleClassicThemeTaskbar
                 }
             }
 
-            if (Config.Instance.EnablePassiveTray)
+            if (Config.Default.EnablePassiveTray)
             {
                 Logger.Log(LoggerVerbosity.Detailed, "EntryPoint", "Initializing new SystemTrayNotificationService");
                 TrayNotificationService = new();

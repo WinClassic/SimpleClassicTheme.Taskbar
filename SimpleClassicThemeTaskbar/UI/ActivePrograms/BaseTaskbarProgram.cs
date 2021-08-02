@@ -156,7 +156,7 @@ namespace SimpleClassicThemeTaskbar
                 return;
             }
 
-            Config.Instance.Renderer.DrawTaskButton(this, e.Graphics);
+            Config.Default.Renderer.DrawTaskButton(this, e.Graphics);
 
             FinishOnPaint(e);
         }

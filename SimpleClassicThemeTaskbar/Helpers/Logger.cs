@@ -61,7 +61,7 @@ namespace SimpleClassicThemeTaskbar.Helpers
 
         public static void Log(LoggerVerbosity verbosity, string source, string text)
         {
-            if (Config.Instance.EnableDebugging)
+            if (Config.Default.EnableDebugging)
                 Debug.WriteLine(text, source);
 
             // text.Replace("\n", "".PadLeft(38));

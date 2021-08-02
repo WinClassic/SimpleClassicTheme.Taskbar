@@ -31,10 +31,10 @@ namespace SimpleClassicThemeTaskbar.ThemeEngine
         {
             get
             {
-                if (Config.Instance.StartButtonAppearance == StartButtonAppearance.CustomButton)
+                if (Config.Default.StartButtonAppearance == StartButtonAppearance.CustomButton)
                     try
                     {
-                        return Image.FromFile(Config.Instance.StartButtonImage).Width;
+                        return Image.FromFile(Config.Default.StartButtonImage).Width;
                     }
                     catch { }
                 return 55;
@@ -57,9 +57,9 @@ namespace SimpleClassicThemeTaskbar.ThemeEngine
             {
                 Image icon = Properties.Resources.startIcon95;
                 g.TextRenderingHint = TextRenderingHint.SingleBitPerPixelGridFit;
-                if (Config.Instance.StartButtonAppearance == StartButtonAppearance.CustomButton)
+                if (Config.Default.StartButtonAppearance == StartButtonAppearance.CustomButton)
                 {
-                    Image image = Image.FromFile(Config.Instance.StartButtonImage);
+                    Image image = Image.FromFile(Config.Default.StartButtonImage);
                     if (image.Height != 66)
                         throw new InvalidOperationException();
                     if (startButton.Width != image.Width)
@@ -67,9 +67,9 @@ namespace SimpleClassicThemeTaskbar.ThemeEngine
                     g.DrawImage(image, new Rectangle(2, 4, image.Width, 22), new Rectangle(0, startButton.Pressed ? 44 : startButton.ClientRectangle.Contains(startButton.PointToClient(Control.MousePosition)) ? 22 : 0, image.Width, 22), GraphicsUnit.Pixel);
                     return;
                 }
-                else if (Config.Instance.StartButtonAppearance == StartButtonAppearance.CustomIcon)
+                else if (Config.Default.StartButtonAppearance == StartButtonAppearance.CustomIcon)
                 {
-                    icon = Image.FromFile(Config.Instance.StartButtonIconImage);
+                    icon = Image.FromFile(Config.Default.StartButtonIconImage);
                 }
                 if (startButton.Width != 57)
                     startButton.Width = 57;
@@ -222,16 +222,16 @@ namespace SimpleClassicThemeTaskbar.ThemeEngine
             g.ResetTransform();
         }
 
-        public override Point GetQuickLaunchIconLocation(int index) => new(16 + (index * (16 + Config.Instance.SpaceBetweenQuickLaunchIcons)), 7);
+        public override Point GetQuickLaunchIconLocation(int index) => new(16 + (index * (16 + Config.Default.SpaceBetweenQuickLaunchIcons)), 7);
 
-        public override int GetQuickLaunchWidth(int iconCount) => (iconCount * 16) + (Config.Instance.SpaceBetweenQuickLaunchIcons * (iconCount - 1));
+        public override int GetQuickLaunchWidth(int iconCount) => (iconCount * 16) + (Config.Default.SpaceBetweenQuickLaunchIcons * (iconCount - 1));
 
-        public override Point GetSystemTrayIconLocation(int index) => new(3 + (index * (16 + Config.Instance.SpaceBetweenTrayIcons)), 7);
+        public override Point GetSystemTrayIconLocation(int index) => new(3 + (index * (16 + Config.Default.SpaceBetweenTrayIcons)), 7);
 
-        public override int GetSystemTrayWidth(int iconCount) => 63 + (iconCount * (16 + Config.Instance.SpaceBetweenTrayIcons));
+        public override int GetSystemTrayWidth(int iconCount) => 63 + (iconCount * (16 + Config.Default.SpaceBetweenTrayIcons));
 
         public override Point GetTaskButtonGroupWindowButtonLocation(int index) => new(4, (index - 1) * 24);
 
-        public override Size GetTaskButtonGroupWindowSize(int buttonCount) => new(Config.Instance.TaskbarProgramWidth + 8, ((buttonCount - 1) * 24) + 6);
+        public override Size GetTaskButtonGroupWindowSize(int buttonCount) => new(Config.Default.TaskbarProgramWidth + 8, ((buttonCount - 1) * 24) + 6);
     }
 }

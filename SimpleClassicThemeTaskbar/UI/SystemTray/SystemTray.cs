@@ -25,10 +25,10 @@ namespace SimpleClassicThemeTaskbar.UIElements.SystemTray
         {
             InitializeComponent();
 
-            Point p = Config.Instance.Renderer.SystemTrayTimeLocation;
+            Point p = Config.Default.Renderer.SystemTrayTimeLocation;
             labelTime.Location = new Point(Width + p.X, p.Y);
-            labelTime.Font = Config.Instance.Renderer.SystemTrayTimeFont;
-            labelTime.ForeColor = Config.Instance.Renderer.SystemTrayTimeColor;
+            labelTime.Font = Config.Default.Renderer.SystemTrayTimeFont;
+            labelTime.ForeColor = Config.Default.Renderer.SystemTrayTimeColor;
 
             ApplicationEntryPoint.TrayNotificationService.RegisterNotificationEvent(TrayNotified);
             Disposed += delegate { ApplicationEntryPoint.TrayNotificationService.UnregisterNotificationEvent(TrayNotified); };
@@ -153,21 +153,21 @@ namespace SimpleClassicThemeTaskbar.UIElements.SystemTray
             Controls.CopyTo(icons, 0);
 
             // Set the width and position of the tray
-            Width = Config.Instance.Renderer.GetSystemTrayWidth(icons.Length - 1);
+            Width = Config.Default.Renderer.GetSystemTrayWidth(icons.Length - 1);
             if (Parent != null)
                 Location = new Point(Parent.Width - Width, 0);
             foreach (Control control in icons)
             {
                 // Put the control at the correct position
                 if (control is SystemTrayIcon icon)
-                    icon.Location = Config.Instance.Renderer.GetSystemTrayIconLocation(Array.IndexOf(icons, icon) - 1);
+                    icon.Location = Config.Default.Renderer.GetSystemTrayIconLocation(Array.IndexOf(icons, icon) - 1);
             }
 
             // Fix tray clock
-            Point p = Config.Instance.Renderer.SystemTrayTimeLocation;
+            Point p = Config.Default.Renderer.SystemTrayTimeLocation;
             labelTime.Location = new Point(Width + p.X, p.Y);
-            labelTime.Font = Config.Instance.Renderer.SystemTrayTimeFont;
-            labelTime.ForeColor = Config.Instance.Renderer.SystemTrayTimeColor;
+            labelTime.Font = Config.Default.Renderer.SystemTrayTimeFont;
+            labelTime.ForeColor = Config.Default.Renderer.SystemTrayTimeColor;
         }
 
         public override void UpdateIcons()
@@ -205,7 +205,7 @@ namespace SimpleClassicThemeTaskbar.UIElements.SystemTray
 
         private void SystemTray_Paint(object sender, System.Windows.Forms.PaintEventArgs e)
         {
-            Config.Instance.Renderer.DrawSystemTray(this, e.Graphics);
+            Config.Default.Renderer.DrawSystemTray(this, e.Graphics);
         }
     }
 }

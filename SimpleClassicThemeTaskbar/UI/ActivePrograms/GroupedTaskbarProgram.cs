@@ -29,7 +29,12 @@ namespace SimpleClassicThemeTaskbar
 
         public bool CanBeSingleWindow => ProgramWindows.Count < 2;
 
-        public override Icon Icon { get => ProgramWindows[0].Icon; set => ProgramWindows[0].Icon = value; }
+        private SingleTaskbarProgram PrimaryWindow => ProgramWindows.FirstOrDefault();
+        public override Icon Icon
+        {
+            get => PrimaryWindow?.Icon;
+            set => PrimaryWindow.Icon = value;
+        }
 
         public override Image IconImage
         {
@@ -48,13 +53,25 @@ namespace SimpleClassicThemeTaskbar
             }
         }
 
-        public override int MinimumWidth => Config.Instance.Renderer.TaskButtonMinimalWidth + 18;
+        public override int MinimumWidth => Config.Default.Renderer.TaskButtonMinimalWidth + 18;
 
-        public override Process Process { get => ProgramWindows[0].Process; set => ProgramWindows[0].Process = value; }
+        public override Process Process
+        {
+            get => PrimaryWindow?.Process;
+            set => PrimaryWindow.Process = value;
+        }
 
-        public override string Title { get => ProgramWindows[0].Title; set => ProgramWindows[0].Title = value; }
+        public override string Title
+        {
+            get => PrimaryWindow?.Title;
+            set => PrimaryWindow.Title = value;
+        }
 
-        public override Window Window { get => ProgramWindows[0].Window; set => ProgramWindows[0].Window = value; }
+        public override Window Window
+        {
+            get => PrimaryWindow.Window;
+            set => PrimaryWindow.Window = value;
+        }
 
         public bool ContainsWindow(IntPtr hwnd)
         {
@@ -69,7 +86,7 @@ namespace SimpleClassicThemeTaskbar
             ApplicationEntryPoint.ErrorSource = this;
             controlState = "painting grouped window extension";
 
-            Config.Instance.Renderer.DrawTaskButtonGroupButton(this, e.Graphics);
+            Config.Default.Renderer.DrawTaskButtonGroupButton(this, e.Graphics);
         }
 
         public override string GetErrorString()
@@ -120,8 +137,8 @@ namespace SimpleClassicThemeTaskbar
             }
             else
             {
-                ProgramWindows[0].OnDoubleClick(sender, e);
-                ActiveWindow = ProgramWindows[0].ActiveWindow;
+                PrimaryWindow.OnDoubleClick(sender, e);
+                ActiveWindow = PrimaryWindow.ActiveWindow;
             }
         }
 
@@ -140,22 +157,22 @@ namespace SimpleClassicThemeTaskbar
             }
             else
             {
-                ProgramWindows[0].OnClick(sender, e);
-                ActiveWindow = ProgramWindows[0].ActiveWindow;
+                PrimaryWindow.OnClick(sender, e);
+                ActiveWindow = PrimaryWindow.ActiveWindow;
             }
         }
 
         public override string ToString()
         {
-            if (Config.Instance.ProgramGroupCheck == ProgramGroupCheck.Process)
+            if (Config.Default.ProgramGroupCheck == ProgramGroupCheck.Process)
             {
                 return $"Process - ID: {Process.Id}, Name: {Process.ProcessName}";
             }
-            else if (Config.Instance.ProgramGroupCheck == ProgramGroupCheck.FileNameAndPath)
+            else if (Config.Default.ProgramGroupCheck == ProgramGroupCheck.FileNameAndPath)
             {
                 return $"Filepath - {GetShortPath(Process.MainModule.FileName)}";
             }
-            else if (Config.Instance.ProgramGroupCheck == ProgramGroupCheck.ModuleName)
+            else if (Config.Default.ProgramGroupCheck == ProgramGroupCheck.ModuleName)
             {
                 return $"Filename - {Process.MainModule.ModuleName}";
             }

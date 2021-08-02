@@ -58,7 +58,7 @@ namespace SimpleClassicThemeTaskbar
         }
 
         public override Image IconImage { get => iconImage;/* { try { return new Icon(Icon, 16, 16).ToBitmap(); } catch { return null; } } */}
-        public override int MinimumWidth => Helpers.Config.Instance.Renderer.TaskButtonMinimalWidth;
+        public override int MinimumWidth => Helpers.Config.Default.Renderer.TaskButtonMinimalWidth;
         public override Process Process { get => process; set { process = value; /*MessageBox.Show(ApplicationEntryPoint.d.GetAppUserModelId(Process.Id));*/ } }
         public override string Title { get => window.Title; set => throw new NotImplementedException(); }
         public override Window Window { get => window; set => window = value; }
@@ -155,11 +155,11 @@ namespace SimpleClassicThemeTaskbar
             if (IsMoving)
                 IsMoving = false;
             else if (e.Button == MouseButtons.Left)
-                PerformClickAction(Config.Instance.TaskbarProgramLeftDoubleClickAction, e);
+                PerformClickAction(Config.Default.TaskbarProgramLeftDoubleClickAction, e);
             else if (e.Button == MouseButtons.Middle)
-                PerformClickAction(Config.Instance.TaskbarProgramMiddleDoubleClickAction, e);
+                PerformClickAction(Config.Default.TaskbarProgramMiddleDoubleClickAction, e);
             else
-                PerformClickAction(Config.Instance.TaskbarProgramRightDoubleClickAction, e);
+                PerformClickAction(Config.Default.TaskbarProgramRightDoubleClickAction, e);
         }
 
 		public override void OnClick(object sender, MouseEventArgs e)
@@ -172,11 +172,11 @@ namespace SimpleClassicThemeTaskbar
             else if (ModifierKeys == (Keys.Control | Keys.Shift | Keys.Alt) && e.Button == MouseButtons.Right)
                 new IconTest(Window).Show();
             else if (e.Button == MouseButtons.Left)
-                PerformClickAction(Config.Instance.TaskbarProgramLeftClickAction, e);
+                PerformClickAction(Config.Default.TaskbarProgramLeftClickAction, e);
             else if (e.Button == MouseButtons.Middle)
-                PerformClickAction(Config.Instance.TaskbarProgramMiddleClickAction, e);
+                PerformClickAction(Config.Default.TaskbarProgramMiddleClickAction, e);
             else
-                PerformClickAction(Config.Instance.TaskbarProgramRightClickAction, e);
+                PerformClickAction(Config.Default.TaskbarProgramRightClickAction, e);
         }
 
         public override string ToString() => $"Handle: {Window.Handle}, Title: {Title}";

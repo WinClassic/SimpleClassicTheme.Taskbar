@@ -30,6 +30,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\SimpleClassicTheme.Common\SimpleClassicTheme.Common\SimpleClassicTheme.Common.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Reference Include="ManagedWifi">
       <HintPath>..\libraries\ManagedWifi.dll</HintPath>
     </Reference>
