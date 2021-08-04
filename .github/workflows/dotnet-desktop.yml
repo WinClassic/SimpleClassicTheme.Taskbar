@@ -84,6 +84,14 @@ jobs:
         files: |
           SimpleClassicTheme.Taskbar_x86.zip
           SimpleClassicTheme.Taskbar_x64.zip
+      
+  sentry:
+    runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'push' }}
+    needs: [release]
+    steps:
+    - name: Check out
+      uses: actions/checkout@v2
 
     - name: Sentry Release
       uses: getsentry/action-release@v1.1.6
