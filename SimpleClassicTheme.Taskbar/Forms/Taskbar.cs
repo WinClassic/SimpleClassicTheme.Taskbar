@@ -1,6 +1,7 @@
 ﻿using Microsoft.Win32;
 
 using SimpleClassicTheme.Common.Logging;
+using SimpleClassicTheme.Common.Performance;
 using SimpleClassicTheme.Taskbar.Helpers;
 using SimpleClassicTheme.Taskbar.Helpers.NativeMethods;
 
