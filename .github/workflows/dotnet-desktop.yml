@@ -36,7 +36,7 @@ jobs:
       working-directory: ./
 
     - name: Build SCTT x64
-      run: 'msbuild -p:Configuration=Release -p:Platform=AMD64 "${{ env.SCTT_PATH }}.sln"'
+      run: 'msbuild -p:Configuration=Release -p:Platform=x64 "${{ env.SCTT_PATH }}.sln"'
       working-directory: ./
 
     - name: Upload x86 build artifacts
