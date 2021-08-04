@@ -81,9 +81,9 @@ namespace SimpleClassicThemeTaskbar.UIElements.QuickLaunch
                 }
 
             //Get the icons in the correct order
-            if (FirstUpdate && Config.Instance.QuickLaunchOrder != "")
+            if (FirstUpdate && Config.Default.QuickLaunchOrder != "")
             {
-                string[] shortcutOrder = Config.Instance.QuickLaunchOrder.Split('|');
+                string[] shortcutOrder = Config.Default.QuickLaunchOrder.Split('|');
                 List<QuickLaunchIcon> newOrder = new();
                 foreach (string shortcut in shortcutOrder)
                 {
@@ -113,12 +113,12 @@ namespace SimpleClassicThemeTaskbar.UIElements.QuickLaunch
             }
 
             //Display everything
-            Width = 32 + (icons.Count * 16) + (Config.Instance.Tweaks.SpaceBetweenQuickLaunchIcons * (icons.Count - 1));
+            Width = 32 + (icons.Count * 16) + (Config.Default.Tweaks.SpaceBetweenQuickLaunchIcons * (icons.Count - 1));
             int x = 16;
 
             int startX = x;
             int iconWidth = 16;
-            int iconSpacing = Config.Instance.Tweaks.SpaceBetweenQuickLaunchIcons;
+            int iconSpacing = Config.Default.Tweaks.SpaceBetweenQuickLaunchIcons;
 
             //See if we're moving, if so calculate new position, if we finished calculate new position and finalize position values
             if (heldDownIcon != null)
@@ -149,9 +149,9 @@ namespace SimpleClassicThemeTaskbar.UIElements.QuickLaunch
             foreach (QuickLaunchIcon icon in icons)
                 correctOrder += Path.GetFileName(icon.FileName) + "|";
             correctOrder = correctOrder.Trim('|');
-            Config.Instance.QuickLaunchOrder = correctOrder;
+            Config.Default.QuickLaunchOrder = correctOrder;
             if (LastOrder != correctOrder)
-                Config.Instance.SaveToRegistry();
+                Config.Default.WriteToRegistry();
             LastOrder = correctOrder;
 
             foreach (QuickLaunchIcon icon in icons)
@@ -159,14 +159,14 @@ namespace SimpleClassicThemeTaskbar.UIElements.QuickLaunch
                 icon.Location = new Point(x, 0);
                 if (!Controls.Contains(icon))
                     Controls.Add(icon);
-                x += 16 + Config.Instance.Tweaks.SpaceBetweenQuickLaunchIcons;
+                x += 16 + Config.Default.Tweaks.SpaceBetweenQuickLaunchIcons;
             }
 
             if (heldDownIcon != null)
                 heldDownIcon.BringToFront();
 
             //Point verticalDividerLocation = new Point(Width - verticalDivider2.Width, verticalDivider2.Location.Y);
-            //Point verticalDividerLocation = new Point(icons.Count > 0 ? icons[icons.Count - 1].Location.X + 16 + Config.Instance.SpaceBetweenQuickLaunchIcons : 3, verticalDivider2.Location.Y);
+            //Point verticalDividerLocation = new Point(icons.Count > 0 ? icons[icons.Count - 1].Location.X + 16 + Config.Default.SpaceBetweenQuickLaunchIcons : 3, verticalDivider2.Location.Y);
             //if (verticalDivider2.Location != verticalDividerLocation)
             //    verticalDivider2.Location = verticalDividerLocation;
 

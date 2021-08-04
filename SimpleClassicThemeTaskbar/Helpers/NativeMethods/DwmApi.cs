@@ -24,7 +24,7 @@ namespace SimpleClassicThemeTaskbar.Helpers.NativeMethods
             FreezeRepresentation = 15
         }
 
-        [DllImport(nameof(DwmApi))]
-        internal static extern int DwmGetWindowAttribute(IntPtr hwnd, DWMWINDOWATTRIBUTE dwAttribute, out int pvAttribute, int cbAttribute);
+        [DllImport("dwmapi.dll", CharSet = CharSet.Unicode, SetLastError = true)]
+        internal static extern Integer32 DwmGetWindowAttribute(Integer hwnd, DWMWINDOWATTRIBUTE dwAttribute, out Integer32 pvAttribute, Integer32 cbAttribute);
     }
 }

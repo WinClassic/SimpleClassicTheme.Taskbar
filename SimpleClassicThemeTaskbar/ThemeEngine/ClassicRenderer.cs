@@ -31,10 +31,10 @@ namespace SimpleClassicThemeTaskbar.ThemeEngine
         {
             get
             {
-                if (Config.Instance.StartButtonAppearance == StartButtonAppearance.CustomButton)
+                if (Config.Default.StartButtonAppearance == StartButtonAppearance.CustomButton)
                     try
                     {
-                        return Image.FromFile(Config.Instance.StartButtonImage).Width;
+                        return Image.FromFile(Config.Default.StartButtonImage).Width;
                     }
                     catch { }
                 return 55;
@@ -57,9 +57,9 @@ namespace SimpleClassicThemeTaskbar.ThemeEngine
             {
                 Image icon = Properties.Resources.startIcon95;
                 g.TextRenderingHint = TextRenderingHint.SingleBitPerPixelGridFit;
-                if (Config.Instance.StartButtonAppearance == StartButtonAppearance.CustomButton)
+                if (Config.Default.StartButtonAppearance == StartButtonAppearance.CustomButton)
                 {
-                    Image image = Image.FromFile(Config.Instance.StartButtonImage);
+                    Image image = Image.FromFile(Config.Default.StartButtonImage);
                     if (image.Height != 66)
                         throw new InvalidOperationException();
                     if (startButton.Width != image.Width)
@@ -67,9 +67,9 @@ namespace SimpleClassicThemeTaskbar.ThemeEngine
                     g.DrawImage(image, new Rectangle(2, 4, image.Width, 22), new Rectangle(0, startButton.Pressed ? 44 : startButton.ClientRectangle.Contains(startButton.PointToClient(Control.MousePosition)) ? 22 : 0, image.Width, 22), GraphicsUnit.Pixel);
                     return;
                 }
-                else if (Config.Instance.StartButtonAppearance == StartButtonAppearance.CustomIcon)
+                else if (Config.Default.StartButtonAppearance == StartButtonAppearance.CustomIcon)
                 {
-                    icon = Image.FromFile(Config.Instance.StartButtonIconImage);
+                    icon = Image.FromFile(Config.Default.StartButtonIconImage);
                 }
                 if (startButton.Width != 57)
                     startButton.Width = 57;
@@ -100,7 +100,7 @@ namespace SimpleClassicThemeTaskbar.ThemeEngine
             }
         }
 
-        public override void DrawSystemTray(SystemTray systemTray, Graphics g)
+        public override void DrawSystemTray(System.Windows.Forms.Control systemTray, Graphics g)
         {
             Rectangle rect = systemTray.ClientRectangle;
             rect.Location = new Point(0, 4);
@@ -165,11 +165,11 @@ namespace SimpleClassicThemeTaskbar.ThemeEngine
                 g.DrawImage(taskbarProgram.IconImage, isPushed ? new Rectangle(5, 8, 16, 16) : new Rectangle(4, 7, 16, 16));
 
                 if (taskbarProgram.Width >= 60)
-                    g.DrawString(taskbarProgram.Title, font, SystemBrushes.ControlText, isPushed ? new Rectangle(21, 11, taskbarProgram.Width - 21 - 3 - taskbarProgram.SpaceNeededNextToText, 10) : new Rectangle(20, 10, taskbarProgram.Width - 20 - 3 - taskbarProgram.SpaceNeededNextToText, 11), format);
+                    g.DrawString(taskbarProgram.Title, font, SystemBrushes.ControlText, isPushed ? new Rectangle(21, 9, taskbarProgram.Width - 21 - 3 - taskbarProgram.SpaceNeededNextToText, 14) : new Rectangle(20, 8, taskbarProgram.Width - 20 - 3 - taskbarProgram.SpaceNeededNextToText, 15), format);
             }
             else
             {
-                g.DrawString(taskbarProgram.Title, font, SystemBrushes.ControlText, isPushed ? new Rectangle(5, 11, taskbarProgram.Width - 5 - 3 - taskbarProgram.SpaceNeededNextToText, 10) : new Rectangle(4, 10, taskbarProgram.Width - 4 - 3 - taskbarProgram.SpaceNeededNextToText, 11), format);
+                g.DrawString(taskbarProgram.Title, font, SystemBrushes.ControlText, isPushed ? new Rectangle(5, 9, taskbarProgram.Width - 5 - 3 - taskbarProgram.SpaceNeededNextToText, 14) : new Rectangle(4, 8, taskbarProgram.Width - 4 - 3 - taskbarProgram.SpaceNeededNextToText, 15), format);
             }
         }
 
@@ -190,7 +190,7 @@ namespace SimpleClassicThemeTaskbar.ThemeEngine
                 buttonStyle |= User32.DFCS_PUSHED;
             }
 
-            _ = Shell32.DrawFrameControl(g.GetHdc(), ref rect, User32.DFC_BUTTON, buttonStyle);
+            _ = User32.DrawFrameControl(g.GetHdc(), ref rect, User32.DFC_BUTTON, buttonStyle);
             g.ReleaseHdc();
             g.ResetTransform();
 
@@ -203,7 +203,9 @@ namespace SimpleClassicThemeTaskbar.ThemeEngine
             format.Alignment = StringAlignment.Near;
             format.LineAlignment = StringAlignment.Center;
             format.Trimming = StringTrimming.EllipsisCharacter;
-            g.DrawString(taskbarProgram.ProgramWindows.Count.ToString(), font, SystemBrushes.ControlText, taskbarProgram.GroupWindow.Visible ? new Rectangle(taskbarProgram.Width - 15, 11, 7, 10) : new Rectangle(taskbarProgram.Width - 16, 10, 7, 11), format);
+            newRect.Inflate(new Size(-2, -2));
+            //g.DrawString(taskbarProgram.ProgramWindows.Count.ToString(), font, SystemBrushes.ControlText, taskbarProgram.GroupWindow.Visible ? new Rectangle(taskbarProgram.Width - 15, 9, 7, 14) : new Rectangle(taskbarProgram.Width - 16, 8, 7, 15), format);
+            g.DrawString(taskbarProgram.ProgramWindows.Count.ToString(), font, SystemBrushes.ControlText, newRect, format);
         }
 
         public override void DrawTaskButtonGroupWindow(PopupTaskbarGroup taskbarGroup, Graphics g)
@@ -220,16 +222,16 @@ namespace SimpleClassicThemeTaskbar.ThemeEngine
             g.ResetTransform();
         }
 
-        public override Point GetQuickLaunchIconLocation(int index) => new(16 + (index * (16 + Config.Instance.Tweaks.SpaceBetweenQuickLaunchIcons)), 7);
+        public override Point GetQuickLaunchIconLocation(int index) => new(16 + (index * (16 + Config.Default.Tweaks.SpaceBetweenQuickLaunchIcons)), 7);
 
-        public override int GetQuickLaunchWidth(int iconCount) => (iconCount * 16) + (Config.Instance.Tweaks.SpaceBetweenQuickLaunchIcons * (iconCount - 1));
+        public override int GetQuickLaunchWidth(int iconCount) => (iconCount * 16) + (Config.Default.Tweaks.SpaceBetweenQuickLaunchIcons * (iconCount - 1));
 
-        public override Point GetSystemTrayIconLocation(int index) => new(3 + (index * (16 + Config.Instance.Tweaks.SpaceBetweenTrayIcons)), 7);
+        public override Point GetSystemTrayIconLocation(int index) => new(3 + (index * (16 + Config.Default.Tweaks.SpaceBetweenTrayIcons)), 7);
 
-        public override int GetSystemTrayWidth(int iconCount) => 63 + (iconCount * (16 + Config.Instance.Tweaks.SpaceBetweenTrayIcons));
+        public override int GetSystemTrayWidth(int iconCount) => 63 + (iconCount * (16 + Config.Default.Tweaks.SpaceBetweenTrayIcons));
 
         public override Point GetTaskButtonGroupWindowButtonLocation(int index) => new(4, (index - 1) * 24);
 
-        public override Size GetTaskButtonGroupWindowSize(int buttonCount) => new(Config.Instance.Tweaks.TaskbarProgramWidth + 8, ((buttonCount - 1) * 24) + 6);
+        public override Size GetTaskButtonGroupWindowSize(int buttonCount) => new(Config.Default.Tweaks.TaskbarProgramWidth + 8, ((buttonCount - 1) * 24) + 6);
     }
 }

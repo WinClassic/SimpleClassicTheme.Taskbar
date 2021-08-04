@@ -34,7 +34,7 @@ namespace SimpleClassicThemeTaskbar
 			this.components = new System.ComponentModel.Container();
 			this.quickLaunch1 = new SimpleClassicThemeTaskbar.UIElements.QuickLaunch.QuickLaunch();
 			this.verticalDivider3 = new SimpleClassicThemeTaskbar.UIElements.Misc.VerticalDivider();
-			this.systemTray1 = new SimpleClassicThemeTaskbar.UIElements.SystemTray.SystemTray();
+			this.systemTray1 = SimpleClassicThemeTaskbar.Helpers.Config.Default.EnablePassiveTray ? new UIElements.SystemTray.SystemTray() : new UIElements.OldSystemTray.SystemTray();
 			this.startButton1 = new SimpleClassicThemeTaskbar.UIElements.StartButton.StartButton();
 			this.timerUpdateUI = new System.Windows.Forms.Timer(this.components);
 			this.timerUpdateInformation = new System.Windows.Forms.Timer(this.components);
@@ -129,7 +129,7 @@ namespace SimpleClassicThemeTaskbar
         #endregion
 
         private UIElements.StartButton.StartButton startButton1;
-        private UIElements.SystemTray.SystemTray systemTray1;
+        private UI.Misc.SystemTrayBase systemTray1;
         private UIElements.Misc.VerticalDivider verticalDivider3;
         private UIElements.QuickLaunch.QuickLaunch quickLaunch1;
         private System.Windows.Forms.Timer timerUpdateUI;

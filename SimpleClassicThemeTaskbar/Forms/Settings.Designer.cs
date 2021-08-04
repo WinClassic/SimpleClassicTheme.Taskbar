@@ -40,15 +40,13 @@
             this.languageComboBox = new System.Windows.Forms.ComboBox();
             this.languageLabel = new System.Windows.Forms.Label();
             this.tabThemes = new System.Windows.Forms.TabPage();
-            this.themesTabControl = new System.Windows.Forms.TabControl();
-            this.visualStyleTab = new System.Windows.Forms.TabPage();
             this.sizeComboBox = new System.Windows.Forms.ComboBox();
-            this.label3 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
-            this.manageStylesButton = new System.Windows.Forms.Button();
             this.colorSchemeComboBox = new System.Windows.Forms.ComboBox();
-            this.visualStyleComboBox = new System.Windows.Forms.ComboBox();
             this.label4 = new System.Windows.Forms.Label();
+            this.visualStyleComboBox = new System.Windows.Forms.ComboBox();
+            this.manageStylesButton = new System.Windows.Forms.Button();
+            this.label3 = new System.Windows.Forms.Label();
             this.themeComboBox = new System.Windows.Forms.ComboBox();
             this.themeLabel = new System.Windows.Forms.Label();
             this.tabStartButton = new System.Windows.Forms.TabPage();
@@ -63,7 +61,6 @@
             this.quickLaunchLinkLabel = new System.Windows.Forms.Label();
             this.enableQuickLaunchCheckBox = new System.Windows.Forms.CheckBox();
             this.tabTaskView = new System.Windows.Forms.TabPage();
-            this.enableGroupingCheckBox = new System.Windows.Forms.CheckBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.addElementButton = new System.Windows.Forms.Button();
             this.taskbarFilterListBox = new System.Windows.Forms.ListBox();
@@ -74,6 +71,10 @@
             this.enableSysTrayHover = new System.Windows.Forms.CheckBox();
             this.tabTweaks = new System.Windows.Forms.TabPage();
             this.tweaksPropertyGrid = new System.Windows.Forms.PropertyGrid();
+            this.tweaksToolStrip = new System.Windows.Forms.ToolStrip();
+            this.tweakResetButton = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.showDescriptionButton = new System.Windows.Forms.ToolStripButton();
             this.tabAbout = new System.Windows.Forms.TabPage();
             this.copyrightTablePanel = new System.Windows.Forms.TableLayoutPanel();
             this.labelCopyrightSCTT = new System.Windows.Forms.Label();
@@ -82,30 +83,36 @@
             this.label7 = new System.Windows.Forms.Label();
             this.bannerPictureBox = new System.Windows.Forms.PictureBox();
             this.tabDebug = new System.Windows.Forms.TabPage();
-            this.stuckRectsCheckBox = new System.Windows.Forms.CheckBox();
-            this.enablePassiveTaskbarCheckBox = new System.Windows.Forms.CheckBox();
+            this.enableActiveTaskbarCheckBox = new System.Windows.Forms.CheckBox();
             this.customButtonFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.aboutLabel = new System.Windows.Forms.LinkLabel();
-            this.panelContent = new System.Windows.Forms.Panel();
             this.panelPreview = new System.Windows.Forms.Panel();
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
             this.customIconFileDialog = new System.Windows.Forms.OpenFileDialog();
+            this.contentSplitContainer = new System.Windows.Forms.SplitContainer();
+            this.tabControl1 = new System.Windows.Forms.TabControl();
+            this.visualStyleTab = new System.Windows.Forms.TabPage();
+            this.enableGroupingCheckBox = new System.Windows.Forms.CheckBox();
             this.tabControl.SuspendLayout();
             this.tabGeneral.SuspendLayout();
             this.tabThemes.SuspendLayout();
-            this.themesTabControl.SuspendLayout();
-            this.visualStyleTab.SuspendLayout();
             this.tabStartButton.SuspendLayout();
             this.tabQuickLaunch.SuspendLayout();
             this.tabTaskView.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.tabSystemTray.SuspendLayout();
             this.tabTweaks.SuspendLayout();
+            this.tweaksToolStrip.SuspendLayout();
             this.tabAbout.SuspendLayout();
             this.copyrightTablePanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.bannerPictureBox)).BeginInit();
             this.tabDebug.SuspendLayout();
-            this.panelContent.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.contentSplitContainer)).BeginInit();
+            this.contentSplitContainer.Panel1.SuspendLayout();
+            this.contentSplitContainer.Panel2.SuspendLayout();
+            this.contentSplitContainer.SuspendLayout();
+            this.tabControl1.SuspendLayout();
+            this.visualStyleTab.SuspendLayout();
             this.SuspendLayout();
             // 
             // buttonApply
@@ -189,32 +196,12 @@
             // 
             // tabThemes
             // 
-            this.tabThemes.Controls.Add(this.themesTabControl);
+            this.tabThemes.Controls.Add(this.tabControl1);
             this.tabThemes.Controls.Add(this.themeComboBox);
             this.tabThemes.Controls.Add(this.themeLabel);
             resources.ApplyResources(this.tabThemes, "tabThemes");
             this.tabThemes.Name = "tabThemes";
             this.tabThemes.UseVisualStyleBackColor = true;
-            // 
-            // themesTabControl
-            // 
-            resources.ApplyResources(this.themesTabControl, "themesTabControl");
-            this.themesTabControl.Controls.Add(this.visualStyleTab);
-            this.themesTabControl.Name = "themesTabControl";
-            this.themesTabControl.SelectedIndex = 0;
-            // 
-            // visualStyleTab
-            // 
-            this.visualStyleTab.Controls.Add(this.sizeComboBox);
-            this.visualStyleTab.Controls.Add(this.label3);
-            this.visualStyleTab.Controls.Add(this.label6);
-            this.visualStyleTab.Controls.Add(this.manageStylesButton);
-            this.visualStyleTab.Controls.Add(this.colorSchemeComboBox);
-            this.visualStyleTab.Controls.Add(this.visualStyleComboBox);
-            this.visualStyleTab.Controls.Add(this.label4);
-            resources.ApplyResources(this.visualStyleTab, "visualStyleTab");
-            this.visualStyleTab.Name = "visualStyleTab";
-            this.visualStyleTab.UseVisualStyleBackColor = true;
             // 
             // sizeComboBox
             // 
@@ -223,22 +210,10 @@
             resources.ApplyResources(this.sizeComboBox, "sizeComboBox");
             this.sizeComboBox.Name = "sizeComboBox";
             // 
-            // label3
-            // 
-            resources.ApplyResources(this.label3, "label3");
-            this.label3.Name = "label3";
-            // 
             // label6
             // 
             resources.ApplyResources(this.label6, "label6");
             this.label6.Name = "label6";
-            // 
-            // manageStylesButton
-            // 
-            resources.ApplyResources(this.manageStylesButton, "manageStylesButton");
-            this.manageStylesButton.Name = "manageStylesButton";
-            this.manageStylesButton.UseVisualStyleBackColor = true;
-            this.manageStylesButton.Click += new System.EventHandler(this.manageStylesButton_Click);
             // 
             // colorSchemeComboBox
             // 
@@ -251,6 +226,11 @@
             resources.ApplyResources(this.colorSchemeComboBox, "colorSchemeComboBox");
             this.colorSchemeComboBox.Name = "colorSchemeComboBox";
             // 
+            // label4
+            // 
+            resources.ApplyResources(this.label4, "label4");
+            this.label4.Name = "label4";
+            // 
             // visualStyleComboBox
             // 
             this.visualStyleComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
@@ -259,10 +239,17 @@
             this.visualStyleComboBox.Name = "visualStyleComboBox";
             this.visualStyleComboBox.SelectedIndexChanged += new System.EventHandler(this.visualStyleComboBox_SelectedIndexChanged);
             // 
-            // label4
+            // manageStylesButton
             // 
-            resources.ApplyResources(this.label4, "label4");
-            this.label4.Name = "label4";
+            resources.ApplyResources(this.manageStylesButton, "manageStylesButton");
+            this.manageStylesButton.Name = "manageStylesButton";
+            this.manageStylesButton.UseVisualStyleBackColor = true;
+            this.manageStylesButton.Click += new System.EventHandler(this.manageStylesButton_Click);
+            // 
+            // label3
+            // 
+            resources.ApplyResources(this.label3, "label3");
+            this.label3.Name = "label3";
             // 
             // themeComboBox
             // 
@@ -372,12 +359,6 @@
             this.tabTaskView.Name = "tabTaskView";
             this.tabTaskView.UseVisualStyleBackColor = true;
             // 
-            // enableGroupingCheckBox
-            // 
-            resources.ApplyResources(this.enableGroupingCheckBox, "enableGroupingCheckBox");
-            this.enableGroupingCheckBox.Name = "enableGroupingCheckBox";
-            this.enableGroupingCheckBox.UseVisualStyleBackColor = true;
-            // 
             // groupBox1
             // 
             this.groupBox1.Controls.Add(this.addElementButton);
@@ -435,6 +416,7 @@
             // tabTweaks
             // 
             this.tabTweaks.Controls.Add(this.tweaksPropertyGrid);
+            this.tabTweaks.Controls.Add(this.tweaksToolStrip);
             resources.ApplyResources(this.tabTweaks, "tabTweaks");
             this.tabTweaks.Name = "tabTweaks";
             this.tabTweaks.UseVisualStyleBackColor = true;
@@ -445,6 +427,40 @@
             this.tweaksPropertyGrid.Name = "tweaksPropertyGrid";
             this.tweaksPropertyGrid.ToolbarVisible = false;
             this.tweaksPropertyGrid.PropertyValueChanged += new System.Windows.Forms.PropertyValueChangedEventHandler(this.tweaksPropertyGrid_PropertyValueChanged);
+            this.tweaksPropertyGrid.SelectedGridItemChanged += new System.Windows.Forms.SelectedGridItemChangedEventHandler(this.TweaksPropertyGrid_SelectedGridItemChanged);
+            // 
+            // tweaksToolStrip
+            // 
+            this.tweaksToolStrip.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+            this.tweaksToolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tweakResetButton,
+            this.toolStripSeparator1,
+            this.showDescriptionButton});
+            resources.ApplyResources(this.tweaksToolStrip, "tweaksToolStrip");
+            this.tweaksToolStrip.Name = "tweaksToolStrip";
+            this.tweaksToolStrip.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
+            // 
+            // tweakResetButton
+            // 
+            this.tweakResetButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            resources.ApplyResources(this.tweakResetButton, "tweakResetButton");
+            this.tweakResetButton.Name = "tweakResetButton";
+            this.tweakResetButton.Click += new System.EventHandler(this.TweakResetButton_Click);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            resources.ApplyResources(this.toolStripSeparator1, "toolStripSeparator1");
+            // 
+            // showDescriptionButton
+            // 
+            this.showDescriptionButton.Checked = true;
+            this.showDescriptionButton.CheckOnClick = true;
+            this.showDescriptionButton.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.showDescriptionButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            resources.ApplyResources(this.showDescriptionButton, "showDescriptionButton");
+            this.showDescriptionButton.Name = "showDescriptionButton";
+            this.showDescriptionButton.CheckedChanged += new System.EventHandler(this.ShowDescriptionButton_CheckedChanged);
             // 
             // tabAbout
             // 
@@ -492,23 +508,16 @@
             // 
             // tabDebug
             // 
-            this.tabDebug.Controls.Add(this.stuckRectsCheckBox);
-            this.tabDebug.Controls.Add(this.enablePassiveTaskbarCheckBox);
+            this.tabDebug.Controls.Add(this.enableActiveTaskbarCheckBox);
             resources.ApplyResources(this.tabDebug, "tabDebug");
             this.tabDebug.Name = "tabDebug";
             this.tabDebug.UseVisualStyleBackColor = true;
             // 
-            // stuckRectsCheckBox
+            // enableActiveTaskbarCheckBox
             // 
-            resources.ApplyResources(this.stuckRectsCheckBox, "stuckRectsCheckBox");
-            this.stuckRectsCheckBox.Name = "stuckRectsCheckBox";
-            this.stuckRectsCheckBox.UseVisualStyleBackColor = true;
-            // 
-            // enablePassiveTaskbarCheckBox
-            // 
-            resources.ApplyResources(this.enablePassiveTaskbarCheckBox, "enablePassiveTaskbarCheckBox");
-            this.enablePassiveTaskbarCheckBox.Name = "enablePassiveTaskbarCheckBox";
-            this.enablePassiveTaskbarCheckBox.UseVisualStyleBackColor = true;
+            resources.ApplyResources(this.enableActiveTaskbarCheckBox, "enableActiveTaskbarCheckBox");
+            this.enableActiveTaskbarCheckBox.Name = "enableActiveTaskbarCheckBox";
+            this.enableActiveTaskbarCheckBox.UseVisualStyleBackColor = true;
             // 
             // customButtonFileDialog
             // 
@@ -521,13 +530,6 @@
             this.aboutLabel.LinkColor = System.Drawing.SystemColors.ControlText;
             this.aboutLabel.Name = "aboutLabel";
             this.aboutLabel.TabStop = true;
-            // 
-            // panelContent
-            // 
-            this.panelContent.Controls.Add(this.tabControl);
-            this.panelContent.Controls.Add(this.panelPreview);
-            resources.ApplyResources(this.panelContent, "panelContent");
-            this.panelContent.Name = "panelContent";
             // 
             // panelPreview
             // 
@@ -545,11 +547,51 @@
             resources.ApplyResources(this.customIconFileDialog, "customIconFileDialog");
             this.customIconFileDialog.FileOk += new System.ComponentModel.CancelEventHandler(this.CustomIconFileDialog_FileOk);
             // 
+            // contentSplitContainer
+            // 
+            this.contentSplitContainer.Cursor = System.Windows.Forms.Cursors.HSplit;
+            resources.ApplyResources(this.contentSplitContainer, "contentSplitContainer");
+            this.contentSplitContainer.Name = "contentSplitContainer";
+            // 
+            // contentSplitContainer.Panel1
+            // 
+            this.contentSplitContainer.Panel1.Controls.Add(this.panelPreview);
+            // 
+            // contentSplitContainer.Panel2
+            // 
+            this.contentSplitContainer.Panel2.Controls.Add(this.tabControl);
+            // 
+            // tabControl1
+            // 
+            this.tabControl1.Controls.Add(this.visualStyleTab);
+            resources.ApplyResources(this.tabControl1, "tabControl1");
+            this.tabControl1.Name = "tabControl1";
+            this.tabControl1.SelectedIndex = 0;
+            // 
+            // visualStyleTab
+            // 
+            this.visualStyleTab.Controls.Add(this.sizeComboBox);
+            this.visualStyleTab.Controls.Add(this.label3);
+            this.visualStyleTab.Controls.Add(this.label6);
+            this.visualStyleTab.Controls.Add(this.manageStylesButton);
+            this.visualStyleTab.Controls.Add(this.colorSchemeComboBox);
+            this.visualStyleTab.Controls.Add(this.visualStyleComboBox);
+            this.visualStyleTab.Controls.Add(this.label4);
+            resources.ApplyResources(this.visualStyleTab, "visualStyleTab");
+            this.visualStyleTab.Name = "visualStyleTab";
+            this.visualStyleTab.UseVisualStyleBackColor = true;
+            // 
+            // enableGroupingCheckBox
+            // 
+            resources.ApplyResources(this.enableGroupingCheckBox, "enableGroupingCheckBox");
+            this.enableGroupingCheckBox.Name = "enableGroupingCheckBox";
+            this.enableGroupingCheckBox.UseVisualStyleBackColor = false;
+            // 
             // Settings
             // 
             resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.panelContent);
+            this.Controls.Add(this.contentSplitContainer);
             this.Controls.Add(this.aboutLabel);
             this.Controls.Add(this.buttonOK);
             this.Controls.Add(this.buttonCancel);
@@ -562,26 +604,29 @@
             this.tabControl.ResumeLayout(false);
             this.tabGeneral.ResumeLayout(false);
             this.tabThemes.ResumeLayout(false);
-            this.themesTabControl.ResumeLayout(false);
-            this.visualStyleTab.ResumeLayout(false);
-            this.visualStyleTab.PerformLayout();
             this.tabStartButton.ResumeLayout(false);
             this.tabStartButton.PerformLayout();
             this.tabQuickLaunch.ResumeLayout(false);
             this.tabQuickLaunch.PerformLayout();
             this.tabTaskView.ResumeLayout(false);
-            this.tabTaskView.PerformLayout();
             this.groupBox1.ResumeLayout(false);
             this.tabSystemTray.ResumeLayout(false);
             this.tabSystemTray.PerformLayout();
             this.tabTweaks.ResumeLayout(false);
+            this.tabTweaks.PerformLayout();
+            this.tweaksToolStrip.ResumeLayout(false);
+            this.tweaksToolStrip.PerformLayout();
             this.tabAbout.ResumeLayout(false);
             this.copyrightTablePanel.ResumeLayout(false);
             this.copyrightTablePanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.bannerPictureBox)).EndInit();
             this.tabDebug.ResumeLayout(false);
-            this.tabDebug.PerformLayout();
-            this.panelContent.ResumeLayout(false);
+            this.contentSplitContainer.Panel1.ResumeLayout(false);
+            this.contentSplitContainer.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.contentSplitContainer)).EndInit();
+            this.contentSplitContainer.ResumeLayout(false);
+            this.tabControl1.ResumeLayout(false);
+            this.visualStyleTab.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -594,29 +639,28 @@
         private System.Windows.Forms.TabControl tabControl;
         private System.Windows.Forms.TabPage tabTaskView;
         private System.Windows.Forms.CheckBox showTaskbarOnAllDesktops;
-		private System.Windows.Forms.TabPage tabAbout;
-		private System.Windows.Forms.Label labelCopyrightSCT;
-		private System.Windows.Forms.Label labelCopyrightSCTT;
-		private System.Windows.Forms.PictureBox bannerPictureBox;
-		private System.Windows.Forms.Label labelCopyrightWindows;
-		private System.Windows.Forms.OpenFileDialog customButtonFileDialog;
-		private System.Windows.Forms.TabPage tabStartButton;
-		private System.Windows.Forms.Button customButtonBrowseButton;
-		private System.Windows.Forms.TextBox customButtonTextBox;
-		private System.Windows.Forms.RadioButton customButtonRadioButton;
-		private System.Windows.Forms.RadioButton customIconRadioButton;
-		private System.Windows.Forms.RadioButton radioStartDefault;
-		private System.Windows.Forms.TabPage tabSystemTray;
-		private System.Windows.Forms.CheckBox enableSysTrayColorChange;
-		private System.Windows.Forms.CheckBox enableSysTrayHover;
-		private System.Windows.Forms.Button removeElementButton;
-		private System.Windows.Forms.Button addElementButton;
-		private System.Windows.Forms.ListBox taskbarFilterListBox;
+        private System.Windows.Forms.TabPage tabAbout;
+        private System.Windows.Forms.Label labelCopyrightSCT;
+        private System.Windows.Forms.Label labelCopyrightSCTT;
+        private System.Windows.Forms.PictureBox bannerPictureBox;
+        private System.Windows.Forms.Label labelCopyrightWindows;
+        private System.Windows.Forms.OpenFileDialog customButtonFileDialog;
+        private System.Windows.Forms.TabPage tabStartButton;
+        private System.Windows.Forms.Button customButtonBrowseButton;
+        private System.Windows.Forms.TextBox customButtonTextBox;
+        private System.Windows.Forms.RadioButton customButtonRadioButton;
+        private System.Windows.Forms.RadioButton customIconRadioButton;
+        private System.Windows.Forms.RadioButton radioStartDefault;
+        private System.Windows.Forms.TabPage tabSystemTray;
+        private System.Windows.Forms.CheckBox enableSysTrayColorChange;
+        private System.Windows.Forms.CheckBox enableSysTrayHover;
+        private System.Windows.Forms.Button removeElementButton;
+        private System.Windows.Forms.Button addElementButton;
+        private System.Windows.Forms.ListBox taskbarFilterListBox;
         private System.Windows.Forms.TabPage tabQuickLaunch;
         private System.Windows.Forms.Label quickLaunchLinkLabel;
         private System.Windows.Forms.CheckBox enableQuickLaunchCheckBox;
         private System.Windows.Forms.LinkLabel aboutLabel;
-        private System.Windows.Forms.Panel panelContent;
         private System.Windows.Forms.Panel panelPreview;
         private System.Windows.Forms.Button customIconBrowseButton;
         private System.Windows.Forms.TextBox customIconTextBox;
@@ -631,8 +675,8 @@
         private System.Windows.Forms.Label exitItemLabel;
         private System.Windows.Forms.ComboBox exitItemComboBox;
         private System.Windows.Forms.GroupBox groupBox1;
-		private System.Windows.Forms.TabPage tabDebug;
-		private System.Windows.Forms.CheckBox enablePassiveTaskbarCheckBox;
+        private System.Windows.Forms.TabPage tabDebug;
+        private System.Windows.Forms.CheckBox enableActiveTaskbarCheckBox;
         private System.Windows.Forms.TabPage tabThemes;
         private System.Windows.Forms.ComboBox sizeComboBox;
         private System.Windows.Forms.Label label6;
@@ -645,9 +689,13 @@
         private System.Windows.Forms.Label themeLabel;
         private System.Windows.Forms.TabPage tabTweaks;
         private System.Windows.Forms.PropertyGrid tweaksPropertyGrid;
-        private System.Windows.Forms.CheckBox enableGroupingCheckBox;
-        private System.Windows.Forms.CheckBox stuckRectsCheckBox;
-        private System.Windows.Forms.TabControl themesTabControl;
+        private System.Windows.Forms.SplitContainer contentSplitContainer;
+        private System.Windows.Forms.ToolStrip tweaksToolStrip;
+        private System.Windows.Forms.ToolStripButton tweakResetButton;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripButton showDescriptionButton;
+        private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.TabPage visualStyleTab;
+        private System.Windows.Forms.CheckBox enableGroupingCheckBox;
     }
 }

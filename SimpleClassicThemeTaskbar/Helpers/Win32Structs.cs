@@ -15,11 +15,14 @@ namespace SimpleClassicThemeTaskbar
         public IntPtr Handle;
         public WINDOWINFO WindowInfo;
         public string GroupingKey;
+        public Process Process;
 
         public Window(IntPtr handle) : this()
         {
             Handle = handle;
             WindowInfo = WINDOWINFO.FromHWND(handle);
+            _ = User32.GetWindowThreadProcessId(Handle, out uint pid);
+            Process = Process.GetProcessById((int)pid);
         }
 
         public string ClassName
@@ -32,26 +35,19 @@ namespace SimpleClassicThemeTaskbar
             }
         }
 
-        public Process Process
-        {
-            get
-            {
-                _ = User32.GetWindowThreadProcessId(Handle, out uint pid);
-                return Process.GetProcessById((int)pid);
-            }
-        }
-
         public string Title
         {
             get
             {
                 var sb = new StringBuilder(100);
-                _ = User32.GetWindowTextW(Handle, sb, 100);
-                return sb.ToString();
+                if (User32.GetWindowText(Handle, sb, sb.Capacity) != 0)
+                    return sb.ToString();
+                else
+                    return "";
             }
             set
             {
-                User32.SetWindowTextW(Handle, value);
+                User32.SetWindowText(Handle, value);
             }
         }
     }

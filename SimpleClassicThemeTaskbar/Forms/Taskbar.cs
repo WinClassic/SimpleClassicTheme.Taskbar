@@ -95,7 +95,7 @@ namespace SimpleClassicThemeTaskbar
         public Taskbar(bool isPrimary)
         {
             //Load filters
-            foreach (string filter in Config.Instance.TaskbarProgramFilter.Split('*'))
+            foreach (string filter in Config.Default.TaskbarProgramFilter.Split('*'))
             {
                 if (filter == "")
                     continue;
@@ -116,14 +116,14 @@ namespace SimpleClassicThemeTaskbar
 
             //Thread.CurrentThread.CurrentUICulture = CultureInfo.InstalledUICulture;
             Primary = isPrimary;
-            Config.Instance.LoadFromRegistry();
-
+            
             //Initialize thingies
             InitializeComponent();
             HandleCreated += delegate { CrossThreadHandle = Handle; };
+            systemTray1.SizeChanged += delegate { UpdateUI(); UpdateUI(); };
             TopLevel = true;
 
-            if (Config.Instance.UseExplorerTaskbarPosition)
+            if (Config.Default.UseExplorerTaskbarPosition)
             {
                 var tvsd = GetSystemTaskbarData();
                 Height = tvsd.rcLastStuck.Bottom - tvsd.rcLastStuck.Top;
@@ -131,9 +131,11 @@ namespace SimpleClassicThemeTaskbar
             else
             {
                 //Fix height according to renderers preferences
-                Height = Config.Instance.Renderer.TaskbarHeight;
+                Height = Config.Default.Renderer.TaskbarHeight;
             }
             
+            //Fix height according to renderers preferences
+            Height = Config.Default.Renderer.TaskbarHeight;
             startButton1.Height = Height;
             systemTray1.Height = Height;
             quickLaunch1.Height = Height;
@@ -150,7 +152,7 @@ namespace SimpleClassicThemeTaskbar
             }
         }
 
-        protected override void OnPaint(PaintEventArgs e) => Config.Instance.Renderer.DrawTaskBar(this, e.Graphics);
+        protected override void OnPaint(PaintEventArgs e) => Config.Default.Renderer.DrawTaskBar(this, e.Graphics);
 
         protected override void WndProc(ref Message m)
         {
@@ -209,11 +211,11 @@ namespace SimpleClassicThemeTaskbar
         private void Taskbar_Load(object sender, EventArgs e)
         {
             //TODO: Add an option to registry tweak classic alt+tab
-            quickLaunch1.Disabled = (!Primary) || (!Config.Instance.EnableQuickLaunch);
+            quickLaunch1.Disabled = (!Primary) || (!Config.Default.EnableQuickLaunch);
             quickLaunch1.UpdateIcons();
 
             // Create shell hook
-            if (Config.Instance.EnablePassiveTaskbar)
+            if (!Config.Default.EnableActiveTaskbar)
             {
                 if (!User32.RegisterShellHookWindow(Handle))
                 //hookProcedure = new User32.WindowsHookProcedure(HookProcedure);
@@ -243,14 +245,14 @@ namespace SimpleClassicThemeTaskbar
             if (!selfClose)
             {
                 //If we don't close ourselves, show the shutdown dialog
-                var hWnd = User32.FindWindowW("Shell_TrayWnd", "");
+                var hWnd = User32.FindWindow("Shell_TrayWnd", "");
                 Keyboard.KeyPress(hWnd, Keys.Menu, Keys.F4);
                 e.Cancel = true;
             }
             else
             {
                 //Show taskbar
-                _ = User32.ShowWindow(User32.FindWindowW("Shell_TrayWnd", ""), 5);
+                _ = User32.ShowWindow(User32.FindWindow("Shell_TrayWnd", ""), 5);
             }
         }
 
@@ -274,7 +276,7 @@ namespace SimpleClassicThemeTaskbar
 
                 Point p = new(heldDownOriginalX + (Cursor.Position.X - mouseOriginalX), heldDownButton.Location.Y);
                 heldDownButton.Location = new Point(Math.Max(taskArea.Start.Value, Math.Min(p.X, taskArea.End.Value)), p.Y);
-                int newIndex = (taskArea.Start.Value - heldDownButton.Location.X - ((taskIconWidth + Config.Instance.Tweaks.SpaceBetweenTaskbarIcons) / 2)) / (taskIconWidth + Config.Instance.Tweaks.SpaceBetweenTaskbarIcons) * -1;
+                int newIndex = (taskArea.Start.Value - heldDownButton.Location.X - ((taskIconWidth + Config.Default.Tweaks.SpaceBetweenTaskbarIcons) / 2)) / (taskIconWidth + Config.Default.Tweaks.SpaceBetweenTaskbarIcons) * -1;
                 if (newIndex < 0) newIndex = 0;
                 if (newIndex != icons.IndexOf(heldDownButton))
                 {
@@ -292,11 +294,11 @@ namespace SimpleClassicThemeTaskbar
                 {
                     if (icon == heldDownButton)
                     {
-                        x += icon.Width + Config.Instance.Tweaks.SpaceBetweenTaskbarIcons;
+                        x += icon.Width + Config.Default.Tweaks.SpaceBetweenTaskbarIcons;
                         continue;
                     }
                     icon.Location = new Point(x, 0);
-                    x += icon.Width + Config.Instance.Tweaks.SpaceBetweenTaskbarIcons;
+                    x += icon.Width + Config.Default.Tweaks.SpaceBetweenTaskbarIcons;
                 }
             }
         }
@@ -345,12 +347,6 @@ namespace SimpleClassicThemeTaskbar
                 watchLogic = !watchLogic;
             }));
 
-            debuggingItem.DropDownItems.Add(new ToolStripMenuItem("Watch Tray", null, (_, __) =>
-            {
-                systemTray1.trayTiming.Reset();
-                systemTray1.watchTray = !systemTray1.watchTray;
-            }));
-
             return debuggingItem;
         }
 
@@ -364,21 +360,39 @@ namespace SimpleClassicThemeTaskbar
             // Check if the foreground window was the start menu
             startButton1.UpdateState(new Window(ForegroundWindow));
 
+            if (Primary)
+            {
+                systemTray1.UpdateTime();
+
+                using (uiTiming.StartRegion("Updating System Tray icons"))
+                {
+                    systemTray1.UpdateIcons();
+                }
+
+                quickLaunch1.Location = new Point(startButton1.Location.X + startButton1.Width + 2, 1);
+
+                using (uiTiming.StartRegion("Update Quick Launch icons"))
+                {
+                    quickLaunch1.UpdateIcons();
+                }
+            }
+
             //Put left side controls in the correct place
             quickLaunch1.Location = new Point(startButton1.Location.X + startButton1.Width + 2, 1);
         }
+
         private IntPtr HookProcedure(User32.ShellEvents nCode, IntPtr wParam, IntPtr lParam)
         {
             Logger.Log(LoggerVerbosity.Verbose, "Taskbar/HookProcedure", $"Call parameters: {nCode}, {wParam:X8}, {lParam:X8}");
 
             if (nCode < 0)
-                return User32.CallNextHookEx(IntPtr.Zero, nCode, wParam, lParam);
+                return User32.CallNextHookEx(IntPtr.Zero, (User32.ShellEvents)nCode, wParam, lParam);
 
             switch (nCode)
             {
                 // Create a button for the new window
                 case User32.ShellEvents.HSHELL_WINDOWCREATED:
-                    HandleWindowCreated(lParam);
+                    HandleWindowCreated(wParam);
                     break;
                 
                 case User32.ShellEvents.HSHELL_WINDOWACTIVATED:
@@ -394,7 +408,7 @@ namespace SimpleClassicThemeTaskbar
                     break;
             }
 
-            return User32.CallNextHookEx(IntPtr.Zero, nCode, wParam, lParam);
+            return User32.CallNextHookEx(IntPtr.Zero, (User32.ShellEvents)nCode, wParam, lParam);
         }
 
         private void HandleWindowDestroyed(IntPtr wParam)
@@ -417,7 +431,10 @@ namespace SimpleClassicThemeTaskbar
         {
             foreach (BaseTaskbarProgram taskbarProgram in icons)
             {
-                taskbarProgram.ActiveWindow = taskbarProgram.Window.Handle == hWnd;
+                if (taskbarProgram is GroupedTaskbarProgram programGroup)
+                    programGroup.IsActiveWindow(hWnd);
+                else
+                    taskbarProgram.ActiveWindow = taskbarProgram.Window.Handle == hWnd;
             }
         }
 
@@ -438,12 +455,25 @@ namespace SimpleClassicThemeTaskbar
                 return true;
             }
 
+            // UWP app
+            if (window.ClassName == "ApplicationFrameWindow")
+            {
+                //Do an API call to see if app isn't cloaked
+                _ = DwmApi.DwmGetWindowAttribute(window.Handle, DwmApi.DWMWINDOWATTRIBUTE.Cloaked, out var d, Marshal.SizeOf(0));
+
+                //If returned value is not 0, the window is cloaked
+                if (d > 0)
+                {
+                    return false;
+                }
+            }
+
             return false;
         }
 
         private void HandleWindowCreated(IntPtr wParam)
         {
-            if ((Environment.OSVersion.Version.Major == 10 && !UnmanagedCodeMigration.IsWindowOnCurrentVirtualDesktop(wParam)))
+            if ((Environment.OSVersion.Version.Major >= 10 && !UnmanagedCodeMigration.IsWindowOnCurrentVirtualDesktop(wParam)))
             {
                 return;
             }
@@ -454,45 +484,39 @@ namespace SimpleClassicThemeTaskbar
                 return;
             }
 
-            var button = CreateTaskbandButton(window);
-            icons.Add(button);
-            Logger.Log(LoggerVerbosity.Verbose, "Taskbar/EnumerateWindows", $"Adding window {button.Title}.");
+            var icon = CreateTaskbandButton(window);
+            Logger.Log(LoggerVerbosity.Verbose, "Taskbar/EnumerateWindows", $"Adding window {icon.Title}.");
+            BaseTaskbarProgram sameThing = icons.Where((p) => IsGroupConditionMet(p, icon)).FirstOrDefault();
 
-            UpdateUI();
-            UpdateUI();
-        }
-
-        private void NewEnumerateWindows()
-        {
-            var windows = GetTaskbarWindows();
-            var groups = windows.GroupBy(GetGroupKey);
-            var buttons = groups.Select(GenerateTaskbandButtons);
-
-            icons = buttons.ToList();
-            Clear();
-
-            UpdateUI();
-            UpdateUI();
-        }
-
-        private BaseTaskbarProgram GenerateTaskbandButtons(IGrouping<object, Window> group)
-        {
-            var count = group.Count();
-            var buttons = group.Select(CreateTaskbandButton);
-            if (count < 2)
+            // No group
+            if (sameThing == null)
             {
-                return buttons.First();
+                icons.Add(icon);
+            }
+            else if (sameThing is GroupedTaskbarProgram group)
+            {
+                if (!group.ProgramWindows.Contains(icon))
+                {
+                    icon.IsMoving = false;
+                    group.ProgramWindows.Add(icon);
+                }
             }
             else
             {
                 GroupedTaskbarProgram newGroup = new();
-                newGroup.MouseDown += Taskbar_IconDown;
+                Controls.Remove(sameThing);
+                icons.Remove(sameThing);
                 newGroup.MouseMove += Taskbar_IconMove;
+                newGroup.MouseDown += Taskbar_IconDown;
                 newGroup.MouseUp += Taskbar_IconUp;
-                newGroup.Height = Height;
-                newGroup.ProgramWindows.AddRange(buttons);
-                return newGroup;
+                newGroup.ProgramWindows.Add(sameThing as SingleTaskbarProgram);
+                newGroup.ProgramWindows.Add(icon);
+                icon.IsMoving = false;
+                icons.Add(newGroup);
             }
+
+            UpdateUI();
+            UpdateUI();
         }
 
         private static IEnumerable<BaseTaskbarProgram> GetValidWindows(IEnumerable<BaseTaskbarProgram> icons, IEnumerable<Window> windows)
@@ -524,7 +548,6 @@ namespace SimpleClassicThemeTaskbar
 
         internal void EnumerateWindows()
 		{
-
             // Obtain task list
             var windows = GetTaskbarWindows();
 
@@ -571,16 +594,16 @@ namespace SimpleClassicThemeTaskbar
             //Create new list for finalized values
             List<BaseTaskbarProgram> programs = new();
 
-            UpdateTaskbarButtons(newIcons, ref programs);
+            UpdateTaskbarButtons(newIcons, programs);
 
             UpdateUI();
             UpdateUI();
         }
 
         // HACK: This is ref based for now since I have no idea what can go away or how it should be changed.
-        private void UpdateTaskbarButtons(IEnumerable<BaseTaskbarProgram> newIcons, ref List<BaseTaskbarProgram> programs)
+        private void UpdateTaskbarButtons(IEnumerable<BaseTaskbarProgram> newIcons, List<BaseTaskbarProgram> programs)
         {
-            if (!Config.Instance.EnableGrouping)
+            if (!Config.Default.EnableGrouping)
             {
                 icons = newIcons.ToList();
                 return;
@@ -596,7 +619,7 @@ namespace SimpleClassicThemeTaskbar
                 }
                 else if (taskbarProgram is SingleTaskbarProgram icon)
                 {
-                    BaseTaskbarProgram sameThing = programs.FirstOrDefault((p) => IsGroupConditionMet(p, icon));
+                    BaseTaskbarProgram sameThing = programs.Where((p) => IsGroupConditionMet(p, icon)).FirstOrDefault();
 
                     // No group
                     if (sameThing == null)
@@ -618,7 +641,9 @@ namespace SimpleClassicThemeTaskbar
                         GroupedTaskbarProgram newGroup = new();
                         Controls.Remove(sameThing);
                         programs.Remove(sameThing);
+                        newGroup.MouseMove += Taskbar_IconMove;
                         newGroup.MouseDown += Taskbar_IconDown;
+                        newGroup.MouseUp += Taskbar_IconUp;
                         newGroup.ProgramWindows.Add(sameThing as SingleTaskbarProgram);
                         newGroup.ProgramWindows.Add(icon);
                         icon.IsMoving = false;
@@ -796,12 +821,11 @@ namespace SimpleClassicThemeTaskbar
                     return null;
                 }
 
-                return groupKeys[handle] = Config.Instance.Tweaks.ProgramGroupCheck switch
+                return Config.Default.Tweaks.ProgramGroupCheck switch
                 {
                     ProgramGroupCheck.Process => window.Process.Id.ToString(),
-                    ProgramGroupCheck.FileNameAndPath => window.Process.GetMainModuleFileName(),
-                    ProgramGroupCheck.ModuleName => window.Process.MainModule.ModuleName,
-                    _ => null,
+                    ProgramGroupCheck.FileNameAndPath => Kernel32.GetProcessFileName(window.Process.Id),
+                    ProgramGroupCheck.ModuleName => Kernel32.GetProcessModuleName(window.Process.Id),
                 };
             }
             catch (Win32Exception ex) when (ex.NativeErrorCode == 5)
@@ -817,16 +841,16 @@ namespace SimpleClassicThemeTaskbar
         {
             // Calculate availabe space in taskbar and then divide that space over all programs
             int startX = quickLaunch1.Location.X + quickLaunch1.Width + 4;
-            int programWidth = Primary ? Config.Instance.Tweaks.TaskbarProgramWidth + Config.Instance.Tweaks.SpaceBetweenTaskbarIcons : 24;
+            int programWidth = Primary ? Config.Default.Tweaks.TaskbarProgramWidth + Config.Default.Tweaks.SpaceBetweenTaskbarIcons : 24;
 
             int availableSpace = verticalDivider3.Location.X - startX - 6;
-            availableSpace += Config.Instance.Tweaks.SpaceBetweenTaskbarIcons;
+            availableSpace += Config.Default.Tweaks.SpaceBetweenTaskbarIcons;
 
             if (icons.Count > 0 && availableSpace / icons.Count > programWidth)
                 availableSpace = icons.Count * programWidth;
 
             int x = startX;
-            int iconWidth = icons.Any() ? (int)Math.Floor((double)availableSpace / icons.Count) - Config.Instance.Tweaks.SpaceBetweenTaskbarIcons : 1;
+            int iconWidth = icons.Any() ? (int)Math.Floor((double)availableSpace / icons.Count) - Config.Default.Tweaks.SpaceBetweenTaskbarIcons : 1;
             int maxX = verticalDivider3.Location.X - iconWidth;
 
             // Re-display all windows (except heldDownButton)
@@ -835,7 +859,7 @@ namespace SimpleClassicThemeTaskbar
                 icon.Width = Math.Max(icon.MinimumWidth, iconWidth);
                 if (icon == heldDownButton)
                 {
-                    x += icon.Width + Config.Instance.Tweaks.SpaceBetweenTaskbarIcons;
+                    x += icon.Width + Config.Default.Tweaks.SpaceBetweenTaskbarIcons;
                     continue;
                 }
 
@@ -847,7 +871,7 @@ namespace SimpleClassicThemeTaskbar
 
                 verticalDivider3.BringToFront();
 
-                x += icon.Width + Config.Instance.Tweaks.SpaceBetweenTaskbarIcons;
+                x += icon.Width + Config.Default.Tweaks.SpaceBetweenTaskbarIcons;
 
                 if (!Controls.Contains(icon))
                 {
@@ -877,7 +901,7 @@ namespace SimpleClassicThemeTaskbar
             {
                 systemTray1.UpdateTime();
 
-                using (uiTiming.StartRegion("Update System Tray icons"))
+                using (uiTiming.StartRegion("Updating System Tray icons"))
                 {
                     systemTray1.UpdateIcons();
                 }
@@ -909,7 +933,7 @@ namespace SimpleClassicThemeTaskbar
             Rectangle rect;
             Point desiredLocation;
 
-            if (Config.Instance.UseExplorerTaskbarPosition)
+            if (Config.Default.UseExplorerTaskbarPosition)
             {
                 var tvsd = GetSystemTaskbarData();
                 rect = tvsd.rcLastStuck;
@@ -936,7 +960,7 @@ namespace SimpleClassicThemeTaskbar
         {
             ContextMenuStrip contextMenu = new();
 
-            if (Config.Instance.Tweaks.EnableDebugging)
+            if (Config.Default.Tweaks.EnableDebugging)
             {
                 contextMenu.Items.Add(ConstructDebuggingMenu());
             }
@@ -956,7 +980,7 @@ namespace SimpleClassicThemeTaskbar
                 }),
                 new ToolStripMenuItem("&Show the Desktop", null, (_, __) => Keyboard.KeyPress(Keys.LWin, Keys.D)),
                 new ToolStripSeparator(),
-                new ToolStripMenuItem("Tas&k Manager", null, (_, __) => Process.Start("taskmgr")),
+                new ToolStripMenuItem("Tas&k Manager", null, (_, __) => Process.Start(new ProcessStartInfo("taskmgr") { UseShellExecute = true })),
                 new ToolStripSeparator(),
                 new ToolStripMenuItem("&Lock the Taskbar") { Enabled = false },
                 new ToolStripMenuItem("P&roperties", null, (_, __) => {
@@ -970,7 +994,7 @@ namespace SimpleClassicThemeTaskbar
 
         private bool ShouldShowExit()
         {
-            if (Config.Instance.ExitMenuItemCondition == ExitMenuItemCondition.Always)
+            if (Config.Default.ExitMenuItemCondition == ExitMenuItemCondition.Always)
             {
                 return true;
             }
@@ -983,8 +1007,8 @@ namespace SimpleClassicThemeTaskbar
         public void ShowOnScreen(Screen screen)
         {
             StartPosition = FormStartPosition.Manual;
-            Location = new Point(screen.WorkingArea.Left, screen.Bounds.Bottom - Config.Instance.Renderer.TaskbarHeight);
-            Size = new Size(screen.Bounds.Width, Config.Instance.Renderer.TaskbarHeight);
+            Location = new Point(screen.WorkingArea.Left, screen.Bounds.Bottom - Config.Default.Renderer.TaskbarHeight);
+            Size = new Size(screen.Bounds.Width, Config.Default.Renderer.TaskbarHeight);
             Show();
         }
     }

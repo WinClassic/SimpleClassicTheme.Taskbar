@@ -1,17 +1,18 @@
-﻿using Microsoft.Win32;
-
+using SimpleClassicThemeTaskbar.Forms;
 using SimpleClassicThemeTaskbar.Helpers;
 using SimpleClassicThemeTaskbar.Helpers.NativeMethods;
 
 using System;
 using System.Collections.Generic;
-using System.CommandLine;
-using System.CommandLine.Invocation;
 using System.Diagnostics;
+using System.Drawing;
 using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
-using System.Windows.Forms.VisualStyles;
 
 namespace SimpleClassicThemeTaskbar
 {
@@ -22,13 +23,26 @@ namespace SimpleClassicThemeTaskbar
 
         public static bool SCTCompatMode = false;
 
-        static UnmanagedCodeMigration.VirtualDesktopNotification VirtualDesktopNotification;
-        static IntPtr virtualDesktopNotificationCookie;
+        public static SystemTrayNotificationService TrayNotificationService;
+        private static UnmanagedCodeMigration.VirtualDesktopNotification VirtualDesktopNotification;
+        private static uint virtualDesktopNotificationCookie;
+
+        public static void VirtualDesktopNotifcation_CurrentDesktopChanged(object sender, EventArgs e)
+        {
+            Logger.Log(LoggerVerbosity.Detailed, "TaskbarManager", "Current virtual desktop changed, sending notification to all Taskbars.");
+            var activeBars = HelperFunctions.GetOpenTaskbars();
+
+            foreach (Taskbar bar in activeBars)
+            {
+                // Redo the enumeration because the open windows are completely different
+                bar.Invoke(new Action(() => { bar.EnumerateWindows(); }));
+            }
+        }
 
         internal static void ExitSCTT()
         {
             Logger.Log(LoggerVerbosity.Detailed, "TaskbarManager", $"Exit requested");
-            Config.Instance.SaveToRegistry();
+            Config.Default.WriteToRegistry();
 
             DestroyAllTaskbars();
 
@@ -36,38 +50,15 @@ namespace SimpleClassicThemeTaskbar
             Logger.Log(LoggerVerbosity.Detailed, "TaskbarManager", $"Killed all taskbars, exiting");
             Logger.Uninitialize();
 
-            if (Environment.OSVersion.Version.Major == 10)
+            if (Environment.OSVersion.Version.Major >= 10 && virtualDesktopNotificationCookie != 0)
                 UnmanagedCodeMigration.UnregisterVdmNotification(virtualDesktopNotificationCookie);
 
             Environment.Exit(0);
         }
 
-        #region Taskbar Management
-        internal static void GenerateNewTaskbars()
-        {
-            Logger.Log(LoggerVerbosity.Detailed, "TaskbarManager", "Generating new taskbars");
-
-            DestroyAllTaskbars();
-
-            if (Config.Instance.ShowTaskbarOnAllDesktops)
-            {
-                int nTaskbars = 0;
-                foreach (Screen screen in Screen.AllScreens)
-                {
-                    nTaskbars++;
-                    CreateTaskbar(screen);
-                }
-                Logger.Log(LoggerVerbosity.Detailed, "TaskbarManager", $"Created {nTaskbars} taskbars in total");
-            }
-            else
-            {
-                CreateTaskbar(Screen.PrimaryScreen);
-            }
-        }
-
         static void DestroyAllTaskbars()
         {
-            var activeBars = Helpers.Helpers.GetOpenTaskbars();
+            var activeBars = HelperFunctions.GetOpenTaskbars();
 
             foreach (Taskbar taskbar in activeBars)
             {
@@ -82,34 +73,52 @@ namespace SimpleClassicThemeTaskbar
             }
         }
 
-        static void CreateTaskbar(Screen screen)
+        internal static void NewTaskbars()
         {
-            Taskbar taskbar = new(screen.Primary);
-            taskbar.ShowOnScreen(screen);
-            Logger.Log(LoggerVerbosity.Detailed, "TaskbarManager", $"Created taskbar in working area: {screen.Bounds}");
+            Logger.Log(LoggerVerbosity.Detailed, "TaskbarManager", "Generating new taskbars");
+
+            var activeBars = HelperFunctions.GetOpenTaskbars();
+
+            foreach (Taskbar bar in activeBars)
+            {
+                foreach (Control d in bar.Controls)
+                    d.Dispose();
+                bar.selfClose = true;
+                bar.Close();
+                bar.Dispose();
+            }
+
+            if (Config.Default.EnablePassiveTray && TrayNotificationService == null)
+                TrayNotificationService = new();
+            else if (!Config.Default.EnablePassiveTray && TrayNotificationService is not null)
+            {
+                TrayNotificationService.Dispose();
+                TrayNotificationService = null;
+            }
+
+            int taskbars = 0;
+            foreach (Screen screen in Screen.AllScreens)
+            {
+                taskbars++;
+                Rectangle rect = screen.Bounds;
+                Taskbar taskbar = new(screen.Primary);
+                taskbar.ShowOnScreen(screen);
+                Logger.Log(LoggerVerbosity.Detailed, "TaskbarManager", $"Created taskbar in working area: {screen.Bounds}");
+                if (!Config.Default.ShowTaskbarOnAllDesktops && !screen.Primary)
+                    taskbar.NeverShow = true;
+            }
+            Logger.Log(LoggerVerbosity.Detailed, "TaskbarManager", $"Created {taskbars} taskbars in total");
         }
 
-        #endregion
-
-        private static void ShowCrashMessageBox(Exception ex)
+        private static void HandleException(Exception ex)
         {
             Logger.Log(LoggerVerbosity.Basic, "ExceptionHandler", $"An exception of type {ex.GetType().FullName} has occured.");
             Logger.Log(LoggerVerbosity.Detailed, "ExceptionHandler", $"Exception details:\nMessage: {ex.Message}\nException location: {ex.TargetSite}\nStack trace: {ex.StackTrace}");
-            
-            if (Logger.GetVerbosity() == LoggerVerbosity.None)
-            {
-                MessageBox.Show("Unhandled exception ocurred. For more information logging must be enabled.", "Something has gone wrong");
-                return;
-            }
+            Logger.Uninitialize();
 
-            var dialogResult = MessageBox.Show(
-                    "Unhandled exception ocurred. More information is available in the log file. Would you like to open the log file now?",
-                    "Something has gone wrong",
-                    MessageBoxButtons.YesNo);
-
-            if (dialogResult == DialogResult.Yes)
+            using (var crashForm = new CrashForm(ex))
             {
-                Logger.OpenLog();
+                crashForm.ShowDialog();
             }
         }
 
@@ -119,59 +128,115 @@ namespace SimpleClassicThemeTaskbar
         [STAThread]
         private static void Main(string[] args)
         {
-            Kernel32.AttachConsole(Kernel32.ATTACH_PARENT_PROCESS);
-
             Logger.Initialize(LoggerVerbosity.Verbose);
-
-            var rootCommand = new RootCommand
+            foreach (var arg in args)
             {
-                new Option<LoggerVerbosity>(
-                    new[] { "--verbose", "-v" },
-                    getDefaultValue: () => LoggerVerbosity.Basic,
-                    description: "Sets the verbosity")
+                if (arg.StartsWith("-v="))
+                    Logger.SetVerbosity((LoggerVerbosity)Int32.Parse(arg[3..]));
+            }
+
+            Logger.Log(LoggerVerbosity.Detailed, "EntryPoint", "Parsing arguments");
+            if (args.Contains("--exit"))
+            {
+                Logger.Log(LoggerVerbosity.Detailed, "EntryPoint", "Killing all SCTT instances");
+                static List<IntPtr> EnumerateProcessWindowHandles(int processId, string name)
                 {
-                    Name = "verbosity",
-                },
+                    List<IntPtr> handles = new();
 
-                new Option<bool>("--sct", "Runs in SCT-managed mode")
+                    foreach (ProcessThread thread in Process.GetProcessById(processId).Threads)
+                    {
+                        User32.EnumThreadWindows(thread.Id, (hWnd, lParam) =>
+                        {
+                            handles.Add(hWnd);
+                            return true;
+                        }, IntPtr.Zero);
+                    }
+                    return handles;
+                }
+
+                Process[] scttInstances = Process.GetProcessesByName("SimpleClassicThemeTaskbar");
+                Array.ForEach(scttInstances, a =>
                 {
-                    Name = "isSctManaged",
-                    Arity = ArgumentArity.ZeroOrOne,
-                },
-            };
-            rootCommand.Handler = CommandHandler.Create<LoggerVerbosity, bool>(RunSctt);
-            rootCommand.Add(new Command("exit", "Closes all running SCTT instances")
+                    List<IntPtr> handles = EnumerateProcessWindowHandles(a.Id, "SCTT_Shell_TrayWnd");
+                    string s = "";
+                    foreach (IntPtr handle in handles)
+                    {
+                        StringBuilder builder = new(1000);
+                        User32.GetClassName(handle, builder, 1000);
+
+                        if (builder.Length > 0)
+                            s = s + builder.ToString() + "\n";
+
+                        IntPtr returnValue = User32.SendMessage(handle, Constants.WM_SCT, new IntPtr(Constants.SCTWP_ISSCT), IntPtr.Zero);
+                        if (returnValue != IntPtr.Zero)
+                        {
+                            User32.SendMessage(handle, Constants.WM_SCT, new IntPtr(Constants.SCTWP_EXIT), IntPtr.Zero);
+                        }
+                    }
+                });
+            }
+            if (args.Contains("--gui-test"))
             {
-                Handler = CommandHandler.Create(EndScttInstances),
-            });
-            rootCommand.Add(new Command("network-ui", "Runs experimental network manager UI")
+                Application.SetCompatibleTextRenderingDefault(false);
+                Application.Run(new Forms.GraphicsTest());
+                return;
+            }
+            if (args.Contains("--network-ui"))
             {
-                Handler = CommandHandler.Create(RunNetworkManager),
-            });
-            rootCommand.Add(new Command("gui-test", "Runs graphics test")
+                Application.VisualStyleState = System.Windows.Forms.VisualStyles.VisualStyleState.NoneEnabled;
+                Application.SetCompatibleTextRenderingDefault(false);
+                Application.Run(new Forms.NetworkUI());
+                return;
+            }
+            if (args.Contains("--unmanaged"))
             {
-                Handler = CommandHandler.Create(RunGraphicsTest),
-            });
+                Logger.Log(LoggerVerbosity.Detailed, "EntryPoint", "Attempted to start unmanaged SCTT. This is not supported anymore.");
+                Environment.Exit(/*d.UnmanagedSCTT()*/0);
+            }
+            if (args.Contains("--traydump"))
+            {
+                Logger.Log(LoggerVerbosity.Detailed, "EntryPoint", "Dumping system tray information to traydump.txt");
+                FileStream fs = new FileStream("traydump.txt", FileMode.Create, FileAccess.ReadWrite);
 
-            // Parse the incoming args and invoke the handler
-            _ = rootCommand.InvokeAsync(args).Result;
-        }
-
-        [STAThread]
-        private static void RunSctt(LoggerVerbosity verbosity, bool isSctManaged)
-        {
-            //Logger.SetVerbosity(verbosity);
-
-            Logger.Log(LoggerVerbosity.Basic, "EntryPoint", verbosity.ToString());
-            Logger.Log(LoggerVerbosity.Basic, "EntryPoint", isSctManaged.ToString());
-
-
-            if (isSctManaged)
+                IntPtr hWndTray = User32.FindWindow("Shell_TrayWnd", null);
+                if (hWndTray != IntPtr.Zero)
+                {
+                    hWndTray = User32.FindWindowEx(hWndTray, IntPtr.Zero, "TrayNotifyWnd", null);
+                    if (hWndTray != IntPtr.Zero)
+                    {
+                        hWndTray = User32.FindWindowEx(hWndTray, IntPtr.Zero, "SysPager", null);
+                        if (hWndTray != IntPtr.Zero)
+                        {
+                            hWndTray = User32.FindWindowEx(hWndTray, IntPtr.Zero, "ToolbarWindow32", null);
+                            if (hWndTray != IntPtr.Zero)
+                            {
+                                UnmanagedCodeMigration.TBBUTTONINFO[] buttons = UnmanagedCodeMigration.GetTrayButtons(hWndTray);
+                                foreach (var button in buttons)
+                                {
+                                    string str = "START OF TBBUTTONINFO\n";
+                                    foreach (var d in button.GetType().GetProperties())
+                                        str += d.Name + ": " + d.GetValue(button) + "\n";
+                                    foreach (var d in button.GetType().GetFields())
+                                        str += d.Name + ": " + d.GetValue(button) + "\n";
+                                    str += "END OF TBBUTTONINFO\n";
+                                    byte[] bytes = Encoding.UTF8.GetBytes(str);
+                                    fs.Write(bytes, 0, bytes.Length);
+                                    fs.Flush();
+                                }
+                            }
+                        }
+                    }
+                }
+                fs.Close();
+                return;
+            }
+            if (args.Contains("--sct"))
             {
                 Logger.Log(LoggerVerbosity.Detailed, "EntryPoint", "Current instance is an SCT managed instance");
                 SCTCompatMode = true;
             }
-#if !DEBUG
+#if DEBUG
+#else
             else
             {
                 MessageBox.Show("SCT Taskbar does not currently work without SCT. Please install SCTT via the Options menu in SCT 1.2.0 or higher", "SCT required");
@@ -180,106 +245,74 @@ namespace SimpleClassicThemeTaskbar
 #endif
 
             //Setup crash reports
-#if !DEBUG
             Logger.Log(LoggerVerbosity.Detailed, "EntryPoint", "Release instance, enabling error handler");
-            Application.ThreadException += (sender, arg) => ShowCrashMessageBox(arg.Exception);
-#endif
+            RegisterExceptionHandlers();
+
             //Check if system/program architecture matches
             if (Environment.Is64BitOperatingSystem != Environment.Is64BitProcess)
             {
                 string sysArch = Environment.Is64BitOperatingSystem ? "x64" : "x86";
                 string processArch = Environment.Is64BitProcess ? "x64" : "x86";
                 MessageBox.Show($"You are trying to run a {processArch} version of SCT Taskbar on a {sysArch} version of Windows. This is not supported. Please download a {sysArch} version of SCT Taskbar", "Incorrect architecture");
-#if !DEBUG
+#if DEBUG
+#else
                 return;
 #endif
                 Logger.Log(LoggerVerbosity.Detailed, "EntryPoint", "Debug instance, ignoring incorrect architecture");
             }
 
-            if (false && Environment.OSVersion.Version.Major == 10)
+            if (Environment.OSVersion.Version.Major >= 10 && Process.GetProcessesByName("explorer").Length > 0)
             {
-                Logger.Log(LoggerVerbosity.Detailed, "EntryPoint", "OSVersion.Major is above 10. Initializing IVirtualDesktopManager");
-                UnmanagedCodeMigration.InitializeVdmInterface();
-                VirtualDesktopNotification = new();
-                VirtualDesktopNotification.CurrentDesktopChanged += VirtualDesktopNotifcation_CurrentDesktopChanged;
-                virtualDesktopNotificationCookie = UnmanagedCodeMigration.RegisterVdmNotification(VirtualDesktopNotification);
+                Logger.Log(LoggerVerbosity.Detailed, "EntryPoint", "OSVersion.Major is equal or above 10. Initializing IVirtualDesktopManager");
+
+                try
+                {
+                    UnmanagedCodeMigration.InitializeVdmInterface();
+                    VirtualDesktopNotification = new();
+                    VirtualDesktopNotification.CurrentDesktopChanged += VirtualDesktopNotifcation_CurrentDesktopChanged;
+                    virtualDesktopNotificationCookie = UnmanagedCodeMigration.RegisterVdmNotification(VirtualDesktopNotification);
+                }
+                catch (Exception ex)
+                {
+                    Logger.Log(LoggerVerbosity.Detailed, "EntryPoint", "Failed to initialize VDM!\n" + ex.ToString());
+                }
             }
 
+            if (Config.Default.EnablePassiveTray)
+            {
+                Logger.Log(LoggerVerbosity.Detailed, "EntryPoint", "Initializing new SystemTrayNotificationService");
+                TrayNotificationService = new();
+            }
+
+            //TODO: Put TaskbarManager into a seperate class
             Logger.Log(LoggerVerbosity.Detailed, "EntryPoint", "Main initialization done, passing execution to TaskbarManager");
 
             Directory.CreateDirectory(Constants.VisualStyleDirectory);
 
-            Application.VisualStyleState = VisualStyleState.NoneEnabled;
+            //Application.EnableVisualStyles();
+            Application.VisualStyleState = System.Windows.Forms.VisualStyles.VisualStyleState.NoneEnabled;
             Application.SetCompatibleTextRenderingDefault(false);
-            SystemEvents.DisplaySettingsChanged += (s, e) => GenerateNewTaskbars();
-            GenerateNewTaskbars();
+            Microsoft.Win32.SystemEvents.DisplaySettingsChanged += delegate
+            {
+                NewTaskbars();
+            };
+            NewTaskbars();
+
             Application.Run();
+
             ExitSCTT();
         }
 
-        private static void RunGraphicsTest()
+        private static void RegisterExceptionHandlers()
         {
-            Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Forms.GraphicsTest());
-        }
-
-        public static void RunNetworkManager()
-        {
-            Application.VisualStyleState = System.Windows.Forms.VisualStyles.VisualStyleState.NoneEnabled;
-            Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Forms.NetworkUI());
-        }
-
-        public static void EndScttInstances()
-        {
-            Logger.Log(LoggerVerbosity.Detailed, "EntryPoint", "Killing all SCTT instances");
-            static List<IntPtr> EnumerateProcessWindowHandles(int processId, string name)
+            Application.ThreadException += (sender, e) => HandleException(e.Exception);
+            Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
+            AppDomain.CurrentDomain.UnhandledException += (sender, e) =>
             {
-                List<IntPtr> handles = new();
-
-                foreach (ProcessThread thread in Process.GetProcessById(processId).Threads)
-                {
-                    User32.EnumThreadWindows(thread.Id, (hWnd, lParam) =>
-                    {
-                        handles.Add(hWnd);
-                        return true;
-                    }, IntPtr.Zero);
-                }
-                return handles;
-            }
-
-            Process[] scttInstances = Process.GetProcessesByName("SimpleClassicThemeTaskbar");
-            Array.ForEach(scttInstances, a =>
-            {
-                List<IntPtr> handles = EnumerateProcessWindowHandles(a.Id, "SCTT_Shell_TrayWnd");
-                string s = "";
-                foreach (IntPtr handle in handles)
-                {
-                    StringBuilder builder = new(1000);
-                    User32.GetClassName(handle, builder, 1000);
-
-                    if (builder.Length > 0)
-                        s = s + builder.ToString() + "\n";
-
-                    IntPtr returnValue = User32.SendMessage(handle, Constants.WM_SCT, new IntPtr(Constants.SCTWP_ISSCT), IntPtr.Zero);
-                    if (returnValue != IntPtr.Zero)
-                    {
-                        User32.SendMessage(handle, Constants.WM_SCT, new IntPtr(Constants.SCTWP_EXIT), IntPtr.Zero);
-                    }
-                }
-            });
-        }
-
-        public static void VirtualDesktopNotifcation_CurrentDesktopChanged(object sender, EventArgs e)
-		{
-            Logger.Log(LoggerVerbosity.Detailed, "TaskbarManager", "Current virtual desktop changed, sending notification to all Taskbars.");
-            var activeBars = Helpers.Helpers.GetOpenTaskbars();
-
-            foreach (Taskbar bar in activeBars)
-            {
-                // Redo the enumeration because the open windows are completely different
-                bar.Invoke(new Action(() => { bar.EnumerateWindows(); }));
-            }
+                if (e.IsTerminating && e.ExceptionObject is Exception ex)
+                    HandleException(ex);
+            };
+            // AppDomain.CurrentDomain.FirstChanceException += (sender, e) => HandleException(e.Exception);
         }
     }
 }

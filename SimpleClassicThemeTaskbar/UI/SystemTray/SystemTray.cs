@@ -2,37 +2,39 @@
 
 using SimpleClassicThemeTaskbar.Helpers;
 using SimpleClassicThemeTaskbar.Helpers.NativeMethods;
-
+using SimpleClassicThemeTaskbar.UI.Misc;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
-using System.Linq;
-using System.Runtime.InteropServices;
 using System.Text;
-using System.Threading;
 using System.Windows.Forms;
 
 namespace SimpleClassicThemeTaskbar.UIElements.SystemTray
 {
-    public partial class SystemTray : UserControlEx
+    public partial class SystemTray : SystemTrayBase
     {
-        public SystemTrayIcon heldDownIcon = null;
-        public int heldDownOriginalX = 0;
-        public List<SystemTrayIcon> icons = new();
-        public int mouseOriginalX = 0;
-        public TimingDebugger trayTiming = new();
-        public bool watchTray = true;
-        private object culprit;
+        private SystemTrayIcon heldDownIcon = null;
+        private int heldDownOriginalX = 0;
+        private int mouseOriginalX = 0;
+
+        private Dictionary<IntPtr, SystemTrayIcon> lookupId = new();
+        private Dictionary<Guid, SystemTrayIcon> lookupGuid = new();
 
         public SystemTray()
         {
             InitializeComponent();
-            Point p = Config.Instance.Renderer.SystemTrayTimeLocation;
+
+            Point p = Config.Default.Renderer.SystemTrayTimeLocation;
             labelTime.Location = new Point(Width + p.X, p.Y);
-            labelTime.Font = Config.Instance.Renderer.SystemTrayTimeFont;
-            labelTime.ForeColor = Config.Instance.Renderer.SystemTrayTimeColor;
+            labelTime.Font = Config.Default.Renderer.SystemTrayTimeFont;
+            labelTime.ForeColor = Config.Default.Renderer.SystemTrayTimeColor;
+
+            ApplicationEntryPoint.TrayNotificationService.RegisterNotificationEvent(TrayNotified);
+            Disposed += delegate { ApplicationEntryPoint.TrayNotificationService.UnregisterNotificationEvent(TrayNotified); };
+            ParentChanged += delegate { RepositionIcons(); };
+            ControlAdded += delegate { RepositionIcons(); };
+            ControlRemoved += delegate { RepositionIcons(); };
         }
 
         public void ClearButtons()
@@ -49,244 +51,158 @@ namespace SimpleClassicThemeTaskbar.UIElements.SystemTray
             }
         }
 
-        public override string GetErrorString()
-        {
-            var sb = new StringBuilder();
+        internal void TrayNotified(object sender, SystemTrayNotificationEventArgs e)
+		{
+            switch (e.Type)
+			{
+                case SystemTrayNotificationType.IconAdded:
+                    AddIcon(e);
+                    break;
+                case SystemTrayNotificationType.IconModified:
+                    ModifyIcon(e);
+                    break;
+                case SystemTrayNotificationType.IconDeleted:
+                    RemoveIcon(e);
+                    break;
+                case SystemTrayNotificationType.FocusTray:
+                    Focus();
+                    break;
+                case SystemTrayNotificationType.SetVersion:
+                    // Not needed.
+                    // We will always assume that we're running on version
+                    // 5 as .NET 5.0 only supports Windows 7 or up
+                    break;
+			}
+		}
 
-            sb.AppendLine(GetBaseErrorString());
-            sb.AppendLine("Unexpected error occured while " + controlState);
+        internal void AddIcon(SystemTrayNotificationEventArgs e)
+		{
+            // If it already exists, update it
+            if (lookupGuid.ContainsKey(e.Data.Guid) ||
+                lookupId.ContainsKey(e.Data.Identifier))
+            {
+                ModifyIcon(e);
+                return;
+            }
 
-            var buttonInfo = GetCulpritButtonInfo();
-            var process = GetProcessFromIcon(buttonInfo).MainModule.ModuleName;
+            ////Display all controls
+            //int virtualWidth = 16 + Config.Instance.Tweaks.SpaceBetweenTrayIcons;
 
-            var windowHwnd = buttonInfo.hwnd;
-            var isWindowHwndValid = User32.IsWindow(windowHwnd);
+            //Invalidate();
+            ////betterBorderPanel1.Refresh();
+            ////betterBorderPanel1.Update();
 
-            var iconHwnd = buttonInfo.icon;
-            var isIconHwndValid = User32.IsWindow(iconHwnd);
+            //int startX = 3;
+            //int iconWidth = 16;
+            //int iconSpacing = Config.Instance.Tweaks.SpaceBetweenTrayIcons;
 
-            sb.AppendLine($"Process: {process} ({buttonInfo.pid})");
-            sb.AppendLine($"Corresponding Window HWND: {windowHwnd} ({(isWindowHwndValid ? "Valid" : "Invalid")})");
-            sb.AppendLine($"Icon HWND: {iconHwnd} ({(isIconHwndValid ? "Valid" : "Invalid")})");
-            sb.AppendLine($"Icon Caption: {buttonInfo.toolTip}");
-            sb.AppendLine($"Icon ID: {buttonInfo.id}");
+            // Create a new tray icon and add it if it isn't hidden
+            SystemTrayIcon trayIcon = new(e.Data);
+            trayIcon.MouseDown += SystemTray_IconDown;
+            if (e.Data.StateMask.HasFlag(SystemTrayIconState.Hidden))
+                if (!e.Data.State.HasFlag(SystemTrayIconState.Hidden))
+                    Controls.Add(trayIcon);
+            if (!e.Data.StateMask.HasFlag(SystemTrayIconState.Hidden))
+                Controls.Add(trayIcon);
 
-            return sb.ToString();
+            // Save icon for reference
+            if (e.Data.Guid != Guid.Empty)
+                lookupGuid.Add(e.Data.Guid, trayIcon);
+            else
+                lookupId.Add(e.Data.Identifier, trayIcon);
+            RepositionIcons();
         }
 
-        public void UpdateIcons()
-        {
-            if (!watchTray)
-            {
-                trayTiming.Reset();
-                trayTiming.Start();
-            }
+        internal void ModifyIcon(SystemTrayNotificationEventArgs e)
+		{
+            // Look for the icon
+            SystemTrayIcon icon;
+            if (lookupGuid.ContainsKey(e.Data.Guid))
+                icon = lookupGuid[e.Data.Guid];
+            else if (lookupId.ContainsKey(e.Data.Identifier))
+                icon = lookupId[e.Data.Identifier];
+            else
+                return;
 
-            //Lists that will receive all button information
-            List<UnmanagedCodeMigration.TBBUTTONINFO> existingButtons = new();
-            List<IntPtr> existingHWNDs = new();
-            IntPtr tray = GetSystemTrayHandle();
-
-            //Loop through all buttons
-            using (var _ = trayTiming.StartRegion("Get all TBUTTONINFO's"))
-            {
-                UnmanagedCodeMigration.TBBUTTONINFO[] bInfos = UnmanagedCodeMigration.GetTrayButtons(tray);
-                foreach (UnmanagedCodeMigration.TBBUTTONINFO bInfo in bInfos)
-                {
-                    //Save it
-                    if (bInfo.visible)
-                    {
-                        existingButtons.Add(bInfo);
-                        existingHWNDs.Add(bInfo.hwnd);
-                    }
-                }
-            }
-
-            //Remove any icons that are now invalid or hidden
-            List<SystemTrayIcon> newIconList = new();
-            using (var _ = trayTiming.StartRegion("Remove icons that are invalid"))
-            {
-                SystemTrayIcon[] enumerator = new SystemTrayIcon[icons.Count];
-                icons.CopyTo(enumerator);
-                foreach (SystemTrayIcon existingIco in enumerator)
-                    if (existingIco is SystemTrayIcon existingIcon)
-                        if (existingHWNDs.Contains(existingIcon.Handle))
-                            newIconList.Add(existingIcon);
-                        else
-                        {
-                            icons.Remove(existingIcon);
-                            Controls.Remove(existingIcon);
-                            existingIcon.Dispose();
-                        }
-            }
-
-            //Add icons that didn't display before
-            using (var _ = trayTiming.StartRegion("Add icons that didn't display"))
-            {
-                foreach (UnmanagedCodeMigration.TBBUTTONINFO info in existingButtons)
-                {
-                    //By default we say the icon doesn't exist
-                    SystemTrayIcon existingIcon = newIconList.FirstOrDefault((i) => i.Handle == info.hwnd);
-
-                    controlState = "updating existing tray icon";
-                    culprit = existingIcon;
-                    //If it does we just update it, else we create it
-                    if (existingIcon != null)
-                        existingIcon.UpdateTrayIcon(info);
-                    else
-                    {
-                        controlState = "creating new tray icon";
-                        culprit = info;
-                        SystemTrayIcon trayIcon = new(info);
-                        trayIcon.MouseDown += SystemTray_IconDown;
-                        newIconList.Add(trayIcon);
-                    }
-                }
-            }
-
-
-            //De-dupe all controls
-            List<SystemTrayIcon> finalIconList = new();
-
-            using (var _ = trayTiming.StartRegion("De-dupe and display everything"))
-            {
-                List<IntPtr> pointers = new();
-                foreach (SystemTrayIcon icon in newIconList)
-                {
-                    if (!pointers.Contains(icon.Handle))
-                        finalIconList.Add(icon);
-                    else
-                        icon.Dispose();
-                    pointers.Add(icon.Handle);
-                }
-
-                //Icons are drawn from right to left so we reverse it so we can draw left to right (probably as easy)
-                finalIconList.Reverse();
-            }
-
-            //Display all controls
-            int virtualWidth = 16 + Config.Instance.Tweaks.SpaceBetweenTrayIcons;
-
-            Invalidate();
-            //betterBorderPanel1.Refresh();
-            //betterBorderPanel1.Update();
-
-            int startX = 3;
-            int iconWidth = 16;
-            int iconSpacing = Config.Instance.Tweaks.SpaceBetweenTrayIcons;
-
-            using (var _ = trayTiming.StartRegion("Check moving"))
-            {
-                //See if we're moving, if so calculate new position, if we finished calculate new position and finalize position values
-                if (heldDownIcon != null)
-                {
-                    if (Math.Abs(mouseOriginalX - Cursor.Position.X) > 3)
-                        heldDownIcon.IsMoving = true;
-
-                    if ((MouseButtons & MouseButtons.Left) != 0)
-                    {
-                        Point p = new(heldDownOriginalX + (Cursor.Position.X - mouseOriginalX), heldDownIcon.Location.Y);
-                        
-                        int newIndex = (startX - p.X - ((iconWidth + iconSpacing) / 2)) / (iconWidth + iconSpacing) * -1;
-                        if (newIndex < 0) newIndex = 0;
-                        
-                        finalIconList.Remove(heldDownIcon);
-                        finalIconList.Insert(Math.Min(finalIconList.Count, newIndex), heldDownIcon);
-                    }
-                    else
-                    {
-                        Point p = new(heldDownOriginalX + (Cursor.Position.X - mouseOriginalX), heldDownIcon.Location.Y);
-                       
-                        int newIndex = (startX - p.X - ((iconWidth + iconSpacing) / 2)) / (iconWidth + iconSpacing) * -1;
-                        if (newIndex < 0) newIndex = 0;
-                        
-                        finalIconList.Remove(heldDownIcon);
-                        finalIconList.Insert(Math.Min(finalIconList.Count, newIndex), heldDownIcon);
-                        
-                        icons.Remove(heldDownIcon);
-                        icons.Insert(Math.Max(Math.Min(icons.Count, finalIconList.Count - newIndex - 1), 0), heldDownIcon);
-                        
-                        heldDownIcon = null;
-                    }
-                }
-            }
-
-            Width = Config.Instance.Renderer.GetSystemTrayWidth(finalIconList.Count);
-
-            foreach (SystemTrayIcon icon in finalIconList)
-            {
-                //Add the control
-                if (icon.Parent != this)
-                {
-                    icons.Add(icon);
+            // If the icon is hidden, remove it (as long as it's not already removed)
+            // If the icon is not hidden, add it (as long as it's not already added)
+            if (e.Data.StateMask.HasFlag(SystemTrayIconState.Hidden))
+                if (e.Data.State.HasFlag(SystemTrayIconState.Hidden) && Controls.Contains(icon))
+                    Controls.Remove(icon);
+                else if (!e.Data.State.HasFlag(SystemTrayIconState.Hidden) && !Controls.Contains(icon))
                     Controls.Add(icon);
-                }
 
-                //Put the control at the correct position
-                icon.Location = Config.Instance.Renderer.GetSystemTrayIconLocation(finalIconList.IndexOf(icon));
-            }
+            // Call the update function
+            icon.Update(e.Data);
+		}
 
-            if (!watchTray)
-            {
-                watchTray = true;
-                trayTiming.Stop();
-                trayTiming.Show();
-            }
+        internal void RemoveIcon(SystemTrayNotificationEventArgs e)
+        {
+            controlState = "removing icon";
 
-            //Move to the left
-            int X = Parent.Size.Width - Width;
-            int Y = Location.Y;
+            // Look for the icon and remove it from the reference list
+            SystemTrayIcon icon;
+            if (e.Data.Guid != Guid.Empty && lookupGuid.ContainsKey(e.Data.Guid))
+                lookupGuid.Remove(e.Data.Guid, out icon);
+            else if (lookupId.ContainsKey(e.Data.Identifier))
+                lookupId.Remove(e.Data.Identifier, out icon);
+            else
+                return;
 
-            Location = new Point(X, Y);
+            // Remove the icon from the system tray, dispose it and position icons
+            Controls.Remove(icon);
+            icon.Dispose();
+            RepositionIcons();
         }
 
-        public void UpdateTime()
+        public void RepositionIcons()
+		{
+            controlState = "respositioning icons";
+
+            // Get an array so we can obtain the index
+            Control[] icons = new Control[Controls.Count];
+            Controls.CopyTo(icons, 0);
+
+            // Set the width and position of the tray
+            Width = Config.Default.Renderer.GetSystemTrayWidth(icons.Length - 1);
+            if (Parent != null)
+                Location = new Point(Parent.Width - Width, 0);
+            foreach (Control control in icons)
+            {
+                // Put the control at the correct position
+                if (control is SystemTrayIcon icon)
+                    icon.Location = Config.Default.Renderer.GetSystemTrayIconLocation(Array.IndexOf(icons, icon) - 1);
+            }
+
+            // Fix tray clock
+            Point p = Config.Default.Renderer.SystemTrayTimeLocation;
+            labelTime.Location = new Point(Width + p.X, p.Y);
+            labelTime.Font = Config.Default.Renderer.SystemTrayTimeFont;
+            labelTime.ForeColor = Config.Default.Renderer.SystemTrayTimeColor;
+        }
+
+        public override void UpdateIcons()
+        {
+            
+        }
+
+		public override void UpdateTime()
         {
             labelTime.Text = DateTime.Now.ToString(CultureInfo.CurrentCulture.DateTimeFormat.ShortTimePattern);
         }
 
-        private static Process GetProcessFromIcon(UnmanagedCodeMigration.TBBUTTONINFO TBUTTONINFO_Struct)
-        {
-            _ = User32.GetWindowThreadProcessId(TBUTTONINFO_Struct.hwnd, out uint pid);
-            return Process.GetProcessById((int)pid);
+		public override string GetErrorString()
+		{
+            var sb = new StringBuilder();
+
+            sb.AppendLine(GetBaseErrorString());
+            sb.AppendLine("Unexpected error occured while " + controlState);
+            sb.AppendLine("If you're seeing this message tell Leet that he should remove this scuffed message.");
+
+            return sb.ToString();
         }
 
-        private static IntPtr GetSystemTrayHandle()
-        {
-            IntPtr hWndTray = User32.FindWindowW("Shell_TrayWnd", null);
-            if (hWndTray != IntPtr.Zero)
-            {
-                hWndTray = User32.FindWindowExW(hWndTray, IntPtr.Zero, "TrayNotifyWnd", null);
-                if (hWndTray != IntPtr.Zero)
-                {
-                    hWndTray = User32.FindWindowExW(hWndTray, IntPtr.Zero, "SysPager", null);
-                    if (hWndTray != IntPtr.Zero)
-                    {
-                        hWndTray = User32.FindWindowExW(hWndTray, IntPtr.Zero, "ToolbarWindow32", null);
-                        return hWndTray;
-                    }
-                }
-            }
-            return IntPtr.Zero;
-        }
-
-        private UnmanagedCodeMigration.TBBUTTONINFO GetCulpritButtonInfo()
-        {
-            if (culprit is SystemTrayIcon trayIcon)
-            {
-                return trayIcon.TBUTTONINFO_Struct;
-            }
-            else if (culprit is UnmanagedCodeMigration.TBBUTTONINFO @struct)
-            {
-                return @struct;
-            }
-            else
-            {
-                return new();
-            }
-        }
-
-        private void labelTime_MouseHover(object sender, EventArgs e)
+		private void labelTime_MouseHover(object sender, EventArgs e)
         {
             toolTip1.SetToolTip(labelTime, DateTime.Now.ToShortDateString());
         }
@@ -300,7 +216,7 @@ namespace SimpleClassicThemeTaskbar.UIElements.SystemTray
 
         private void SystemTray_Paint(object sender, System.Windows.Forms.PaintEventArgs e)
         {
-            Config.Instance.Renderer.DrawSystemTray(this, e.Graphics);
+            Config.Default.Renderer.DrawSystemTray(this, e.Graphics);
         }
     }
 }

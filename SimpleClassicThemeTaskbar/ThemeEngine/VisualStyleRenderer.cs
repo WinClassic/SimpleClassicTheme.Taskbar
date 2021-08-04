@@ -134,7 +134,7 @@ namespace SimpleClassicThemeTaskbar.ThemeEngine
 			g.DrawString(startButtonElement, "start", 35, 3, startButton.Width - 35, startButton.Height - 3);
 		}
 
-		public override void DrawSystemTray(SystemTray systemTray, Graphics g)
+		public override void DrawSystemTray(System.Windows.Forms.Control systemTray, Graphics g)
 		{
 			var element = colorScheme["TrayNotifyHoriz::TrayNotify.Background"];
 

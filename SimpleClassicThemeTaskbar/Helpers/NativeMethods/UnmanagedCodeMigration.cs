@@ -144,8 +144,8 @@ namespace SimpleClassicThemeTaskbar.Helpers.NativeMethods
 		[InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
 		public interface IVirtualDesktopNotificationService
 		{
-			int Register(IVirtualDesktopNotification pNotification, out IntPtr dwCookie);
-			int Unregister(IntPtr dwCookie);
+			int Register(IVirtualDesktopNotification pNotification, out uint dwCookie);
+			int Unregister(uint dwCookie);
 		}
 
 		[ComImport]
@@ -176,6 +176,8 @@ namespace SimpleClassicThemeTaskbar.Helpers.NativeMethods
 
 	    static IVirtualDesktopNotificationService virtualDesktopNotificationService;
 		static IVirtualDesktopManager virtualDesktopManager;
+
+		static bool s_isVdmInitialized;
 
 		internal static string GetAppUserModelId(int pid)
 		{
@@ -229,10 +231,10 @@ namespace SimpleClassicThemeTaskbar.Helpers.NativeMethods
 					TBBUTTON64 tbButton = new();
 					TRAYDATA trData = new();
 
-					User32.SendMessage(sysTray, User32.TB_GETBUTTON, i, dataPtr.ToInt32());
+					User32.SendMessage(sysTray, User32.TB_GETBUTTON, new(i), dataPtr);
 
 					byte[] tbButtonBytes = new byte[tbButtonSize];
-					Kernel32.ReadProcessMemory(hProcess, dataPtr, tbButtonBytes, tbButtonSize, out int bytesRead);
+					Kernel32.ReadProcessMemory(hProcess, dataPtr, tbButtonBytes, tbButtonSize, out var bytesRead);
 					GCHandle tbButtonHandle = GCHandle.Alloc(tbButtonBytes, GCHandleType.Pinned);
 					tbButton = (TBBUTTON64) Marshal.PtrToStructure(tbButtonHandle.AddrOfPinnedObject(), tbButton.GetType());
 					tbButtonHandle.Free();
@@ -281,7 +283,7 @@ namespace SimpleClassicThemeTaskbar.Helpers.NativeMethods
 					User32.SendMessage(sysTray, User32.TB_GETBUTTON, i, (int)dataPtr);
 
 					byte[] tbButtonBytes = new byte[tbButtonSize];
-					Kernel32.ReadProcessMemory(hProcess, dataPtr, tbButtonBytes, tbButtonSize, out int bytesRead);
+					Kernel32.ReadProcessMemory(hProcess, dataPtr, tbButtonBytes, tbButtonSize, out var bytesRead);
 					GCHandle tbButtonHandle = GCHandle.Alloc(tbButtonBytes, GCHandleType.Pinned);
 					tbButton = (TBBUTTON32)Marshal.PtrToStructure(tbButtonHandle.AddrOfPinnedObject(), tbButton.GetType());
 					tbButtonHandle.Free();
@@ -341,22 +343,35 @@ namespace SimpleClassicThemeTaskbar.Helpers.NativeMethods
 			IServiceProvider serviceProvider = (IServiceProvider) Activator.CreateInstance(spType);
 			serviceProvider.QueryService(new Guid("a501fdec-4a09-464c-ae4e-1b9c21b84918"), typeof(IVirtualDesktopNotificationService).GUID, out object ppvObject);
 			virtualDesktopNotificationService = (IVirtualDesktopNotificationService)ppvObject;
+
+			s_isVdmInitialized = virtualDesktopManager is not null;
 		}
 		
-		internal static IntPtr RegisterVdmNotification(IVirtualDesktopNotification notification)
+		internal static uint RegisterVdmNotification(IVirtualDesktopNotification notification)
 		{
-			virtualDesktopNotificationService.Register(notification, out IntPtr cookie);
-			return cookie;
+			try
+			{
+				virtualDesktopNotificationService.Register(notification, out uint cookie);
+				return cookie;
+			}
+			catch (Exception e)
+			{
+				Logger.Log(LoggerVerbosity.Basic, "VDMService", "Failed to register VDM Notification. Reason: " + e.Message);
+				return 0U;
+			}
 		}
 
-		internal static void UnregisterVdmNotification(IntPtr notificationCookie)
+		internal static void UnregisterVdmNotification(uint notificationCookie)
 		{
-			virtualDesktopNotificationService?.Unregister(notificationCookie);
+            if (s_isVdmInitialized)
+            {
+				virtualDesktopNotificationService?.Unregister(notificationCookie);
+            }
 		}
 
 		internal static bool IsWindowOnCurrentVirtualDesktop(IntPtr window)
 		{
-			if (virtualDesktopManager is not null)
+			if (s_isVdmInitialized)
 			{
 				return virtualDesktopManager.IsWindowOnCurrentVirtualDesktop(window);
 				//bool isWndOnDekstop = false;

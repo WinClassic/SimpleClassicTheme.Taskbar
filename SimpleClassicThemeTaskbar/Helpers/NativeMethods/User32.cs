@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text;
 
@@ -12,13 +13,16 @@ namespace SimpleClassicThemeTaskbar.Helpers.NativeMethods
 
         internal delegate bool EnumWindowsCallback(IntPtr hWnd, int lParam);
 
-        internal delegate IntPtr WindowsHookProcedure(ShellEvents nCode, IntPtr wParam, IntPtr lParam);
+        internal delegate IntPtr WindowsHookProcedure(ShellEvents nCode, Integer32 wParam, Integer32 lParam);
 
         [DllImport(nameof(User32), CharSet = CharSet.Unicode)]
         internal static extern bool AppendMenu(IntPtr hMenu, uint uFlags, int uIDNewItem, string lpNewItem);
 
         [DllImport(nameof(User32), CharSet = CharSet.Auto)]
         internal static extern bool AppendMenu(IntPtr hMenu, uint uFlags, int uIDNewItem, IntPtr lpNewItem);
+
+        [DllImport(nameof(User32), SetLastError = true)]
+        internal static extern bool BringWindowToTop(IntPtr hWnd);
 
         [DllImport(nameof(User32))]
         internal static extern IntPtr CallNextHookEx(IntPtr hhk, ShellEvents nCode, IntPtr wParam, IntPtr lParam);
@@ -39,6 +43,9 @@ namespace SimpleClassicThemeTaskbar.Helpers.NativeMethods
         [DllImport(nameof(User32), SetLastError = true)]
         internal static extern bool DestroyMenu(IntPtr hMenu);
 
+        [DllImport(nameof(User32), SetLastError = true)]
+        internal static extern bool DestroyWindow(IntPtr hWnd);
+
         [DllImport(nameof(User32))]
         internal static extern int DrawFrameControl(IntPtr hdc, ref RECT lpRect, uint un1, uint un2);
 
@@ -49,10 +56,10 @@ namespace SimpleClassicThemeTaskbar.Helpers.NativeMethods
         internal static extern int EnumWindows(EnumWindowsCallback callPtr, int lParam);
 
         [DllImport(nameof(User32), CharSet = CharSet.Unicode)]
-        internal static extern IntPtr FindWindowExW(IntPtr hWndParent, IntPtr hWndChildAfter, string lpszClass, string lpszWindow);
+        internal static extern IntPtr FindWindowEx(IntPtr hWndParent, IntPtr hWndChildAfter, string lpszClass, string lpszWindow);
 
         [DllImport(nameof(User32), CharSet = CharSet.Unicode)]
-        internal static extern IntPtr FindWindowW(string a, string b);
+        internal static extern IntPtr FindWindow(string a, string b);
 
         [DllImport(nameof(User32))]
         internal static extern IntPtr GetAncestor(IntPtr hWnd, uint gaFlags);
@@ -91,21 +98,18 @@ namespace SimpleClassicThemeTaskbar.Helpers.NativeMethods
         [DllImport(nameof(User32), SetLastError = true)]
         internal static extern bool GetWindowRect(IntPtr hwnd, out RECT lpRect);
 
-        [DllImport(nameof(User32), EntryPoint = "GetWindowTextA", CharSet = CharSet.Unicode, SetLastError = true, ExactSpelling = true)]
-        internal static extern int GetWindowText(IntPtr hwnd, StringBuilder lpString, int cch);
+        [DllImport(nameof(User32), EntryPoint = "GetWindowTextW", CharSet = CharSet.Unicode, SetLastError = true, ExactSpelling = true)]
+        internal static extern int GetWindowText(IntPtr hwnd, System.Text.StringBuilder lpString, int cch);
 
-        [DllImport(nameof(User32), EntryPoint = "GetWindowTextLengthA", CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true)]
+        [DllImport(nameof(User32), EntryPoint = "GetWindowTextLengthW", CharSet = CharSet.Unicode, SetLastError = true, ExactSpelling = true)]
         internal static extern int GetWindowTextLength(IntPtr hwnd);
-
-        [DllImport(nameof(User32), CharSet = CharSet.Unicode)]
-        internal static extern bool GetWindowTextW(IntPtr hWnd, StringBuilder lpString, int nMaxCount);
 
         [DllImport(nameof(User32), SetLastError = false)]
         internal static extern uint GetWindowThreadProcessId(IntPtr hWnd, out uint lpdwProcessId);
 
         [DllImport(nameof(User32), SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
-        internal static extern bool IsWindow(IntPtr hWnd);
+        internal static extern bool IsWindow(Integer hWnd);
 
         [DllImport(nameof(User32))]
         internal static extern bool IsWindowVisible(IntPtr hWnd);
@@ -147,7 +151,7 @@ namespace SimpleClassicThemeTaskbar.Helpers.NativeMethods
         internal static extern IntPtr SetWindowsHookEx(ShellHookId idHook, WindowsHookProcedure lpfn, IntPtr hmod, uint dwThreadId);
 
         [DllImport(nameof(User32), SetLastError = true, CharSet = CharSet.Unicode)]
-        internal static extern bool SetWindowTextW(IntPtr hWnd, string lpString);
+        internal static extern bool SetWindowText(IntPtr hWnd, string lpString);
 
         [DllImport(nameof(User32))]
         [return: MarshalAs(UnmanagedType.Bool)]

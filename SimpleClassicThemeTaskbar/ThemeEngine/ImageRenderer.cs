@@ -250,11 +250,12 @@ namespace SimpleClassicThemeTaskbar.ThemeEngine
 			startButton = (Bitmap)resources.GetObject("StartButton");
 		}
 
-		public override Size GetTaskButtonGroupWindowSize(int buttonCount) => new Size(Config.Instance.Tweaks.TaskbarProgramWidth + (taskbuttonGroupWindowBorderSize * 2), ((buttonCount - 1) * (TaskbarHeight - taskbuttonGroupWindowTaskbuttonRealSize.Top + taskbuttonGroupWindowTaskbuttonRealSize.Bottom)) + (taskbuttonGroupWindowBorderSize * 2));
+		public override Size GetTaskButtonGroupWindowSize(int buttonCount) => new Size(Config.Default.Tweaks.TaskbarProgramWidth + (taskbuttonGroupWindowBorderSize * 2), ((buttonCount - 1) * (TaskbarHeight - taskbuttonGroupWindowTaskbuttonRealSize.Top + taskbuttonGroupWindowTaskbuttonRealSize.Bottom)) + (taskbuttonGroupWindowBorderSize * 2));
 		public override Point GetTaskButtonGroupWindowButtonLocation(int index) => new Point(taskbuttonGroupWindowBorderSize, ((index - 1) * (TaskbarHeight - taskbuttonGroupWindowTaskbuttonRealSize.Top + taskbuttonGroupWindowTaskbuttonRealSize.Bottom)) - taskbuttonGroupWindowTaskbuttonRealSize.Top + taskbuttonGroupWindowBorderSize);
 
-		public override Point GetSystemTrayIconLocation(int index) => new(systemTrayFirstIconPosition.Item1 + (index * (16 + Config.Instance.Tweaks.SpaceBetweenTrayIcons)), systemTrayFirstIconPosition.Item2);
-		public override int GetSystemTrayWidth(int iconCount) => systemTrayBaseWidth + (iconCount * 16) + (Config.Instance.Tweaks.SpaceBetweenTrayIcons * (iconCount - 1));
+		public override Point GetSystemTrayIconLocation(int index) => new(systemTrayFirstIconPosition.Item1 + (index * (16 + Config.Default.Tweaks.SpaceBetweenTrayIcons)), systemTrayFirstIconPosition.Item2);
+		public override int GetSystemTrayWidth(int iconCount) => systemTrayBaseWidth + (iconCount * 16) + (Config.Default.Tweaks.SpaceBetweenTrayIcons * (iconCount - 1));
+
 		public override Point SystemTrayTimeLocation => r.SystemTrayTimeLocation;
 		public override Font SystemTrayTimeFont => r.SystemTrayTimeFont;
 		public override Color SystemTrayTimeColor => Color.White;
@@ -371,7 +372,7 @@ namespace SimpleClassicThemeTaskbar.ThemeEngine
 			g.DrawImage(image, new Rectangle(0, 0, image.Width, taskbarHeight), new Rectangle(0, startButton.Pressed ? (taskbarHeight*2) : startButton.ClientRectangle.Contains(startButton.PointToClient(Control.MousePosition)) ? taskbarHeight : 0, image.Width, taskbarHeight), GraphicsUnit.Pixel);
 		}
 
-		public override void DrawSystemTray(SystemTray systemTray, Graphics g)
+		public override void DrawSystemTray(System.Windows.Forms.Control systemTray, Graphics g)
 		{
 			using (TextureBrush brush = new(systemTrayTexture, WrapMode.Tile))
 				g.FillRectangle(brush, systemTray.ClientRectangle);

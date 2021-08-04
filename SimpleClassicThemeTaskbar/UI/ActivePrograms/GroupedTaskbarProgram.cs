@@ -29,7 +29,12 @@ namespace SimpleClassicThemeTaskbar
 
         public bool CanBeSingleWindow => ProgramWindows.Count < 2;
 
-        public override Icon Icon { get => ProgramWindows[0].Icon; set => ProgramWindows[0].Icon = value; }
+        private SingleTaskbarProgram PrimaryWindow => ProgramWindows.FirstOrDefault();
+        public override Icon Icon
+        {
+            get => PrimaryWindow?.Icon;
+            set => PrimaryWindow.Icon = value;
+        }
 
         public override Image IconImage
         {
@@ -51,13 +56,25 @@ namespace SimpleClassicThemeTaskbar
             }
         }
 
-        public override int MinimumWidth => Config.Instance.Renderer.TaskButtonMinimalWidth + 18;
+        public override int MinimumWidth => Config.Default.Renderer.TaskButtonMinimalWidth + 18;
 
-        public override Process Process { get => ProgramWindows[0].Process; set => ProgramWindows[0].Process = value; }
+        public override Process Process
+        {
+            get => PrimaryWindow?.Process;
+            set => PrimaryWindow.Process = value;
+        }
 
-        public override string Title { get => ProgramWindows[0].Title; set => ProgramWindows[0].Title = value; }
+        public override string Title
+        {
+            get => PrimaryWindow?.Title;
+            set => PrimaryWindow.Title = value;
+        }
 
-        public override Window Window { get => ProgramWindows[0].Window; set => ProgramWindows[0].Window = value; }
+        public override Window Window
+        {
+            get => PrimaryWindow.Window;
+            set => PrimaryWindow.Window = value;
+        }
 
         public bool ContainsWindow(IntPtr hwnd)
         {
@@ -72,7 +89,7 @@ namespace SimpleClassicThemeTaskbar
             ApplicationEntryPoint.ErrorSource = this;
             controlState = "painting grouped window extension";
 
-            Config.Instance.Renderer.DrawTaskButtonGroupButton(this, e.Graphics);
+            Config.Default.Renderer.DrawTaskButtonGroupButton(this, e.Graphics);
         }
 
         public override string GetErrorString()
@@ -108,7 +125,27 @@ namespace SimpleClassicThemeTaskbar
             return false;
         }
 
-        public override void OnClick(object sender, MouseEventArgs e)
+		public override void OnDoubleClick(object sender, MouseEventArgs e)
+		{
+            if (e.X > Width - 19 &&
+                e.X < Width - 3 &&
+                e.Y > 7 &&
+                e.Y < 24)
+            {
+                GroupWindow.Show(PointToScreen(new Point(0, 0)));
+            }
+            else if (IsMoving)
+            {
+                IsMoving = false;
+            }
+            else
+            {
+                PrimaryWindow.OnDoubleClick(sender, e);
+                ActiveWindow = PrimaryWindow.ActiveWindow;
+            }
+        }
+
+		public override void OnClick(object sender, MouseEventArgs e)
         {
             if (e.X > Width - 19 &&
                 e.X < Width - 3 &&
@@ -123,22 +160,22 @@ namespace SimpleClassicThemeTaskbar
             }
             else
             {
-                ProgramWindows[0].OnClick(sender, e);
-                ActiveWindow = ProgramWindows[0].ActiveWindow;
+                PrimaryWindow.OnClick(sender, e);
+                ActiveWindow = PrimaryWindow.ActiveWindow;
             }
         }
 
         public override string ToString()
         {
-            if (Config.Instance.Tweaks.ProgramGroupCheck == ProgramGroupCheck.Process)
+            if (Config.Default.Tweaks.ProgramGroupCheck == ProgramGroupCheck.Process)
             {
                 return $"Process - ID: {Process.Id}, Name: {Process.ProcessName}";
             }
-            else if (Config.Instance.Tweaks.ProgramGroupCheck == ProgramGroupCheck.FileNameAndPath)
+            else if (Config.Default.Tweaks.ProgramGroupCheck == ProgramGroupCheck.FileNameAndPath)
             {
                 return $"Filepath - {GetShortPath(Process.MainModule.FileName)}";
             }
-            else if (Config.Instance.Tweaks.ProgramGroupCheck == ProgramGroupCheck.ModuleName)
+            else if (Config.Default.Tweaks.ProgramGroupCheck == ProgramGroupCheck.ModuleName)
             {
                 return $"Filename - {Process.MainModule.ModuleName}";
             }

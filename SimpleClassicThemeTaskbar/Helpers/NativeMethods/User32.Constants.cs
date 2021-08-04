@@ -60,6 +60,7 @@
         internal const uint VK_F4 = 0x73;
         internal const uint VK_MENU = 0x12;
         internal const uint WM_CLOSE = 0x0010;
+        internal const uint WM_COPYDATA = 0x004A;
         internal const uint WM_ENDSESSION = 0x0016;
         internal const uint WM_GETICON = 0x007F;
         internal const uint WM_KEYDOWN = 0x0100;

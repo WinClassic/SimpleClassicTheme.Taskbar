@@ -50,15 +50,15 @@ namespace SimpleClassicThemeTaskbar
                 return;
             Controls.Clear();
             StartPosition = FormStartPosition.Manual;
-            //Size = new Size(Config.Instance.TaskbarProgramWidth + 8, ((parent.ProgramWindows.Count - 1) * 24) + 6);
-            Size = Config.Instance.Renderer.GetTaskButtonGroupWindowSize(parent.ProgramWindows.Count);
+            //Size = new Size(Config.Default.TaskbarProgramWidth + 8, ((parent.ProgramWindows.Count - 1) * 24) + 6);
+            Size = Config.Default.Renderer.GetTaskButtonGroupWindowSize(parent.ProgramWindows.Count);
             Location = new Point(buttonScreenCoordinates.X + (parent.Width / 2) - (Width / 2), buttonScreenCoordinates.Y - Height);
             for (int i = 1; i < parent.ProgramWindows.Count; i++)
             {
                 SingleTaskbarProgram program = parent.ProgramWindows[i];
                 program.Parent = this;
-                program.Location = Config.Instance.Renderer.GetTaskButtonGroupWindowButtonLocation(i);
-                program.Width = Config.Instance.Tweaks.TaskbarProgramWidth;
+                program.Location = Config.Default.Renderer.GetTaskButtonGroupWindowButtonLocation(i);
+                program.Width = Config.Default.Tweaks.TaskbarProgramWidth;
                 program.Visible = true;
                 //program.MouseClick += delegate (object sender, MouseEventArgs e) {  };
             }
@@ -76,7 +76,7 @@ namespace SimpleClassicThemeTaskbar
 
         private void PopupTaskbarGroup_Paint(object sender, PaintEventArgs e)
         {
-            Config.Instance.Renderer.DrawTaskButtonGroupWindow(this, e.Graphics);
+            Config.Default.Renderer.DrawTaskButtonGroupWindow(this, e.Graphics);
             return;
 
             Rectangle newRect = ClientRectangle;

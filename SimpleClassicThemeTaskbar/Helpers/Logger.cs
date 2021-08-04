@@ -3,7 +3,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
-using System.Text;
 
 namespace SimpleClassicThemeTaskbar.Helpers
 {
@@ -30,8 +29,13 @@ namespace SimpleClassicThemeTaskbar.Helpers
     public static class Logger
     {
         private static FileStream fs;
+        private static object lockObject = new();
         private static bool loggerOff = false;
+        private static StreamWriter sw;
         private static LoggerVerbosity verb;
+        public static string FilePath { get; private set; }
+
+        public static FileStream FileStream => fs;
 
         public static LoggerVerbosity GetVerbosity() => verb;
 
@@ -41,39 +45,36 @@ namespace SimpleClassicThemeTaskbar.Helpers
             if (loggerOff)
                 return;
 
-            fs = new FileStream("latest.log", FileMode.Create, FileAccess.Write, FileShare.Read);
+            fs = new FileStream(FilePath = "latest.log", FileMode.Create, FileAccess.Write, FileShare.Read);
+            sw = new StreamWriter(fs) { AutoFlush = true };
             Log(LoggerVerbosity.Basic, "Logger", "Succesfully initialized logger");
 
             Log(LoggerVerbosity.Detailed, "SystemDump", "Performing quick system dump");
             Log(LoggerVerbosity.Detailed, "SystemDump", $"OS: {RuntimeInformation.OSDescription} {RuntimeInformation.OSArchitecture}");
-            if (ApplicationEntryPoint.SCTCompatMode) Log(LoggerVerbosity.Detailed, "SystemDump", $"SCT version: {Assembly.LoadFrom("C:\\SCT\\SCT.exe").GetName().Version}");
+
+            if (ApplicationEntryPoint.SCTCompatMode)
+                Log(LoggerVerbosity.Detailed, "SystemDump", $"SCT version: {Assembly.LoadFrom("C:\\SCT\\SCT.exe").GetName().Version}");
+
             Log(LoggerVerbosity.Detailed, "SystemDump", $"SCT Taskbar version: {Assembly.GetExecutingAssembly().GetName().Version}");
         }
 
         public static void Log(LoggerVerbosity verbosity, string source, string text)
         {
-            if (Config.Instance.Tweaks.EnableDebugging)
+            if (Config.Default.Tweaks.EnableDebugging)
                 Debug.WriteLine(text, source);
 
-            text.Replace("\n", "".PadLeft(38));
+            // text.Replace("\n", "".PadLeft(38));
+
             if (loggerOff) return;
             if (verbosity <= verb)
             {
-                string toWrite = $"[{verbosity,-8}][{source,-24}]: {text}" + Environment.NewLine;
+                string toWrite = $"[{verbosity,-8}][{source,-24}]: {text}";
 
-                Console.Write(toWrite);
-
-                byte[] bytes = Encoding.UTF8.GetBytes(toWrite);
-                fs.Write(bytes, 0, bytes.Length);
-                fs.Flush();
-            }
-        }
-
-        public static void OpenLog()
-        {
-            if (fs != null)
-            {
-                Process.Start(fs.Name);
+                lock (lockObject)
+                {
+                    Console.WriteLine(toWrite);
+                    sw.WriteLine(toWrite);
+                }
             }
         }
 
@@ -87,6 +88,7 @@ namespace SimpleClassicThemeTaskbar.Helpers
         {
             Log(LoggerVerbosity.Basic, "Logger", "Shutting down logger");
             fs.Close();
+            loggerOff = true;
         }
     }
 }

@@ -24,7 +24,7 @@ namespace SimpleClassicThemeTaskbar.ThemeEngine
 
         public abstract void DrawStartButton(StartButton startButton, Graphics g);
 
-        public abstract void DrawSystemTray(SystemTray systemTray, Graphics g);
+        public abstract void DrawSystemTray(System.Windows.Forms.Control systemTray, Graphics g);
 
         public abstract void DrawTaskBar(Taskbar taskbar, Graphics g);
 

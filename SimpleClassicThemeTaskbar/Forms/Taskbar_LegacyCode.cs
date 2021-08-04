@@ -31,8 +31,8 @@ namespace SimpleClassicThemeTaskbar
             if (!User32.IsWindowVisible(hwnd))
                 return false;
 
-            //Check if the OS is Windows 10
-            if (Environment.OSVersion.Version.Major == 10)
+            //Check if the OS is Windows 10 or higher
+            if (Environment.OSVersion.Version.Major >= 10)
                 //Check if the window is on the current Desktop
                 if (!UnmanagedCodeMigration.IsWindowOnCurrentVirtualDesktop(hwnd))
                     return false;
@@ -64,7 +64,7 @@ namespace SimpleClassicThemeTaskbar
             if (wi.ClassName == "ApplicationFrameWindow")
             {
                 //Do an API call to see if app isn't cloaked
-                _ = DwmApi.DwmGetWindowAttribute(wi.Handle, DwmApi.DWMWINDOWATTRIBUTE.Cloaked, out int d, Marshal.SizeOf(0));
+                _ = DwmApi.DwmGetWindowAttribute(wi.Handle, DwmApi.DWMWINDOWATTRIBUTE.Cloaked, out var d, Marshal.SizeOf(0));
 
                 //If returned value is not 0, the window is cloaked
                 if (d > 0)
@@ -173,7 +173,7 @@ namespace SimpleClassicThemeTaskbar
 
                 using (var _ = logicTiming.StartRegion("Do grouping"))
                 {
-                    UpdateTaskbarButtons(newIcons, ref programs);
+                    UpdateTaskbarButtons(newIcons, programs);
                 }
 
                 icons = programs;
