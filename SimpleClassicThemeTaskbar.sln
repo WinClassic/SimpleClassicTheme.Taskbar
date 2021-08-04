@@ -21,30 +21,24 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimpleClassicTheme.Common",
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
-		Debug|Any CPU = Debug|Any CPU
 		Debug|x64 = Debug|x64
 		Debug|x86 = Debug|x86
-		Release|Any CPU = Release|Any CPU
 		Release|x64 = Release|x64
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{9267271F-5D75-471E-87DA-A3EAE513FF8D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9267271F-5D75-471E-87DA-A3EAE513FF8D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9267271F-5D75-471E-87DA-A3EAE513FF8D}.Debug|x64.ActiveCfg = Debug|x64
 		{9267271F-5D75-471E-87DA-A3EAE513FF8D}.Debug|x64.Build.0 = Debug|x64
 		{9267271F-5D75-471E-87DA-A3EAE513FF8D}.Debug|x86.ActiveCfg = Debug|x86
 		{9267271F-5D75-471E-87DA-A3EAE513FF8D}.Debug|x86.Build.0 = Debug|x86
-		{9267271F-5D75-471E-87DA-A3EAE513FF8D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9267271F-5D75-471E-87DA-A3EAE513FF8D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{9267271F-5D75-471E-87DA-A3EAE513FF8D}.Release|x64.ActiveCfg = Release|x64
 		{9267271F-5D75-471E-87DA-A3EAE513FF8D}.Release|x64.Build.0 = Release|x64
 		{9267271F-5D75-471E-87DA-A3EAE513FF8D}.Release|x86.ActiveCfg = Release|x86
 		{9267271F-5D75-471E-87DA-A3EAE513FF8D}.Release|x86.Build.0 = Release|x86
-		{E9317DC3-CA35-4420-B595-444974403E89}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{E9317DC3-CA35-4420-B595-444974403E89}.Debug|x64.Build.0 = Debug|Any CPU
-		{E9317DC3-CA35-4420-B595-444974403E89}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{E9317DC3-CA35-4420-B595-444974403E89}.Debug|x86.Build.0 = Debug|Any CPU
+		{E9317DC3-CA35-4420-B595-444974403E89}.Debug|x64.ActiveCfg = Debug|x64
+		{E9317DC3-CA35-4420-B595-444974403E89}.Debug|x64.Build.0 = Debug|x64
+		{E9317DC3-CA35-4420-B595-444974403E89}.Debug|x86.ActiveCfg = Debug|x86
+		{E9317DC3-CA35-4420-B595-444974403E89}.Debug|x86.Build.0 = Debug|x86
 		{E9317DC3-CA35-4420-B595-444974403E89}.Release|x64.ActiveCfg = Release|Any CPU
 		{E9317DC3-CA35-4420-B595-444974403E89}.Release|x64.Build.0 = Release|Any CPU
 		{E9317DC3-CA35-4420-B595-444974403E89}.Release|x86.ActiveCfg = Release|Any CPU
