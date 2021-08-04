@@ -32,24 +32,24 @@ jobs:
       uses: microsoft/setup-msbuild@v1
       
     - name: Build SCTT x86
-      run: msbuild -p:Configuration=Release -p:Platform=x86 $SCTT_PATH/SimpleClassicTheme.Taskbar.sln
+      run: msbuild -p:Configuration=Release -p:Platform=x86 ${SCTT_PATH}/SimpleClassicTheme.Taskbar.sln
       working-directory: ./
 
     - name: Build SCTT x64
-      run: msbuild -p:Configuration=Release -p:Platform=AMD64 $SCTT_PATH/SimpleClassicTheme.Taskbar.sln
+      run: msbuild -p:Configuration=Release -p:Platform=AMD64 ${SCTT_PATH}/SimpleClassicTheme.Taskbar.sln
       working-directory: ./
 
     - name: Upload x86 build artifacts
       uses: actions/upload-artifact@v2.2.3
       with:
         name: SimpleClassicTheme.Taskbar_x86
-        path: '$SCTT_PATH/bin/x86/Release/net5.0-windows'
+        path: '${SCTT_PATH}/bin/x86/Release/net5.0-windows'
 
     - name: Upload x64 build artifacts
       uses: actions/upload-artifact@v2.2.3
       with:
         name: SimpleClassicTheme.Taskbar_x64
-        path: '$SCTT_PATH/bin/x64/Release/net5.0-windows'
+        path: '${SCTT_PATH}/bin/x64/Release/net5.0-windows'
 
   release:
     runs-on: ubuntu-latest
