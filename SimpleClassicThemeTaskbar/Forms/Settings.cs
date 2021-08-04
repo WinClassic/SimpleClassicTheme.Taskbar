@@ -1,4 +1,5 @@
-﻿using SimpleClassicThemeTaskbar.Helpers;
+﻿using SimpleClassicThemeTaskbar.Forms;
+using SimpleClassicThemeTaskbar.Helpers;
 using SimpleClassicThemeTaskbar.Helpers.NativeMethods;
 using SimpleClassicThemeTaskbar.ThemeEngine.VisualStyles;
 
@@ -45,13 +46,13 @@ namespace SimpleClassicThemeTaskbar
             Config.Default.EnableGrouping = enableGroupingCheckBox.Checked;
 
             // Save taskbar filter
-            string taskbarFilter = "";
-            foreach (object f in taskbarFilterListBox.Items)
-            {
-                string filter = f.ToString();
-                taskbarFilter += filter + "*";
-            }
-            Config.Default.TaskbarProgramFilter = taskbarFilter;
+            // string taskbarFilter = "";
+            // foreach (object f in taskbarFilterListBox.Items)
+            // {
+            //     string filter = f.ToString();
+            //     taskbarFilter += filter + "*";
+            // }
+            // Config.Default.TaskbarProgramFilter = taskbarFilter;
 
             // Save renderer path
             switch (themeComboBox.SelectedItem)
@@ -88,18 +89,18 @@ namespace SimpleClassicThemeTaskbar
 
         private void button2_Click(object sender, EventArgs e)
         {
-            SettingsAddProgramFilter dialog = new();
-            _ = dialog.ShowDialog(this);
-            _ = taskbarFilterListBox.Items.Add(dialog.result);
-            dialog.Dispose();
+            // SettingsAddProgramFilter dialog = new();
+            // _ = dialog.ShowDialog(this);
+            // _ = taskbarFilterListBox.Items.Add(dialog.result);
+            // dialog.Dispose();
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
-            if (taskbarFilterListBox.SelectedIndex != -1)
-            {
-                taskbarFilterListBox.Items.RemoveAt(taskbarFilterListBox.SelectedIndex);
-            }
+            // if (taskbarFilterListBox.SelectedIndex != -1)
+            // {
+            //     taskbarFilterListBox.Items.RemoveAt(taskbarFilterListBox.SelectedIndex);
+            // }
         }
 
         private void ButtonApply_Click(object sender, EventArgs e)
@@ -288,10 +289,10 @@ namespace SimpleClassicThemeTaskbar
             }
 
             // Load taskbar filter
-            string taskbarFilter = Config.Default.TaskbarProgramFilter;
-            foreach (string filter in taskbarFilter.Split('*'))
-                if (filter != "")
-                    _ = taskbarFilterListBox.Items.Add(filter);
+            // string taskbarFilter = Config.Default.TaskbarProgramFilter;
+            // foreach (string filter in taskbarFilter.Split('*'))
+            //     if (filter != "")
+            //         _ = taskbarFilterListBox.Items.Add(filter);
 
             UpdateSelectedRenderer();
             PopulateVisualStyles();
@@ -483,6 +484,14 @@ namespace SimpleClassicThemeTaskbar
         private void ShowDescriptionButton_CheckedChanged(object sender, EventArgs e)
         {
             tweaksPropertyGrid.HelpVisible = showDescriptionButton.Checked;
+        }
+
+        private void ManageHiddenElementsButton_Click(object sender, EventArgs e)
+        {
+            using (var dialog = new ProgramFilterSettings())
+            {
+                dialog.ShowDialog();
+            }
         }
     }
 }

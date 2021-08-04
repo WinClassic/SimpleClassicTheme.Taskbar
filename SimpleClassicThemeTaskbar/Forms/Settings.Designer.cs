@@ -40,13 +40,15 @@
             this.languageComboBox = new System.Windows.Forms.ComboBox();
             this.languageLabel = new System.Windows.Forms.Label();
             this.tabThemes = new System.Windows.Forms.TabPage();
+            this.tabControl1 = new System.Windows.Forms.TabControl();
+            this.visualStyleTab = new System.Windows.Forms.TabPage();
             this.sizeComboBox = new System.Windows.Forms.ComboBox();
-            this.label6 = new System.Windows.Forms.Label();
-            this.colorSchemeComboBox = new System.Windows.Forms.ComboBox();
-            this.label4 = new System.Windows.Forms.Label();
-            this.visualStyleComboBox = new System.Windows.Forms.ComboBox();
-            this.manageStylesButton = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
+            this.manageStylesButton = new System.Windows.Forms.Button();
+            this.colorSchemeComboBox = new System.Windows.Forms.ComboBox();
+            this.visualStyleComboBox = new System.Windows.Forms.ComboBox();
+            this.label4 = new System.Windows.Forms.Label();
             this.themeComboBox = new System.Windows.Forms.ComboBox();
             this.themeLabel = new System.Windows.Forms.Label();
             this.tabStartButton = new System.Windows.Forms.TabPage();
@@ -61,10 +63,8 @@
             this.quickLaunchLinkLabel = new System.Windows.Forms.Label();
             this.enableQuickLaunchCheckBox = new System.Windows.Forms.CheckBox();
             this.tabTaskView = new System.Windows.Forms.TabPage();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.addElementButton = new System.Windows.Forms.Button();
-            this.taskbarFilterListBox = new System.Windows.Forms.ListBox();
-            this.removeElementButton = new System.Windows.Forms.Button();
+            this.manageHiddenElementsButton = new System.Windows.Forms.Button();
+            this.enableGroupingCheckBox = new System.Windows.Forms.CheckBox();
             this.showTaskbarOnAllDesktops = new System.Windows.Forms.CheckBox();
             this.tabSystemTray = new System.Windows.Forms.TabPage();
             this.enableSysTrayColorChange = new System.Windows.Forms.CheckBox();
@@ -90,16 +90,14 @@
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
             this.customIconFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.contentSplitContainer = new System.Windows.Forms.SplitContainer();
-            this.tabControl1 = new System.Windows.Forms.TabControl();
-            this.visualStyleTab = new System.Windows.Forms.TabPage();
-            this.enableGroupingCheckBox = new System.Windows.Forms.CheckBox();
             this.tabControl.SuspendLayout();
             this.tabGeneral.SuspendLayout();
             this.tabThemes.SuspendLayout();
+            this.tabControl1.SuspendLayout();
+            this.visualStyleTab.SuspendLayout();
             this.tabStartButton.SuspendLayout();
             this.tabQuickLaunch.SuspendLayout();
             this.tabTaskView.SuspendLayout();
-            this.groupBox1.SuspendLayout();
             this.tabSystemTray.SuspendLayout();
             this.tabTweaks.SuspendLayout();
             this.tweaksToolStrip.SuspendLayout();
@@ -111,8 +109,6 @@
             this.contentSplitContainer.Panel1.SuspendLayout();
             this.contentSplitContainer.Panel2.SuspendLayout();
             this.contentSplitContainer.SuspendLayout();
-            this.tabControl1.SuspendLayout();
-            this.visualStyleTab.SuspendLayout();
             this.SuspendLayout();
             // 
             // buttonApply
@@ -203,6 +199,26 @@
             this.tabThemes.Name = "tabThemes";
             this.tabThemes.UseVisualStyleBackColor = true;
             // 
+            // tabControl1
+            // 
+            this.tabControl1.Controls.Add(this.visualStyleTab);
+            resources.ApplyResources(this.tabControl1, "tabControl1");
+            this.tabControl1.Name = "tabControl1";
+            this.tabControl1.SelectedIndex = 0;
+            // 
+            // visualStyleTab
+            // 
+            this.visualStyleTab.Controls.Add(this.sizeComboBox);
+            this.visualStyleTab.Controls.Add(this.label3);
+            this.visualStyleTab.Controls.Add(this.label6);
+            this.visualStyleTab.Controls.Add(this.manageStylesButton);
+            this.visualStyleTab.Controls.Add(this.colorSchemeComboBox);
+            this.visualStyleTab.Controls.Add(this.visualStyleComboBox);
+            this.visualStyleTab.Controls.Add(this.label4);
+            resources.ApplyResources(this.visualStyleTab, "visualStyleTab");
+            this.visualStyleTab.Name = "visualStyleTab";
+            this.visualStyleTab.UseVisualStyleBackColor = true;
+            // 
             // sizeComboBox
             // 
             this.sizeComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
@@ -210,10 +226,22 @@
             resources.ApplyResources(this.sizeComboBox, "sizeComboBox");
             this.sizeComboBox.Name = "sizeComboBox";
             // 
+            // label3
+            // 
+            resources.ApplyResources(this.label3, "label3");
+            this.label3.Name = "label3";
+            // 
             // label6
             // 
             resources.ApplyResources(this.label6, "label6");
             this.label6.Name = "label6";
+            // 
+            // manageStylesButton
+            // 
+            resources.ApplyResources(this.manageStylesButton, "manageStylesButton");
+            this.manageStylesButton.Name = "manageStylesButton";
+            this.manageStylesButton.UseVisualStyleBackColor = true;
+            this.manageStylesButton.Click += new System.EventHandler(this.manageStylesButton_Click);
             // 
             // colorSchemeComboBox
             // 
@@ -226,11 +254,6 @@
             resources.ApplyResources(this.colorSchemeComboBox, "colorSchemeComboBox");
             this.colorSchemeComboBox.Name = "colorSchemeComboBox";
             // 
-            // label4
-            // 
-            resources.ApplyResources(this.label4, "label4");
-            this.label4.Name = "label4";
-            // 
             // visualStyleComboBox
             // 
             this.visualStyleComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
@@ -239,17 +262,10 @@
             this.visualStyleComboBox.Name = "visualStyleComboBox";
             this.visualStyleComboBox.SelectedIndexChanged += new System.EventHandler(this.visualStyleComboBox_SelectedIndexChanged);
             // 
-            // manageStylesButton
+            // label4
             // 
-            resources.ApplyResources(this.manageStylesButton, "manageStylesButton");
-            this.manageStylesButton.Name = "manageStylesButton";
-            this.manageStylesButton.UseVisualStyleBackColor = true;
-            this.manageStylesButton.Click += new System.EventHandler(this.manageStylesButton_Click);
-            // 
-            // label3
-            // 
-            resources.ApplyResources(this.label3, "label3");
-            this.label3.Name = "label3";
+            resources.ApplyResources(this.label4, "label4");
+            this.label4.Name = "label4";
             // 
             // themeComboBox
             // 
@@ -352,41 +368,25 @@
             // 
             // tabTaskView
             // 
+            this.tabTaskView.Controls.Add(this.manageHiddenElementsButton);
             this.tabTaskView.Controls.Add(this.enableGroupingCheckBox);
-            this.tabTaskView.Controls.Add(this.groupBox1);
             this.tabTaskView.Controls.Add(this.showTaskbarOnAllDesktops);
             resources.ApplyResources(this.tabTaskView, "tabTaskView");
             this.tabTaskView.Name = "tabTaskView";
             this.tabTaskView.UseVisualStyleBackColor = true;
             // 
-            // groupBox1
+            // manageHiddenElementsButton
             // 
-            this.groupBox1.Controls.Add(this.addElementButton);
-            this.groupBox1.Controls.Add(this.taskbarFilterListBox);
-            this.groupBox1.Controls.Add(this.removeElementButton);
-            resources.ApplyResources(this.groupBox1, "groupBox1");
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.TabStop = false;
+            resources.ApplyResources(this.manageHiddenElementsButton, "manageHiddenElementsButton");
+            this.manageHiddenElementsButton.Name = "manageHiddenElementsButton";
+            this.manageHiddenElementsButton.UseVisualStyleBackColor = true;
+            this.manageHiddenElementsButton.Click += new System.EventHandler(this.ManageHiddenElementsButton_Click);
             // 
-            // addElementButton
+            // enableGroupingCheckBox
             // 
-            resources.ApplyResources(this.addElementButton, "addElementButton");
-            this.addElementButton.Name = "addElementButton";
-            this.addElementButton.UseVisualStyleBackColor = true;
-            this.addElementButton.Click += new System.EventHandler(this.button2_Click);
-            // 
-            // taskbarFilterListBox
-            // 
-            this.taskbarFilterListBox.FormattingEnabled = true;
-            resources.ApplyResources(this.taskbarFilterListBox, "taskbarFilterListBox");
-            this.taskbarFilterListBox.Name = "taskbarFilterListBox";
-            // 
-            // removeElementButton
-            // 
-            resources.ApplyResources(this.removeElementButton, "removeElementButton");
-            this.removeElementButton.Name = "removeElementButton";
-            this.removeElementButton.UseVisualStyleBackColor = true;
-            this.removeElementButton.Click += new System.EventHandler(this.button3_Click);
+            resources.ApplyResources(this.enableGroupingCheckBox, "enableGroupingCheckBox");
+            this.enableGroupingCheckBox.Name = "enableGroupingCheckBox";
+            this.enableGroupingCheckBox.UseVisualStyleBackColor = false;
             // 
             // showTaskbarOnAllDesktops
             // 
@@ -561,32 +561,6 @@
             // 
             this.contentSplitContainer.Panel2.Controls.Add(this.tabControl);
             // 
-            // tabControl1
-            // 
-            this.tabControl1.Controls.Add(this.visualStyleTab);
-            resources.ApplyResources(this.tabControl1, "tabControl1");
-            this.tabControl1.Name = "tabControl1";
-            this.tabControl1.SelectedIndex = 0;
-            // 
-            // visualStyleTab
-            // 
-            this.visualStyleTab.Controls.Add(this.sizeComboBox);
-            this.visualStyleTab.Controls.Add(this.label3);
-            this.visualStyleTab.Controls.Add(this.label6);
-            this.visualStyleTab.Controls.Add(this.manageStylesButton);
-            this.visualStyleTab.Controls.Add(this.colorSchemeComboBox);
-            this.visualStyleTab.Controls.Add(this.visualStyleComboBox);
-            this.visualStyleTab.Controls.Add(this.label4);
-            resources.ApplyResources(this.visualStyleTab, "visualStyleTab");
-            this.visualStyleTab.Name = "visualStyleTab";
-            this.visualStyleTab.UseVisualStyleBackColor = true;
-            // 
-            // enableGroupingCheckBox
-            // 
-            resources.ApplyResources(this.enableGroupingCheckBox, "enableGroupingCheckBox");
-            this.enableGroupingCheckBox.Name = "enableGroupingCheckBox";
-            this.enableGroupingCheckBox.UseVisualStyleBackColor = false;
-            // 
             // Settings
             // 
             resources.ApplyResources(this, "$this");
@@ -604,12 +578,13 @@
             this.tabControl.ResumeLayout(false);
             this.tabGeneral.ResumeLayout(false);
             this.tabThemes.ResumeLayout(false);
+            this.tabControl1.ResumeLayout(false);
+            this.visualStyleTab.ResumeLayout(false);
             this.tabStartButton.ResumeLayout(false);
             this.tabStartButton.PerformLayout();
             this.tabQuickLaunch.ResumeLayout(false);
             this.tabQuickLaunch.PerformLayout();
             this.tabTaskView.ResumeLayout(false);
-            this.groupBox1.ResumeLayout(false);
             this.tabSystemTray.ResumeLayout(false);
             this.tabSystemTray.PerformLayout();
             this.tabTweaks.ResumeLayout(false);
@@ -625,8 +600,6 @@
             this.contentSplitContainer.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.contentSplitContainer)).EndInit();
             this.contentSplitContainer.ResumeLayout(false);
-            this.tabControl1.ResumeLayout(false);
-            this.visualStyleTab.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -654,9 +627,6 @@
         private System.Windows.Forms.TabPage tabSystemTray;
         private System.Windows.Forms.CheckBox enableSysTrayColorChange;
         private System.Windows.Forms.CheckBox enableSysTrayHover;
-        private System.Windows.Forms.Button removeElementButton;
-        private System.Windows.Forms.Button addElementButton;
-        private System.Windows.Forms.ListBox taskbarFilterListBox;
         private System.Windows.Forms.TabPage tabQuickLaunch;
         private System.Windows.Forms.Label quickLaunchLinkLabel;
         private System.Windows.Forms.CheckBox enableQuickLaunchCheckBox;
@@ -674,7 +644,6 @@
         private System.Windows.Forms.Label bel;
         private System.Windows.Forms.Label exitItemLabel;
         private System.Windows.Forms.ComboBox exitItemComboBox;
-        private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.TabPage tabDebug;
         private System.Windows.Forms.CheckBox enableActiveTaskbarCheckBox;
         private System.Windows.Forms.TabPage tabThemes;
@@ -697,5 +666,6 @@
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.TabPage visualStyleTab;
         private System.Windows.Forms.CheckBox enableGroupingCheckBox;
+        private System.Windows.Forms.Button manageHiddenElementsButton;
     }
 }
