@@ -1,9 +1,5 @@
-﻿using Microsoft.VisualBasic;
-
-using SimpleClassicTheme.Taskbar.Helpers;
-using SimpleClassicTheme.Taskbar.Helpers.NativeMethods;
+﻿using SimpleClassicTheme.Taskbar.Helpers;
 using SimpleClassicTheme.Taskbar.UI.Misc;
-using SimpleClassicThemeTaskbar;
 
 using System;
 using System.Collections.Generic;

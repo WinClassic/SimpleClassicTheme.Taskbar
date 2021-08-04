@@ -3,8 +3,6 @@ using SimpleClassicTheme.Taskbar.Helpers;
 using SimpleClassicTheme.Taskbar.Helpers.NativeMethods;
 using SimpleClassicTheme.Taskbar.ThemeEngine.VisualStyles;
 
-using SimpleClassicThemeTaskbar;
-
 using System;
 using System.Diagnostics;
 using System.Drawing;

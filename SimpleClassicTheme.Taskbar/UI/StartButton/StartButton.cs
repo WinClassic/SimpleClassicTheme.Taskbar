@@ -1,7 +1,5 @@
 ﻿using SimpleClassicTheme.Taskbar.Helpers;
 
-using SimpleClassicThemeTaskbar;
-
 using System;
 using System.ComponentModel;
 using System.Windows.Forms;

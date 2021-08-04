@@ -1,5 +1,4 @@
 ﻿using SimpleClassicTheme.Common.Logging;
-using SimpleClassicTheme.Taskbar;
 using SimpleClassicTheme.Taskbar.Helpers;
 
 using System;
@@ -7,7 +6,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace SimpleClassicThemeTaskbar
+namespace SimpleClassicTheme.Taskbar
 {
     internal static class TaskbarManager
     {
