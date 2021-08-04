@@ -62,7 +62,7 @@
   </PropertyGroup>
   <PropertyGroup>
     <LangVersion>preview</LangVersion>
-    <StartupObject>SimpleClassicThemeTaskbar.ApplicationEntryPoint</StartupObject>
+    <StartupObject>SimpleClassicTheme.Taskbar.ApplicationEntryPoint</StartupObject>
     <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
     <PackageIcon>SimpleClassicTheme.ico</PackageIcon>
     <ApplicationIcon>SimpleClassicTheme.ico</ApplicationIcon>
