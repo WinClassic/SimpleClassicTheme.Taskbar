@@ -14,30 +14,30 @@ jobs:
     
     - name: Restore packages
       run: dotnet restore
-      working-directory: ./SimpleClassicThemeTaskbar/
+      working-directory: ./SimpleClassicTheme.Taskbar/
     
     - name: Setup MSBuild
       uses: microsoft/setup-msbuild@v1
       
     - name: Build SCTT x86
-      run: msbuild -p:Configuration=Release -p:Platform=x86 SimpleClassicThemeTaskbar.sln
+      run: msbuild -p:Configuration=Release -p:Platform=x86 SimpleClassicTheme.Taskbar.sln
       working-directory: ./
 
     - name: Build SCTT x64
-      run: msbuild -p:Configuration=Release -p:Platform=AMD64 SimpleClassicThemeTaskbar.sln
+      run: msbuild -p:Configuration=Release -p:Platform=AMD64 SimpleClassicTheme.Taskbar.sln
       working-directory: ./
 
     - name: Upload x86 build artifacts
       uses: actions/upload-artifact@v2.2.3
       with:
-        name: SimpleClassicThemeTaskbar_x86
-        path: './SimpleClassicThemeTaskbar/bin/x86/Release/net5.0-windows'
+        name: SimpleClassicTheme.Taskbar_x86
+        path: './SimpleClassicTheme.Taskbar/bin/x86/Release/net5.0-windows'
 
     - name: Upload x64 build artifacts
       uses: actions/upload-artifact@v2.2.3
       with:
-        name: SimpleClassicThemeTaskbar_x64
-        path: './SimpleClassicThemeTaskbar/bin/x64/Release/net5.0-windows'
+        name: SimpleClassicTheme.Taskbar_x64
+        path: './SimpleClassicTheme.Taskbar/bin/x64/Release/net5.0-windows'
 
   release:
     runs-on: ubuntu-latest
@@ -47,20 +47,20 @@ jobs:
     - name: Download x86 build artifacts 
       uses: actions/download-artifact@v2.0.9
       with:
-        name: SimpleClassicThemeTaskbar_x86
-        path: SimpleClassicThemeTaskbar_x86
+        name: SimpleClassicTheme.Taskbar_x86
+        path: SimpleClassicTheme.Taskbar_x86
 
     - name: Download x64 build artifacts
       uses: actions/download-artifact@v2.0.9
       with:
-        name: SimpleClassicThemeTaskbar_x64
-        path: SimpleClassicThemeTaskbar_x64
+        name: SimpleClassicTheme.Taskbar_x64
+        path: SimpleClassicTheme.Taskbar_x64
         
     - name: Zip files for x86
-      run: zip -r SimpleClassicThemeTaskbar_x86.zip SimpleClassicThemeTaskbar_x86
+      run: zip -r SimpleClassicTheme.Taskbar_x86.zip SimpleClassicTheme.Taskbar_x86
 
     - name: Zip files for x64
-      run: zip -r SimpleClassicThemeTaskbar_x64.zip SimpleClassicThemeTaskbar_x64
+      run: zip -r SimpleClassicTheme.Taskbar_x64.zip SimpleClassicTheme.Taskbar_x64
         
     - name: Publish release
       uses: "marvinpinto/action-automatic-releases@latest"
@@ -70,5 +70,5 @@ jobs:
         prerelease: true
         title: "Development Build"
         files: |
-          SimpleClassicThemeTaskbar_x86.zip
-          SimpleClassicThemeTaskbar_x64.zip
+          SimpleClassicTheme.Taskbar_x86.zip
+          SimpleClassicTheme.Taskbar_x64.zip
