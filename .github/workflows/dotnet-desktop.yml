@@ -32,11 +32,11 @@ jobs:
       uses: microsoft/setup-msbuild@v1
       
     - name: Build SCTT x86
-      run: 'msbuild -p:Configuration=Release -p:Platform=x86 "${{ env.SCTT_PATH }}/SimpleClassicTheme.Taskbar.sln"'
+      run: 'msbuild -p:Configuration=Release -p:Platform=x86 "${{ env.SCTT_PATH }}.sln"'
       working-directory: ./
 
     - name: Build SCTT x64
-      run: 'msbuild -p:Configuration=Release -p:Platform=AMD64 "${{ env.SCTT_PATH }}/SimpleClassicTheme.Taskbar.sln"'
+      run: 'msbuild -p:Configuration=Release -p:Platform=AMD64 "${{ env.SCTT_PATH }}.sln"'
       working-directory: ./
 
     - name: Upload x86 build artifacts
