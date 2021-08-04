@@ -1,3 +1,4 @@
+using SimpleClassicTheme.Common.ErrorHandling;
 using SimpleClassicTheme.Common.Logging;
 using SimpleClassicTheme.Taskbar.Forms;
 using SimpleClassicTheme.Taskbar.Helpers;
@@ -9,24 +10,20 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Reflection;
-using System.Runtime.InteropServices;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
 namespace SimpleClassicTheme.Taskbar
 {
     internal static class ApplicationEntryPoint
     {
-        public static int ErrorCount = 0;
-        public static UserControlEx ErrorSource;
-
-        public static bool SCTCompatMode = false;
-
-        public static SystemTrayNotificationService TrayNotificationService;
-        private static UnmanagedCodeMigration.VirtualDesktopNotification VirtualDesktopNotification;
+        private static readonly ErrorHandler errorHandler = new() { SentryDsn = "https://eadebff4c83e42e4955d85403ff0cc7c@o925637.ingest.sentry.io/5874762" };
         private static uint virtualDesktopNotificationCookie;
+        private static UnmanagedCodeMigration.VirtualDesktopNotification VirtualDesktopNotification;
+        public static bool SCTCompatMode = false;
+        public static int ErrorCount = 0;
+        public static SystemTrayNotificationService TrayNotificationService;
+        public static UserControlEx ErrorSource;
 
         public static void VirtualDesktopNotifcation_CurrentDesktopChanged(object sender, EventArgs e)
         {
@@ -109,18 +106,6 @@ namespace SimpleClassicTheme.Taskbar
                     taskbar.NeverShow = true;
             }
             Logger.Instance.Log(LoggerVerbosity.Detailed, "TaskbarManager", $"Created {taskbars} taskbars in total");
-        }
-
-        private static void HandleException(Exception ex)
-        {
-            Logger.Instance.Log(LoggerVerbosity.Basic, "ExceptionHandler", $"An exception of type {ex.GetType().FullName} has occured.");
-            Logger.Instance.Log(LoggerVerbosity.Detailed, "ExceptionHandler", $"Exception details:\nMessage: {ex.Message}\nException location: {ex.TargetSite}\nStack trace: {ex.StackTrace}");
-            Logger.Instance.Dispose();
-
-            using (var crashForm = new CrashForm(ex))
-            {
-                crashForm.ShowDialog();
-            }
         }
 
         /// <summary>
@@ -250,7 +235,7 @@ namespace SimpleClassicTheme.Taskbar
 
             //Setup crash reports
             Logger.Instance.Log(LoggerVerbosity.Detailed, "EntryPoint", "Release instance, enabling error handler");
-            RegisterExceptionHandlers();
+            errorHandler.SubscribeToErrorEvents();
 
             //Check if system/program architecture matches
             if (Environment.Is64BitOperatingSystem != Environment.Is64BitProcess)
@@ -305,18 +290,6 @@ namespace SimpleClassicTheme.Taskbar
             Application.Run();
 
             ExitSCTT();
-        }
-
-        private static void RegisterExceptionHandlers()
-        {
-            Application.ThreadException += (sender, e) => HandleException(e.Exception);
-            Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
-            AppDomain.CurrentDomain.UnhandledException += (sender, e) =>
-            {
-                if (e.IsTerminating && e.ExceptionObject is Exception ex)
-                    HandleException(ex);
-            };
-            // AppDomain.CurrentDomain.FirstChanceException += (sender, e) => HandleException(e.Exception);
         }
     }
 }
