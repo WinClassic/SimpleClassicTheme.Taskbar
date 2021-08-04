@@ -9,8 +9,8 @@
  * 
  */
 
-using SimpleClassicThemeTaskbar.Helpers;
-using SimpleClassicThemeTaskbar.Helpers.NativeMethods;
+using SimpleClassicTheme.Taskbar.Helpers;
+using SimpleClassicTheme.Taskbar.Helpers.NativeMethods;
 
 using System;
 using System.Collections.Generic;
@@ -18,9 +18,9 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
-using static SimpleClassicThemeTaskbar.Helpers.NativeMethods.WinDef;
+using static SimpleClassicTheme.Taskbar.Helpers.NativeMethods.WinDef;
 
-namespace SimpleClassicThemeTaskbar
+namespace SimpleClassicTheme.Taskbar
 {
     public partial class Taskbar : Form
     {

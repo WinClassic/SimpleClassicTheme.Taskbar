@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SimpleClassicThemeTaskbar.Helpers.NativeMethods
+namespace SimpleClassicTheme.Taskbar.Helpers.NativeMethods
 {
     /*
      * When to use what integer type:

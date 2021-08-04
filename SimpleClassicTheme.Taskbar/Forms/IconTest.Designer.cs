@@ -1,5 +1,5 @@
 ﻿
-namespace SimpleClassicThemeTaskbar.Forms
+namespace SimpleClassicTheme.Taskbar.Forms
 {
 	partial class IconTest
 	{

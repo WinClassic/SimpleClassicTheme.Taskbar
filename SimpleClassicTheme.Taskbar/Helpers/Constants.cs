@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace SimpleClassicThemeTaskbar.Helpers
+namespace SimpleClassicTheme.Taskbar.Helpers
 {
     public static class Constants
     {

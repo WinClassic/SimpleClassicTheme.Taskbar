@@ -1,4 +1,4 @@
-﻿namespace SimpleClassicThemeTaskbar.UIElements.StartButton
+﻿namespace SimpleClassicTheme.Taskbar.UIElements.StartButton
 {
     partial class StartButton
     {

@@ -1,5 +1,5 @@
-﻿using SimpleClassicThemeTaskbar.Helpers;
-using SimpleClassicThemeTaskbar.Helpers.NativeMethods;
+﻿using SimpleClassicTheme.Taskbar.Helpers;
+using SimpleClassicTheme.Taskbar.Helpers.NativeMethods;
 
 using System.Collections.Generic;
 using System.Drawing;

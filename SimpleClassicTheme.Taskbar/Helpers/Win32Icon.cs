@@ -1,4 +1,4 @@
-﻿using SimpleClassicThemeTaskbar.Helpers.NativeMethods;
+﻿using SimpleClassicTheme.Taskbar.Helpers.NativeMethods;
 
 using System;
 using System.Collections.Generic;
@@ -7,9 +7,9 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
-using static SimpleClassicThemeTaskbar.Helpers.NativeMethods.WinDef;
+using static SimpleClassicTheme.Taskbar.Helpers.NativeMethods.WinDef;
 
-namespace SimpleClassicThemeTaskbar.Helpers
+namespace SimpleClassicTheme.Taskbar.Helpers
 {
     [ComImport()]
     [Guid("46EB5926-582E-4017-9FDF-E8998DAA0950")]

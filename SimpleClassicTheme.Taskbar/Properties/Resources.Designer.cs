@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace SimpleClassicThemeTaskbar.Properties {
+namespace SimpleClassicTheme.Taskbar.Properties {
     using System;
     
     

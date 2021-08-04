@@ -1,13 +1,13 @@
-﻿using SimpleClassicThemeTaskbar.Helpers.NativeMethods;
+﻿using SimpleClassicTheme.Taskbar.Helpers.NativeMethods;
 
 using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Text;
 
-using static SimpleClassicThemeTaskbar.Helpers.NativeMethods.WinDef;
+using static SimpleClassicTheme.Taskbar.Helpers.NativeMethods.WinDef;
 
-namespace SimpleClassicThemeTaskbar
+namespace SimpleClassicTheme.Taskbar
 {
 
     public struct Window

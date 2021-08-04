@@ -1,4 +1,4 @@
-﻿namespace SimpleClassicThemeTaskbar
+﻿namespace SimpleClassicTheme.Taskbar
 {
 	partial class PopupTaskbarGroup
 	{

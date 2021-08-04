@@ -1,5 +1,5 @@
-﻿using SimpleClassicThemeTaskbar.Helpers;
-using SimpleClassicThemeTaskbar.Helpers.NativeMethods;
+﻿using SimpleClassicTheme.Taskbar.Helpers;
+using SimpleClassicTheme.Taskbar.Helpers.NativeMethods;
 
 using System;
 using System.Collections.Generic;
@@ -11,7 +11,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
 
-namespace SimpleClassicThemeTaskbar
+namespace SimpleClassicTheme.Taskbar
 {
     public class GroupedTaskbarProgram : BaseTaskbarProgram
     {

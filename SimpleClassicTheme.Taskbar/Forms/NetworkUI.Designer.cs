@@ -1,4 +1,4 @@
-﻿namespace SimpleClassicThemeTaskbar.Forms
+﻿namespace SimpleClassicTheme.Taskbar.Forms
 {
     partial class NetworkUI
     {
@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.panel1 = new SimpleClassicThemeTaskbar.UIElements.Misc.DoubleBufferedPanel();
+            this.panel1 = new SimpleClassicTheme.Taskbar.UIElements.Misc.DoubleBufferedPanel();
             this.button2 = new System.Windows.Forms.Button();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.timer1 = new System.Windows.Forms.Timer(this.components);

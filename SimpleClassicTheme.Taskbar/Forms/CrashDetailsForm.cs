@@ -1,11 +1,11 @@
-﻿using SimpleClassicThemeTaskbar.Helpers;
+﻿using SimpleClassicTheme.Taskbar.Helpers;
 
 using System;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 
-namespace SimpleClassicThemeTaskbar.Forms
+namespace SimpleClassicTheme.Taskbar.Forms
 {
     public partial class CrashDetailsForm : Form
     {

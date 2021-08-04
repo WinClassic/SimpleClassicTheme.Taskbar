@@ -1,4 +1,4 @@
-﻿using SimpleClassicThemeTaskbar.Helpers.NativeMethods;
+﻿using SimpleClassicTheme.Taskbar.Helpers.NativeMethods;
 
 using System;
 using System.Collections.Generic;
@@ -12,7 +12,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace SimpleClassicThemeTaskbar.Forms
+namespace SimpleClassicTheme.Taskbar.Forms
 {
     public partial class IconTest : Form
     {

@@ -1,5 +1,5 @@
-﻿using SimpleClassicThemeTaskbar.Helpers;
-using SimpleClassicThemeTaskbar.Helpers.NativeMethods;
+﻿using SimpleClassicTheme.Taskbar.Helpers;
+using SimpleClassicTheme.Taskbar.Helpers.NativeMethods;
 
 using System;
 using System.Collections.Generic;
@@ -12,9 +12,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-using static SimpleClassicThemeTaskbar.Helpers.NativeMethods.WinDef;
+using static SimpleClassicTheme.Taskbar.Helpers.NativeMethods.WinDef;
 
-namespace SimpleClassicThemeTaskbar
+namespace SimpleClassicTheme.Taskbar
 {
     public partial class PopupTaskbarGroup : Form
     {

@@ -2,7 +2,7 @@
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace SimpleClassicThemeTaskbar.Helpers
+namespace SimpleClassicTheme.Taskbar.Helpers
 {
     public static class NinePatchExtensions
     {

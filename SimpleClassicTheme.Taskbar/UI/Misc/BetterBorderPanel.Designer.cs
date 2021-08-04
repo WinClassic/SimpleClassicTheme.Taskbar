@@ -1,4 +1,4 @@
-﻿namespace SimpleClassicThemeTaskbar.UIElements.Misc
+﻿namespace SimpleClassicTheme.Taskbar.UIElements.Misc
 {
     partial class BetterBorderPanel
     {

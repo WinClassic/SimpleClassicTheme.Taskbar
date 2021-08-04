@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SimpleClassicThemeTaskbar.Helpers
+namespace SimpleClassicTheme.Taskbar.Helpers
 {
     public enum ExitMenuItemCondition
     {

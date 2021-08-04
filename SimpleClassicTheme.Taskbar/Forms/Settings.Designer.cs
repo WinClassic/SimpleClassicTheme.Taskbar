@@ -1,4 +1,4 @@
-﻿namespace SimpleClassicThemeTaskbar
+﻿namespace SimpleClassicTheme.Taskbar
 {
     partial class Settings
     {
@@ -502,7 +502,7 @@
             // 
             this.bannerPictureBox.BackColor = System.Drawing.Color.White;
             resources.ApplyResources(this.bannerPictureBox, "bannerPictureBox");
-            this.bannerPictureBox.Image = global::SimpleClassicThemeTaskbar.Properties.Resources.win98scttbanner;
+            this.bannerPictureBox.Image = global::SimpleClassicTheme.Taskbar.Properties.Resources.win98scttbanner;
             this.bannerPictureBox.Name = "bannerPictureBox";
             this.bannerPictureBox.TabStop = false;
             // 

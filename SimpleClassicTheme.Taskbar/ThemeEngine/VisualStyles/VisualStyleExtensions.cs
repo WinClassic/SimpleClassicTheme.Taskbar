@@ -1,14 +1,14 @@
-﻿using SimpleClassicThemeTaskbar.Helpers;
-using SimpleClassicThemeTaskbar.Helpers.NativeMethods;
+﻿using SimpleClassicTheme.Taskbar.Helpers;
+using SimpleClassicTheme.Taskbar.Helpers.NativeMethods;
 
 using System;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Xml.Linq;
 
-using static SimpleClassicThemeTaskbar.Helpers.NativeMethods.WinDef;
+using static SimpleClassicTheme.Taskbar.Helpers.NativeMethods.WinDef;
 
-namespace SimpleClassicThemeTaskbar.ThemeEngine.VisualStyles
+namespace SimpleClassicTheme.Taskbar.ThemeEngine.VisualStyles
 {
     public static class VisualStyleExtensions
     {

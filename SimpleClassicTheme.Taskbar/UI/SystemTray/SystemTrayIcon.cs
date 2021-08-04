@@ -1,5 +1,5 @@
-﻿using SimpleClassicThemeTaskbar.Helpers;
-using SimpleClassicThemeTaskbar.Helpers.NativeMethods;
+﻿using SimpleClassicTheme.Taskbar.Helpers;
+using SimpleClassicTheme.Taskbar.Helpers.NativeMethods;
 
 using System;
 using System.Collections.Generic;
@@ -9,7 +9,7 @@ using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
-namespace SimpleClassicThemeTaskbar.UIElements.SystemTray
+namespace SimpleClassicTheme.Taskbar.UIElements.SystemTray
 {
     public class SystemTrayIcon : PictureBox
     {

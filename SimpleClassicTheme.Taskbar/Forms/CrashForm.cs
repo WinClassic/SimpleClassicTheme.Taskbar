@@ -1,12 +1,12 @@
 ﻿using Sentry;
 
-using SimpleClassicThemeTaskbar.Helpers;
+using SimpleClassicTheme.Taskbar.Helpers;
 
 using System;
 using System.ComponentModel;
 using System.Windows.Forms;
 
-namespace SimpleClassicThemeTaskbar.Forms
+namespace SimpleClassicTheme.Taskbar.Forms
 {
     public partial class CrashForm : Form
     {

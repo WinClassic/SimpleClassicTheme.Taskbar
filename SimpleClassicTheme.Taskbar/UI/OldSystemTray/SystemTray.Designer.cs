@@ -1,4 +1,4 @@
-﻿namespace SimpleClassicThemeTaskbar.UIElements.OldSystemTray
+﻿namespace SimpleClassicTheme.Taskbar.UIElements.OldSystemTray
 {
     partial class SystemTray
     {

@@ -2,7 +2,7 @@
 using IniParser.Model.Configuration;
 using IniParser.Parser;
 
-using SimpleClassicThemeTaskbar.Helpers.NativeMethods;
+using SimpleClassicTheme.Taskbar.Helpers.NativeMethods;
 
 using System;
 using System.Collections.Generic;
@@ -13,7 +13,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace SimpleClassicThemeTaskbar.ThemeEngine.VisualStyles
+namespace SimpleClassicTheme.Taskbar.ThemeEngine.VisualStyles
 {
     /// <summary>
     /// Represents a Windows visual style

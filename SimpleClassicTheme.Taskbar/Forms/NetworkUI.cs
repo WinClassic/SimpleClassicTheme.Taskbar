@@ -7,11 +7,11 @@ using System.Runtime.InteropServices;
 using System.Drawing;
 using System.Linq;
 
-using SimpleClassicThemeTaskbar.UIElements.NetworkUI;
+using SimpleClassicTheme.Taskbar.UIElements.NetworkUI;
 using System.Threading;
-using SimpleClassicThemeTaskbar.Helpers.NativeMethods;
+using SimpleClassicTheme.Taskbar.Helpers.NativeMethods;
 
-namespace SimpleClassicThemeTaskbar.Forms
+namespace SimpleClassicTheme.Taskbar.Forms
 {
     public partial class NetworkUI : Form
     {

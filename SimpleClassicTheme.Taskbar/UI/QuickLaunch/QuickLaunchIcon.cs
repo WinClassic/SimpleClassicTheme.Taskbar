@@ -10,7 +10,7 @@ using System.Windows.Forms;
 using System.Reflection;
 using System.Diagnostics;
 
-namespace SimpleClassicThemeTaskbar.UIElements.QuickLaunch
+namespace SimpleClassicTheme.Taskbar.UIElements.QuickLaunch
 {
     public partial class QuickLaunchIcon : PictureBox
     {

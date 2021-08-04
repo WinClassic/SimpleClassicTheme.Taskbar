@@ -1,7 +1,7 @@
 ﻿
 using System.Drawing;
 
-namespace SimpleClassicThemeTaskbar
+namespace SimpleClassicTheme.Taskbar
 {
     partial class Taskbar
     {
@@ -32,10 +32,10 @@ namespace SimpleClassicThemeTaskbar
         private void InitializeComponent()
         {
 			this.components = new System.ComponentModel.Container();
-			this.quickLaunch1 = new SimpleClassicThemeTaskbar.UIElements.QuickLaunch.QuickLaunch();
-			this.verticalDivider3 = new SimpleClassicThemeTaskbar.UIElements.Misc.VerticalDivider();
-			this.systemTray1 = SimpleClassicThemeTaskbar.Helpers.Config.Default.EnablePassiveTray ? new UIElements.SystemTray.SystemTray() : new UIElements.OldSystemTray.SystemTray();
-			this.startButton1 = new SimpleClassicThemeTaskbar.UIElements.StartButton.StartButton();
+			this.quickLaunch1 = new SimpleClassicTheme.Taskbar.UIElements.QuickLaunch.QuickLaunch();
+			this.verticalDivider3 = new SimpleClassicTheme.Taskbar.UIElements.Misc.VerticalDivider();
+			this.systemTray1 = SimpleClassicTheme.Taskbar.Helpers.Config.Default.EnablePassiveTray ? new UIElements.SystemTray.SystemTray() : new UIElements.OldSystemTray.SystemTray();
+			this.startButton1 = new SimpleClassicTheme.Taskbar.UIElements.StartButton.StartButton();
 			this.timerUpdateUI = new System.Windows.Forms.Timer(this.components);
 			this.timerUpdateInformation = new System.Windows.Forms.Timer(this.components);
 			this.timerUpdate = new System.Windows.Forms.Timer(this.components);

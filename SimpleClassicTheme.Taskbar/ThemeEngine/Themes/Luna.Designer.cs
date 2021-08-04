@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace SimpleClassicThemeTaskbar.ThemeEngine.Themes {
+namespace SimpleClassicTheme.Taskbar.ThemeEngine.Themes {
     using System;
     
     

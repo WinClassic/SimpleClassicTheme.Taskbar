@@ -8,10 +8,10 @@ using System.Text;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
 using System.Drawing.Drawing2D;
-using SimpleClassicThemeTaskbar.Helpers.NativeMethods;
-using static SimpleClassicThemeTaskbar.Helpers.NativeMethods.WinDef;
+using SimpleClassicTheme.Taskbar.Helpers.NativeMethods;
+using static SimpleClassicTheme.Taskbar.Helpers.NativeMethods.WinDef;
 
-namespace SimpleClassicThemeTaskbar.UIElements.Misc
+namespace SimpleClassicTheme.Taskbar.UIElements.Misc
 {
     public partial class BetterBorderPanel : Panel
     {

@@ -1,10 +1,10 @@
-﻿using SimpleClassicThemeTaskbar.Helpers.NativeMethods;
+﻿using SimpleClassicTheme.Taskbar.Helpers.NativeMethods;
 using System;
 using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.InteropServices;
 
-namespace SimpleClassicThemeTaskbar.Helpers
+namespace SimpleClassicTheme.Taskbar.Helpers
 {
 	// These correspond to the NIM_* values described here
 	// https://docs.microsoft.com/en-us/windows/win32/api/shellapi/nf-shellapi-shell_notifyicona

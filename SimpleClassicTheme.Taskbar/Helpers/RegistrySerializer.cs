@@ -3,7 +3,7 @@
 using System;
 using System.Reflection;
 
-namespace SimpleClassicThemeTaskbar.Helpers
+namespace SimpleClassicTheme.Taskbar.Helpers
 {
     public static class RegistrySerializer
     {

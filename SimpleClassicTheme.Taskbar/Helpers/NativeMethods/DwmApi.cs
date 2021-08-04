@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace SimpleClassicThemeTaskbar.Helpers.NativeMethods
+namespace SimpleClassicTheme.Taskbar.Helpers.NativeMethods
 {
     internal static class DwmApi
     {

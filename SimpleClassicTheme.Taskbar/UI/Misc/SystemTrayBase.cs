@@ -1,4 +1,4 @@
-﻿namespace SimpleClassicThemeTaskbar.UI.Misc
+﻿namespace SimpleClassicTheme.Taskbar.UI.Misc
 {
     public abstract class SystemTrayBase : UserControlEx
     {

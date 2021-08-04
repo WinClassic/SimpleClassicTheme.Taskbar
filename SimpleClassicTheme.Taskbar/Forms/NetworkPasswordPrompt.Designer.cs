@@ -1,4 +1,4 @@
-﻿namespace SimpleClassicThemeTaskbar.Forms
+﻿namespace SimpleClassicTheme.Taskbar.Forms
 {
     partial class NetworkPasswordPrompt
     {
@@ -40,7 +40,7 @@
             // 
             // pictureBox1
             // 
-            this.pictureBox1.Image = global::SimpleClassicThemeTaskbar.Properties.Resources._lock;
+            this.pictureBox1.Image = global::SimpleClassicTheme.Taskbar.Properties.Resources._lock;
             this.pictureBox1.Location = new System.Drawing.Point(32, 32);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(64, 64);

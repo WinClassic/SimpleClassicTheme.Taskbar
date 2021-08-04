@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace SimpleClassicThemeTaskbar.UIElements.Misc
+namespace SimpleClassicTheme.Taskbar.UIElements.Misc
 {
     public class BetterToolTip : ToolTip
     {

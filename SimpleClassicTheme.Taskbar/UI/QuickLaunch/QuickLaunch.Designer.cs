@@ -1,6 +1,6 @@
 ﻿using System.Windows.Forms;
 
-namespace SimpleClassicThemeTaskbar.UIElements.QuickLaunch
+namespace SimpleClassicTheme.Taskbar.UIElements.QuickLaunch
 {
     partial class QuickLaunch
     {

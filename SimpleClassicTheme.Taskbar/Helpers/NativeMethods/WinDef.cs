@@ -2,7 +2,7 @@
 using System.Drawing;
 using System.Runtime.InteropServices;
 
-namespace SimpleClassicThemeTaskbar.Helpers.NativeMethods
+namespace SimpleClassicTheme.Taskbar.Helpers.NativeMethods
 {
     /// <summary>
     /// This header is used by Windows GDI.

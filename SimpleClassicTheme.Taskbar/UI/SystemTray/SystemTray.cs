@@ -1,8 +1,8 @@
 ﻿using Microsoft.VisualBasic;
 
-using SimpleClassicThemeTaskbar.Helpers;
-using SimpleClassicThemeTaskbar.Helpers.NativeMethods;
-using SimpleClassicThemeTaskbar.UI.Misc;
+using SimpleClassicTheme.Taskbar.Helpers;
+using SimpleClassicTheme.Taskbar.Helpers.NativeMethods;
+using SimpleClassicTheme.Taskbar.UI.Misc;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -10,7 +10,7 @@ using System.Globalization;
 using System.Text;
 using System.Windows.Forms;
 
-namespace SimpleClassicThemeTaskbar.UIElements.SystemTray
+namespace SimpleClassicTheme.Taskbar.UIElements.SystemTray
 {
     public partial class SystemTray : SystemTrayBase
     {

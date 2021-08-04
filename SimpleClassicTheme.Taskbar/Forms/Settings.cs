@@ -1,7 +1,7 @@
-﻿using SimpleClassicThemeTaskbar.Forms;
-using SimpleClassicThemeTaskbar.Helpers;
-using SimpleClassicThemeTaskbar.Helpers.NativeMethods;
-using SimpleClassicThemeTaskbar.ThemeEngine.VisualStyles;
+﻿using SimpleClassicTheme.Taskbar.Forms;
+using SimpleClassicTheme.Taskbar.Helpers;
+using SimpleClassicTheme.Taskbar.Helpers.NativeMethods;
+using SimpleClassicTheme.Taskbar.ThemeEngine.VisualStyles;
 
 using System;
 using System.Diagnostics;
@@ -11,7 +11,7 @@ using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
 
-namespace SimpleClassicThemeTaskbar
+namespace SimpleClassicTheme.Taskbar
 {
     public partial class Settings : Form
     {

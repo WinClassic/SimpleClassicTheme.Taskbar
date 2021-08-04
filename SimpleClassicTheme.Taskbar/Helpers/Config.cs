@@ -1,13 +1,13 @@
 ﻿using SimpleClassicTheme.Common.Configuration;
 using SimpleClassicTheme.Common.Serialization;
 
-using SimpleClassicThemeTaskbar.ThemeEngine;
-using SimpleClassicThemeTaskbar.ThemeEngine.VisualStyles;
+using SimpleClassicTheme.Taskbar.ThemeEngine;
+using SimpleClassicTheme.Taskbar.ThemeEngine.VisualStyles;
 
 using System.ComponentModel;
 using System.Resources;
 
-namespace SimpleClassicThemeTaskbar.Helpers
+namespace SimpleClassicTheme.Taskbar.Helpers
 {
     public class Config : ConfigBase<Config>
     {

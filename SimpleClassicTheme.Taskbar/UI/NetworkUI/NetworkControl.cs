@@ -5,7 +5,7 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 
-namespace SimpleClassicThemeTaskbar.UIElements.NetworkUI
+namespace SimpleClassicTheme.Taskbar.UIElements.NetworkUI
 {
     public partial class NetworkControl : UserControl
     {

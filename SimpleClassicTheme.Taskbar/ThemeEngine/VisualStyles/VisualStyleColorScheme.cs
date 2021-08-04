@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace SimpleClassicThemeTaskbar.ThemeEngine.VisualStyles
+namespace SimpleClassicTheme.Taskbar.ThemeEngine.VisualStyles
 {
     public class VisualStyleColorScheme
     {

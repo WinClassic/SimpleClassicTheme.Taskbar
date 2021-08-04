@@ -4,9 +4,9 @@ using System.ComponentModel;
 using System.Runtime.InteropServices;
 using System.Text;
 
-using static SimpleClassicThemeTaskbar.Helpers.NativeMethods.WinDef;
+using static SimpleClassicTheme.Taskbar.Helpers.NativeMethods.WinDef;
 
-namespace SimpleClassicThemeTaskbar.Helpers.NativeMethods
+namespace SimpleClassicTheme.Taskbar.Helpers.NativeMethods
 {
 	/// <summary>
 	/// This class is intended for the functions currently present in SimpleClassicThemeTaskbar.UnmanagedCode

@@ -10,9 +10,9 @@ using System.Windows.Forms;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Diagnostics;
-using SimpleClassicThemeTaskbar.Helpers;
+using SimpleClassicTheme.Taskbar.Helpers;
 
-namespace SimpleClassicThemeTaskbar.UIElements.QuickLaunch
+namespace SimpleClassicTheme.Taskbar.UIElements.QuickLaunch
 {
     public partial class QuickLaunch : UserControl
     {

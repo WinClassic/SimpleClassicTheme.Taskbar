@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Text;
 
-namespace SimpleClassicThemeTaskbar.Helpers.NativeMethods
+namespace SimpleClassicTheme.Taskbar.Helpers.NativeMethods
 {
     internal static class Kernel32
     {

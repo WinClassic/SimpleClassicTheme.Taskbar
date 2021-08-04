@@ -1,5 +1,5 @@
 ﻿
-namespace SimpleClassicThemeTaskbar.Forms
+namespace SimpleClassicTheme.Taskbar.Forms
 {
     partial class CrashForm
     {
@@ -45,7 +45,7 @@ namespace SimpleClassicThemeTaskbar.Forms
             // 
             // pictureBox1
             // 
-            this.pictureBox1.Image = global::SimpleClassicThemeTaskbar.Properties.Resources.CrashIcon;
+            this.pictureBox1.Image = global::SimpleClassicTheme.Taskbar.Properties.Resources.CrashIcon;
             this.pictureBox1.Location = new System.Drawing.Point(11, 11);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(32, 32);

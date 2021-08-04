@@ -1,8 +1,8 @@
-﻿using SimpleClassicThemeTaskbar.Helpers;
-using SimpleClassicThemeTaskbar.Helpers.NativeMethods;
-using SimpleClassicThemeTaskbar.UIElements.QuickLaunch;
-using SimpleClassicThemeTaskbar.UIElements.StartButton;
-using SimpleClassicThemeTaskbar.UIElements.SystemTray;
+﻿using SimpleClassicTheme.Taskbar.Helpers;
+using SimpleClassicTheme.Taskbar.Helpers.NativeMethods;
+using SimpleClassicTheme.Taskbar.UIElements.QuickLaunch;
+using SimpleClassicTheme.Taskbar.UIElements.StartButton;
+using SimpleClassicTheme.Taskbar.UIElements.SystemTray;
 
 using System;
 using System.Drawing;
@@ -10,9 +10,9 @@ using System.Drawing.Drawing2D;
 using System.Drawing.Text;
 using System.Windows.Forms;
 
-using static SimpleClassicThemeTaskbar.Helpers.NativeMethods.WinDef;
+using static SimpleClassicTheme.Taskbar.Helpers.NativeMethods.WinDef;
 
-namespace SimpleClassicThemeTaskbar.ThemeEngine
+namespace SimpleClassicTheme.Taskbar.ThemeEngine
 {
     internal class ClassicRenderer : BaseRenderer
     {

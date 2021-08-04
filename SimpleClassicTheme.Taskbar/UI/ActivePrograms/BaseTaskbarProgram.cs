@@ -1,4 +1,4 @@
-﻿using SimpleClassicThemeTaskbar.Helpers;
+﻿using SimpleClassicTheme.Taskbar.Helpers;
 
 using System;
 using System.Collections.Generic;
@@ -13,7 +13,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace SimpleClassicThemeTaskbar
+namespace SimpleClassicTheme.Taskbar
 {
     public abstract partial class BaseTaskbarProgram : UserControlEx
     {

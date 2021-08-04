@@ -1,11 +1,11 @@
-﻿using SimpleClassicThemeTaskbar.Forms;
+﻿using SimpleClassicTheme.Taskbar.Forms;
 
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 
-namespace SimpleClassicThemeTaskbar.Helpers
+namespace SimpleClassicTheme.Taskbar.Helpers
 {
     public class TimingDebugger
     {

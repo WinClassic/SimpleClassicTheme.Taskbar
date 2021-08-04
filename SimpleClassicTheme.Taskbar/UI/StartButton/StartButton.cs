@@ -1,10 +1,10 @@
-﻿using SimpleClassicThemeTaskbar.Helpers;
+﻿using SimpleClassicTheme.Taskbar.Helpers;
 
 using System;
 using System.ComponentModel;
 using System.Windows.Forms;
 
-namespace SimpleClassicThemeTaskbar.UIElements.StartButton
+namespace SimpleClassicTheme.Taskbar.UIElements.StartButton
 {
     public partial class StartButton : UserControl
     {

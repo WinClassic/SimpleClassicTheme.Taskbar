@@ -1,4 +1,4 @@
-﻿using SimpleClassicThemeTaskbar.Helpers.NativeMethods;
+﻿using SimpleClassicTheme.Taskbar.Helpers.NativeMethods;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -11,9 +11,9 @@ using System.Text;
 using System.Windows.Forms;
 using System.Xml.Linq;
 
-using static SimpleClassicThemeTaskbar.Helpers.NativeMethods.Kernel32;
+using static SimpleClassicTheme.Taskbar.Helpers.NativeMethods.Kernel32;
 
-namespace SimpleClassicThemeTaskbar.Helpers
+namespace SimpleClassicTheme.Taskbar.Helpers
 {
     internal static class HelperFunctions
     {

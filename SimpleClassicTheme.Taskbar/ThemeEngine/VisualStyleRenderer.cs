@@ -1,9 +1,9 @@
-﻿using SimpleClassicThemeTaskbar.Helpers;
-using SimpleClassicThemeTaskbar.Helpers.NativeMethods;
-using SimpleClassicThemeTaskbar.ThemeEngine.VisualStyles;
-using SimpleClassicThemeTaskbar.UIElements.QuickLaunch;
-using SimpleClassicThemeTaskbar.UIElements.StartButton;
-using SimpleClassicThemeTaskbar.UIElements.SystemTray;
+﻿using SimpleClassicTheme.Taskbar.Helpers;
+using SimpleClassicTheme.Taskbar.Helpers.NativeMethods;
+using SimpleClassicTheme.Taskbar.ThemeEngine.VisualStyles;
+using SimpleClassicTheme.Taskbar.UIElements.QuickLaunch;
+using SimpleClassicTheme.Taskbar.UIElements.StartButton;
+using SimpleClassicTheme.Taskbar.UIElements.SystemTray;
 
 using System;
 using System.Drawing;
@@ -13,7 +13,7 @@ using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
-namespace SimpleClassicThemeTaskbar.ThemeEngine
+namespace SimpleClassicTheme.Taskbar.ThemeEngine
 {
     class VisualStyleRenderer : BaseRenderer
 	{

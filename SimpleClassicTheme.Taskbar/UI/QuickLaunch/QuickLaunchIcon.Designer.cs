@@ -1,4 +1,4 @@
-﻿namespace SimpleClassicThemeTaskbar.UIElements.QuickLaunch
+﻿namespace SimpleClassicTheme.Taskbar.UIElements.QuickLaunch
 {
     partial class QuickLaunchIcon
     {

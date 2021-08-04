@@ -1,4 +1,4 @@
-﻿namespace SimpleClassicThemeTaskbar.UIElements.NetworkUI
+﻿namespace SimpleClassicTheme.Taskbar.UIElements.NetworkUI
 {
     partial class NetworkControl
     {
@@ -70,7 +70,7 @@
             // 
             // pictureBox1
             // 
-            this.pictureBox1.Image = global::SimpleClassicThemeTaskbar.Properties.Resources.wifiIconTemp;
+            this.pictureBox1.Image = global::SimpleClassicTheme.Taskbar.Properties.Resources.wifiIconTemp;
             this.pictureBox1.Location = new System.Drawing.Point(4, 4);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(48, 48);
