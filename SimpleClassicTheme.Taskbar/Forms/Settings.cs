@@ -3,6 +3,8 @@ using SimpleClassicTheme.Taskbar.Helpers;
 using SimpleClassicTheme.Taskbar.Helpers.NativeMethods;
 using SimpleClassicTheme.Taskbar.ThemeEngine.VisualStyles;
 
+using SimpleClassicThemeTaskbar;
+
 using System;
 using System.Diagnostics;
 using System.Drawing;
@@ -81,7 +83,7 @@ namespace SimpleClassicTheme.Taskbar
 
             Config.Default.ConfigChanged = true;
             Config.Default.WriteToRegistry();
-            ApplicationEntryPoint.NewTaskbars();
+            TaskbarManager.GenerateNewTaskbars();
 
             previewTaskbar.Height = Config.Default.Renderer.TaskbarHeight;
             previewTaskbar.EnumerateWindows();

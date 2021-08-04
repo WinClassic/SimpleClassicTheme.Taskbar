@@ -1,13 +1,16 @@
+using Microsoft.Win32;
+
 using SimpleClassicTheme.Common.ErrorHandling;
 using SimpleClassicTheme.Common.Logging;
 using SimpleClassicTheme.Taskbar.Forms;
 using SimpleClassicTheme.Taskbar.Helpers;
 using SimpleClassicTheme.Taskbar.Helpers.NativeMethods;
 
+using SimpleClassicThemeTaskbar;
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -19,93 +22,25 @@ namespace SimpleClassicTheme.Taskbar
     {
         private static readonly ErrorHandler errorHandler = new() { SentryDsn = "https://eadebff4c83e42e4955d85403ff0cc7c@o925637.ingest.sentry.io/5874762" };
         private static uint virtualDesktopNotificationCookie;
-        private static UnmanagedCodeMigration.VirtualDesktopNotification VirtualDesktopNotification;
+        public static UnmanagedCodeMigration.VirtualDesktopNotification VirtualDesktopNotification { get; private set; }
         public static bool SCTCompatMode = false;
         public static int ErrorCount = 0;
-        public static SystemTrayNotificationService TrayNotificationService;
         public static UserControlEx ErrorSource;
-
-        public static void VirtualDesktopNotifcation_CurrentDesktopChanged(object sender, EventArgs e)
-        {
-            Logger.Instance.Log(LoggerVerbosity.Detailed, "TaskbarManager", "Current virtual desktop changed, sending notification to all Taskbars.");
-            var activeBars = HelperFunctions.GetOpenTaskbars();
-
-            foreach (Taskbar bar in activeBars)
-            {
-                // Redo the enumeration because the open windows are completely different
-                bar.Invoke(new Action(() => { bar.EnumerateWindows(); }));
-            }
-        }
 
         internal static void ExitSCTT()
         {
-            Logger.Instance.Log(LoggerVerbosity.Detailed, "TaskbarManager", $"Exit requested");
+            Logger.Instance.Log(LoggerVerbosity.Detailed, "EntryPoint", $"Exit requested");
             Config.Default.WriteToRegistry();
 
-            DestroyAllTaskbars();
+            TaskbarManager.DestroyAllTaskbars();
 
-            // Taskbar randomBar = activeBars.FirstOrDefault();
-            Logger.Instance.Log(LoggerVerbosity.Detailed, "TaskbarManager", $"Killed all taskbars, exiting");
+            Logger.Instance.Log(LoggerVerbosity.Detailed, "EntryPoint", $"Killed all taskbars, exiting");
             Logger.Instance.Dispose();
 
             if (Environment.OSVersion.Version.Major >= 10 && virtualDesktopNotificationCookie != 0)
                 UnmanagedCodeMigration.UnregisterVdmNotification(virtualDesktopNotificationCookie);
 
             Environment.Exit(0);
-        }
-
-        static void DestroyAllTaskbars()
-        {
-            var activeBars = HelperFunctions.GetOpenTaskbars();
-
-            foreach (Taskbar taskbar in activeBars)
-            {
-                foreach (Control control in taskbar.Controls)
-                {
-                    control.Dispose();
-                }
-
-                taskbar.selfClose = true;
-                taskbar.Close();
-                taskbar.Dispose();
-            }
-        }
-
-        internal static void NewTaskbars()
-        {
-            Logger.Instance.Log(LoggerVerbosity.Detailed, "TaskbarManager", "Generating new taskbars");
-
-            var activeBars = HelperFunctions.GetOpenTaskbars();
-
-            foreach (Taskbar bar in activeBars)
-            {
-                foreach (Control d in bar.Controls)
-                    d.Dispose();
-                bar.selfClose = true;
-                bar.Close();
-                bar.Dispose();
-            }
-
-            if (Config.Default.EnablePassiveTray && TrayNotificationService == null)
-                TrayNotificationService = new();
-            else if (!Config.Default.EnablePassiveTray && TrayNotificationService is not null)
-            {
-                TrayNotificationService.Dispose();
-                TrayNotificationService = null;
-            }
-
-            int taskbars = 0;
-            foreach (Screen screen in Screen.AllScreens)
-            {
-                taskbars++;
-                Rectangle rect = screen.Bounds;
-                Taskbar taskbar = new(screen.Primary);
-                taskbar.ShowOnScreen(screen);
-                Logger.Instance.Log(LoggerVerbosity.Detailed, "TaskbarManager", $"Created taskbar in working area: {screen.Bounds}");
-                if (!Config.Default.ShowTaskbarOnAllDesktops && !screen.Primary)
-                    taskbar.NeverShow = true;
-            }
-            Logger.Instance.Log(LoggerVerbosity.Detailed, "TaskbarManager", $"Created {taskbars} taskbars in total");
         }
 
         /// <summary>
@@ -185,7 +120,7 @@ namespace SimpleClassicTheme.Taskbar
             if (args.Contains("--traydump"))
             {
                 Logger.Instance.Log(LoggerVerbosity.Detailed, "EntryPoint", "Dumping system tray information to traydump.txt");
-                FileStream fs = new FileStream("traydump.txt", FileMode.Create, FileAccess.ReadWrite);
+                FileStream fs = new("traydump.txt", FileMode.Create, FileAccess.ReadWrite);
 
                 IntPtr hWndTray = User32.FindWindow("Shell_TrayWnd", null);
                 if (hWndTray != IntPtr.Zero)
@@ -237,6 +172,7 @@ namespace SimpleClassicTheme.Taskbar
             Logger.Instance.Log(LoggerVerbosity.Detailed, "EntryPoint", "Release instance, enabling error handler");
             errorHandler.SubscribeToErrorEvents();
 
+
             //Check if system/program architecture matches
             if (Environment.Is64BitOperatingSystem != Environment.Is64BitProcess)
             {
@@ -258,7 +194,6 @@ namespace SimpleClassicTheme.Taskbar
                 {
                     UnmanagedCodeMigration.InitializeVdmInterface();
                     VirtualDesktopNotification = new();
-                    VirtualDesktopNotification.CurrentDesktopChanged += VirtualDesktopNotifcation_CurrentDesktopChanged;
                     virtualDesktopNotificationCookie = UnmanagedCodeMigration.RegisterVdmNotification(VirtualDesktopNotification);
                 }
                 catch (Exception ex)
@@ -267,25 +202,21 @@ namespace SimpleClassicTheme.Taskbar
                 }
             }
 
-            if (Config.Default.EnablePassiveTray)
-            {
-                Logger.Instance.Log(LoggerVerbosity.Detailed, "EntryPoint", "Initializing new SystemTrayNotificationService");
-                TrayNotificationService = new();
-            }
-
-            //TODO: Put TaskbarManager into a seperate class
-            Logger.Instance.Log(LoggerVerbosity.Detailed, "EntryPoint", "Main initialization done, passing execution to TaskbarManager");
-
             Directory.CreateDirectory(Constants.VisualStyleDirectory);
 
             //Application.EnableVisualStyles();
             Application.VisualStyleState = System.Windows.Forms.VisualStyles.VisualStyleState.NoneEnabled;
             Application.SetCompatibleTextRenderingDefault(false);
-            Microsoft.Win32.SystemEvents.DisplaySettingsChanged += delegate
+
+            Logger.Instance.Log(LoggerVerbosity.Detailed, "EntryPoint", "Main initialization done, passing execution to TaskbarManager");
+
+            SystemEvents.DisplaySettingsChanged += delegate
             {
-                NewTaskbars();
+                TaskbarManager.GenerateNewTaskbars();
             };
-            NewTaskbars();
+
+            TaskbarManager.Initialize();
+            TaskbarManager.GenerateNewTaskbars();
 
             Application.Run();
 

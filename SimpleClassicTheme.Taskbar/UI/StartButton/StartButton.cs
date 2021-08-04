@@ -1,5 +1,7 @@
 ﻿using SimpleClassicTheme.Taskbar.Helpers;
 
+using SimpleClassicThemeTaskbar;
+
 using System;
 using System.ComponentModel;
 using System.Windows.Forms;
@@ -78,9 +80,9 @@ namespace SimpleClassicTheme.Taskbar.UIElements.StartButton
             }
             set
             {
-                if (value && ApplicationEntryPoint.TrayNotificationService != null)
+                if (value && TaskbarManager.TrayNotificationService != null)
                 {
-                    ApplicationEntryPoint.TrayNotificationService.RegainTrayPriority();
+                    TaskbarManager.TrayNotificationService.RegainTrayPriority();
                 }
                 pressed = value;
                 style = pressed ? Border3DStyle.Sunken : Border3DStyle.Raised;

@@ -1,8 +1,7 @@
 ﻿using SimpleClassicTheme.Common.Logging;
 using SimpleClassicTheme.Taskbar.Helpers.NativeMethods;
+
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
@@ -10,7 +9,6 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
-using System.Xml.Linq;
 
 using static SimpleClassicTheme.Taskbar.Helpers.NativeMethods.Kernel32;
 
@@ -28,23 +26,8 @@ namespace SimpleClassicTheme.Taskbar.Helpers
             action.Invoke(control);
         }
 
-        public static IEnumerable<Taskbar> GetOpenTaskbars()
-        {
-            // We're using a for loop because apparently Application.OpenForm can be modified while iterating
-            for (int i = 0; i < Application.OpenForms.Count; i++)
-            {
-                var form = Application.OpenForms[i];
-                if (form is Taskbar taskbar)
-                {
-                    if (form.ParentForm is not Settings)
-                    {
-                        yield return taskbar;
-                    }
-                }
-            }
-        }
-
         delegate IntPtr MsgHookProc(IntPtr hWnd, uint Msg, IntPtr wParam, IntPtr lParam);
+
         static IntPtr proc(IntPtr hhk, uint nCode, IntPtr wParam, IntPtr lParam)
         {
             const uint WM_DESTROYWINDOW = 0xBFFF;

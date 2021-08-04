@@ -3,6 +3,8 @@
 using SimpleClassicTheme.Taskbar.Helpers;
 using SimpleClassicTheme.Taskbar.Helpers.NativeMethods;
 using SimpleClassicTheme.Taskbar.UI.Misc;
+using SimpleClassicThemeTaskbar;
+
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -30,8 +32,8 @@ namespace SimpleClassicTheme.Taskbar.UIElements.SystemTray
             labelTime.Font = Config.Default.Renderer.SystemTrayTimeFont;
             labelTime.ForeColor = Config.Default.Renderer.SystemTrayTimeColor;
 
-            ApplicationEntryPoint.TrayNotificationService.RegisterNotificationEvent(TrayNotified);
-            Disposed += delegate { ApplicationEntryPoint.TrayNotificationService.UnregisterNotificationEvent(TrayNotified); };
+            TaskbarManager.TrayNotificationService.RegisterNotificationEvent(TrayNotified);
+            Disposed += delegate { TaskbarManager.TrayNotificationService.UnregisterNotificationEvent(TrayNotified); };
             ParentChanged += delegate { RepositionIcons(); };
             ControlAdded += delegate { RepositionIcons(); };
             ControlRemoved += delegate { RepositionIcons(); };
