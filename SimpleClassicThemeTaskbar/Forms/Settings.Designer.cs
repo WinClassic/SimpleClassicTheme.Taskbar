@@ -76,6 +76,8 @@
             this.enableSysTrayHover = new System.Windows.Forms.CheckBox();
             this.tabTweaks = new System.Windows.Forms.TabPage();
             this.tweaksPropertyGrid = new System.Windows.Forms.PropertyGrid();
+            this.tweaksToolStrip = new System.Windows.Forms.ToolStrip();
+            this.tweakResetButton = new System.Windows.Forms.ToolStripButton();
             this.tabAbout = new System.Windows.Forms.TabPage();
             this.copyrightTablePanel = new System.Windows.Forms.TableLayoutPanel();
             this.labelCopyrightSCTT = new System.Windows.Forms.Label();
@@ -91,6 +93,8 @@
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
             this.customIconFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.contentSplitContainer = new System.Windows.Forms.SplitContainer();
+            this.showDescriptionButton = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.tabControl.SuspendLayout();
             this.tabGeneral.SuspendLayout();
             this.tabThemes.SuspendLayout();
@@ -102,6 +106,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.taskbarProgramWidth)).BeginInit();
             this.tabSystemTray.SuspendLayout();
             this.tabTweaks.SuspendLayout();
+            this.tweaksToolStrip.SuspendLayout();
             this.tabAbout.SuspendLayout();
             this.copyrightTablePanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.bannerPictureBox)).BeginInit();
@@ -471,6 +476,7 @@
             // tabTweaks
             // 
             this.tabTweaks.Controls.Add(this.tweaksPropertyGrid);
+            this.tabTweaks.Controls.Add(this.tweaksToolStrip);
             resources.ApplyResources(this.tabTweaks, "tabTweaks");
             this.tabTweaks.Name = "tabTweaks";
             this.tabTweaks.UseVisualStyleBackColor = true;
@@ -481,6 +487,25 @@
             this.tweaksPropertyGrid.Name = "tweaksPropertyGrid";
             this.tweaksPropertyGrid.ToolbarVisible = false;
             this.tweaksPropertyGrid.PropertyValueChanged += new System.Windows.Forms.PropertyValueChangedEventHandler(this.tweaksPropertyGrid_PropertyValueChanged);
+            this.tweaksPropertyGrid.SelectedGridItemChanged += new System.Windows.Forms.SelectedGridItemChangedEventHandler(this.TweaksPropertyGrid_SelectedGridItemChanged);
+            // 
+            // tweaksToolStrip
+            // 
+            this.tweaksToolStrip.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+            this.tweaksToolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tweakResetButton,
+            this.toolStripSeparator1,
+            this.showDescriptionButton});
+            resources.ApplyResources(this.tweaksToolStrip, "tweaksToolStrip");
+            this.tweaksToolStrip.Name = "tweaksToolStrip";
+            this.tweaksToolStrip.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
+            // 
+            // tweakResetButton
+            // 
+            this.tweakResetButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            resources.ApplyResources(this.tweakResetButton, "tweakResetButton");
+            this.tweakResetButton.Name = "tweakResetButton";
+            this.tweakResetButton.Click += new System.EventHandler(this.TweakResetButton_Click);
             // 
             // tabAbout
             // 
@@ -581,6 +606,21 @@
             // 
             this.contentSplitContainer.Panel2.Controls.Add(this.tabControl);
             // 
+            // showDescriptionButton
+            // 
+            this.showDescriptionButton.Checked = true;
+            this.showDescriptionButton.CheckOnClick = true;
+            this.showDescriptionButton.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.showDescriptionButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            resources.ApplyResources(this.showDescriptionButton, "showDescriptionButton");
+            this.showDescriptionButton.Name = "showDescriptionButton";
+            this.showDescriptionButton.CheckedChanged += new System.EventHandler(this.ShowDescriptionButton_CheckedChanged);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            resources.ApplyResources(this.toolStripSeparator1, "toolStripSeparator1");
+            // 
             // Settings
             // 
             resources.ApplyResources(this, "$this");
@@ -609,6 +649,9 @@
             this.tabSystemTray.ResumeLayout(false);
             this.tabSystemTray.PerformLayout();
             this.tabTweaks.ResumeLayout(false);
+            this.tabTweaks.PerformLayout();
+            this.tweaksToolStrip.ResumeLayout(false);
+            this.tweaksToolStrip.PerformLayout();
             this.tabAbout.ResumeLayout(false);
             this.copyrightTablePanel.ResumeLayout(false);
             this.copyrightTablePanel.PerformLayout();
@@ -686,5 +729,9 @@
         private System.Windows.Forms.TabPage tabTweaks;
         private System.Windows.Forms.PropertyGrid tweaksPropertyGrid;
         private System.Windows.Forms.SplitContainer contentSplitContainer;
+        private System.Windows.Forms.ToolStrip tweaksToolStrip;
+        private System.Windows.Forms.ToolStripButton tweakResetButton;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripButton showDescriptionButton;
     }
 }

@@ -369,6 +369,7 @@ namespace SimpleClassicThemeTaskbar
                 LayoutTaskbarPreview(systemTraySelected);
             }
 
+            contentSplitContainer.Panel1Collapsed = aboutSelected;
             panelPreview.Visible = !aboutSelected;
         }
 
@@ -468,6 +469,23 @@ namespace SimpleClassicThemeTaskbar
                         tabControl.TabPages.Remove(tabDebug);
                 }
             }
+        }
+
+        private void TweakResetButton_Click(object sender, EventArgs e)
+        {
+            var obj = tweaksPropertyGrid.SelectedObject;
+            tweaksPropertyGrid.SelectedGridItem.PropertyDescriptor.ResetValue(obj);
+        }
+
+        private void TweaksPropertyGrid_SelectedGridItemChanged(object sender, SelectedGridItemChangedEventArgs e)
+        {
+            var obj = tweaksPropertyGrid.SelectedObject;
+            tweakResetButton.Enabled = tweaksPropertyGrid.SelectedGridItem.PropertyDescriptor?.CanResetValue(obj) == true;
+        }
+
+        private void ShowDescriptionButton_CheckedChanged(object sender, EventArgs e)
+        {
+            tweaksPropertyGrid.HelpVisible = showDescriptionButton.Checked;
         }
     }
 }

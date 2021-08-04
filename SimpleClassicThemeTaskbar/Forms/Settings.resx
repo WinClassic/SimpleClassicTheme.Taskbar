@@ -150,138 +150,6 @@
   <data name="&gt;&gt;buttonOK.ZOrder" xml:space="preserve">
     <value>2</value>
   </data>
-  <data name="&gt;&gt;tabGeneral.Name" xml:space="preserve">
-    <value>tabGeneral</value>
-  </data>
-  <data name="&gt;&gt;tabGeneral.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tabGeneral.Parent" xml:space="preserve">
-    <value>tabControl</value>
-  </data>
-  <data name="&gt;&gt;tabGeneral.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="&gt;&gt;tabThemes.Name" xml:space="preserve">
-    <value>tabThemes</value>
-  </data>
-  <data name="&gt;&gt;tabThemes.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tabThemes.Parent" xml:space="preserve">
-    <value>tabControl</value>
-  </data>
-  <data name="&gt;&gt;tabThemes.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="&gt;&gt;tabStartButton.Name" xml:space="preserve">
-    <value>tabStartButton</value>
-  </data>
-  <data name="&gt;&gt;tabStartButton.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tabStartButton.Parent" xml:space="preserve">
-    <value>tabControl</value>
-  </data>
-  <data name="&gt;&gt;tabStartButton.ZOrder" xml:space="preserve">
-    <value>2</value>
-  </data>
-  <data name="&gt;&gt;tabQuickLaunch.Name" xml:space="preserve">
-    <value>tabQuickLaunch</value>
-  </data>
-  <data name="&gt;&gt;tabQuickLaunch.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tabQuickLaunch.Parent" xml:space="preserve">
-    <value>tabControl</value>
-  </data>
-  <data name="&gt;&gt;tabQuickLaunch.ZOrder" xml:space="preserve">
-    <value>3</value>
-  </data>
-  <data name="&gt;&gt;tabTaskView.Name" xml:space="preserve">
-    <value>tabTaskView</value>
-  </data>
-  <data name="&gt;&gt;tabTaskView.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tabTaskView.Parent" xml:space="preserve">
-    <value>tabControl</value>
-  </data>
-  <data name="&gt;&gt;tabTaskView.ZOrder" xml:space="preserve">
-    <value>4</value>
-  </data>
-  <data name="&gt;&gt;tabSystemTray.Name" xml:space="preserve">
-    <value>tabSystemTray</value>
-  </data>
-  <data name="&gt;&gt;tabSystemTray.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tabSystemTray.Parent" xml:space="preserve">
-    <value>tabControl</value>
-  </data>
-  <data name="&gt;&gt;tabSystemTray.ZOrder" xml:space="preserve">
-    <value>5</value>
-  </data>
-  <data name="&gt;&gt;tabTweaks.Name" xml:space="preserve">
-    <value>tabTweaks</value>
-  </data>
-  <data name="&gt;&gt;tabTweaks.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tabTweaks.Parent" xml:space="preserve">
-    <value>tabControl</value>
-  </data>
-  <data name="&gt;&gt;tabTweaks.ZOrder" xml:space="preserve">
-    <value>6</value>
-  </data>
-  <data name="&gt;&gt;tabAbout.Name" xml:space="preserve">
-    <value>tabAbout</value>
-  </data>
-  <data name="&gt;&gt;tabAbout.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tabAbout.Parent" xml:space="preserve">
-    <value>tabControl</value>
-  </data>
-  <data name="&gt;&gt;tabAbout.ZOrder" xml:space="preserve">
-    <value>7</value>
-  </data>
-  <data name="&gt;&gt;tabDebug.Name" xml:space="preserve">
-    <value>tabDebug</value>
-  </data>
-  <data name="&gt;&gt;tabDebug.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tabDebug.Parent" xml:space="preserve">
-    <value>tabControl</value>
-  </data>
-  <data name="&gt;&gt;tabDebug.ZOrder" xml:space="preserve">
-    <value>8</value>
-  </data>
-  <data name="tabControl.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="tabControl.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 0</value>
-  </data>
-  <data name="tabControl.Size" type="System.Drawing.Size, System.Drawing">
-    <value>384, 300</value>
-  </data>
-  <data name="tabControl.TabIndex" type="System.Int32, mscorlib">
-    <value>5</value>
-  </data>
-  <data name="&gt;&gt;tabControl.Name" xml:space="preserve">
-    <value>tabControl</value>
-  </data>
-  <data name="&gt;&gt;tabControl.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TabControl, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tabControl.Parent" xml:space="preserve">
-    <value>contentSplitContainer.Panel2</value>
-  </data>
-  <data name="&gt;&gt;tabControl.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
   <data name="&gt;&gt;exitItemLabel.Name" xml:space="preserve">
     <value>exitItemLabel</value>
   </data>
@@ -338,7 +206,7 @@
     <value>3, 3, 3, 3</value>
   </data>
   <data name="tabGeneral.Size" type="System.Drawing.Size, System.Drawing">
-    <value>376, 232</value>
+    <value>376, 256</value>
   </data>
   <data name="tabGeneral.TabIndex" type="System.Int32, mscorlib">
     <value>5</value>
@@ -356,6 +224,603 @@
     <value>tabControl</value>
   </data>
   <data name="&gt;&gt;tabGeneral.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;visualStyleGroupBox.Name" xml:space="preserve">
+    <value>visualStyleGroupBox</value>
+  </data>
+  <data name="&gt;&gt;visualStyleGroupBox.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;visualStyleGroupBox.Parent" xml:space="preserve">
+    <value>tabThemes</value>
+  </data>
+  <data name="&gt;&gt;visualStyleGroupBox.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;themeComboBox.Name" xml:space="preserve">
+    <value>themeComboBox</value>
+  </data>
+  <data name="&gt;&gt;themeComboBox.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;themeComboBox.Parent" xml:space="preserve">
+    <value>tabThemes</value>
+  </data>
+  <data name="&gt;&gt;themeComboBox.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;themeLabel.Name" xml:space="preserve">
+    <value>themeLabel</value>
+  </data>
+  <data name="&gt;&gt;themeLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;themeLabel.Parent" xml:space="preserve">
+    <value>tabThemes</value>
+  </data>
+  <data name="&gt;&gt;themeLabel.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="tabThemes.Location" type="System.Drawing.Point, System.Drawing">
+    <value>4, 40</value>
+  </data>
+  <data name="tabThemes.Size" type="System.Drawing.Size, System.Drawing">
+    <value>376, 256</value>
+  </data>
+  <data name="tabThemes.TabIndex" type="System.Int32, mscorlib">
+    <value>7</value>
+  </data>
+  <data name="tabThemes.Text" xml:space="preserve">
+    <value>Themes</value>
+  </data>
+  <data name="&gt;&gt;tabThemes.Name" xml:space="preserve">
+    <value>tabThemes</value>
+  </data>
+  <data name="&gt;&gt;tabThemes.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tabThemes.Parent" xml:space="preserve">
+    <value>tabControl</value>
+  </data>
+  <data name="&gt;&gt;tabThemes.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;customIconBrowseButton.Name" xml:space="preserve">
+    <value>customIconBrowseButton</value>
+  </data>
+  <data name="&gt;&gt;customIconBrowseButton.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;customIconBrowseButton.Parent" xml:space="preserve">
+    <value>tabStartButton</value>
+  </data>
+  <data name="&gt;&gt;customIconBrowseButton.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;customIconTextBox.Name" xml:space="preserve">
+    <value>customIconTextBox</value>
+  </data>
+  <data name="&gt;&gt;customIconTextBox.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;customIconTextBox.Parent" xml:space="preserve">
+    <value>tabStartButton</value>
+  </data>
+  <data name="&gt;&gt;customIconTextBox.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;customButtonBrowseButton.Name" xml:space="preserve">
+    <value>customButtonBrowseButton</value>
+  </data>
+  <data name="&gt;&gt;customButtonBrowseButton.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;customButtonBrowseButton.Parent" xml:space="preserve">
+    <value>tabStartButton</value>
+  </data>
+  <data name="&gt;&gt;customButtonBrowseButton.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="&gt;&gt;customButtonTextBox.Name" xml:space="preserve">
+    <value>customButtonTextBox</value>
+  </data>
+  <data name="&gt;&gt;customButtonTextBox.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;customButtonTextBox.Parent" xml:space="preserve">
+    <value>tabStartButton</value>
+  </data>
+  <data name="&gt;&gt;customButtonTextBox.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="&gt;&gt;radioStartDefault.Name" xml:space="preserve">
+    <value>radioStartDefault</value>
+  </data>
+  <data name="&gt;&gt;radioStartDefault.Type" xml:space="preserve">
+    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;radioStartDefault.Parent" xml:space="preserve">
+    <value>tabStartButton</value>
+  </data>
+  <data name="&gt;&gt;radioStartDefault.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="&gt;&gt;customButtonRadioButton.Name" xml:space="preserve">
+    <value>customButtonRadioButton</value>
+  </data>
+  <data name="&gt;&gt;customButtonRadioButton.Type" xml:space="preserve">
+    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;customButtonRadioButton.Parent" xml:space="preserve">
+    <value>tabStartButton</value>
+  </data>
+  <data name="&gt;&gt;customButtonRadioButton.ZOrder" xml:space="preserve">
+    <value>5</value>
+  </data>
+  <data name="&gt;&gt;customIconRadioButton.Name" xml:space="preserve">
+    <value>customIconRadioButton</value>
+  </data>
+  <data name="&gt;&gt;customIconRadioButton.Type" xml:space="preserve">
+    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;customIconRadioButton.Parent" xml:space="preserve">
+    <value>tabStartButton</value>
+  </data>
+  <data name="&gt;&gt;customIconRadioButton.ZOrder" xml:space="preserve">
+    <value>6</value>
+  </data>
+  <data name="tabStartButton.Location" type="System.Drawing.Point, System.Drawing">
+    <value>4, 40</value>
+  </data>
+  <data name="tabStartButton.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>10, 10, 10, 10</value>
+  </data>
+  <data name="tabStartButton.Size" type="System.Drawing.Size, System.Drawing">
+    <value>376, 256</value>
+  </data>
+  <data name="tabStartButton.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="tabStartButton.Text" xml:space="preserve">
+    <value>Start Button</value>
+  </data>
+  <data name="&gt;&gt;tabStartButton.Name" xml:space="preserve">
+    <value>tabStartButton</value>
+  </data>
+  <data name="&gt;&gt;tabStartButton.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tabStartButton.Parent" xml:space="preserve">
+    <value>tabControl</value>
+  </data>
+  <data name="&gt;&gt;tabStartButton.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="&gt;&gt;quickLaunchLinkLabel.Name" xml:space="preserve">
+    <value>quickLaunchLinkLabel</value>
+  </data>
+  <data name="&gt;&gt;quickLaunchLinkLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;quickLaunchLinkLabel.Parent" xml:space="preserve">
+    <value>tabQuickLaunch</value>
+  </data>
+  <data name="&gt;&gt;quickLaunchLinkLabel.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;enableQuickLaunchCheckBox.Name" xml:space="preserve">
+    <value>enableQuickLaunchCheckBox</value>
+  </data>
+  <data name="&gt;&gt;enableQuickLaunchCheckBox.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;enableQuickLaunchCheckBox.Parent" xml:space="preserve">
+    <value>tabQuickLaunch</value>
+  </data>
+  <data name="&gt;&gt;enableQuickLaunchCheckBox.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="tabQuickLaunch.Location" type="System.Drawing.Point, System.Drawing">
+    <value>4, 40</value>
+  </data>
+  <data name="tabQuickLaunch.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 3</value>
+  </data>
+  <data name="tabQuickLaunch.Size" type="System.Drawing.Size, System.Drawing">
+    <value>376, 256</value>
+  </data>
+  <data name="tabQuickLaunch.TabIndex" type="System.Int32, mscorlib">
+    <value>4</value>
+  </data>
+  <data name="tabQuickLaunch.Text" xml:space="preserve">
+    <value>Quick Launch</value>
+  </data>
+  <data name="&gt;&gt;tabQuickLaunch.Name" xml:space="preserve">
+    <value>tabQuickLaunch</value>
+  </data>
+  <data name="&gt;&gt;tabQuickLaunch.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tabQuickLaunch.Parent" xml:space="preserve">
+    <value>tabControl</value>
+  </data>
+  <data name="&gt;&gt;tabQuickLaunch.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="&gt;&gt;groupBox1.Name" xml:space="preserve">
+    <value>groupBox1</value>
+  </data>
+  <data name="&gt;&gt;groupBox1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;groupBox1.Parent" xml:space="preserve">
+    <value>tabTaskView</value>
+  </data>
+  <data name="&gt;&gt;groupBox1.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;comboBoxGroupingMethod.Name" xml:space="preserve">
+    <value>comboBoxGroupingMethod</value>
+  </data>
+  <data name="&gt;&gt;comboBoxGroupingMethod.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;comboBoxGroupingMethod.Parent" xml:space="preserve">
+    <value>tabTaskView</value>
+  </data>
+  <data name="&gt;&gt;comboBoxGroupingMethod.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;label9.Name" xml:space="preserve">
+    <value>label9</value>
+  </data>
+  <data name="&gt;&gt;label9.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;label9.Parent" xml:space="preserve">
+    <value>tabTaskView</value>
+  </data>
+  <data name="&gt;&gt;label9.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="&gt;&gt;showTaskbarOnAllDesktops.Name" xml:space="preserve">
+    <value>showTaskbarOnAllDesktops</value>
+  </data>
+  <data name="&gt;&gt;showTaskbarOnAllDesktops.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;showTaskbarOnAllDesktops.Parent" xml:space="preserve">
+    <value>tabTaskView</value>
+  </data>
+  <data name="&gt;&gt;showTaskbarOnAllDesktops.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="&gt;&gt;taskbarProgramWidth.Name" xml:space="preserve">
+    <value>taskbarProgramWidth</value>
+  </data>
+  <data name="&gt;&gt;taskbarProgramWidth.Type" xml:space="preserve">
+    <value>System.Windows.Forms.NumericUpDown, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;taskbarProgramWidth.Parent" xml:space="preserve">
+    <value>tabTaskView</value>
+  </data>
+  <data name="&gt;&gt;taskbarProgramWidth.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="&gt;&gt;label1.Name" xml:space="preserve">
+    <value>label1</value>
+  </data>
+  <data name="&gt;&gt;label1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;label1.Parent" xml:space="preserve">
+    <value>tabTaskView</value>
+  </data>
+  <data name="&gt;&gt;label1.ZOrder" xml:space="preserve">
+    <value>5</value>
+  </data>
+  <data name="tabTaskView.Location" type="System.Drawing.Point, System.Drawing">
+    <value>4, 40</value>
+  </data>
+  <data name="tabTaskView.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 3</value>
+  </data>
+  <data name="tabTaskView.Size" type="System.Drawing.Size, System.Drawing">
+    <value>376, 256</value>
+  </data>
+  <data name="tabTaskView.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="tabTaskView.Text" xml:space="preserve">
+    <value>Task View</value>
+  </data>
+  <data name="&gt;&gt;tabTaskView.Name" xml:space="preserve">
+    <value>tabTaskView</value>
+  </data>
+  <data name="&gt;&gt;tabTaskView.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tabTaskView.Parent" xml:space="preserve">
+    <value>tabControl</value>
+  </data>
+  <data name="&gt;&gt;tabTaskView.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="&gt;&gt;enableSysTrayColorChange.Name" xml:space="preserve">
+    <value>enableSysTrayColorChange</value>
+  </data>
+  <data name="&gt;&gt;enableSysTrayColorChange.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;enableSysTrayColorChange.Parent" xml:space="preserve">
+    <value>tabSystemTray</value>
+  </data>
+  <data name="&gt;&gt;enableSysTrayColorChange.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;enableSysTrayHover.Name" xml:space="preserve">
+    <value>enableSysTrayHover</value>
+  </data>
+  <data name="&gt;&gt;enableSysTrayHover.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;enableSysTrayHover.Parent" xml:space="preserve">
+    <value>tabSystemTray</value>
+  </data>
+  <data name="&gt;&gt;enableSysTrayHover.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="tabSystemTray.Location" type="System.Drawing.Point, System.Drawing">
+    <value>4, 40</value>
+  </data>
+  <data name="tabSystemTray.Size" type="System.Drawing.Size, System.Drawing">
+    <value>376, 256</value>
+  </data>
+  <data name="tabSystemTray.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="tabSystemTray.Text" xml:space="preserve">
+    <value>System Tray</value>
+  </data>
+  <data name="&gt;&gt;tabSystemTray.Name" xml:space="preserve">
+    <value>tabSystemTray</value>
+  </data>
+  <data name="&gt;&gt;tabSystemTray.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tabSystemTray.Parent" xml:space="preserve">
+    <value>tabControl</value>
+  </data>
+  <data name="&gt;&gt;tabSystemTray.ZOrder" xml:space="preserve">
+    <value>5</value>
+  </data>
+  <data name="tweaksPropertyGrid.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="tweaksPropertyGrid.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 25</value>
+  </data>
+  <data name="tweaksPropertyGrid.Size" type="System.Drawing.Size, System.Drawing">
+    <value>376, 231</value>
+  </data>
+  <data name="tweaksPropertyGrid.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;tweaksPropertyGrid.Name" xml:space="preserve">
+    <value>tweaksPropertyGrid</value>
+  </data>
+  <data name="&gt;&gt;tweaksPropertyGrid.Type" xml:space="preserve">
+    <value>System.Windows.Forms.PropertyGrid, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tweaksPropertyGrid.Parent" xml:space="preserve">
+    <value>tabTweaks</value>
+  </data>
+  <data name="&gt;&gt;tweaksPropertyGrid.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <metadata name="tweaksToolStrip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>450, 17</value>
+  </metadata>
+  <data name="tweakResetButton.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
+        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAACRSURBVDhPY/j27dt/SjDYACcnJ7IwigEf3n8kCZNswPNb
+        J/+f6DYF0yA+yQac6Db5f6hWCmwIiE+mC0wIu2DS2Vf/F1x6DefjwlgNyNr34r/0wkdgTMgQDAOQNRNj
+        CIoBOg0rMTTDMLIhIHbriZeYBmDTiIxBGkEYxge5liQDsGGQqykyAISpZwAlmIEywMAAAAc1/Jwvt6sN
+        AAAAAElFTkSuQmCC
+</value>
+  </data>
+  <data name="tweakResetButton.ImageTransparentColor" type="System.Drawing.Color, System.Drawing">
+    <value>Magenta</value>
+  </data>
+  <data name="tweakResetButton.Size" type="System.Drawing.Size, System.Drawing">
+    <value>39, 22</value>
+  </data>
+  <data name="tweakResetButton.Text" xml:space="preserve">
+    <value>&amp;Reset</value>
+  </data>
+  <data name="toolStripSeparator1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>6, 25</value>
+  </data>
+  <data name="showDescriptionButton.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
+        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAACRSURBVDhPY/j27dt/SjDYACcnJ7IwigEf3n8kCZNswPNb
+        J/+f6DYF0yA+yQac6Db5f6hWCmwIiE+mC0wIu2DS2Vf/F1x6DefjwlgNyNr34r/0wkdgTMgQDAOQNRNj
+        CIoBOg0rMTTDMLIhIHbriZeYBmDTiIxBGkEYxge5liQDsGGQqykyAISpZwAlmIEywMAAAAc1/Jwvt6sN
+        AAAAAElFTkSuQmCC
+</value>
+  </data>
+  <data name="showDescriptionButton.ImageTransparentColor" type="System.Drawing.Color, System.Drawing">
+    <value>Magenta</value>
+  </data>
+  <data name="showDescriptionButton.Size" type="System.Drawing.Size, System.Drawing">
+    <value>92, 22</value>
+  </data>
+  <data name="showDescriptionButton.Text" xml:space="preserve">
+    <value>Show description</value>
+  </data>
+  <data name="tweaksToolStrip.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 0</value>
+  </data>
+  <data name="tweaksToolStrip.Size" type="System.Drawing.Size, System.Drawing">
+    <value>376, 25</value>
+  </data>
+  <data name="tweaksToolStrip.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="tweaksToolStrip.Text" xml:space="preserve">
+    <value>toolStrip1</value>
+  </data>
+  <data name="&gt;&gt;tweaksToolStrip.Name" xml:space="preserve">
+    <value>tweaksToolStrip</value>
+  </data>
+  <data name="&gt;&gt;tweaksToolStrip.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStrip, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tweaksToolStrip.Parent" xml:space="preserve">
+    <value>tabTweaks</value>
+  </data>
+  <data name="&gt;&gt;tweaksToolStrip.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="tabTweaks.Location" type="System.Drawing.Point, System.Drawing">
+    <value>4, 40</value>
+  </data>
+  <data name="tabTweaks.Size" type="System.Drawing.Size, System.Drawing">
+    <value>376, 256</value>
+  </data>
+  <data name="tabTweaks.TabIndex" type="System.Int32, mscorlib">
+    <value>8</value>
+  </data>
+  <data name="tabTweaks.Text" xml:space="preserve">
+    <value>Tweaks</value>
+  </data>
+  <data name="&gt;&gt;tabTweaks.Name" xml:space="preserve">
+    <value>tabTweaks</value>
+  </data>
+  <data name="&gt;&gt;tabTweaks.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tabTweaks.Parent" xml:space="preserve">
+    <value>tabControl</value>
+  </data>
+  <data name="&gt;&gt;tabTweaks.ZOrder" xml:space="preserve">
+    <value>6</value>
+  </data>
+  <data name="&gt;&gt;copyrightTablePanel.Name" xml:space="preserve">
+    <value>copyrightTablePanel</value>
+  </data>
+  <data name="&gt;&gt;copyrightTablePanel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;copyrightTablePanel.Parent" xml:space="preserve">
+    <value>tabAbout</value>
+  </data>
+  <data name="&gt;&gt;copyrightTablePanel.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="copyrightTablePanel.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="labelCopyrightSCTT" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="labelCopyrightWindows" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="labelCopyrightSCT" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="label7" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,50,Percent,50" /&gt;&lt;Rows Styles="AutoSize,0,AutoSize,0" /&gt;&lt;/TableLayoutSettings&gt;</value>
+  </data>
+  <data name="&gt;&gt;bannerPictureBox.Name" xml:space="preserve">
+    <value>bannerPictureBox</value>
+  </data>
+  <data name="&gt;&gt;bannerPictureBox.Type" xml:space="preserve">
+    <value>System.Windows.Forms.PictureBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;bannerPictureBox.Parent" xml:space="preserve">
+    <value>tabAbout</value>
+  </data>
+  <data name="&gt;&gt;bannerPictureBox.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="tabAbout.Location" type="System.Drawing.Point, System.Drawing">
+    <value>4, 40</value>
+  </data>
+  <data name="tabAbout.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 3</value>
+  </data>
+  <data name="tabAbout.Size" type="System.Drawing.Size, System.Drawing">
+    <value>376, 256</value>
+  </data>
+  <data name="tabAbout.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="tabAbout.Text" xml:space="preserve">
+    <value>About</value>
+  </data>
+  <data name="&gt;&gt;tabAbout.Name" xml:space="preserve">
+    <value>tabAbout</value>
+  </data>
+  <data name="&gt;&gt;tabAbout.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tabAbout.Parent" xml:space="preserve">
+    <value>tabControl</value>
+  </data>
+  <data name="&gt;&gt;tabAbout.ZOrder" xml:space="preserve">
+    <value>7</value>
+  </data>
+  <data name="&gt;&gt;enableActiveTaskbarCheckBox.Name" xml:space="preserve">
+    <value>enableActiveTaskbarCheckBox</value>
+  </data>
+  <data name="&gt;&gt;enableActiveTaskbarCheckBox.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;enableActiveTaskbarCheckBox.Parent" xml:space="preserve">
+    <value>tabDebug</value>
+  </data>
+  <data name="&gt;&gt;enableActiveTaskbarCheckBox.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="tabDebug.Location" type="System.Drawing.Point, System.Drawing">
+    <value>4, 40</value>
+  </data>
+  <data name="tabDebug.Size" type="System.Drawing.Size, System.Drawing">
+    <value>376, 256</value>
+  </data>
+  <data name="tabDebug.TabIndex" type="System.Int32, mscorlib">
+    <value>6</value>
+  </data>
+  <data name="tabDebug.Text" xml:space="preserve">
+    <value>DEBUG</value>
+  </data>
+  <data name="&gt;&gt;tabDebug.Name" xml:space="preserve">
+    <value>tabDebug</value>
+  </data>
+  <data name="&gt;&gt;tabDebug.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tabDebug.Parent" xml:space="preserve">
+    <value>tabControl</value>
+  </data>
+  <data name="&gt;&gt;tabDebug.ZOrder" xml:space="preserve">
+    <value>8</value>
+  </data>
+  <data name="tabControl.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="tabControl.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 0</value>
+  </data>
+  <data name="tabControl.Size" type="System.Drawing.Size, System.Drawing">
+    <value>384, 300</value>
+  </data>
+  <data name="tabControl.TabIndex" type="System.Int32, mscorlib">
+    <value>5</value>
+  </data>
+  <data name="&gt;&gt;tabControl.Name" xml:space="preserve">
+    <value>tabControl</value>
+  </data>
+  <data name="&gt;&gt;tabControl.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TabControl, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tabControl.Parent" xml:space="preserve">
+    <value>contentSplitContainer.Panel2</value>
+  </data>
+  <data name="&gt;&gt;tabControl.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
   <data name="exitItemLabel.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
@@ -468,66 +933,6 @@
   </data>
   <data name="&gt;&gt;languageLabel.ZOrder" xml:space="preserve">
     <value>3</value>
-  </data>
-  <data name="&gt;&gt;visualStyleGroupBox.Name" xml:space="preserve">
-    <value>visualStyleGroupBox</value>
-  </data>
-  <data name="&gt;&gt;visualStyleGroupBox.Type" xml:space="preserve">
-    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;visualStyleGroupBox.Parent" xml:space="preserve">
-    <value>tabThemes</value>
-  </data>
-  <data name="&gt;&gt;visualStyleGroupBox.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="&gt;&gt;themeComboBox.Name" xml:space="preserve">
-    <value>themeComboBox</value>
-  </data>
-  <data name="&gt;&gt;themeComboBox.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;themeComboBox.Parent" xml:space="preserve">
-    <value>tabThemes</value>
-  </data>
-  <data name="&gt;&gt;themeComboBox.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="&gt;&gt;themeLabel.Name" xml:space="preserve">
-    <value>themeLabel</value>
-  </data>
-  <data name="&gt;&gt;themeLabel.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;themeLabel.Parent" xml:space="preserve">
-    <value>tabThemes</value>
-  </data>
-  <data name="&gt;&gt;themeLabel.ZOrder" xml:space="preserve">
-    <value>2</value>
-  </data>
-  <data name="tabThemes.Location" type="System.Drawing.Point, System.Drawing">
-    <value>4, 40</value>
-  </data>
-  <data name="tabThemes.Size" type="System.Drawing.Size, System.Drawing">
-    <value>376, 256</value>
-  </data>
-  <data name="tabThemes.TabIndex" type="System.Int32, mscorlib">
-    <value>7</value>
-  </data>
-  <data name="tabThemes.Text" xml:space="preserve">
-    <value>Themes</value>
-  </data>
-  <data name="&gt;&gt;tabThemes.Name" xml:space="preserve">
-    <value>tabThemes</value>
-  </data>
-  <data name="&gt;&gt;tabThemes.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tabThemes.Parent" xml:space="preserve">
-    <value>tabControl</value>
-  </data>
-  <data name="&gt;&gt;tabThemes.ZOrder" xml:space="preserve">
-    <value>1</value>
   </data>
   <data name="&gt;&gt;sizeComboBox.Name" xml:space="preserve">
     <value>sizeComboBox</value>
@@ -886,117 +1291,6 @@
   <data name="&gt;&gt;themeLabel.ZOrder" xml:space="preserve">
     <value>2</value>
   </data>
-  <data name="&gt;&gt;customIconBrowseButton.Name" xml:space="preserve">
-    <value>customIconBrowseButton</value>
-  </data>
-  <data name="&gt;&gt;customIconBrowseButton.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;customIconBrowseButton.Parent" xml:space="preserve">
-    <value>tabStartButton</value>
-  </data>
-  <data name="&gt;&gt;customIconBrowseButton.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="&gt;&gt;customIconTextBox.Name" xml:space="preserve">
-    <value>customIconTextBox</value>
-  </data>
-  <data name="&gt;&gt;customIconTextBox.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;customIconTextBox.Parent" xml:space="preserve">
-    <value>tabStartButton</value>
-  </data>
-  <data name="&gt;&gt;customIconTextBox.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="&gt;&gt;customButtonBrowseButton.Name" xml:space="preserve">
-    <value>customButtonBrowseButton</value>
-  </data>
-  <data name="&gt;&gt;customButtonBrowseButton.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;customButtonBrowseButton.Parent" xml:space="preserve">
-    <value>tabStartButton</value>
-  </data>
-  <data name="&gt;&gt;customButtonBrowseButton.ZOrder" xml:space="preserve">
-    <value>2</value>
-  </data>
-  <data name="&gt;&gt;customButtonTextBox.Name" xml:space="preserve">
-    <value>customButtonTextBox</value>
-  </data>
-  <data name="&gt;&gt;customButtonTextBox.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;customButtonTextBox.Parent" xml:space="preserve">
-    <value>tabStartButton</value>
-  </data>
-  <data name="&gt;&gt;customButtonTextBox.ZOrder" xml:space="preserve">
-    <value>3</value>
-  </data>
-  <data name="&gt;&gt;radioStartDefault.Name" xml:space="preserve">
-    <value>radioStartDefault</value>
-  </data>
-  <data name="&gt;&gt;radioStartDefault.Type" xml:space="preserve">
-    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;radioStartDefault.Parent" xml:space="preserve">
-    <value>tabStartButton</value>
-  </data>
-  <data name="&gt;&gt;radioStartDefault.ZOrder" xml:space="preserve">
-    <value>4</value>
-  </data>
-  <data name="&gt;&gt;customButtonRadioButton.Name" xml:space="preserve">
-    <value>customButtonRadioButton</value>
-  </data>
-  <data name="&gt;&gt;customButtonRadioButton.Type" xml:space="preserve">
-    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;customButtonRadioButton.Parent" xml:space="preserve">
-    <value>tabStartButton</value>
-  </data>
-  <data name="&gt;&gt;customButtonRadioButton.ZOrder" xml:space="preserve">
-    <value>5</value>
-  </data>
-  <data name="&gt;&gt;customIconRadioButton.Name" xml:space="preserve">
-    <value>customIconRadioButton</value>
-  </data>
-  <data name="&gt;&gt;customIconRadioButton.Type" xml:space="preserve">
-    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;customIconRadioButton.Parent" xml:space="preserve">
-    <value>tabStartButton</value>
-  </data>
-  <data name="&gt;&gt;customIconRadioButton.ZOrder" xml:space="preserve">
-    <value>6</value>
-  </data>
-  <data name="tabStartButton.Location" type="System.Drawing.Point, System.Drawing">
-    <value>4, 40</value>
-  </data>
-  <data name="tabStartButton.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>10, 10, 10, 10</value>
-  </data>
-  <data name="tabStartButton.Size" type="System.Drawing.Size, System.Drawing">
-    <value>376, 256</value>
-  </data>
-  <data name="tabStartButton.TabIndex" type="System.Int32, mscorlib">
-    <value>2</value>
-  </data>
-  <data name="tabStartButton.Text" xml:space="preserve">
-    <value>Start Button</value>
-  </data>
-  <data name="&gt;&gt;tabStartButton.Name" xml:space="preserve">
-    <value>tabStartButton</value>
-  </data>
-  <data name="&gt;&gt;tabStartButton.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tabStartButton.Parent" xml:space="preserve">
-    <value>tabControl</value>
-  </data>
-  <data name="&gt;&gt;tabStartButton.ZOrder" xml:space="preserve">
-    <value>2</value>
-  </data>
   <data name="customIconBrowseButton.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
@@ -1183,57 +1477,6 @@
   <data name="&gt;&gt;customIconRadioButton.ZOrder" xml:space="preserve">
     <value>6</value>
   </data>
-  <data name="&gt;&gt;quickLaunchLinkLabel.Name" xml:space="preserve">
-    <value>quickLaunchLinkLabel</value>
-  </data>
-  <data name="&gt;&gt;quickLaunchLinkLabel.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;quickLaunchLinkLabel.Parent" xml:space="preserve">
-    <value>tabQuickLaunch</value>
-  </data>
-  <data name="&gt;&gt;quickLaunchLinkLabel.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="&gt;&gt;enableQuickLaunchCheckBox.Name" xml:space="preserve">
-    <value>enableQuickLaunchCheckBox</value>
-  </data>
-  <data name="&gt;&gt;enableQuickLaunchCheckBox.Type" xml:space="preserve">
-    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;enableQuickLaunchCheckBox.Parent" xml:space="preserve">
-    <value>tabQuickLaunch</value>
-  </data>
-  <data name="&gt;&gt;enableQuickLaunchCheckBox.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="tabQuickLaunch.Location" type="System.Drawing.Point, System.Drawing">
-    <value>4, 40</value>
-  </data>
-  <data name="tabQuickLaunch.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>3, 3, 3, 3</value>
-  </data>
-  <data name="tabQuickLaunch.Size" type="System.Drawing.Size, System.Drawing">
-    <value>376, 256</value>
-  </data>
-  <data name="tabQuickLaunch.TabIndex" type="System.Int32, mscorlib">
-    <value>4</value>
-  </data>
-  <data name="tabQuickLaunch.Text" xml:space="preserve">
-    <value>Quick Launch</value>
-  </data>
-  <data name="&gt;&gt;tabQuickLaunch.Name" xml:space="preserve">
-    <value>tabQuickLaunch</value>
-  </data>
-  <data name="&gt;&gt;tabQuickLaunch.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tabQuickLaunch.Parent" xml:space="preserve">
-    <value>tabControl</value>
-  </data>
-  <data name="&gt;&gt;tabQuickLaunch.ZOrder" xml:space="preserve">
-    <value>3</value>
-  </data>
   <data name="quickLaunchLinkLabel.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
@@ -1296,105 +1539,6 @@
   </data>
   <data name="&gt;&gt;enableQuickLaunchCheckBox.ZOrder" xml:space="preserve">
     <value>1</value>
-  </data>
-  <data name="&gt;&gt;groupBox1.Name" xml:space="preserve">
-    <value>groupBox1</value>
-  </data>
-  <data name="&gt;&gt;groupBox1.Type" xml:space="preserve">
-    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;groupBox1.Parent" xml:space="preserve">
-    <value>tabTaskView</value>
-  </data>
-  <data name="&gt;&gt;groupBox1.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="&gt;&gt;comboBoxGroupingMethod.Name" xml:space="preserve">
-    <value>comboBoxGroupingMethod</value>
-  </data>
-  <data name="&gt;&gt;comboBoxGroupingMethod.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;comboBoxGroupingMethod.Parent" xml:space="preserve">
-    <value>tabTaskView</value>
-  </data>
-  <data name="&gt;&gt;comboBoxGroupingMethod.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="&gt;&gt;label9.Name" xml:space="preserve">
-    <value>label9</value>
-  </data>
-  <data name="&gt;&gt;label9.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;label9.Parent" xml:space="preserve">
-    <value>tabTaskView</value>
-  </data>
-  <data name="&gt;&gt;label9.ZOrder" xml:space="preserve">
-    <value>2</value>
-  </data>
-  <data name="&gt;&gt;showTaskbarOnAllDesktops.Name" xml:space="preserve">
-    <value>showTaskbarOnAllDesktops</value>
-  </data>
-  <data name="&gt;&gt;showTaskbarOnAllDesktops.Type" xml:space="preserve">
-    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;showTaskbarOnAllDesktops.Parent" xml:space="preserve">
-    <value>tabTaskView</value>
-  </data>
-  <data name="&gt;&gt;showTaskbarOnAllDesktops.ZOrder" xml:space="preserve">
-    <value>3</value>
-  </data>
-  <data name="&gt;&gt;taskbarProgramWidth.Name" xml:space="preserve">
-    <value>taskbarProgramWidth</value>
-  </data>
-  <data name="&gt;&gt;taskbarProgramWidth.Type" xml:space="preserve">
-    <value>System.Windows.Forms.NumericUpDown, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;taskbarProgramWidth.Parent" xml:space="preserve">
-    <value>tabTaskView</value>
-  </data>
-  <data name="&gt;&gt;taskbarProgramWidth.ZOrder" xml:space="preserve">
-    <value>4</value>
-  </data>
-  <data name="&gt;&gt;label1.Name" xml:space="preserve">
-    <value>label1</value>
-  </data>
-  <data name="&gt;&gt;label1.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;label1.Parent" xml:space="preserve">
-    <value>tabTaskView</value>
-  </data>
-  <data name="&gt;&gt;label1.ZOrder" xml:space="preserve">
-    <value>5</value>
-  </data>
-  <data name="tabTaskView.Location" type="System.Drawing.Point, System.Drawing">
-    <value>4, 40</value>
-  </data>
-  <data name="tabTaskView.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>3, 3, 3, 3</value>
-  </data>
-  <data name="tabTaskView.Size" type="System.Drawing.Size, System.Drawing">
-    <value>376, 232</value>
-  </data>
-  <data name="tabTaskView.TabIndex" type="System.Int32, mscorlib">
-    <value>0</value>
-  </data>
-  <data name="tabTaskView.Text" xml:space="preserve">
-    <value>Task View</value>
-  </data>
-  <data name="&gt;&gt;tabTaskView.Name" xml:space="preserve">
-    <value>tabTaskView</value>
-  </data>
-  <data name="&gt;&gt;tabTaskView.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tabTaskView.Parent" xml:space="preserve">
-    <value>tabControl</value>
-  </data>
-  <data name="&gt;&gt;tabTaskView.ZOrder" xml:space="preserve">
-    <value>4</value>
   </data>
   <data name="&gt;&gt;addElementButton.Name" xml:space="preserve">
     <value>addElementButton</value>
@@ -1672,54 +1816,6 @@
   <data name="&gt;&gt;label1.ZOrder" xml:space="preserve">
     <value>5</value>
   </data>
-  <data name="&gt;&gt;enableSysTrayColorChange.Name" xml:space="preserve">
-    <value>enableSysTrayColorChange</value>
-  </data>
-  <data name="&gt;&gt;enableSysTrayColorChange.Type" xml:space="preserve">
-    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;enableSysTrayColorChange.Parent" xml:space="preserve">
-    <value>tabSystemTray</value>
-  </data>
-  <data name="&gt;&gt;enableSysTrayColorChange.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="&gt;&gt;enableSysTrayHover.Name" xml:space="preserve">
-    <value>enableSysTrayHover</value>
-  </data>
-  <data name="&gt;&gt;enableSysTrayHover.Type" xml:space="preserve">
-    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;enableSysTrayHover.Parent" xml:space="preserve">
-    <value>tabSystemTray</value>
-  </data>
-  <data name="&gt;&gt;enableSysTrayHover.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="tabSystemTray.Location" type="System.Drawing.Point, System.Drawing">
-    <value>4, 40</value>
-  </data>
-  <data name="tabSystemTray.Size" type="System.Drawing.Size, System.Drawing">
-    <value>376, 256</value>
-  </data>
-  <data name="tabSystemTray.TabIndex" type="System.Int32, mscorlib">
-    <value>3</value>
-  </data>
-  <data name="tabSystemTray.Text" xml:space="preserve">
-    <value>System Tray</value>
-  </data>
-  <data name="&gt;&gt;tabSystemTray.Name" xml:space="preserve">
-    <value>tabSystemTray</value>
-  </data>
-  <data name="&gt;&gt;tabSystemTray.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tabSystemTray.Parent" xml:space="preserve">
-    <value>tabControl</value>
-  </data>
-  <data name="&gt;&gt;tabSystemTray.ZOrder" xml:space="preserve">
-    <value>5</value>
-  </data>
   <data name="enableSysTrayColorChange.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
@@ -1779,120 +1875,6 @@
   </data>
   <data name="&gt;&gt;enableSysTrayHover.ZOrder" xml:space="preserve">
     <value>1</value>
-  </data>
-  <data name="&gt;&gt;tweaksPropertyGrid.Name" xml:space="preserve">
-    <value>tweaksPropertyGrid</value>
-  </data>
-  <data name="&gt;&gt;tweaksPropertyGrid.Type" xml:space="preserve">
-    <value>System.Windows.Forms.PropertyGrid, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tweaksPropertyGrid.Parent" xml:space="preserve">
-    <value>tabTweaks</value>
-  </data>
-  <data name="&gt;&gt;tweaksPropertyGrid.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="tabTweaks.Location" type="System.Drawing.Point, System.Drawing">
-    <value>4, 40</value>
-  </data>
-  <data name="tabTweaks.Size" type="System.Drawing.Size, System.Drawing">
-    <value>376, 256</value>
-  </data>
-  <data name="tabTweaks.TabIndex" type="System.Int32, mscorlib">
-    <value>8</value>
-  </data>
-  <data name="tabTweaks.Text" xml:space="preserve">
-    <value>Tweaks</value>
-  </data>
-  <data name="&gt;&gt;tabTweaks.Name" xml:space="preserve">
-    <value>tabTweaks</value>
-  </data>
-  <data name="&gt;&gt;tabTweaks.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tabTweaks.Parent" xml:space="preserve">
-    <value>tabControl</value>
-  </data>
-  <data name="&gt;&gt;tabTweaks.ZOrder" xml:space="preserve">
-    <value>6</value>
-  </data>
-  <data name="tweaksPropertyGrid.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="tweaksPropertyGrid.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 0</value>
-  </data>
-  <data name="tweaksPropertyGrid.Size" type="System.Drawing.Size, System.Drawing">
-    <value>376, 256</value>
-  </data>
-  <data name="tweaksPropertyGrid.TabIndex" type="System.Int32, mscorlib">
-    <value>0</value>
-  </data>
-  <data name="&gt;&gt;tweaksPropertyGrid.Name" xml:space="preserve">
-    <value>tweaksPropertyGrid</value>
-  </data>
-  <data name="&gt;&gt;tweaksPropertyGrid.Type" xml:space="preserve">
-    <value>System.Windows.Forms.PropertyGrid, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tweaksPropertyGrid.Parent" xml:space="preserve">
-    <value>tabTweaks</value>
-  </data>
-  <data name="&gt;&gt;tweaksPropertyGrid.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="&gt;&gt;copyrightTablePanel.Name" xml:space="preserve">
-    <value>copyrightTablePanel</value>
-  </data>
-  <data name="&gt;&gt;copyrightTablePanel.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;copyrightTablePanel.Parent" xml:space="preserve">
-    <value>tabAbout</value>
-  </data>
-  <data name="&gt;&gt;copyrightTablePanel.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="copyrightTablePanel.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="labelCopyrightSCTT" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="labelCopyrightWindows" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="labelCopyrightSCT" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="label7" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,50,Percent,50" /&gt;&lt;Rows Styles="AutoSize,0,AutoSize,0" /&gt;&lt;/TableLayoutSettings&gt;</value>
-  </data>
-  <data name="&gt;&gt;bannerPictureBox.Name" xml:space="preserve">
-    <value>bannerPictureBox</value>
-  </data>
-  <data name="&gt;&gt;bannerPictureBox.Type" xml:space="preserve">
-    <value>System.Windows.Forms.PictureBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;bannerPictureBox.Parent" xml:space="preserve">
-    <value>tabAbout</value>
-  </data>
-  <data name="&gt;&gt;bannerPictureBox.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="tabAbout.Location" type="System.Drawing.Point, System.Drawing">
-    <value>4, 40</value>
-  </data>
-  <data name="tabAbout.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>3, 3, 3, 3</value>
-  </data>
-  <data name="tabAbout.Size" type="System.Drawing.Size, System.Drawing">
-    <value>376, 232</value>
-  </data>
-  <data name="tabAbout.TabIndex" type="System.Int32, mscorlib">
-    <value>1</value>
-  </data>
-  <data name="tabAbout.Text" xml:space="preserve">
-    <value>About</value>
-  </data>
-  <data name="&gt;&gt;tabAbout.Name" xml:space="preserve">
-    <value>tabAbout</value>
-  </data>
-  <data name="&gt;&gt;tabAbout.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tabAbout.Parent" xml:space="preserve">
-    <value>tabControl</value>
-  </data>
-  <data name="&gt;&gt;tabAbout.ZOrder" xml:space="preserve">
-    <value>7</value>
   </data>
   <data name="copyrightTablePanel.ColumnCount" type="System.Int32, mscorlib">
     <value>2</value>
@@ -1958,7 +1940,7 @@
     <value>2</value>
   </data>
   <data name="copyrightTablePanel.Size" type="System.Drawing.Size, System.Drawing">
-    <value>370, 169</value>
+    <value>370, 193</value>
   </data>
   <data name="copyrightTablePanel.TabIndex" type="System.Int32, mscorlib">
     <value>28</value>
@@ -2033,7 +2015,7 @@ All rights reserved</value>
     <value>3, 3, 3, 3</value>
   </data>
   <data name="labelCopyrightWindows.Size" type="System.Drawing.Size, System.Drawing">
-    <value>179, 95</value>
+    <value>179, 119</value>
   </data>
   <data name="labelCopyrightWindows.TabIndex" type="System.Int32, mscorlib">
     <value>27</value>
@@ -2113,7 +2095,7 @@ All rights reserved</value>
     <value>3, 3, 3, 3</value>
   </data>
   <data name="label7.Size" type="System.Drawing.Size, System.Drawing">
-    <value>179, 95</value>
+    <value>179, 119</value>
   </data>
   <data name="label7.TabIndex" type="System.Int32, mscorlib">
     <value>28</value>
@@ -2168,42 +2150,6 @@ no warranty what so ever.</value>
   </data>
   <data name="&gt;&gt;bannerPictureBox.ZOrder" xml:space="preserve">
     <value>1</value>
-  </data>
-  <data name="&gt;&gt;enableActiveTaskbarCheckBox.Name" xml:space="preserve">
-    <value>enableActiveTaskbarCheckBox</value>
-  </data>
-  <data name="&gt;&gt;enableActiveTaskbarCheckBox.Type" xml:space="preserve">
-    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;enableActiveTaskbarCheckBox.Parent" xml:space="preserve">
-    <value>tabDebug</value>
-  </data>
-  <data name="&gt;&gt;enableActiveTaskbarCheckBox.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="tabDebug.Location" type="System.Drawing.Point, System.Drawing">
-    <value>4, 40</value>
-  </data>
-  <data name="tabDebug.Size" type="System.Drawing.Size, System.Drawing">
-    <value>376, 232</value>
-  </data>
-  <data name="tabDebug.TabIndex" type="System.Int32, mscorlib">
-    <value>6</value>
-  </data>
-  <data name="tabDebug.Text" xml:space="preserve">
-    <value>DEBUG</value>
-  </data>
-  <data name="&gt;&gt;tabDebug.Name" xml:space="preserve">
-    <value>tabDebug</value>
-  </data>
-  <data name="&gt;&gt;tabDebug.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tabDebug.Parent" xml:space="preserve">
-    <value>tabControl</value>
-  </data>
-  <data name="&gt;&gt;tabDebug.ZOrder" xml:space="preserve">
-    <value>8</value>
   </data>
   <data name="enableActiveTaskbarCheckBox.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
@@ -6335,6 +6281,12 @@ no warranty what so ever.</value>
   <data name="$this.Text" xml:space="preserve">
     <value>SimpleClassicTheme Taskbar - Control Panel</value>
   </data>
+  <data name="&gt;&gt;tweakResetButton.Name" xml:space="preserve">
+    <value>tweakResetButton</value>
+  </data>
+  <data name="&gt;&gt;tweakResetButton.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripButton, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="&gt;&gt;customButtonFileDialog.Name" xml:space="preserve">
     <value>customButtonFileDialog</value>
   </data>
@@ -6352,6 +6304,18 @@ no warranty what so ever.</value>
   </data>
   <data name="&gt;&gt;customIconFileDialog.Type" xml:space="preserve">
     <value>System.Windows.Forms.OpenFileDialog, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;showDescriptionButton.Name" xml:space="preserve">
+    <value>showDescriptionButton</value>
+  </data>
+  <data name="&gt;&gt;showDescriptionButton.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripButton, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;toolStripSeparator1.Name" xml:space="preserve">
+    <value>toolStripSeparator1</value>
+  </data>
+  <data name="&gt;&gt;toolStripSeparator1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;$this.Name" xml:space="preserve">
     <value>Settings</value>
