@@ -101,38 +101,47 @@ namespace SimpleClassicThemeTaskbar.Helpers
 
         [Category("Task view click actions")]
         [DisplayName("Left click")]
+        [DefaultValue(TaskbarProgramClickAction.ShowHide)]
         public TaskbarProgramClickAction TaskbarProgramLeftClickAction { get; set; } = TaskbarProgramClickAction.ShowHide;
 
         [Category("Task view click actions")]
         [DisplayName("Right click")]
+        [DefaultValue(TaskbarProgramClickAction.ContextMenu)]
         public TaskbarProgramClickAction TaskbarProgramRightClickAction { get; set; } = TaskbarProgramClickAction.ContextMenu;
 
         [Category("Task view click actions")]
         [DisplayName("Middle click")]
+        [DefaultValue(TaskbarProgramClickAction.NewInstance)]
         public TaskbarProgramClickAction TaskbarProgramMiddleClickAction { get; set; } = TaskbarProgramClickAction.NewInstance;
 
         [Category("Task view click actions")]
         [DisplayName("Left double click")]
+        [DefaultValue(TaskbarProgramClickAction.None)]
         public TaskbarProgramClickAction TaskbarProgramLeftDoubleClickAction { get; set; } = TaskbarProgramClickAction.None;
 
         [Category("Task view click actions")]
         [DisplayName("Right double click")]
+        [DefaultValue(TaskbarProgramClickAction.Close)]
         public TaskbarProgramClickAction TaskbarProgramRightDoubleClickAction { get; set; } = TaskbarProgramClickAction.Close;
 
         [Category("Task view click actions")]
         [DisplayName("Middle double click")]
+        [DefaultValue(TaskbarProgramClickAction.None)]
         public TaskbarProgramClickAction TaskbarProgramMiddleDoubleClickAction { get; set; } = TaskbarProgramClickAction.None;
 
         [Category("Spacing between items")]
         [DisplayName("Spacing between Quick Launch icons")]
+        [DefaultValue(2)]
         public int SpaceBetweenQuickLaunchIcons { get; set; } = 2;
 
         [Category("Spacing between items")]
         [DisplayName("Spacing between task view items")]
+        [DefaultValue(2)]
         public int SpaceBetweenTaskbarIcons { get; set; } = 2;
 
         [Category("Spacing between items")]
         [DisplayName("Spacing between tray icons")]
+        [DefaultValue(2)]
         public int SpaceBetweenTrayIcons { get; set; } = 2;
 
         public int TaskbarProgramWidth { get; set; } = 160;
