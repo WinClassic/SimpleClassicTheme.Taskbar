@@ -1,5 +1,4 @@
-﻿
-using SimpleClassicTheme.Common.Configuration;
+﻿using SimpleClassicTheme.Common.Configuration;
 using SimpleClassicTheme.Common.Serialization;
 
 using SimpleClassicThemeTaskbar.ThemeEngine;
@@ -15,7 +14,7 @@ namespace SimpleClassicThemeTaskbar.Helpers
 
         private string rendererPath = "Internal/Classic";
 
-        public Config() : base("Taskbar", ConfigType.Taskbar)
+        public Config() : base(@"Simple Classic Theme\Taskbar", ConfigType.Taskbar)
         {
         }
 
@@ -47,7 +46,6 @@ namespace SimpleClassicThemeTaskbar.Helpers
         public string VisualStylePath { get; set; } = string.Empty;
         public string VisualStyleSize { get; set; } = string.Empty;
         public Tweaks Tweaks { get; set; } = new();
-
 
         public string RendererPath
         {
@@ -84,6 +82,8 @@ namespace SimpleClassicThemeTaskbar.Helpers
         [DisplayName("Enable debugging options")]
         public bool EnableDebugging { get; set; } = true;
 
+        [Category("Task view")]
+        [DisplayName("Grouping method")]
         public ProgramGroupCheck ProgramGroupCheck { get; set; } = ProgramGroupCheck.FileNameAndPath;
 
         [Category("Task view click actions")]
@@ -117,17 +117,20 @@ namespace SimpleClassicThemeTaskbar.Helpers
         public TaskbarProgramClickAction TaskbarProgramMiddleDoubleClickAction { get; set; } = TaskbarProgramClickAction.None;
 
         [Category("Spacing between items")]
-        [DisplayName("Spacing between Quick Launch icons")]
+        [DisplayName("Quick Launch icons")]
+        [Description("Defines the space between quick launch icons in pixels.")]
         [DefaultValue(2)]
         public int SpaceBetweenQuickLaunchIcons { get; set; } = 2;
 
         [Category("Spacing between items")]
-        [DisplayName("Spacing between task view items")]
+        [DisplayName("Task View items")]
+        [Description("Defines the space between task view items in pixels.")]
         [DefaultValue(2)]
         public int SpaceBetweenTaskbarIcons { get; set; } = 2;
 
         [Category("Spacing between items")]
-        [DisplayName("Spacing between tray icons")]
+        [DisplayName("Tray icons")]
+        [Description("Defines the space between tray icons in pixels.")]
         [DefaultValue(2)]
         public int SpaceBetweenTrayIcons { get; set; } = 2;
 
