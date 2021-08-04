@@ -11,7 +11,7 @@ jobs:
   build:
     runs-on: windows-latest
     env:
-      SCTT_PATH: ./SimpleClassicTheme.Taskbar/SimpleClassicTheme.Taskbar
+      SCTT_PATH: './SimpleClassicTheme.Taskbar/SimpleClassicTheme.Taskbar'
     steps:
     - name: Check out Common
       uses: actions/checkout@v2
@@ -32,11 +32,11 @@ jobs:
       uses: microsoft/setup-msbuild@v1
       
     - name: Build SCTT x86
-      run: msbuild -p:Configuration=Release -p:Platform=x86 ${SCTT_PATH}/SimpleClassicTheme.Taskbar.sln
+      run: msbuild -p:Configuration=Release -p:Platform=x86 "${SCTT_PATH}/SimpleClassicTheme.Taskbar.sln"
       working-directory: ./
 
     - name: Build SCTT x64
-      run: msbuild -p:Configuration=Release -p:Platform=AMD64 ${SCTT_PATH}/SimpleClassicTheme.Taskbar.sln
+      run: msbuild -p:Configuration=Release -p:Platform=AMD64 "${SCTT_PATH}/SimpleClassicTheme.Taskbar.sln"
       working-directory: ./
 
     - name: Upload x86 build artifacts
