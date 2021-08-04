@@ -15,13 +15,15 @@ jobs:
     steps:
     - name: Check out Common
       uses: actions/checkout@v2
-      path: 'SimpleClassicTheme.Common'
-      repository: 'WinClassic/SimpleClassicTheme.Common'
-      
+      with:
+        path: 'SimpleClassicTheme.Common'
+        repository: 'WinClassic/SimpleClassicTheme.Common'
+
     - name: Check out Taskbar
       uses: actions/checkout@v2
-      path: 'SimpleClassicTheme.Taskbar'
-    
+      with:
+        path: 'SimpleClassicTheme.Taskbar'
+
     - name: Restore packages
       run: dotnet restore
       working-directory: ./SimpleClassicTheme.Taskbar/SimpleClassicTheme.Taskbar/
