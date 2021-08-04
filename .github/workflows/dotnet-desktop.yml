@@ -84,3 +84,12 @@ jobs:
         files: |
           SimpleClassicTheme.Taskbar_x86.zip
           SimpleClassicTheme.Taskbar_x64.zip
+
+    - name: Sentry Release
+      uses: getsentry/action-release@v1.1.6
+      env:
+        SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+        SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
+        SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
+      environment: "dev"
+      ignore_missing: true
