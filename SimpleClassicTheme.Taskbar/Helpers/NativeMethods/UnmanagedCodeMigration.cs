@@ -1,4 +1,6 @@
-﻿using System;
+﻿using SimpleClassicTheme.Common.Logging;
+
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.InteropServices;
@@ -212,14 +214,14 @@ namespace SimpleClassicTheme.Taskbar.Helpers.NativeMethods
 			IntPtr hProcess = Kernel32.OpenProcess(Kernel32.PROCESS_ALL_ACCESS, false, (int)trayProcess);
 			if (hProcess == IntPtr.Zero)
 			{
-				Logger.Log(LoggerVerbosity.Basic, "CppHelper/GetTrayButtons", "Could not get tray buttons: OpenProcess failed.");
+				Logger.Instance.Log(LoggerVerbosity.Basic, "CppHelper/GetTrayButtons", "Could not get tray buttons: OpenProcess failed.");
 				return Array.Empty<TBBUTTONINFO>();
 			}
 			IntPtr dataPtr = Kernel32.VirtualAllocEx(hProcess, IntPtr.Zero, (uint)tbButtonSize, Kernel32.MEM_COMMIT, Kernel32.PAGE_READWRITE);
 			if (dataPtr == IntPtr.Zero)
 			{
 				int errocode = Marshal.GetLastWin32Error();
-				Logger.Log(LoggerVerbosity.Basic, "CppHelper/GetTrayButtons", "Could not get tray buttons: VirtualAllocEx failed.");
+				Logger.Instance.Log(LoggerVerbosity.Basic, "CppHelper/GetTrayButtons", "Could not get tray buttons: VirtualAllocEx failed.");
 				return Array.Empty<TBBUTTONINFO>();
 			}
 			int count = (int)User32.SendMessage(sysTray, User32.TB_BUTTONCOUNT, 0, 0);
@@ -356,7 +358,7 @@ namespace SimpleClassicTheme.Taskbar.Helpers.NativeMethods
 			}
 			catch (Exception e)
 			{
-				Logger.Log(LoggerVerbosity.Basic, "VDMService", "Failed to register VDM Notification. Reason: " + e.Message);
+				Logger.Instance.Log(LoggerVerbosity.Basic, "VDMService", "Failed to register VDM Notification. Reason: " + e.Message);
 				return 0U;
 			}
 		}
@@ -392,7 +394,7 @@ namespace SimpleClassicTheme.Taskbar.Helpers.NativeMethods
 			if (!SystemParametersInfo(SPI.SPI_SETWORKAREA, 0, ref rect, sendChange ? SPIF.SPIF_SENDWININICHANGE | SPIF.SPIF_UPDATEINIFILE : 0))
 			{
 				int errorCode = Marshal.GetLastWin32Error();
-				Logger.Log(LoggerVerbosity.Basic, "UnmanagedCode/SetWorkArea", $"Could not set the working area. {errorCode}");
+				Logger.Instance.Log(LoggerVerbosity.Basic, "UnmanagedCode/SetWorkArea", $"Could not set the working area. {errorCode}");
 				throw new Win32Exception(errorCode);
 			}
 

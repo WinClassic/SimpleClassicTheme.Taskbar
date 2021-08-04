@@ -1,4 +1,5 @@
-﻿using SimpleClassicTheme.Taskbar.Helpers;
+﻿using SimpleClassicTheme.Common.Logging;
+using SimpleClassicTheme.Taskbar.Helpers;
 
 using System;
 using System.Collections.Generic;
@@ -135,7 +136,7 @@ namespace SimpleClassicTheme.Taskbar
             MouseClick += OnClick;
             MouseDoubleClick += OnDoubleClick;
 
-            ClientSizeChanged += delegate { if (Height == 24) Logger.Log(LoggerVerbosity.Verbose, "BaseTaskbarProgram", $"Size changed to {ClientRectangle}"); };
+            ClientSizeChanged += delegate { if (Height == 24) Logger.Instance.Log(LoggerVerbosity.Verbose, "BaseTaskbarProgram", $"Size changed to {ClientRectangle}"); };
         }
 
         public abstract void FinishOnPaint(PaintEventArgs e);

@@ -1,5 +1,6 @@
 ﻿using Sentry;
 
+using SimpleClassicTheme.Common.Logging;
 using SimpleClassicTheme.Taskbar.Helpers;
 
 using System;
@@ -50,7 +51,7 @@ namespace SimpleClassicTheme.Taskbar.Forms
 
                         if (submitLogCheckBox.Checked)
                         {
-                            scope.AddAttachment(Logger.FilePath, AttachmentType.Default);
+                            scope.AddAttachment(Logger.Instance.FilePath, AttachmentType.Default);
                         }
 
                         SentrySdk.CaptureException(exception);

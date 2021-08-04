@@ -1,4 +1,5 @@
-﻿using SimpleClassicTheme.Taskbar.Helpers.NativeMethods;
+﻿using SimpleClassicTheme.Common.Logging;
+using SimpleClassicTheme.Taskbar.Helpers.NativeMethods;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -48,7 +49,7 @@ namespace SimpleClassicTheme.Taskbar.Helpers
         {
             const uint WM_DESTROYWINDOW = 0xBFFF;
 
-            Logger.Log(LoggerVerbosity.Verbose, "TrayHook", "HOOK IS WORK YES");
+            Logger.Instance.Log(LoggerVerbosity.Verbose, "TrayHook", "HOOK IS WORK YES");
             if (nCode == WM_DESTROYWINDOW)
             {
                 File.WriteAllText("C:\\fuck.txt", "fuck.txt");

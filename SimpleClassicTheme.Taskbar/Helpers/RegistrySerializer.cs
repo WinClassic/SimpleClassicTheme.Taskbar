@@ -1,5 +1,7 @@
 ﻿using Microsoft.Win32;
 
+using SimpleClassicTheme.Common.Logging;
+
 using System;
 using System.Reflection;
 
@@ -47,7 +49,7 @@ namespace SimpleClassicTheme.Taskbar.Helpers
                         }
                         else
                         {
-                            Logger.Log(LoggerVerbosity.Basic, "RegistrySerializer", $"Ignoring property {property.Name} because {value?.GetType()} is an unknown type");
+                            Logger.Instance.Log(LoggerVerbosity.Basic, "RegistrySerializer", $"Ignoring property {property.Name} because {value?.GetType()} is an unknown type");
                         }
 
                         continue;

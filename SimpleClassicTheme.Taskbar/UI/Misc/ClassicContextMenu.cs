@@ -1,4 +1,5 @@
-﻿using SimpleClassicTheme.Taskbar.Helpers;
+﻿using SimpleClassicTheme.Common.Logging;
+using SimpleClassicTheme.Taskbar.Helpers;
 using SimpleClassicTheme.Taskbar.Helpers.NativeMethods;
 
 using System.Collections.Generic;
@@ -79,7 +80,7 @@ namespace System.Windows.Forms
 
             if (item == null)
             {
-                Logger.Log(LoggerVerbosity.Basic, "ClassicContextMenu", $"Tried to perform action for item with ID {itemId}, but couldn't find it.");
+                Logger.Instance.Log(LoggerVerbosity.Basic, "ClassicContextMenu", $"Tried to perform action for item with ID {itemId}, but couldn't find it.");
             }
             else
             {

@@ -1,4 +1,5 @@
-﻿using SimpleClassicTheme.Taskbar.Forms;
+﻿using SimpleClassicTheme.Common.Logging;
+using SimpleClassicTheme.Taskbar.Forms;
 using SimpleClassicTheme.Taskbar.Helpers;
 using SimpleClassicTheme.Taskbar.Helpers.NativeMethods;
 
@@ -49,7 +50,7 @@ namespace SimpleClassicTheme.Taskbar
                 }
                 catch (Exception ex)
                 {
-                    Logger.Log(LoggerVerbosity.Verbose, "TaskbarProgram/Icon", "Failed to set icon");
+                    Logger.Instance.Log(LoggerVerbosity.Verbose, "TaskbarProgram/Icon", "Failed to set icon");
                 }
                     
                 /*if (icon == null)
@@ -129,7 +130,7 @@ namespace SimpleClassicTheme.Taskbar
 
                     if (systemMenu == IntPtr.Zero)
                     {
-                        Logger.Log(LoggerVerbosity.Verbose, "SingleTaskbarProgram", $"Got an empty system menu ({systemMenu:X8})");
+                        Logger.Instance.Log(LoggerVerbosity.Verbose, "SingleTaskbarProgram", $"Got an empty system menu ({systemMenu:X8})");
                         return;
                     }
 

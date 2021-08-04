@@ -1,5 +1,6 @@
 ﻿using Microsoft.Win32;
 
+using SimpleClassicTheme.Common.Logging;
 using SimpleClassicTheme.Taskbar.Helpers;
 using SimpleClassicTheme.Taskbar.Helpers.NativeMethods;
 
@@ -222,14 +223,14 @@ namespace SimpleClassicTheme.Taskbar
                 //if (User32.SetWindowsHookEx(User32.ShellHookId.WH_SHELL, hookProcedure, Marshal.GetHINSTANCE(typeof(Taskbar).Module), /*Kernel32.GetCurrentThreadId()*/0) == IntPtr.Zero)
                 {
                     int errorCode = Marshal.GetLastWin32Error();
-                    Logger.Log(LoggerVerbosity.Basic, "Taskbar/Constructor", $"Failed to create Shell Hook. ({errorCode:X8})");
+                    Logger.Instance.Log(LoggerVerbosity.Basic, "Taskbar/Constructor", $"Failed to create Shell Hook. ({errorCode:X8})");
                     throw new Win32Exception(errorCode);
                 }
                 WM_SHELLHOOKMESSAGE = User32.RegisterWindowMessage("SHELLHOOK");
                 if (WM_SHELLHOOKMESSAGE == 0)
                 {
                     int errorCode = Marshal.GetLastWin32Error();
-                    Logger.Log(LoggerVerbosity.Basic, "Taskbar/Constructor", $"Failed to register Shell Hook message. ({errorCode:X8})");
+                    Logger.Instance.Log(LoggerVerbosity.Basic, "Taskbar/Constructor", $"Failed to register Shell Hook message. ({errorCode:X8})");
                     throw new Win32Exception(errorCode);
                 }
 
@@ -383,7 +384,7 @@ namespace SimpleClassicTheme.Taskbar
 
         private IntPtr HookProcedure(User32.ShellEvents nCode, IntPtr wParam, IntPtr lParam)
         {
-            Logger.Log(LoggerVerbosity.Verbose, "Taskbar/HookProcedure", $"Call parameters: {nCode}, {wParam:X8}, {lParam:X8}");
+            Logger.Instance.Log(LoggerVerbosity.Verbose, "Taskbar/HookProcedure", $"Call parameters: {nCode}, {wParam:X8}, {lParam:X8}");
 
             if (nCode < 0)
                 return User32.CallNextHookEx(IntPtr.Zero, (User32.ShellEvents)nCode, wParam, lParam);
@@ -404,7 +405,7 @@ namespace SimpleClassicTheme.Taskbar
                     break;
 
                 default:
-                    Logger.Log(LoggerVerbosity.Verbose, "Taskbar/HookProcedure", $"Cannot handle {(int)nCode} (W:{wParam:X8}, L:{lParam:X8})");
+                    Logger.Instance.Log(LoggerVerbosity.Verbose, "Taskbar/HookProcedure", $"Cannot handle {(int)nCode} (W:{wParam:X8}, L:{lParam:X8})");
                     break;
             }
 
@@ -485,7 +486,7 @@ namespace SimpleClassicTheme.Taskbar
             }
 
             var icon = CreateTaskbandButton(window);
-            Logger.Log(LoggerVerbosity.Verbose, "Taskbar/EnumerateWindows", $"Adding window {icon.Title}.");
+            Logger.Instance.Log(LoggerVerbosity.Verbose, "Taskbar/EnumerateWindows", $"Adding window {icon.Title}.");
             BaseTaskbarProgram sameThing = icons.Where((p) => IsGroupConditionMet(p, icon)).FirstOrDefault();
 
             // No group
@@ -580,7 +581,7 @@ namespace SimpleClassicTheme.Taskbar
                 //Create the button
                 BaseTaskbarProgram button = CreateTaskbandButton(z);
                 icons.Add(button);
-                Logger.Log(LoggerVerbosity.Verbose, "Taskbar/EnumerateWindows", $"Adding window {button.Title}.");
+                Logger.Instance.Log(LoggerVerbosity.Verbose, "Taskbar/EnumerateWindows", $"Adding window {button.Title}.");
             }
 
             //The new list of icons
@@ -786,7 +787,7 @@ namespace SimpleClassicTheme.Taskbar
 
         private void DisposeTaskbarProgram(BaseTaskbarProgram program)
         {
-            Logger.Log(LoggerVerbosity.Verbose, "Taskbar/EnumerateWindows", $"Deleting window {program.Title}.");
+            Logger.Instance.Log(LoggerVerbosity.Verbose, "Taskbar/EnumerateWindows", $"Deleting window {program.Title}.");
             Controls.Remove(program);
             icons.Remove(program);
             program.Dispose();
@@ -832,7 +833,7 @@ namespace SimpleClassicTheme.Taskbar
             {
                 // If we got an access denied exception we catch it and return false.
                 // Otherwise we re-throw the exception
-                Logger.Log(LoggerVerbosity.Basic, "Taskbar/Groups", $"Failed to compare taskbar programs: {ex}");
+                Logger.Instance.Log(LoggerVerbosity.Basic, "Taskbar/Groups", $"Failed to compare taskbar programs: {ex}");
                 return null;
             }
         }

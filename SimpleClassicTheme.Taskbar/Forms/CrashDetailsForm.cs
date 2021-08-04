@@ -1,4 +1,5 @@
-﻿using SimpleClassicTheme.Taskbar.Helpers;
+﻿using SimpleClassicTheme.Common.Logging;
+using SimpleClassicTheme.Taskbar.Helpers;
 
 using System;
 using System.Drawing;
@@ -45,7 +46,7 @@ namespace SimpleClassicTheme.Taskbar.Forms
         {
             try
             {
-                var filePath = Logger.FilePath;
+                var filePath = Logger.Instance.FilePath;
 
                 if (filePath == null)
                 {
