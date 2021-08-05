@@ -92,7 +92,8 @@ jobs:
 
     - name: Read version string
       id: get_version
-      run: echo "::set-output name=version::$(cat ./version.txt)"
+      run: echo "::set-output name=version::$(cat version.txt)"
+      working-directory: ./
         
     - name: Publish release
       uses: "marvinpinto/action-automatic-releases@latest"
@@ -112,8 +113,7 @@ jobs:
     steps:
     - name: Check out
       uses: actions/checkout@v2
-    
-    
+
     - name: Download version string
       uses: actions/download-artifact@v2.0.9
       with:
@@ -122,7 +122,8 @@ jobs:
 
     - name: Read version string
       id: get_version
-      run: echo "::set-output name=version::$(cat ./version.txt)"
+      run: echo "::set-output name=version::$(cat version.txt)"
+      working-directory: ./
         
     - name: Sentry Release
       uses: getsentry/action-release@v1.1.6
