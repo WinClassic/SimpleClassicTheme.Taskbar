@@ -18,6 +18,9 @@ namespace SimpleClassicTheme.Taskbar
         [Verb("exit", HelpText = "Exits all running SCTT instances")]
         internal record ExitOptions : Options { }
 
+        [Verb("version", HelpText = "Prints the application version (used for build pipeline)")]
+        internal record VersionOptions : Options { }
+
         [Verb("run", true, Hidden = true)]
         internal record Options
         {

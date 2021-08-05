@@ -50,7 +50,7 @@ namespace SimpleClassicTheme.Taskbar
         private static void Main(string[] args)
         {
             Parser.Default
-                .ParseArguments<Options, GuiTestOptions, NetworkUiOptions, TrayDumpOptions>(args)
+                .ParseArguments<Options, GuiTestOptions, NetworkUiOptions, TrayDumpOptions, VersionOptions>(args)
                 .WithParsed((obj) =>
                 {
                     var options = obj as Options;
@@ -73,6 +73,12 @@ namespace SimpleClassicTheme.Taskbar
 
                         case NetworkUiOptions:
                             RunNetworkUI(options);
+                            break;
+
+                        case VersionOptions:
+                            var appVersion = Common.Helpers.HelperMethods.GetApplicationVersion();
+                            Console.Write(appVersion);
+                            Environment.Exit(0);
                             break;
 
                         case Options:
