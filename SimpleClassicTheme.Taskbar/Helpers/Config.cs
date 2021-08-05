@@ -134,6 +134,9 @@ namespace SimpleClassicTheme.Taskbar.Helpers
         [DefaultValue(2)]
         public int SpaceBetweenTrayIcons { get; set; } = 2;
 
+        [Category("Task view")]
+        [DisplayName("Program width")]
+        [Description("Defines the width of programs in pixels.")]
         public int TaskbarProgramWidth { get; set; } = 160;
     }
 }
