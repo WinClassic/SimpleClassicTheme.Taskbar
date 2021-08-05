@@ -130,6 +130,7 @@ jobs:
       with:
         environment: "development"
         version: ${{ steps.get_version.outputs.version }}
+        fetch-depth: 0
       env:
         SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
         SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
