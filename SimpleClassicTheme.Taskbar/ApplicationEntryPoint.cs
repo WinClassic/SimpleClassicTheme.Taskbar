@@ -64,7 +64,7 @@ namespace SimpleClassicTheme.Taskbar
                         case VersionOptions:
                             var appVersion = Common.Helpers.HelperMethods.GetApplicationVersion();
                             File.WriteAllText("version.txt", appVersion);
-                            Console.Write(appVersion);
+                            Console.Write("::set-output name=version::" + appVersion);
                             break;
 
                         case GuiTestOptions:
