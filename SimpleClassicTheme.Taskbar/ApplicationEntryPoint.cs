@@ -49,6 +49,8 @@ namespace SimpleClassicTheme.Taskbar
         [STAThread]
         private static void Main(string[] args)
         {
+            Kernel32.AttachConsole(Kernel32.ATTACH_PARENT_PROCESS);
+
             Parser.Default
                 .ParseArguments<Options, GuiTestOptions, NetworkUiOptions, TrayDumpOptions, VersionOptions>(args)
                 .WithParsed((obj) =>
@@ -59,6 +61,12 @@ namespace SimpleClassicTheme.Taskbar
 
                     switch (obj)
                     {
+                        case VersionOptions:
+                            var appVersion = Common.Helpers.HelperMethods.GetApplicationVersion();
+                            File.WriteAllText("version.txt", appVersion);
+                            Console.Write(appVersion);
+                            break;
+
                         case GuiTestOptions:
                             RunGuiTest(options);
                             break;
@@ -75,24 +83,12 @@ namespace SimpleClassicTheme.Taskbar
                             RunNetworkUI(options);
                             break;
 
-                        case VersionOptions:
-                            var appVersion = Common.Helpers.HelperMethods.GetApplicationVersion();
-                            Console.Write(appVersion);
-                            Environment.Exit(0);
-                            break;
-
                         case Options:
                         default:
                             RunSCTT(options);
                             break;
                     }
-                })
-                .WithNotParsed(HandleNotParsed);
-        }
-
-        private static void HandleNotParsed(IEnumerable<Error> obj)
-        {
-            Environment.Exit(1);
+                });
         }
 
         private static void RunSCTT(Options options)

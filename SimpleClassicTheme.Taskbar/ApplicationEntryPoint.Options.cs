@@ -18,7 +18,7 @@ namespace SimpleClassicTheme.Taskbar
         [Verb("exit", HelpText = "Exits all running SCTT instances")]
         internal record ExitOptions : Options { }
 
-        [Verb("version", HelpText = "Prints the application version (used for build pipeline)")]
+        [Verb("raw-version", HelpText = "Prints the application version (used for build pipeline)")]
         internal record VersionOptions : Options { }
 
         [Verb("run", true, Hidden = true)]
@@ -27,6 +27,8 @@ namespace SimpleClassicTheme.Taskbar
             [Option('v', "verbosity", Required = false, HelpText = "Changes logger verbosity.", Default = LoggerVerbosity.Verbose)]
             public LoggerVerbosity Verbosity { get; set; }
 
+            [Option('c', "no-console-attach", HelpText = "Whether to attach to/create a console", Default = false)]
+            public bool NoConsoleAttach { get; set; }
 
             [Option("sct", Required = false, HelpText = "Runs SCT Taskbar in SCT managed mode.", Default = false)]
             public bool SctManagedMode { get; set; }
