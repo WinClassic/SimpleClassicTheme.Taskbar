@@ -109,7 +109,7 @@ jobs:
       uses: getsentry/action-release@v1.1.6
       with:
         environment: "development"
-        version: ${{ needs.build.outputs.version }}
+        version: "${{ needs.build.outputs.version }}"
         ignore_missing: true
       env:
         SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
