@@ -15,7 +15,7 @@ jobs:
       SCTT_PATH: './SimpleClassicTheme.Taskbar/SimpleClassicTheme.Taskbar'
     
     outputs:
-      version: ${{ steps.fetch-version.outputs }}
+      version: ${{ steps.fetch-version.outputs.version }}
       
     steps:
     - name: Check out Common
