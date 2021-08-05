@@ -1,3 +1,5 @@
+using CommandLine;
+
 using Microsoft.Win32;
 
 using SimpleClassicTheme.Common.ErrorHandling;
@@ -6,19 +8,17 @@ using SimpleClassicTheme.Taskbar.Forms;
 using SimpleClassicTheme.Taskbar.Helpers;
 using SimpleClassicTheme.Taskbar.Helpers.NativeMethods;
 
-using SimpleClassicThemeTaskbar;
-
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using System.Windows.Forms.VisualStyles;
 
 namespace SimpleClassicTheme.Taskbar
 {
-    internal static class ApplicationEntryPoint
+    internal static partial class ApplicationEntryPoint
     {
         private static readonly ErrorHandler errorHandler = new() { SentryDsn = "https://eadebff4c83e42e4955d85403ff0cc7c@o925637.ingest.sentry.io/5874762" };
         private static uint virtualDesktopNotificationCookie;
@@ -49,118 +49,54 @@ namespace SimpleClassicTheme.Taskbar
         [STAThread]
         private static void Main(string[] args)
         {
-            LoggerVerbosity verbosity = LoggerVerbosity.Verbose;
-
-            foreach (var arg in args)
-            {
-                if (arg.StartsWith("-v="))
-                    verbosity = (LoggerVerbosity)int.Parse(arg[3..]);
-            }
-
-            Logger.Instance.Initialize(verbosity);
-
-            Logger.Instance.Log(LoggerVerbosity.Detailed, "EntryPoint", "Parsing arguments");
-            if (args.Contains("--exit"))
-            {
-                Logger.Instance.Log(LoggerVerbosity.Detailed, "EntryPoint", "Killing all SCTT instances");
-                static List<IntPtr> EnumerateProcessWindowHandles(int processId, string name)
+            Parser.Default
+                .ParseArguments<Options, GuiTestOptions, NetworkUiOptions, TrayDumpOptions>(args)
+                .WithParsed((obj) =>
                 {
-                    List<IntPtr> handles = new();
+                    var options = obj as Options;
 
-                    foreach (ProcessThread thread in Process.GetProcessById(processId).Threads)
+                    Logger.Instance.Initialize(options.Verbosity);
+
+                    switch (obj)
                     {
-                        User32.EnumThreadWindows(thread.Id, (hWnd, lParam) =>
-                        {
-                            handles.Add(hWnd);
-                            return true;
-                        }, IntPtr.Zero);
+                        case GuiTestOptions:
+                            RunGuiTest(options);
+                            break;
+
+                        case ExitOptions:
+                            CloseRunningInstances(options);
+                            break;
+
+                        case TrayDumpOptions:
+                            DumpTray(options);
+                            break;
+
+                        case NetworkUiOptions:
+                            RunNetworkUI(options);
+                            break;
+
+                        case Options:
+                        default:
+                            RunSCTT(options);
+                            break;
                     }
-                    return handles;
-                }
+                })
+                .WithNotParsed(HandleNotParsed);
+        }
 
-                Process[] scttInstances = Process.GetProcessesByName("SimpleClassicThemeTaskbar");
-                Array.ForEach(scttInstances, a =>
-                {
-                    List<IntPtr> handles = EnumerateProcessWindowHandles(a.Id, "SCTT_Shell_TrayWnd");
-                    string s = "";
-                    foreach (IntPtr handle in handles)
-                    {
-                        StringBuilder builder = new(1000);
-                        User32.GetClassName(handle, builder, 1000);
+        private static void HandleNotParsed(IEnumerable<Error> obj)
+        {
+            Environment.Exit(1);
+        }
 
-                        if (builder.Length > 0)
-                            s = s + builder.ToString() + "\n";
-
-                        IntPtr returnValue = User32.SendMessage(handle, Constants.WM_SCT, new IntPtr(Constants.SCTWP_ISSCT), IntPtr.Zero);
-                        if (returnValue != IntPtr.Zero)
-                        {
-                            User32.SendMessage(handle, Constants.WM_SCT, new IntPtr(Constants.SCTWP_EXIT), IntPtr.Zero);
-                        }
-                    }
-                });
-            }
-            if (args.Contains("--gui-test"))
-            {
-                Application.SetCompatibleTextRenderingDefault(false);
-                Application.Run(new GraphicsTest());
-                return;
-            }
-            if (args.Contains("--network-ui"))
-            {
-                Application.VisualStyleState = System.Windows.Forms.VisualStyles.VisualStyleState.NoneEnabled;
-                Application.SetCompatibleTextRenderingDefault(false);
-                Application.Run(new NetworkUI());
-                return;
-            }
-            if (args.Contains("--unmanaged"))
-            {
-                Logger.Instance.Log(LoggerVerbosity.Detailed, "EntryPoint", "Attempted to start unmanaged SCTT. This is not supported anymore.");
-                Environment.Exit(/*d.UnmanagedSCTT()*/0);
-            }
-            if (args.Contains("--traydump"))
-            {
-                Logger.Instance.Log(LoggerVerbosity.Detailed, "EntryPoint", "Dumping system tray information to traydump.txt");
-                FileStream fs = new("traydump.txt", FileMode.Create, FileAccess.ReadWrite);
-
-                IntPtr hWndTray = User32.FindWindow("Shell_TrayWnd", null);
-                if (hWndTray != IntPtr.Zero)
-                {
-                    hWndTray = User32.FindWindowEx(hWndTray, IntPtr.Zero, "TrayNotifyWnd", null);
-                    if (hWndTray != IntPtr.Zero)
-                    {
-                        hWndTray = User32.FindWindowEx(hWndTray, IntPtr.Zero, "SysPager", null);
-                        if (hWndTray != IntPtr.Zero)
-                        {
-                            hWndTray = User32.FindWindowEx(hWndTray, IntPtr.Zero, "ToolbarWindow32", null);
-                            if (hWndTray != IntPtr.Zero)
-                            {
-                                UnmanagedCodeMigration.TBBUTTONINFO[] buttons = UnmanagedCodeMigration.GetTrayButtons(hWndTray);
-                                foreach (var button in buttons)
-                                {
-                                    string str = "START OF TBBUTTONINFO\n";
-                                    foreach (var d in button.GetType().GetProperties())
-                                        str += d.Name + ": " + d.GetValue(button) + "\n";
-                                    foreach (var d in button.GetType().GetFields())
-                                        str += d.Name + ": " + d.GetValue(button) + "\n";
-                                    str += "END OF TBBUTTONINFO\n";
-                                    byte[] bytes = Encoding.UTF8.GetBytes(str);
-                                    fs.Write(bytes, 0, bytes.Length);
-                                    fs.Flush();
-                                }
-                            }
-                        }
-                    }
-                }
-                fs.Close();
-                return;
-            }
-            if (args.Contains("--sct"))
+        private static void RunSCTT(Options options)
+        {
+            if (options.SctManagedMode)
             {
                 Logger.Instance.Log(LoggerVerbosity.Detailed, "EntryPoint", "Current instance is an SCT managed instance");
                 SCTCompatMode = true;
             }
-#if DEBUG
-#else
+#if !DEBUG
             else
             {
                 MessageBox.Show("SCT Taskbar does not currently work without SCT. Please install SCTT via the Options menu in SCT 1.2.0 or higher", "SCT required");
@@ -169,9 +105,8 @@ namespace SimpleClassicTheme.Taskbar
 #endif
 
             //Setup crash reports
-            Logger.Instance.Log(LoggerVerbosity.Detailed, "EntryPoint", "Release instance, enabling error handler");
+            Logger.Instance.Log(LoggerVerbosity.Detailed, "EntryPoint", "Enabling error handler");
             errorHandler.SubscribeToErrorEvents();
-
 
             //Check if system/program architecture matches
             if (Environment.Is64BitOperatingSystem != Environment.Is64BitProcess)
@@ -179,8 +114,7 @@ namespace SimpleClassicTheme.Taskbar
                 string sysArch = Environment.Is64BitOperatingSystem ? "x64" : "x86";
                 string processArch = Environment.Is64BitProcess ? "x64" : "x86";
                 MessageBox.Show($"You are trying to run a {processArch} version of SCT Taskbar on a {sysArch} version of Windows. This is not supported. Please download a {sysArch} version of SCT Taskbar", "Incorrect architecture");
-#if DEBUG
-#else
+#if !DEBUG
                 return;
 #endif
                 Logger.Instance.Log(LoggerVerbosity.Detailed, "EntryPoint", "Debug instance, ignoring incorrect architecture");
@@ -204,8 +138,7 @@ namespace SimpleClassicTheme.Taskbar
 
             Directory.CreateDirectory(Constants.VisualStyleDirectory);
 
-            //Application.EnableVisualStyles();
-            Application.VisualStyleState = System.Windows.Forms.VisualStyles.VisualStyleState.NoneEnabled;
+            Application.VisualStyleState = VisualStyleState.NoneEnabled;
             Application.SetCompatibleTextRenderingDefault(false);
 
             Logger.Instance.Log(LoggerVerbosity.Detailed, "EntryPoint", "Main initialization done, passing execution to TaskbarManager");
@@ -222,5 +155,97 @@ namespace SimpleClassicTheme.Taskbar
 
             ExitSCTT();
         }
+
+        private static void DumpTray(Options options)
+        {
+            Logger.Instance.Log(LoggerVerbosity.Detailed, "EntryPoint", "Dumping system tray information to traydump.txt");
+            FileStream fs = new("traydump.txt", FileMode.Create, FileAccess.ReadWrite);
+
+            IntPtr hWndTray = User32.FindWindow("Shell_TrayWnd", null);
+            if (hWndTray != IntPtr.Zero)
+            {
+                hWndTray = User32.FindWindowEx(hWndTray, IntPtr.Zero, "TrayNotifyWnd", null);
+                if (hWndTray != IntPtr.Zero)
+                {
+                    hWndTray = User32.FindWindowEx(hWndTray, IntPtr.Zero, "SysPager", null);
+                    if (hWndTray != IntPtr.Zero)
+                    {
+                        hWndTray = User32.FindWindowEx(hWndTray, IntPtr.Zero, "ToolbarWindow32", null);
+                        if (hWndTray != IntPtr.Zero)
+                        {
+                            UnmanagedCodeMigration.TBBUTTONINFO[] buttons = UnmanagedCodeMigration.GetTrayButtons(hWndTray);
+                            foreach (var button in buttons)
+                            {
+                                string str = "START OF TBBUTTONINFO\n";
+                                foreach (var d in button.GetType().GetProperties())
+                                    str += d.Name + ": " + d.GetValue(button) + "\n";
+                                foreach (var d in button.GetType().GetFields())
+                                    str += d.Name + ": " + d.GetValue(button) + "\n";
+                                str += "END OF TBBUTTONINFO\n";
+                                byte[] bytes = Encoding.UTF8.GetBytes(str);
+                                fs.Write(bytes, 0, bytes.Length);
+                                fs.Flush();
+                            }
+                        }
+                    }
+                }
+            }
+            fs.Close();
+            return;
+        }
+
+        private static void RunGuiTest(Options options)
+        {
+            Application.SetCompatibleTextRenderingDefault(false);
+            Application.Run(new GraphicsTest());
+        }
+
+        private static void CloseRunningInstances(Options options)
+        {
+            Logger.Instance.Log(LoggerVerbosity.Detailed, "EntryPoint", "Killing all SCTT instances");
+            static List<IntPtr> EnumerateProcessWindowHandles(int processId, string name)
+            {
+                List<IntPtr> handles = new();
+
+                foreach (ProcessThread thread in Process.GetProcessById(processId).Threads)
+                {
+                    User32.EnumThreadWindows(thread.Id, (hWnd, lParam) =>
+                    {
+                        handles.Add(hWnd);
+                        return true;
+                    }, IntPtr.Zero);
+                }
+                return handles;
+            }
+
+            Process[] scttInstances = Process.GetProcessesByName("SimpleClassicThemeTaskbar");
+            Array.ForEach(scttInstances, a =>
+            {
+                List<IntPtr> handles = EnumerateProcessWindowHandles(a.Id, "SCTT_Shell_TrayWnd");
+                string s = "";
+                foreach (IntPtr handle in handles)
+                {
+                    StringBuilder builder = new(1000);
+                    User32.GetClassName(handle, builder, 1000);
+
+                    if (builder.Length > 0)
+                        s = s + builder.ToString() + "\n";
+
+                    IntPtr returnValue = User32.SendMessage(handle, Constants.WM_SCT, new IntPtr(Constants.SCTWP_ISSCT), IntPtr.Zero);
+                    if (returnValue != IntPtr.Zero)
+                    {
+                        User32.SendMessage(handle, Constants.WM_SCT, new IntPtr(Constants.SCTWP_EXIT), IntPtr.Zero);
+                    }
+                }
+            });
+        }
+
+        private static void RunNetworkUI(Options options)
+        {
+            Application.VisualStyleState = System.Windows.Forms.VisualStyles.VisualStyleState.NoneEnabled;
+            Application.SetCompatibleTextRenderingDefault(false);
+            Application.Run(new NetworkUI());
+        }
     }
+
 }
