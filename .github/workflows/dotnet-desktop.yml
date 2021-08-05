@@ -10,8 +10,13 @@ on:
 jobs:
   build:
     runs-on: windows-latest
+    
     env:
       SCTT_PATH: './SimpleClassicTheme.Taskbar/SimpleClassicTheme.Taskbar'
+    
+    outputs:
+      version: ${{ steps.fetch-version.outputs }}
+      
     steps:
     - name: Check out Common
       uses: actions/checkout@v2
@@ -52,14 +57,9 @@ jobs:
         path: '${{ env.SCTT_PATH }}/bin/x64/Release/net5.0-windows'
         
     - name: Fetch version string
+      id: fetch-version
       run: '${{ env.SCTT_PATH }}/bin/x86/Release/net5.0-windows/SimpleClassicTheme.Taskbar.exe raw-version'
       working-directory: ./
-
-    - name: Upload version string
-      uses: actions/upload-artifact@v2.2.3
-      with:
-        name: version
-        path: './version.txt'
 
   release:
     runs-on: ubuntu-latest
@@ -83,25 +83,14 @@ jobs:
 
     - name: Zip files for x64
       run: zip -r SimpleClassicTheme.Taskbar_x64.zip SimpleClassicTheme.Taskbar_x64
-        
-    - name: Download version string
-      uses: actions/download-artifact@v2.0.9
-      with:
-        name: version
-        path: './version.txt'
 
-    - name: Read version string
-      id: get_version
-      run: echo "::set-output name=version::$(cat version.txt)"
-      working-directory: ./
-        
     - name: Publish release
       uses: "marvinpinto/action-automatic-releases@latest"
       with:
         repo_token: "${{ secrets.GITHUB_TOKEN }}"
         automatic_release_tag: "latest"
         prerelease: true
-        title: "Development Build (${{ steps.get_version.outputs.version }})"
+        title: "Development Build (${{ needs.build.outputs.version }})"
         files: |
           SimpleClassicTheme.Taskbar_x86.zip
           SimpleClassicTheme.Taskbar_x64.zip
@@ -113,24 +102,15 @@ jobs:
     steps:
     - name: Check out
       uses: actions/checkout@v2
-
-    - name: Download version string
-      uses: actions/download-artifact@v2.0.9
       with:
-        name: version
-        path: './version.txt'
+        fetch-depth: 0
 
-    - name: Read version string
-      id: get_version
-      run: echo "::set-output name=version::$(cat version.txt)"
-      working-directory: ./
-        
     - name: Sentry Release
       uses: getsentry/action-release@v1.1.6
       with:
         environment: "development"
-        version: ${{ steps.get_version.outputs.version }}
-        fetch-depth: 0
+        version: ${{ needs.build.outputs.version }}
+        ignore_missing: true
       env:
         SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
         SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
