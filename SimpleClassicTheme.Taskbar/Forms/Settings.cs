@@ -66,7 +66,7 @@ namespace SimpleClassicTheme.Taskbar
                     break;
 
                 case "Visual Style":
-                    if (visualStyles.Length == 0)
+                    if (visualStyles == null || visualStyles.Length == 0)
                     {
                         MessageBox.Show(
                             this,
