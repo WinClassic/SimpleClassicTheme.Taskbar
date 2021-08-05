@@ -8,7 +8,8 @@
     <RootNamespace>SimpleClassicTheme.Taskbar</RootNamespace>
     <AssemblyName>SimpleClassicTheme.Taskbar</AssemblyName>
     <Deterministic>false</Deterministic>
-    <Platforms>x86;x64;AnyCPU</Platforms>
+    <Platforms>x86;x64</Platforms>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
   <ItemGroup>
@@ -18,10 +19,6 @@
     <EmbeddedResource Remove="tools\**" />
     <None Remove="binaries\**" />
     <None Remove="tools\**" />
-    <None Include="..\..\..\..\..\Desktop\Simple Classic Theme Family Artwork\Icons\SimpleClassicTheme.ico">
-      <Pack>True</Pack>
-      <PackagePath></PackagePath>
-    </None>
   </ItemGroup>
 
   <ItemGroup>
@@ -57,25 +54,10 @@
     </None>
   </ItemGroup>
   <PropertyGroup>
-    <PostBuildEvent></PostBuildEvent>
-  </PropertyGroup>
-  <PropertyGroup>
     <LangVersion>preview</LangVersion>
     <StartupObject>SimpleClassicTheme.Taskbar.ApplicationEntryPoint</StartupObject>
     <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
     <PackageIcon>SimpleClassicTheme.ico</PackageIcon>
     <ApplicationIcon>SimpleClassicTheme.ico</ApplicationIcon>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 </Project>

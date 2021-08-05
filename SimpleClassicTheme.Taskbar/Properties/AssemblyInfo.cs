@@ -9,7 +9,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyDescription("A classic taskbar alternative")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("1337ftw")]
-[assembly: AssemblyProduct("SCT Taskbar")]
+[assembly: AssemblyProduct("Simple Classic Theme")]
 [assembly: AssemblyCopyright("Copyright 1337ftw ©2020")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
