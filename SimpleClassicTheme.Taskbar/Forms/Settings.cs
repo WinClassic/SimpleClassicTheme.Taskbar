@@ -66,12 +66,23 @@ namespace SimpleClassicTheme.Taskbar
                     break;
 
                 case "Visual Style":
-                    var visualStyle = visualStyles[visualStyleComboBox.SelectedIndex];
-                    Config.Default.VisualStyleColor = visualStyle.ColorNames[colorSchemeComboBox.SelectedIndex];
-                    Config.Default.VisualStyleSize = visualStyle.SizeNames[sizeComboBox.SelectedIndex];
-                    Config.Default.VisualStylePath = visualStylePaths[visualStyleComboBox.SelectedIndex];
-
-                    Config.Default.RendererPath = "Internal/VisualStyle";
+                    if (visualStyles.Length == 0)
+                    {
+                        MessageBox.Show(
+                            this,
+                            "You must have at least one visual style installed and selected to be able to use visual styles.",
+                            "No visual styles installed",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Exclamation);
+                    }
+                    else
+                    {
+                        var visualStyle = visualStyles[visualStyleComboBox.SelectedIndex];
+                        Config.Default.VisualStyleColor = visualStyle.ColorNames[colorSchemeComboBox.SelectedIndex];
+                        Config.Default.VisualStyleSize = visualStyle.SizeNames[sizeComboBox.SelectedIndex];
+                        Config.Default.VisualStylePath = visualStylePaths[visualStyleComboBox.SelectedIndex];
+                        Config.Default.RendererPath = "Internal/VisualStyle";
+                    }
                     break;
 
                 default:
