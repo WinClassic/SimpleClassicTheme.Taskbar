@@ -21,12 +21,7 @@ namespace SimpleClassicTheme.Taskbar
 
     public class SingleTaskbarProgram : BaseTaskbarProgram
     {
-        private Icon icon;
-
-        private Bitmap iconImage;
-
         private Process process;
-
         private Window window;
 
         public SingleTaskbarProgram()
@@ -34,41 +29,7 @@ namespace SimpleClassicTheme.Taskbar
             Constructor();
         }
 
-        public override Icon Icon
-        {
-            get => icon;
-            set
-            {
-                icon = value;
-
-                iconImage = null;
-
-                try
-                {
-                    if (icon != null)
-                        iconImage = new Icon(icon, 16, 16).ToBitmap();
-                }
-                catch (Exception ex)
-                {
-                    Logger.Instance.Log(LoggerVerbosity.Verbose, "TaskbarProgram/Icon", "Failed to set icon");
-                }
-                    
-                /*if (icon == null)
-                    return;
-                ICONINFO ii;
-                GetIconInfo(icon.Handle, out ii);
-                Bitmap bmpIcon = Bitmap.FromHbitmap(ii.hbmColor);
-                Rectangle rectBounds = new Rectangle(0, 0, bmpIcon.Width, bmpIcon.Height );
-                BitmapData bmData = new BitmapData();
-                bmpIcon.LockBits(rectBounds, ImageLockMode.ReadOnly, bmpIcon.PixelFormat, bmData);
-                Bitmap bmpAlpha = new Bitmap(bmData.Width, bmData.Height, bmData.Stride, PixelFormat.Format32bppArgb, bmData.Scan0);
-                bmpIcon.UnlockBits(bmData);
-                iconImage = bmpAlpha;*/
-            }
-        }
-
-        public override Image IconImage { get => iconImage;/* { try { return new Icon(Icon, 16, 16).ToBitmap(); } catch { return null; } } */}
-        public override int MinimumWidth => Helpers.Config.Default.Renderer.TaskButtonMinimalWidth;
+        public override int MinimumWidth => Config.Default.Renderer.TaskButtonMinimalWidth;
         public override Process Process { get => process; set { process = value; /*MessageBox.Show(ApplicationEntryPoint.d.GetAppUserModelId(Process.Id));*/ } }
         public override string Title { get => window.Title; set => throw new NotImplementedException(); }
         public override Window Window { get => window; set => window = value; }

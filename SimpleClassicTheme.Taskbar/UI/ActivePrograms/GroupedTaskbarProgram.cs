@@ -5,9 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
-using System.Drawing.Text;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
 
@@ -36,25 +34,7 @@ namespace SimpleClassicTheme.Taskbar
             set => PrimaryWindow.Icon = value;
         }
 
-        public override Image IconImage
-        {
-            get
-            {
-                if (Icon != null)
-                {
-                    try
-                    {
-                        return new Icon(Icon, 16, 16).ToBitmap();
-                    }
-                    catch (ObjectDisposedException)
-                    {
-                        // Ignore
-                    }
-                }
-
-                return null;
-            }
-        }
+        public override Image IconImage => PrimaryWindow?.IconImage;
 
         public override int MinimumWidth => Config.Default.Renderer.TaskButtonMinimalWidth + 18;
 

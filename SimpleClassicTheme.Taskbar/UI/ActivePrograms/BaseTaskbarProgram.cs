@@ -34,6 +34,7 @@ namespace SimpleClassicTheme.Taskbar
         private bool activeWindow = false;
         private Border3DStyle style;
         private bool textIndent = false;
+        private Icon icon;
 
         public bool ActiveWindow
         {
@@ -76,10 +77,30 @@ namespace SimpleClassicTheme.Taskbar
         }
 
         public Font GetFont { get; private set; }
+        public virtual Icon Icon
+        {
+            get => icon;
+            set
+            {
+                icon = value;
 
-        public abstract Icon Icon { get; set; }
+                IconImage = null;
 
-        public abstract Image IconImage { get; }
+                try
+                {
+                    if (icon != null)
+                    {
+                        IconImage = new Icon(icon, 16, 16).ToBitmap();
+                    }
+                }
+                catch
+                {
+                    Logger.Instance.Log(LoggerVerbosity.Verbose, "TaskbarProgram/Icon", "Failed to set icon");
+                }
+            }
+        }
+
+        public virtual Image IconImage { get; protected set; }
 
         /// <summary>
         /// This value is true if the user is holding down the mouse on the button
