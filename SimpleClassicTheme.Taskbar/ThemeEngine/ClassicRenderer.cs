@@ -222,6 +222,18 @@ namespace SimpleClassicTheme.Taskbar.ThemeEngine
             g.ResetTransform();
         }
 
+        public override void DrawToolbarButton(Rectangle rectangle, Graphics g, bool down)
+        {
+            if (down)
+            {
+                ControlPaint.DrawBorder3D(g, rectangle, Border3DStyle.SunkenOuter);
+            }
+            else
+            {
+                ControlPaint.DrawBorder3D(g, rectangle, Border3DStyle.RaisedInner);
+            }
+        }
+
         public override Point GetQuickLaunchIconLocation(int index) => new(16 + (index * (16 + Config.Default.Tweaks.SpaceBetweenQuickLaunchIcons)), 7);
 
         public override int GetQuickLaunchWidth(int iconCount) => (iconCount * 16) + (Config.Default.Tweaks.SpaceBetweenQuickLaunchIcons * (iconCount - 1));

@@ -1,6 +1,7 @@
 ﻿using SimpleClassicTheme.Taskbar.Helpers;
 using SimpleClassicTheme.Taskbar.Helpers.NativeMethods;
 using SimpleClassicTheme.Taskbar.ThemeEngine.VisualStyles;
+using SimpleClassicTheme.Taskbar.UIElements.OldSystemTray;
 using SimpleClassicTheme.Taskbar.UIElements.QuickLaunch;
 using SimpleClassicTheme.Taskbar.UIElements.StartButton;
 using SimpleClassicTheme.Taskbar.UIElements.SystemTray;
@@ -175,6 +176,12 @@ namespace SimpleClassicTheme.Taskbar.ThemeEngine
         public override Size GetTaskButtonGroupWindowSize(int buttonCount)
         {
 			return r.GetTaskButtonGroupWindowSize(buttonCount);
+		}
+
+        public override void DrawToolbarButton(Rectangle rectangle, Graphics g, bool down)
+        {
+			var element = colorScheme["TaskBar::Toolbar.Button"];
+			g.DrawElement(element, rectangle, down ? 2 : 1);
 		}
     }
 }

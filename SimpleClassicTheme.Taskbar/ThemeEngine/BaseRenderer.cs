@@ -45,5 +45,9 @@ namespace SimpleClassicTheme.Taskbar.ThemeEngine
         public abstract Point GetTaskButtonGroupWindowButtonLocation(int index);
 
         public abstract Size GetTaskButtonGroupWindowSize(int buttonCount);
+
+        public virtual void DrawToolbarButton(Rectangle rectangle, Graphics g, bool down)
+        {
+        }
     }
 }
