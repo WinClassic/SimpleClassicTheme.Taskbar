@@ -2,16 +2,8 @@
 using SimpleClassicTheme.Taskbar.Helpers;
 
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
-using System.Drawing.Drawing2D;
-using System.Drawing.Text;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace SimpleClassicTheme.Taskbar
@@ -63,20 +55,17 @@ namespace SimpleClassicTheme.Taskbar
                 {
                     style = Border3DStyle.Sunken;
                     IsPressed = true;
-                    GetFont = new Font(GetFont.FontFamily, GetFont.Size, FontStyle.Bold, GraphicsUnit.Point);
                 }
                 else
                 {
                     style = Border3DStyle.Raised;
                     IsPressed = false;
-                    GetFont = new Font(GetFont.FontFamily, GetFont.Size, FontStyle.Regular, GraphicsUnit.Point);
                 }
 
                 Invalidate();
             }
         }
 
-        public Font GetFont { get; private set; }
         public virtual Icon Icon
         {
             get => icon;
@@ -133,7 +122,6 @@ namespace SimpleClassicTheme.Taskbar
             Paint += OnPaint;
 
             BackColor = Color.Transparent;
-            GetFont = new Font("Tahoma", 8F, FontStyle.Regular, GraphicsUnit.Point, 0);
 
             base.MouseDown += delegate (object sender, MouseEventArgs e) { _ = (MouseDown?.DynamicInvoke(this, e)); };
             base.MouseUp += delegate (object sender, MouseEventArgs e) { _ = (MouseUp?.DynamicInvoke(this, e)); };
@@ -144,7 +132,6 @@ namespace SimpleClassicTheme.Taskbar
                 if (CancelMouseDown(e))
                     return;
                 style = Border3DStyle.Sunken;
-                GetFont = new Font(GetFont.FontFamily, GetFont.Size, FontStyle.Bold, GraphicsUnit.Point);
                 IsPressed = true;
                 textIndent = true;
                 Invalidate();
