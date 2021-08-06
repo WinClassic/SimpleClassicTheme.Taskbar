@@ -2,7 +2,6 @@
 using SimpleClassicTheme.Taskbar.Helpers.NativeMethods;
 using SimpleClassicTheme.Taskbar.UIElements.QuickLaunch;
 using SimpleClassicTheme.Taskbar.UIElements.StartButton;
-using SimpleClassicTheme.Taskbar.UIElements.SystemTray;
 
 using System;
 using System.Drawing;
@@ -12,7 +11,7 @@ using System.Windows.Forms;
 
 using static SimpleClassicTheme.Taskbar.Helpers.NativeMethods.WinDef;
 
-namespace SimpleClassicTheme.Taskbar.ThemeEngine
+namespace SimpleClassicTheme.Taskbar.ThemeEngine.Renderers
 {
     internal class ClassicRenderer : BaseRenderer
     {
@@ -100,7 +99,7 @@ namespace SimpleClassicTheme.Taskbar.ThemeEngine
             }
         }
 
-        public override void DrawSystemTray(System.Windows.Forms.Control systemTray, Graphics g)
+        public override void DrawSystemTray(Control systemTray, Graphics g)
         {
             Rectangle rect = systemTray.ClientRectangle;
             rect.Location = new Point(0, 4);
@@ -224,7 +223,7 @@ namespace SimpleClassicTheme.Taskbar.ThemeEngine
 
         public override void DrawQuickLaunchIcon(QuickLaunchIcon icon, Graphics g, MouseState state)
         {
-            Rectangle rectangle = new(0, (icon.Height / 2) - (icon.Width / 2), icon.Width, icon.Width);
+            Rectangle rectangle = new(0, icon.Height / 2 - icon.Width / 2, icon.Width, icon.Width);
 
             if (state == MouseState.Pressed)
             {
@@ -236,16 +235,16 @@ namespace SimpleClassicTheme.Taskbar.ThemeEngine
             }
         }
 
-        public override Point GetQuickLaunchIconLocation(int index) => new(16 + (index * (16 + Config.Default.Tweaks.SpaceBetweenQuickLaunchIcons)), 7);
+        public override Point GetQuickLaunchIconLocation(int index) => new(16 + index * (16 + Config.Default.Tweaks.SpaceBetweenQuickLaunchIcons), 7);
 
-        public override int GetQuickLaunchWidth(int iconCount) => (iconCount * 16) + (Config.Default.Tweaks.SpaceBetweenQuickLaunchIcons * (iconCount - 1));
+        public override int GetQuickLaunchWidth(int iconCount) => iconCount * 16 + Config.Default.Tweaks.SpaceBetweenQuickLaunchIcons * (iconCount - 1);
 
-        public override Point GetSystemTrayIconLocation(int index) => new(3 + (index * (16 + Config.Default.Tweaks.SpaceBetweenTrayIcons)), 7);
+        public override Point GetSystemTrayIconLocation(int index) => new(3 + index * (16 + Config.Default.Tweaks.SpaceBetweenTrayIcons), 7);
 
-        public override int GetSystemTrayWidth(int iconCount) => 63 + (iconCount * (16 + Config.Default.Tweaks.SpaceBetweenTrayIcons));
+        public override int GetSystemTrayWidth(int iconCount) => 63 + iconCount * (16 + Config.Default.Tweaks.SpaceBetweenTrayIcons);
 
         public override Point GetTaskButtonGroupWindowButtonLocation(int index) => new(4, (index - 1) * 24);
 
-        public override Size GetTaskButtonGroupWindowSize(int buttonCount) => new(Config.Default.Tweaks.TaskbarProgramWidth + 8, ((buttonCount - 1) * 24) + 6);
+        public override Size GetTaskButtonGroupWindowSize(int buttonCount) => new(Config.Default.Tweaks.TaskbarProgramWidth + 8, (buttonCount - 1) * 24 + 6);
     }
 }

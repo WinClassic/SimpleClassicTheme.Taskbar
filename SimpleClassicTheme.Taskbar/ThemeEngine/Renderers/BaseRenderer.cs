@@ -1,11 +1,10 @@
 ﻿using SimpleClassicTheme.Taskbar.UIElements.StartButton;
-using SimpleClassicTheme.Taskbar.UIElements.SystemTray;
 using SimpleClassicTheme.Taskbar.UIElements.QuickLaunch;
 using System.Drawing;
 using System;
 using SimpleClassicTheme.Taskbar.Helpers;
 
-namespace SimpleClassicTheme.Taskbar.ThemeEngine
+namespace SimpleClassicTheme.Taskbar.ThemeEngine.Renderers
 {
     public abstract class BaseRenderer : IDisposable
     {

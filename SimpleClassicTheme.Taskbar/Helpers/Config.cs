@@ -2,6 +2,7 @@
 using SimpleClassicTheme.Common.Serialization;
 
 using SimpleClassicTheme.Taskbar.ThemeEngine;
+using SimpleClassicTheme.Taskbar.ThemeEngine.Renderers;
 using SimpleClassicTheme.Taskbar.ThemeEngine.VisualStyles;
 
 using System.ComponentModel;
