@@ -5,6 +5,7 @@ using SimpleClassicTheme.Taskbar.ThemeEngine;
 using SimpleClassicTheme.Taskbar.ThemeEngine.VisualStyles;
 
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Resources;
 
 namespace SimpleClassicTheme.Taskbar.Helpers
@@ -25,7 +26,7 @@ namespace SimpleClassicTheme.Taskbar.Helpers
         public BaseRenderer Renderer { get; set; } = new ClassicRenderer();
 
         // VisualStyleRenderer settings
-        public bool EnableActiveTaskbar { get; internal set; } = true;
+        public bool EnableActiveTaskbar { get; internal set; } = false;
         public bool EnableGrouping { get; set; } = true;
         public bool EnablePassiveTaskbar { get; internal set; } = false;
         public bool EnablePassiveTray { get; set; } = false;
@@ -80,7 +81,7 @@ namespace SimpleClassicTheme.Taskbar.Helpers
     public class Tweaks
     {
         [DisplayName("Enable debugging options")]
-        public bool EnableDebugging { get; set; } = true;
+        public bool EnableDebugging { get; set; } = Debugger.IsAttached;
 
         [Category("Task view")]
         [DisplayName("Grouping method")]
