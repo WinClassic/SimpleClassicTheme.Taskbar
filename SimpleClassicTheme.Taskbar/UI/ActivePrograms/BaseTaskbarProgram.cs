@@ -25,7 +25,6 @@ namespace SimpleClassicTheme.Taskbar
 
         private bool activeWindow = false;
         private Border3DStyle style;
-        private bool textIndent = false;
         private Icon icon;
 
         public bool ActiveWindow
@@ -131,14 +130,13 @@ namespace SimpleClassicTheme.Taskbar
             {
                 if (CancelMouseDown(e))
                     return;
+
                 style = Border3DStyle.Sunken;
                 IsPressed = true;
-                textIndent = true;
                 Invalidate();
             };
             MouseUp += delegate
             {
-                textIndent = false;
                 Invalidate();
             };
             MouseClick += OnClick;

@@ -4,6 +4,7 @@ using SimpleClassicTheme.Taskbar.Helpers.NativeMethods;
 using SimpleClassicTheme.Taskbar.ThemeEngine.VisualStyles;
 
 using System;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
@@ -16,7 +17,6 @@ namespace SimpleClassicTheme.Taskbar
     public partial class Settings : Form
     {
         private Taskbar previewTaskbar;
-        private System.ComponentModel.ComponentResourceManager Resources = new(typeof(Settings));
         private VisualStyle[] visualStyles;
         private string[] visualStylePaths;
 
@@ -390,7 +390,7 @@ namespace SimpleClassicTheme.Taskbar
             UpdateStartButton();
         }
 
-        private void UpdateStartButton()
+        private static void UpdateStartButton()
         {
             // var appearance = GetCurrentStartButtonAppearance();
             // startButton.DummySettings(customButtonTextBox.Text, customIconTextBox.Text, appearance);

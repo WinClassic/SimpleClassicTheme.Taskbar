@@ -168,7 +168,7 @@ namespace SimpleClassicTheme.Taskbar.UIElements.SystemTray
             uint wParam = version > 3 ? mouse : uID;
             uint lParamH = version > 3 ? uID : 0;
             uint lParamL = eventMessage;
-            uint lParam = lParamH << 16 | lParamL;
+            uint lParam = (lParamH << 16) | lParamL;
 
             _ = User32.SendNotifyMessage(hWnd, uCallbackMessage, wParam, lParam);
 		}

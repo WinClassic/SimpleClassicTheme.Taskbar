@@ -79,12 +79,12 @@ namespace SimpleClassicTheme.Taskbar
             Config.Default.Renderer.DrawTaskButtonGroupWindow(this, e.Graphics);
             return;
 
-            Rectangle newRect = ClientRectangle;
-            RECT rect = newRect;
-            uint buttonStyle = DFCS_BUTTONPUSH;
-            _ = User32.DrawFrameControl(e.Graphics.GetHdc(), ref rect, DFC_BUTTON, buttonStyle);
-            e.Graphics.ReleaseHdc();
-            e.Graphics.ResetTransform();
+            // Rectangle newRect = ClientRectangle;
+            // RECT rect = newRect;
+            // uint buttonStyle = DFCS_BUTTONPUSH;
+            // _ = User32.DrawFrameControl(e.Graphics.GetHdc(), ref rect, DFC_BUTTON, buttonStyle);
+            // e.Graphics.ReleaseHdc();
+            // e.Graphics.ResetTransform();
         }
     }
 }

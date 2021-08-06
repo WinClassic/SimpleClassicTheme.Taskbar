@@ -13,7 +13,7 @@ namespace SimpleClassicTheme.Taskbar.ThemeEngine.VisualStyles
     public class VisualStyleColorScheme
     {
         private readonly IniData ini;
-        private Dictionary<string, VisualStyleElement> sectionCache = new();
+        private readonly Dictionary<string, VisualStyleElement> sectionCache = new();
 
         public VisualStyle VisualStyle { get; }
 

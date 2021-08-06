@@ -205,14 +205,10 @@ namespace SimpleClassicTheme.Taskbar
             ProgramWindows.CopyTo(enumerator);
             foreach (SingleTaskbarProgram dd in enumerator)
             {
-                if (dd is SingleTaskbarProgram)
+                if (dd is not null && !newIcons.Contains(dd))
                 {
-                    SingleTaskbarProgram icon = dd as SingleTaskbarProgram;
-                    if (!newIcons.Contains(icon))
-                    {
-                        _ = ProgramWindows.Remove(icon);
-                        icon.Dispose();
-                    }
+                    _ = ProgramWindows.Remove(dd);
+                    dd.Dispose();
                 }
             }
 

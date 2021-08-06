@@ -28,23 +28,6 @@ namespace SimpleClassicTheme.Taskbar.Helpers
 
         delegate IntPtr MsgHookProc(IntPtr hWnd, uint Msg, IntPtr wParam, IntPtr lParam);
 
-        static IntPtr proc(IntPtr hhk, uint nCode, IntPtr wParam, IntPtr lParam)
-        {
-            const uint WM_DESTROYWINDOW = 0xBFFF;
-
-            Logger.Instance.Log(LoggerVerbosity.Verbose, "TrayHook", "HOOK IS WORK YES");
-            if (nCode == WM_DESTROYWINDOW)
-            {
-                File.WriteAllText("C:\\fuck.txt", "fuck.txt");
-                MessageBox.Show(Environment.CurrentDirectory);
-                if (User32.DestroyWindow(wParam))
-                    return new IntPtr(1);
-                else
-                    return new IntPtr(0);
-            }
-            return User32.CallNextHookEx(hhk, (User32.ShellEvents)nCode, wParam, lParam); ;
-        }
-
         public static void OpenQuickLaunchFolder()
         {
             var appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);

@@ -12,7 +12,7 @@ namespace SimpleClassicTheme.Taskbar.ThemeEngine.Renderers
 {
     class VisualStyleRenderer : BaseRenderer
     {
-        private VisualStyleColorScheme colorScheme;
+        private readonly VisualStyleColorScheme colorScheme;
 
         readonly ClassicRenderer r = new();
 

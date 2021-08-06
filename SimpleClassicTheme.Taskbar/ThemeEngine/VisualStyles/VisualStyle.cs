@@ -22,7 +22,7 @@ namespace SimpleClassicTheme.Taskbar.ThemeEngine.VisualStyles
     {
         private readonly IntPtr hModule;
         private bool disposedValue;
-        private IniData themeIni;
+        private readonly IniData themeIni;
         private static readonly IniParserConfiguration iniParserConfig = new()
         {
             CaseInsensitive = true,

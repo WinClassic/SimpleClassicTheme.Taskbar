@@ -104,7 +104,7 @@ namespace SimpleClassicTheme.Taskbar
             Window fgWindow = new(User32.GetForegroundWindow());
 
             //Hide explorer's taskbar(s)
-            waitBeforeShow = false;
+            WaitBeforeShow = false;
 
             using (var _ = logicTiming.StartRegion("Hide Shell_TrayWnd and Shell_SecondaryTrayWnd"))
             {

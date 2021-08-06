@@ -13,11 +13,9 @@ namespace SimpleClassicTheme.Taskbar.UIElements.SystemTray
     public partial class SystemTray : SystemTrayBase
     {
         private SystemTrayIcon heldDownIcon = null;
-        private int heldDownOriginalX = 0;
-        private int mouseOriginalX = 0;
 
-        private Dictionary<IntPtr, SystemTrayIcon> lookupId = new();
-        private Dictionary<Guid, SystemTrayIcon> lookupGuid = new();
+        private readonly Dictionary<IntPtr, SystemTrayIcon> lookupId = new();
+        private readonly Dictionary<Guid, SystemTrayIcon> lookupGuid = new();
 
         public SystemTray()
         {
@@ -208,8 +206,8 @@ namespace SimpleClassicTheme.Taskbar.UIElements.SystemTray
         private void SystemTray_IconDown(object sender, MouseEventArgs e)
         {
             heldDownIcon = (SystemTrayIcon)sender;
-            heldDownOriginalX = heldDownIcon.Location.X;
-            mouseOriginalX = Cursor.Position.X;
+            // heldDownOriginalX = heldDownIcon.Location.X;
+            // mouseOriginalX = Cursor.Position.X;
         }
 
         private void SystemTray_Paint(object sender, System.Windows.Forms.PaintEventArgs e)

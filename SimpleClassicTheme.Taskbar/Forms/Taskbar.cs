@@ -18,8 +18,8 @@ namespace SimpleClassicTheme.Taskbar
 {
     public partial class Taskbar : Form
     {
-        public static IntPtr lastOpenWindow;
-        public static bool waitBeforeShow = false;
+        public static IntPtr LastOpenWindow { get; set; }
+        public static bool WaitBeforeShow { get; set; } = false;
         public bool busy = false;
         public bool CanInvoke = false;
         public BaseTaskbarProgram heldDownButton;
@@ -189,7 +189,7 @@ namespace SimpleClassicTheme.Taskbar
                     break;
 
                 default:
-                    if (m.Msg == (int)WM_SHELLHOOKMESSAGE)
+                    if (m.Msg == WM_SHELLHOOKMESSAGE)
                     {
                         HookProcedure((User32.ShellEvents)m.WParam, m.LParam, IntPtr.Zero);
                     }
@@ -388,7 +388,7 @@ namespace SimpleClassicTheme.Taskbar
             Logger.Instance.Log(LoggerVerbosity.Verbose, "Taskbar/HookProcedure", $"Call parameters: {nCode}, {wParam:X8}, {lParam:X8}");
 
             if (nCode < 0)
-                return User32.CallNextHookEx(IntPtr.Zero, (User32.ShellEvents)nCode, wParam, lParam);
+                return User32.CallNextHookEx(IntPtr.Zero, nCode, wParam, lParam);
 
             switch (nCode)
             {
@@ -410,7 +410,7 @@ namespace SimpleClassicTheme.Taskbar
                     break;
             }
 
-            return User32.CallNextHookEx(IntPtr.Zero, (User32.ShellEvents)nCode, wParam, lParam);
+            return User32.CallNextHookEx(IntPtr.Zero, nCode, wParam, lParam);
         }
 
         private void HandleWindowDestroyed(IntPtr wParam)
@@ -475,7 +475,7 @@ namespace SimpleClassicTheme.Taskbar
 
         private void HandleWindowCreated(IntPtr wParam)
         {
-            if ((Environment.OSVersion.Version.Major >= 10 && !UnmanagedCodeMigration.IsWindowOnCurrentVirtualDesktop(wParam)))
+            if (Environment.OSVersion.Version.Major >= 10 && !UnmanagedCodeMigration.IsWindowOnCurrentVirtualDesktop(wParam))
             {
                 return;
             }
@@ -556,7 +556,7 @@ namespace SimpleClassicTheme.Taskbar
             if (!Dummy)
 			{
                 // Hide explorer's taskbar(s)
-                waitBeforeShow = false;
+                WaitBeforeShow = false;
 
                 var enumTrayWindows = GetTrayWindows();
 
@@ -994,7 +994,7 @@ namespace SimpleClassicTheme.Taskbar
             return contextMenu;
         }
 
-        private bool ShouldShowExit()
+        private static bool ShouldShowExit()
         {
             if (Config.Default.ExitMenuItemCondition == ExitMenuItemCondition.Always)
             {

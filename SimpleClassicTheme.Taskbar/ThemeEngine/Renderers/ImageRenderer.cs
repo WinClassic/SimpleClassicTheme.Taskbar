@@ -38,9 +38,6 @@ namespace SimpleClassicTheme.Taskbar.ThemeEngine.Renderers
         private (int, int) taskbuttonRightBorderLocation;
         private readonly int taskbuttonGroupWindowBorderSize;
         private RECT taskbuttonGroupWindowTaskbuttonRealSize;
-        private (int, int) taskbuttonIconLocation;
-        private (int, int) taskbuttonIconSize;
-        private (int, int) taskbuttonTextLocation;
         private readonly int taskbuttonMinimalWidth;
         private readonly int startButtonWidth;
         private readonly int systemTrayBaseWidth;
@@ -140,10 +137,10 @@ namespace SimpleClassicTheme.Taskbar.ThemeEngine.Renderers
                 taskButtonGroupWindowBorderTexture.Item2 = taskButtonGroupWindowBorder.Clone(new Rectangle(cx - bs, 0, bs, bs), taskButtonGroupWindowBorder.PixelFormat); // Top right corner texture
                 taskButtonGroupWindowBorderTexture.Item3 = taskButtonGroupWindowBorder.Clone(new Rectangle(0, cy - bs, bs, bs), taskButtonGroupWindowBorder.PixelFormat); // Bottom left corner texture
                 taskButtonGroupWindowBorderTexture.Item4 = taskButtonGroupWindowBorder.Clone(new Rectangle(cx - bs, cy - bs, bs, bs), taskButtonGroupWindowBorder.PixelFormat); // Bottom right corner texture
-                taskButtonGroupWindowBorderTexture.Item5 = taskButtonGroupWindowBorder.Clone(new Rectangle(0, bs, bs, cy - 2 * bs), taskButtonGroupWindowBorder.PixelFormat); // Left side texture
-                taskButtonGroupWindowBorderTexture.Item6 = taskButtonGroupWindowBorder.Clone(new Rectangle(bs, 0, cx - 2 * bs, bs), taskButtonGroupWindowBorder.PixelFormat); // Top side texture
-                taskButtonGroupWindowBorderTexture.Item7 = taskButtonGroupWindowBorder.Clone(new Rectangle(cx - bs, bs, bs, cy - 2 * bs), taskButtonGroupWindowBorder.PixelFormat); // Right side texture
-                taskButtonGroupWindowBorderTexture.Item8 = taskButtonGroupWindowBorder.Clone(new Rectangle(bs, cy - bs, cx - 2 * bs, bs), taskButtonGroupWindowBorder.PixelFormat); // Bottom side texture
+                taskButtonGroupWindowBorderTexture.Item5 = taskButtonGroupWindowBorder.Clone(new Rectangle(0, bs, bs, cy - (2 * bs)), taskButtonGroupWindowBorder.PixelFormat); // Left side texture
+                taskButtonGroupWindowBorderTexture.Item6 = taskButtonGroupWindowBorder.Clone(new Rectangle(bs, 0, cx - (2 * bs), bs), taskButtonGroupWindowBorder.PixelFormat); // Top side texture
+                taskButtonGroupWindowBorderTexture.Item7 = taskButtonGroupWindowBorder.Clone(new Rectangle(cx - bs, bs, bs, cy - (2 * bs)), taskButtonGroupWindowBorder.PixelFormat); // Right side texture
+                taskButtonGroupWindowBorderTexture.Item8 = taskButtonGroupWindowBorder.Clone(new Rectangle(bs, cy - bs, cx - (2 * bs), bs), taskButtonGroupWindowBorder.PixelFormat); // Bottom side texture
 
                 systemTrayTexture = new Bitmap(Path.Combine(resourceDirectory, "SystemTrayTexture.png"));
                 systemTrayBorder = new Bitmap(Path.Combine(resourceDirectory, "SystemTrayBorder.png"));
@@ -237,21 +234,21 @@ namespace SimpleClassicTheme.Taskbar.ThemeEngine.Renderers
             taskButtonGroupWindowBorderTexture.Item2 = taskButtonGroupWindowBorder.Clone(new Rectangle(cx - bs, 0, bs, bs), taskButtonGroupWindowBorder.PixelFormat); // Top right corner texture
             taskButtonGroupWindowBorderTexture.Item3 = taskButtonGroupWindowBorder.Clone(new Rectangle(0, cy - bs, bs, bs), taskButtonGroupWindowBorder.PixelFormat); // Bottom left corner texture
             taskButtonGroupWindowBorderTexture.Item4 = taskButtonGroupWindowBorder.Clone(new Rectangle(cx - bs, cy - bs, bs, bs), taskButtonGroupWindowBorder.PixelFormat); // Bottom right corner texture
-            taskButtonGroupWindowBorderTexture.Item5 = taskButtonGroupWindowBorder.Clone(new Rectangle(0, bs, bs, cy - 2 * bs), taskButtonGroupWindowBorder.PixelFormat); // Left side texture
-            taskButtonGroupWindowBorderTexture.Item6 = taskButtonGroupWindowBorder.Clone(new Rectangle(bs, 0, cx - 2 * bs, bs), taskButtonGroupWindowBorder.PixelFormat); // Top side texture
-            taskButtonGroupWindowBorderTexture.Item7 = taskButtonGroupWindowBorder.Clone(new Rectangle(cx - bs, bs, bs, cy - 2 * bs), taskButtonGroupWindowBorder.PixelFormat); // Right side texture
-            taskButtonGroupWindowBorderTexture.Item8 = taskButtonGroupWindowBorder.Clone(new Rectangle(bs, cy - bs, cx - 2 * bs, bs), taskButtonGroupWindowBorder.PixelFormat); // Bottom side texture
+            taskButtonGroupWindowBorderTexture.Item5 = taskButtonGroupWindowBorder.Clone(new Rectangle(0, bs, bs, cy - (2 * bs)), taskButtonGroupWindowBorder.PixelFormat); // Left side texture
+            taskButtonGroupWindowBorderTexture.Item6 = taskButtonGroupWindowBorder.Clone(new Rectangle(bs, 0, cx - (2 * bs), bs), taskButtonGroupWindowBorder.PixelFormat); // Top side texture
+            taskButtonGroupWindowBorderTexture.Item7 = taskButtonGroupWindowBorder.Clone(new Rectangle(cx - bs, bs, bs, cy - (2 * bs)), taskButtonGroupWindowBorder.PixelFormat); // Right side texture
+            taskButtonGroupWindowBorderTexture.Item8 = taskButtonGroupWindowBorder.Clone(new Rectangle(bs, cy - bs, cx - (2 * bs), bs), taskButtonGroupWindowBorder.PixelFormat); // Bottom side texture
 
             systemTrayTexture = (Bitmap)resources.GetObject("SystemTrayTexture");
             systemTrayBorder = (Bitmap)resources.GetObject("SystemTrayBorder");
             startButton = (Bitmap)resources.GetObject("StartButton");
         }
 
-        public override Size GetTaskButtonGroupWindowSize(int buttonCount) => new Size(Config.Default.Tweaks.TaskbarProgramWidth + taskbuttonGroupWindowBorderSize * 2, (buttonCount - 1) * (TaskbarHeight - taskbuttonGroupWindowTaskbuttonRealSize.Top + taskbuttonGroupWindowTaskbuttonRealSize.Bottom) + taskbuttonGroupWindowBorderSize * 2);
-        public override Point GetTaskButtonGroupWindowButtonLocation(int index) => new Point(taskbuttonGroupWindowBorderSize, (index - 1) * (TaskbarHeight - taskbuttonGroupWindowTaskbuttonRealSize.Top + taskbuttonGroupWindowTaskbuttonRealSize.Bottom) - taskbuttonGroupWindowTaskbuttonRealSize.Top + taskbuttonGroupWindowBorderSize);
+        public override Size GetTaskButtonGroupWindowSize(int buttonCount) => new(Config.Default.Tweaks.TaskbarProgramWidth + (taskbuttonGroupWindowBorderSize * 2), ((buttonCount - 1) * (TaskbarHeight - taskbuttonGroupWindowTaskbuttonRealSize.Top + taskbuttonGroupWindowTaskbuttonRealSize.Bottom)) + (taskbuttonGroupWindowBorderSize * 2));
+        public override Point GetTaskButtonGroupWindowButtonLocation(int index) => new(taskbuttonGroupWindowBorderSize, ((index - 1) * (TaskbarHeight - taskbuttonGroupWindowTaskbuttonRealSize.Top + taskbuttonGroupWindowTaskbuttonRealSize.Bottom)) - taskbuttonGroupWindowTaskbuttonRealSize.Top + taskbuttonGroupWindowBorderSize);
 
-        public override Point GetSystemTrayIconLocation(int index) => new(systemTrayFirstIconPosition.Item1 + index * (16 + Config.Default.Tweaks.SpaceBetweenTrayIcons), systemTrayFirstIconPosition.Item2);
-        public override int GetSystemTrayWidth(int iconCount) => systemTrayBaseWidth + iconCount * 16 + Config.Default.Tweaks.SpaceBetweenTrayIcons * (iconCount - 1);
+        public override Point GetSystemTrayIconLocation(int index) => new(systemTrayFirstIconPosition.Item1 + (index * (16 + Config.Default.Tweaks.SpaceBetweenTrayIcons)), systemTrayFirstIconPosition.Item2);
+        public override int GetSystemTrayWidth(int iconCount) => systemTrayBaseWidth + (iconCount * 16) + (Config.Default.Tweaks.SpaceBetweenTrayIcons * (iconCount - 1));
 
         public override Point SystemTrayTimeLocation => r.SystemTrayTimeLocation;
         public override Font SystemTrayTimeFont => r.SystemTrayTimeFont;
@@ -326,8 +323,8 @@ namespace SimpleClassicTheme.Taskbar.ThemeEngine.Renderers
             int bs = taskbuttonGroupWindowBorderSize;
             int cxm = taskbarGroup.Width - bs;
             int cym = taskbarGroup.Height - bs;
-            int cxb = taskbarGroup.Width - 2 * bs;
-            int cyb = taskbarGroup.Height - 2 * bs;
+            int cxb = taskbarGroup.Width - (2 * bs);
+            int cyb = taskbarGroup.Height - (2 * bs);
 
             // Draw corners
             g.DrawImageUnscaled(taskButtonGroupWindowBorderTexture.Item1, new Point(0, 0));

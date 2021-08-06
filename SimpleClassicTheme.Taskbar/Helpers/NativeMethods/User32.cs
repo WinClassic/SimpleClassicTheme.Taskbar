@@ -117,7 +117,7 @@ namespace SimpleClassicTheme.Taskbar.Helpers.NativeMethods
         [DllImport(nameof(User32))]
         internal static extern void keybd_event(byte bVk, byte bScan, uint dwFlags, UIntPtr dwExtraInfo);
 
-        [DllImport(nameof(User32))]
+        [DllImport(nameof(User32), CharSet = CharSet.Ansi)]
         internal static extern IntPtr LoadBitmapA(IntPtr hModule, string lpBitmapName);
 
         [DllImport(nameof(User32), SetLastError = true, CharSet = CharSet.Auto)]

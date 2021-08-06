@@ -68,8 +68,8 @@ namespace SimpleClassicTheme.Taskbar.Helpers.NativeMethods
         [DllImport(nameof(Kernel32), CharSet = CharSet.Unicode)]
         internal static extern long WritePrivateProfileString(string section, string key, string val, string filePath);
 
-        [DllImport(nameof(Kernel32), SetLastError = true)]
-        internal static extern bool QueryFullProcessImageName([In] IntPtr hProcess, [In] int dwFlags, [Out] StringBuilder lpExeName, ref int lpdwSize);
+        [DllImport(nameof(Kernel32), SetLastError = true, CharSet = CharSet.Unicode)]
+        internal static extern bool QueryFullProcessImageNameW([In] IntPtr hProcess, [In] int dwFlags, [Out] StringBuilder lpExeName, ref int lpdwSize);
 
         [DllImport(nameof(Kernel32), CharSet = CharSet.Unicode, SetLastError = true)]
         internal static extern bool GetModuleBaseName(IntPtr hProcess, IntPtr hModule, [MarshalAs(UnmanagedType.LPWStr)] StringBuilder lpBaseName, int nSize);
@@ -79,7 +79,7 @@ namespace SimpleClassicTheme.Taskbar.Helpers.NativeMethods
             int capacity = 2000;
             StringBuilder builder = new(capacity);
             IntPtr hProcess = OpenProcess(PROCESS_QUERY_LIMITED_INFORMATION, false, pid);
-            if (!QueryFullProcessImageName(hProcess, 0, builder, ref capacity))
+            if (!QueryFullProcessImageNameW(hProcess, 0, builder, ref capacity))
             {
                 CloseHandle(hProcess);
                 return String.Empty;

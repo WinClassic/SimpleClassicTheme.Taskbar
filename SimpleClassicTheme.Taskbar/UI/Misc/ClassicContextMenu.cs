@@ -110,7 +110,7 @@ namespace System.Windows.Forms
             PerformAction(id);
         }
 
-        private static SystemContextMenuItem? SearchForId(IEnumerable<SystemContextMenuItem> items, int itemId)
+        private static SystemContextMenuItem SearchForId(IEnumerable<SystemContextMenuItem> items, int itemId)
         {
             foreach (var item in items)
             {

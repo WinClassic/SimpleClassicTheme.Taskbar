@@ -13,8 +13,6 @@ namespace SimpleClassicTheme.Taskbar.UIElements.StartButton
         public const uint DFCS_PUSHED = 512;
 
         private bool OpeningStartMenu = false;
-        private bool Do3DBorder = true;
-        private bool isButton = true;
         private bool pressed = false;
         private bool WasPressed = false;
 
@@ -27,8 +25,6 @@ namespace SimpleClassicTheme.Taskbar.UIElements.StartButton
             Paint += OnPaint;
             MouseDown += OnMouseDown;
             MouseClick += OnMouseClick;
-
-            Do3DBorder = true;
 
             Appearance = Config.Default.StartButtonAppearance;
         }
@@ -122,10 +118,10 @@ namespace SimpleClassicTheme.Taskbar.UIElements.StartButton
             }
             else
             {
-                Window d = new(Taskbar.lastOpenWindow);
+                Window d = new(Taskbar.LastOpenWindow);
                 if (d.ClassName == "OpenShell.CMenuContainer" || d.ClassName == "Windows.UI.Core.CoreWindow")
                 {
-                    Taskbar.lastOpenWindow = Parent.Handle;
+                    Taskbar.LastOpenWindow = Parent.Handle;
                     Pressed = false;
                 }
                 else

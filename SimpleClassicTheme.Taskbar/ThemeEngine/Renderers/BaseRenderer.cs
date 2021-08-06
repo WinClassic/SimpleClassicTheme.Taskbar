@@ -1,12 +1,12 @@
-﻿using SimpleClassicTheme.Taskbar.UIElements.StartButton;
+﻿using SimpleClassicTheme.Taskbar.Helpers;
 using SimpleClassicTheme.Taskbar.UIElements.QuickLaunch;
+using SimpleClassicTheme.Taskbar.UIElements.StartButton;
+
 using System.Drawing;
-using System;
-using SimpleClassicTheme.Taskbar.Helpers;
 
 namespace SimpleClassicTheme.Taskbar.ThemeEngine.Renderers
 {
-    public abstract class BaseRenderer : IDisposable
+    public abstract class BaseRenderer
     {
         public abstract int StartButtonWidth { get; }
         public abstract Color SystemTrayTimeColor { get; }
@@ -14,11 +14,6 @@ namespace SimpleClassicTheme.Taskbar.ThemeEngine.Renderers
         public abstract Point SystemTrayTimeLocation { get; }
         public abstract int TaskbarHeight { get; }
         public abstract int TaskButtonMinimalWidth { get; }
-
-        public virtual void Dispose()
-        {
-            SystemTrayTimeFont?.Dispose();
-        }
 
         public abstract void DrawQuickLaunch(QuickLaunch quickLaunch, Graphics g);
 

@@ -74,6 +74,7 @@ namespace SimpleClassicTheme.Taskbar.ThemeEngine.VisualStyles
 
                 return _image;
             }
+            private set => _image = value;
         }
 
         public int ImageCount { get; init; }
@@ -104,7 +105,13 @@ namespace SimpleClassicTheme.Taskbar.ThemeEngine.VisualStyles
 
         public void Dispose()
         {
-            Image?.Dispose();
+            if (Image != null)
+            {
+                Image.Dispose();
+                Image = null;
+            }
+           
+            GC.SuppressFinalize(this);
         }
 
         public Bitmap[] GetBitmaps()

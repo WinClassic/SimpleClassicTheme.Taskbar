@@ -1,6 +1,7 @@
 ﻿using SimpleClassicTheme.Taskbar.Helpers.NativeMethods;
 using System;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Runtime.InteropServices;
 
@@ -52,6 +53,7 @@ namespace SimpleClassicTheme.Taskbar.Helpers
 		RespectQuietTime = 0x80
 	}
 
+	[SuppressMessage("Style", "IDE0044:Add readonly modifier", Justification = "This shouldn't be a class, this needs to be refactored into a struct.")]
 	[StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
 	internal class SystemTrayNotificationData
 	{
@@ -72,11 +74,11 @@ namespace SimpleClassicTheme.Taskbar.Helpers
 		public string InfoBalloonTitle;
 		public SystemTrayIconInfoBalloonFlags InfoBalloonFlags;
 		public Guid Guid;
-		private int infoBalloonIcon;
+        private int infoBalloonIcon;
 
-		public IntPtr WindowHandle => new IntPtr(windowHandle);
-		public IntPtr IconHandle => new IntPtr(iconHandle);
-		public IntPtr InfoBalloonIcon => new IntPtr(infoBalloonIcon);
+		public IntPtr WindowHandle => new(windowHandle);
+		public IntPtr IconHandle => new(iconHandle);
+		public IntPtr InfoBalloonIcon => new(infoBalloonIcon);
 
 		public int Timeout { get => TimeoutOrVersion; }
 		public int Version { get => TimeoutOrVersion; }
@@ -196,7 +198,7 @@ namespace SimpleClassicTheme.Taskbar.Helpers
 		}
 
 		const int HWND_BROADCAST = 0xFFFF;
-		int WM_TASKBARCREATED = User32.RegisterWindowMessage("TaskbarCreated");
+        readonly int WM_TASKBARCREATED = User32.RegisterWindowMessage("TaskbarCreated");
 		Integer oldTaskbar;
 		delegate Integer WndProc(IntPtr hWnd, uint uMsg, IntPtr wParam, IntPtr lParam);
 		WNDCLASS windowClass;

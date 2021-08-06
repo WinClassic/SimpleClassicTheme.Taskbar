@@ -121,7 +121,7 @@ namespace SimpleClassicTheme.Taskbar.Helpers
             const int ILD_TRANSPARENT = 1;
 
             SHFILEINFO fileInfo = new();
-            var retval = Shell32.SHGetFileInfo(path, 0, ref fileInfo, Marshal.SizeOf(fileInfo), SHGFI_SYSICONINDEX);
+            _ = Shell32.SHGetFileInfo(path, 0, ref fileInfo, Marshal.SizeOf(fileInfo), SHGFI_SYSICONINDEX);
             var imageListGuid = new Guid("46EB5926-582E-4017-9FDF-E8998DAA0950");
             Shell32.SHGetImageList((int)size, ref imageListGuid, out IImageList imageList);
             var iconIndex = fileInfo.iIcon;
