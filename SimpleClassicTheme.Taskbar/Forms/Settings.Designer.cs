@@ -35,6 +35,7 @@
             this.buttonOK = new System.Windows.Forms.Button();
             this.tabControl = new System.Windows.Forms.TabControl();
             this.tabGeneral = new System.Windows.Forms.TabPage();
+            this.showTaskbarOnAllDesktops = new System.Windows.Forms.CheckBox();
             this.exitItemLabel = new System.Windows.Forms.Label();
             this.exitItemComboBox = new System.Windows.Forms.ComboBox();
             this.languageComboBox = new System.Windows.Forms.ComboBox();
@@ -65,7 +66,6 @@
             this.tabTaskView = new System.Windows.Forms.TabPage();
             this.manageHiddenElementsButton = new System.Windows.Forms.Button();
             this.enableGroupingCheckBox = new System.Windows.Forms.CheckBox();
-            this.showTaskbarOnAllDesktops = new System.Windows.Forms.CheckBox();
             this.tabSystemTray = new System.Windows.Forms.TabPage();
             this.enableSysTrayColorChange = new System.Windows.Forms.CheckBox();
             this.enableSysTrayHover = new System.Windows.Forms.CheckBox();
@@ -152,6 +152,7 @@
             // 
             // tabGeneral
             // 
+            this.tabGeneral.Controls.Add(this.showTaskbarOnAllDesktops);
             this.tabGeneral.Controls.Add(this.exitItemLabel);
             this.tabGeneral.Controls.Add(this.exitItemComboBox);
             this.tabGeneral.Controls.Add(this.languageComboBox);
@@ -159,6 +160,12 @@
             resources.ApplyResources(this.tabGeneral, "tabGeneral");
             this.tabGeneral.Name = "tabGeneral";
             this.tabGeneral.UseVisualStyleBackColor = true;
+            // 
+            // showTaskbarOnAllDesktops
+            // 
+            resources.ApplyResources(this.showTaskbarOnAllDesktops, "showTaskbarOnAllDesktops");
+            this.showTaskbarOnAllDesktops.Name = "showTaskbarOnAllDesktops";
+            this.showTaskbarOnAllDesktops.UseVisualStyleBackColor = false;
             // 
             // exitItemLabel
             // 
@@ -201,10 +208,11 @@
             // 
             // tabControl1
             // 
-            this.tabControl1.Controls.Add(this.visualStyleTab);
             resources.ApplyResources(this.tabControl1, "tabControl1");
+            this.tabControl1.Controls.Add(this.visualStyleTab);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
+            this.tabControl1.SizeMode = System.Windows.Forms.TabSizeMode.FillToRight;
             // 
             // visualStyleTab
             // 
@@ -370,7 +378,6 @@
             // 
             this.tabTaskView.Controls.Add(this.manageHiddenElementsButton);
             this.tabTaskView.Controls.Add(this.enableGroupingCheckBox);
-            this.tabTaskView.Controls.Add(this.showTaskbarOnAllDesktops);
             resources.ApplyResources(this.tabTaskView, "tabTaskView");
             this.tabTaskView.Name = "tabTaskView";
             this.tabTaskView.UseVisualStyleBackColor = true;
@@ -387,12 +394,6 @@
             resources.ApplyResources(this.enableGroupingCheckBox, "enableGroupingCheckBox");
             this.enableGroupingCheckBox.Name = "enableGroupingCheckBox";
             this.enableGroupingCheckBox.UseVisualStyleBackColor = false;
-            // 
-            // showTaskbarOnAllDesktops
-            // 
-            resources.ApplyResources(this.showTaskbarOnAllDesktops, "showTaskbarOnAllDesktops");
-            this.showTaskbarOnAllDesktops.Name = "showTaskbarOnAllDesktops";
-            this.showTaskbarOnAllDesktops.UseVisualStyleBackColor = false;
             // 
             // tabSystemTray
             // 
@@ -454,9 +455,7 @@
             // 
             // showDescriptionButton
             // 
-            this.showDescriptionButton.Checked = true;
             this.showDescriptionButton.CheckOnClick = true;
-            this.showDescriptionButton.CheckState = System.Windows.Forms.CheckState.Checked;
             this.showDescriptionButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             resources.ApplyResources(this.showDescriptionButton, "showDescriptionButton");
             this.showDescriptionButton.Name = "showDescriptionButton";
