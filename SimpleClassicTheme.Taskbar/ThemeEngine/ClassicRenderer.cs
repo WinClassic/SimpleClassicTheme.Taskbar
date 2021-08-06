@@ -222,13 +222,15 @@ namespace SimpleClassicTheme.Taskbar.ThemeEngine
             g.ResetTransform();
         }
 
-        public override void DrawToolbarButton(Rectangle rectangle, Graphics g, bool down)
+        public override void DrawQuickLaunchIcon(QuickLaunchIcon icon, Graphics g, MouseState state)
         {
-            if (down)
+            Rectangle rectangle = new(0, (icon.Height / 2) - (icon.Width / 2), icon.Width, icon.Width);
+
+            if (state == MouseState.Pressed)
             {
                 ControlPaint.DrawBorder3D(g, rectangle, Border3DStyle.SunkenOuter);
             }
-            else
+            else if (state == MouseState.Hover)
             {
                 ControlPaint.DrawBorder3D(g, rectangle, Border3DStyle.RaisedInner);
             }

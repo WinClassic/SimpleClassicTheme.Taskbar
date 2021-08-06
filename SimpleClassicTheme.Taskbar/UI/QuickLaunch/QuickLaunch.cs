@@ -41,6 +41,9 @@ namespace SimpleClassicTheme.Taskbar.UIElements.QuickLaunch
 
         public void UpdateIcons()
         {
+
+            const int iconSize = 16 + (3 * 2);
+
             //If it is disabled, don't show
             if (Disabled)
             {
@@ -53,14 +56,12 @@ namespace SimpleClassicTheme.Taskbar.UIElements.QuickLaunch
             foreach (string file in Directory.EnumerateFiles(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\AppData\\Roaming\\Microsoft\\Internet Explorer\\Quick Launch\\", "*.lnk"))
             {
                 newFiles.Add(file);
-                bool contains = false;
-                foreach (QuickLaunchIcon icon in icons)
-                    if (icon.FileName == file)
-                        contains = true;
+                bool contains = icons.Any(icon => icon.FileName == file);
                 if (!contains)
                 {
                     QuickLaunchIcon icon = new();
                     icon.FileName = file;
+                    icon.Size = new Size(iconSize, 28);
                     icon.MouseDown += QuickLaunch_IconDown;
                     icon.Click += delegate
                     {
@@ -113,33 +114,32 @@ namespace SimpleClassicTheme.Taskbar.UIElements.QuickLaunch
             }
 
             //Display everything
-            Width = 32 + (icons.Count * 16) + (Config.Default.Tweaks.SpaceBetweenQuickLaunchIcons * (icons.Count - 1));
+            int iconSpacing = Config.Default.Tweaks.SpaceBetweenQuickLaunchIcons;
+            int emptySpace = iconSpacing * (icons.Count - 1);
+            Width = 32 + (icons.Count * iconSize) + emptySpace;
             int x = 16;
 
             int startX = x;
-            int iconWidth = 16;
-            int iconSpacing = Config.Default.Tweaks.SpaceBetweenQuickLaunchIcons;
 
             //See if we're moving, if so calculate new position, if we finished calculate new position and finalize position values
             if (heldDownIcon != null)
             {
                 if (Math.Abs(mouseOriginalX - Cursor.Position.X) > 3)
                     heldDownIcon.IsMoving = true;
-                if ((MouseButtons & MouseButtons.Left) != 0)
+
+                Point p = new(heldDownOriginalX + (Cursor.Position.X - mouseOriginalX), heldDownIcon.Location.Y);
+                int newIndex = (startX - p.X - ((iconSize + iconSpacing) / 2)) / (iconSize + iconSpacing) * -1;
+
+                if (newIndex < 0)
                 {
-                    Point p = new(heldDownOriginalX + (Cursor.Position.X - mouseOriginalX), heldDownIcon.Location.Y);
-                    int newIndex = (startX - p.X - ((iconWidth + iconSpacing) / 2)) / (iconWidth + iconSpacing) * -1;
-                    if (newIndex < 0) newIndex = 0;
-                    _ = icons.Remove(heldDownIcon);
-                    icons.Insert(Math.Min(icons.Count, newIndex), heldDownIcon);
+                    newIndex = 0;
                 }
-                else
+
+                _ = icons.Remove(heldDownIcon);
+                icons.Insert(Math.Min(icons.Count, newIndex), heldDownIcon);
+
+                if ((MouseButtons & MouseButtons.Left) == 0)
                 {
-                    Point p = new(heldDownOriginalX + (Cursor.Position.X - mouseOriginalX), heldDownIcon.Location.Y);
-                    int newIndex = (startX - p.X - ((iconWidth + iconSpacing) / 2)) / (iconWidth + iconSpacing) * -1;
-                    if (newIndex < 0) newIndex = 0;
-                    _ = icons.Remove(heldDownIcon);
-                    icons.Insert(Math.Min(icons.Count, newIndex), heldDownIcon);
                     heldDownIcon = null;
                 }
             }
@@ -157,9 +157,11 @@ namespace SimpleClassicTheme.Taskbar.UIElements.QuickLaunch
             foreach (QuickLaunchIcon icon in icons)
             {
                 icon.Location = new Point(x, 0);
+                
                 if (!Controls.Contains(icon))
                     Controls.Add(icon);
-                x += 16 + Config.Default.Tweaks.SpaceBetweenQuickLaunchIcons;
+
+                x += iconSize + Config.Default.Tweaks.SpaceBetweenQuickLaunchIcons;
             }
 
             if (heldDownIcon != null)

@@ -178,10 +178,13 @@ namespace SimpleClassicTheme.Taskbar.ThemeEngine
 			return r.GetTaskButtonGroupWindowSize(buttonCount);
 		}
 
-        public override void DrawToolbarButton(Rectangle rectangle, Graphics g, bool down)
-        {
+        public override void DrawQuickLaunchIcon(QuickLaunchIcon icon, Graphics g, MouseState state)
+		{
+			// HACK: hard coded offset to match screenshots
+			Rectangle rectangle = new(0, -3, icon.Width, icon.Height + 4);
+
 			var element = colorScheme["TaskBar::Toolbar.Button"];
-			g.DrawElement(element, rectangle, down ? 2 : 1);
+			g.DrawElement(element, rectangle, state == MouseState.Pressed ? 2 : 1);
 		}
     }
 }

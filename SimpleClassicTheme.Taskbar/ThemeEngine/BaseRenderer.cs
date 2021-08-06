@@ -3,6 +3,7 @@ using SimpleClassicTheme.Taskbar.UIElements.SystemTray;
 using SimpleClassicTheme.Taskbar.UIElements.QuickLaunch;
 using System.Drawing;
 using System;
+using SimpleClassicTheme.Taskbar.Helpers;
 
 namespace SimpleClassicTheme.Taskbar.ThemeEngine
 {
@@ -46,7 +47,7 @@ namespace SimpleClassicTheme.Taskbar.ThemeEngine
 
         public abstract Size GetTaskButtonGroupWindowSize(int buttonCount);
 
-        public virtual void DrawToolbarButton(Rectangle rectangle, Graphics g, bool down)
+        public virtual void DrawQuickLaunchIcon(QuickLaunchIcon icon, Graphics g, MouseState state)
         {
         }
     }

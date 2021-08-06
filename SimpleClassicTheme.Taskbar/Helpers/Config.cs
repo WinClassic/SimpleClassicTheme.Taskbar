@@ -119,8 +119,8 @@ namespace SimpleClassicTheme.Taskbar.Helpers
         [Category("Spacing between items")]
         [DisplayName("Quick Launch icons")]
         [Description("Defines the space between quick launch icons in pixels.")]
-        [DefaultValue(2)]
-        public int SpaceBetweenQuickLaunchIcons { get; set; } = 2;
+        [DefaultValue(0)]
+        public int SpaceBetweenQuickLaunchIcons { get; set; } = 0;
 
         [Category("Spacing between items")]
         [DisplayName("Task View items")]
