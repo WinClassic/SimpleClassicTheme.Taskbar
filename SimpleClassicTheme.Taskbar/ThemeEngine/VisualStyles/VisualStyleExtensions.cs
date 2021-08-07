@@ -52,10 +52,13 @@ namespace SimpleClassicTheme.Taskbar.ThemeEngine.VisualStyles
 
                 var rect = new RECT(x, y, x + w, y + h);
                 var hdc = graphics.GetHdc();
-
-                Gdi32.SelectObject(hdc, element.Font.ToHfont());
+                var hFont = element.Font.ToHfont();
+                
+                Gdi32.SelectObject(hdc, hFont);
                 Gdi32.SetTextColor(hdc, textColor);
                 ComCtl32.DrawShadowText(hdc, s, (uint)s.Length, rect, 0, textColor, shadowColor, element.TextShadowOffset.X, element.TextShadowOffset.Y);
+                
+                Gdi32.DeleteObject(hFont);
                 graphics.ReleaseHdc(hdc);
             }
             else

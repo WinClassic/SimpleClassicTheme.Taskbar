@@ -10,5 +10,8 @@ namespace SimpleClassicTheme.Taskbar.Helpers.NativeMethods
 
         [DllImport(nameof(Gdi32), SetLastError = false)]
         internal static extern IntPtr SelectObject(IntPtr hdc, IntPtr h);
+
+        [DllImport(nameof(Gdi32), SetLastError = false)]
+        internal static extern IntPtr DeleteObject(IntPtr ho);
     }
 }
