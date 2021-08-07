@@ -38,7 +38,7 @@ namespace SimpleClassicTheme.Taskbar.Helpers
 
         private static void Control_MouseUp(object sender, MouseEventArgs e)
         {
-            if (sender is Control control && sender is IHasMouseState mouseClass)
+            if (sender is Control control && sender is IHasMouseState mouseClass && e.Button == MouseButtons.Left)
             {
                 mouseClass.IsPressed = false;
                 control.Invalidate();
@@ -47,7 +47,7 @@ namespace SimpleClassicTheme.Taskbar.Helpers
 
         private static void Control_MouseDown(object sender, MouseEventArgs e)
         {
-            if (sender is Control control && sender is IHasMouseState mouseClass)
+            if (sender is Control control && sender is IHasMouseState mouseClass && e.Button == MouseButtons.Left)
             {
                 mouseClass.IsPressed = true;
                 control.Invalidate();
