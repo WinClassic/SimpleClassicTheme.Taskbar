@@ -14,6 +14,7 @@ namespace SimpleClassicTheme.Taskbar.ThemeEngine.Renderers
         public abstract Point SystemTrayTimeLocation { get; }
         public abstract int TaskbarHeight { get; }
         public abstract int TaskButtonMinimalWidth { get; }
+        public virtual int QuickLaunchPadding => 0;
 
         public abstract void DrawQuickLaunch(QuickLaunch quickLaunch, Graphics g);
 

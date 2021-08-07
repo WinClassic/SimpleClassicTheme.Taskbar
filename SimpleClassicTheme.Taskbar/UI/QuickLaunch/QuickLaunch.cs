@@ -115,9 +115,11 @@ namespace SimpleClassicTheme.Taskbar.UIElements.QuickLaunch
 
             //Display everything
             int iconSpacing = Config.Default.Tweaks.SpaceBetweenQuickLaunchIcons;
+            int qlPadding = Config.Default.Renderer.QuickLaunchPadding;
+            
             int emptySpace = iconSpacing * (icons.Count - 1);
-            Width = 32 + (icons.Count * iconSize) + emptySpace;
-            int x = 16;
+            Width = (qlPadding * 2) + (icons.Count * iconSize) + emptySpace;
+            int x = qlPadding;
 
             int startX = x;
 

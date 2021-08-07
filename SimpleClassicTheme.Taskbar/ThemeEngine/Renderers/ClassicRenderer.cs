@@ -46,6 +46,8 @@ namespace SimpleClassicTheme.Taskbar.ThemeEngine.Renderers
         public override int TaskbarHeight => 28;
         public override int TaskButtonMinimalWidth => 24;
 
+        public override int QuickLaunchPadding => 16;
+
         public override void DrawQuickLaunch(QuickLaunch systemTray, Graphics g)
         {
         }
