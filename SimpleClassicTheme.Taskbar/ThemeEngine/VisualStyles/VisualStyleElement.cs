@@ -10,7 +10,7 @@ namespace SimpleClassicTheme.Taskbar.ThemeEngine.VisualStyles
     {
         private Bitmap _image;
 
-        private Font font;
+        private Font _font;
 
         internal VisualStyleElement(VisualStyleColorScheme colorScheme)
         {
@@ -35,7 +35,7 @@ namespace SimpleClassicTheme.Taskbar.ThemeEngine.VisualStyles
         {
             get
             {
-                if (font == null)
+                if (_font == null)
                 {
                     var split = FontName.Split(", ", StringSplitOptions.RemoveEmptyEntries);
                     
@@ -49,9 +49,9 @@ namespace SimpleClassicTheme.Taskbar.ThemeEngine.VisualStyles
                     }
 
 
-                    font = new Font(fontFamily, fontSize, fontStyle, GraphicsUnit.Point);
+                    _font = new Font(fontFamily, fontSize, fontStyle, GraphicsUnit.Point);
                 }
-                return font;
+                return _font;
             }
         }
 
@@ -105,10 +105,16 @@ namespace SimpleClassicTheme.Taskbar.ThemeEngine.VisualStyles
 
         public void Dispose()
         {
-            if (Image != null)
+            if (_image != null)
             {
-                Image.Dispose();
-                Image = null;
+                _image.Dispose();
+                _image = null;
+            }
+
+            if (_font != null)
+            {
+                _font.Dispose();
+                _font = null;
             }
            
             GC.SuppressFinalize(this);

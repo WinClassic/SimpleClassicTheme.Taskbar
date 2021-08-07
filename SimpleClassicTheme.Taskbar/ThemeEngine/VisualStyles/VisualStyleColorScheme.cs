@@ -10,7 +10,7 @@ using System.Windows.Forms;
 
 namespace SimpleClassicTheme.Taskbar.ThemeEngine.VisualStyles
 {
-    public class VisualStyleColorScheme
+    public class VisualStyleColorScheme : IDisposable
     {
         private readonly IniData ini;
         private readonly Dictionary<string, VisualStyleElement> sectionCache = new();
@@ -127,6 +127,18 @@ namespace SimpleClassicTheme.Taskbar.ThemeEngine.VisualStyles
                 TextShadowColor = ParseColor(data["TextShadowColor"]),
                 TextShadowOffset = ParseOffset(data["TextShadowOffset"]),
             };
+        }
+
+        public void Dispose()
+        {
+            foreach (VisualStyleElement element in sectionCache.Values)
+            {
+                element.Dispose();
+            }
+
+            sectionCache.Clear();
+
+            GC.SuppressFinalize(this);
         }
     }
 }
