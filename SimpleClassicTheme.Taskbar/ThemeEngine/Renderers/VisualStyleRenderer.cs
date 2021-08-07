@@ -56,27 +56,21 @@ namespace SimpleClassicTheme.Taskbar.ThemeEngine.Renderers
             bool IsHover = taskbarProgram.ClientRectangle.Contains(taskbarProgram.PointToClient(Control.MousePosition));
             int index = (IsHover ? 1 : 0) + (IsActive ? 2 : 0);
 
-            // TODO
-
             //r.DrawTaskButtonGroupWindow(taskbarGroup, g);
             var toolbarElement = colorScheme["TaskBand::Toolbar"];
-            using var textBrush = new SolidBrush(toolbarElement.TextColor.Value);
-
+            var toolbarElementPressed = colorScheme["TaskBand::Toolbar(pressed)"];
             var buttonElement = colorScheme["TaskBand::Toolbar.Button"];
 
-            //int imageIndex = 0;
-            //int imageIndex = taskbarProgram.MouseState switch
-            //{
-            //	_ => 0,
-            //};
+            var textColor = toolbarElement.TextColor.Value;
+
+            if (IsActive && toolbarElementPressed.TextColor.HasValue)
+            {
+                textColor = toolbarElementPressed.TextColor.Value;
+            }
+
+            using var textBrush = new SolidBrush(textColor);
 
             g.DrawElement(buttonElement, new Rectangle(Point.Empty, taskbarProgram.Size), index);
-
-
-            // Generate font
-            Font font = SystemFonts.DefaultFont;
-            if (IsActive)
-                font = new Font(font, FontStyle.Bold);
 
             // Draw text and icon
             StringFormat format = new();
@@ -86,14 +80,18 @@ namespace SimpleClassicTheme.Taskbar.ThemeEngine.Renderers
             format.Trimming = StringTrimming.EllipsisCharacter;
             if (taskbarProgram.IconImage != null)
             {
-                g.DrawImage(taskbarProgram.IconImage, IsActive ? new Rectangle(5, 8, 16, 16) : new Rectangle(4, 7, 16, 16));
+                Rectangle iconRect = IsActive
+                    ? new Rectangle(5, 8, 16, 16)
+                    : new Rectangle(4, 7, 16, 16);
+
+                g.DrawImage(taskbarProgram.IconImage, iconRect);
 
                 if (taskbarProgram.Width >= 60)
-                    g.DrawString(taskbarProgram.Title, font, textBrush, IsActive ? new Rectangle(21, 10, taskbarProgram.Width - 21 - 3 - taskbarProgram.SpaceNeededNextToText, 13) : new Rectangle(20, 9, taskbarProgram.Width - 20 - 3 - taskbarProgram.SpaceNeededNextToText, 14), format);
+                    g.DrawString(taskbarProgram.Title, toolbarElement.Font, textBrush, IsActive ? new Rectangle(21, 10, taskbarProgram.Width - 21 - 3 - taskbarProgram.SpaceNeededNextToText, 13) : new Rectangle(20, 9, taskbarProgram.Width - 20 - 3 - taskbarProgram.SpaceNeededNextToText, 14), format);
             }
             else
             {
-                g.DrawString(taskbarProgram.Title, font, textBrush, IsActive ? new Rectangle(5, 10, taskbarProgram.Width - 5 - 3 - taskbarProgram.SpaceNeededNextToText, 13) : new Rectangle(4, 9, taskbarProgram.Width - 4 - 3 - taskbarProgram.SpaceNeededNextToText, 14), format);
+                g.DrawString(taskbarProgram.Title, toolbarElement.Font, textBrush, IsActive ? new Rectangle(5, 10, taskbarProgram.Width - 5 - 3 - taskbarProgram.SpaceNeededNextToText, 13) : new Rectangle(4, 9, taskbarProgram.Width - 4 - 3 - taskbarProgram.SpaceNeededNextToText, 14), format);
             }
         }
 
