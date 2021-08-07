@@ -143,6 +143,8 @@ namespace SimpleClassicTheme.Taskbar
             Application.VisualStyleState = VisualStyleState.NoneEnabled;
             Application.SetCompatibleTextRenderingDefault(false);
 
+            errorHandler.InitializeSentry();
+
             Logger.Instance.Log(LoggerVerbosity.Detailed, "EntryPoint", "Main initialization done, passing execution to TaskbarManager");
 
             SystemEvents.DisplaySettingsChanged += delegate
