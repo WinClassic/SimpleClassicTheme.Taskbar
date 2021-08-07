@@ -371,8 +371,6 @@ namespace SimpleClassicTheme.Taskbar
                     systemTray1.UpdateIcons();
                 }
 
-                quickLaunch1.Location = new Point(startButton1.Location.X + startButton1.Width + 2, 1);
-
                 using (uiTiming.StartRegion("Update Quick Launch icons"))
                 {
                     quickLaunch1.UpdateIcons();
@@ -380,7 +378,7 @@ namespace SimpleClassicTheme.Taskbar
             }
 
             //Put left side controls in the correct place
-            quickLaunch1.Location = new Point(startButton1.Location.X + startButton1.Width + 2, 1);
+            LayoutUI();
         }
 
         private IntPtr HookProcedure(User32.ShellEvents nCode, IntPtr wParam, IntPtr lParam)
@@ -895,6 +893,13 @@ namespace SimpleClassicTheme.Taskbar
             Invalidate();
         }
 
+        private void LayoutUI()
+        {
+            quickLaunch1.Location = new Point(startButton1.Location.X + startButton1.Width + 2, 1);
+            LayoutTaskbandButtons();
+            verticalDivider3.Location = new Point(systemTray1.Location.X - 9, verticalDivider3.Location.Y);
+        }
+
         private void UpdateUI()
         {
             startButton1.UpdateState(new Window(User32.GetForegroundWindow()));
@@ -908,20 +913,16 @@ namespace SimpleClassicTheme.Taskbar
                     systemTray1.UpdateIcons();
                 }
 
-                quickLaunch1.Location = new Point(startButton1.Location.X + startButton1.Width + 2, 1);
-
                 using (uiTiming.StartRegion("Update Quick Launch icons"))
                 {
                     quickLaunch1.UpdateIcons();
                 }
             }
 
-            verticalDivider3.Location = new Point(systemTray1.Location.X - 9, verticalDivider3.Location.Y);
-
             var foregroundWindow = User32.GetForegroundWindow();
             UpdateActiveWindow(foregroundWindow);
 
-            LayoutTaskbandButtons();
+            LayoutUI();
 
             Invalidate();
         }
@@ -984,7 +985,13 @@ namespace SimpleClassicTheme.Taskbar
                 new ToolStripSeparator(),
                 new ToolStripMenuItem("Tas&k Manager", null, (_, __) => Process.Start(new ProcessStartInfo("taskmgr") { UseShellExecute = true })),
                 new ToolStripSeparator(),
-                new ToolStripMenuItem("&Lock the Taskbar") { Enabled = false },
+                new ToolStripMenuItem("&Lock the Taskbar", null, (_, __) => {
+                    Config.Default.IsLocked = !Config.Default.IsLocked;
+                    Config.Default.WriteToRegistry();
+
+                    LayoutUI();
+                    Invalidate();
+                }) { Checked = Config.Default.IsLocked },
                 new ToolStripMenuItem("P&roperties", null, (_, __) => {
                     new Settings().Show();
                 }),

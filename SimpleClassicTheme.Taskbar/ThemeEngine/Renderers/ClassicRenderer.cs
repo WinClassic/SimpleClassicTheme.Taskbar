@@ -46,12 +46,49 @@ namespace SimpleClassicTheme.Taskbar.ThemeEngine.Renderers
         public override int TaskbarHeight => 28;
         public override int TaskButtonMinimalWidth => 24;
 
-        public override int QuickLaunchPadding => 16;
+        public override Padding QuickLaunchPadding
+        {
+            get
+            {
+                int left = 1;
+                int right = 0;
+
+                if (!Config.Default.IsLocked)
+                {
+                    left += 11;
+                    right += 11;
+                }
+
+                return new(left, 0, right, 0);
+            }
+        }
 
         public override void DrawQuickLaunch(QuickLaunch systemTray, Graphics g)
         {
+            if (Config.Default.IsLocked)
+            {
+                return;
+            }
+
+            DrawGripper(1, -1, systemTray.Height, g);
+            DrawGripper(systemTray.Width - 7, -1, systemTray.Height, g);
         }
 
+        public void DrawGripper(int x, int y, int height, Graphics g)
+        {
+            const int topPad = 4;
+            const int bottomPad = 2;
+
+            Rectangle dentRect = new(x, y + topPad, 2, height - topPad - bottomPad);
+            ControlPaint.DrawBorder(g, dentRect,
+                SystemColors.ControlDark, 1, ButtonBorderStyle.Solid,
+                Color.Transparent, 0, ButtonBorderStyle.Solid,
+                SystemColors.ControlLightLight, 1, ButtonBorderStyle.Solid,
+                Color.Transparent, 0, ButtonBorderStyle.Solid);
+
+            Rectangle notchRect = new(x + 4, dentRect.Y + 2, 3, dentRect.Height - 4);
+            ControlPaint.DrawBorder3D(g, notchRect, Border3DStyle.RaisedInner);
+        }
         public override void DrawStartButton(StartButton startButton, Graphics g)
         {
             try

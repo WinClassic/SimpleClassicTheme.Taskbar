@@ -31,7 +31,7 @@ namespace SimpleClassicTheme.Taskbar.ThemeEngine.Renderers
 
         public override int TaskButtonMinimalWidth => r.TaskButtonMinimalWidth;
 
-        public override int QuickLaunchPadding => 3;
+        public override Padding QuickLaunchPadding => new(3);
 
         public override Point GetQuickLaunchIconLocation(int index)
         {

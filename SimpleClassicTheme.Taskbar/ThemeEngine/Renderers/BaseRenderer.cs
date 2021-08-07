@@ -3,6 +3,7 @@ using SimpleClassicTheme.Taskbar.UIElements.QuickLaunch;
 using SimpleClassicTheme.Taskbar.UIElements.StartButton;
 
 using System.Drawing;
+using System.Windows.Forms;
 
 namespace SimpleClassicTheme.Taskbar.ThemeEngine.Renderers
 {
@@ -14,7 +15,7 @@ namespace SimpleClassicTheme.Taskbar.ThemeEngine.Renderers
         public abstract Point SystemTrayTimeLocation { get; }
         public abstract int TaskbarHeight { get; }
         public abstract int TaskButtonMinimalWidth { get; }
-        public virtual int QuickLaunchPadding => 0;
+        public virtual Padding QuickLaunchPadding => Padding.Empty;
 
         public abstract void DrawQuickLaunch(QuickLaunch quickLaunch, Graphics g);
 

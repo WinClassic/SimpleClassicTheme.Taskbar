@@ -47,6 +47,8 @@ namespace SimpleClassicTheme.Taskbar.Helpers
         public string VisualStyleColor { get; set; } = string.Empty;
         public string VisualStylePath { get; set; } = string.Empty;
         public string VisualStyleSize { get; set; } = string.Empty;
+
+        public bool IsLocked { get; set; } = false;
         public Tweaks Tweaks { get; set; } = new();
 
         public string RendererPath

@@ -125,11 +125,11 @@ namespace SimpleClassicTheme.Taskbar.UIElements.QuickLaunch
 
             //Display everything
             int iconSpacing = Config.Default.Tweaks.SpaceBetweenQuickLaunchIcons;
-            int qlPadding = Config.Default.Renderer.QuickLaunchPadding;
+            Padding qlPadding = Config.Default.Renderer.QuickLaunchPadding;
             
             int emptySpace = iconSpacing * (icons.Count - 1);
-            Width = (qlPadding * 2) + (icons.Count * _iconSize) + emptySpace;
-            int x = qlPadding;
+            Width = qlPadding.Horizontal + (icons.Count * _iconSize) + emptySpace;
+            int x = qlPadding.Left;
 
             int startX = x;
 
@@ -181,7 +181,7 @@ namespace SimpleClassicTheme.Taskbar.UIElements.QuickLaunch
 
         private void UpdateIconControls(IEnumerable<QuickLaunchIcon> icons)
         {
-            int x = Config.Default.Renderer.QuickLaunchPadding;
+            int x = Config.Default.Renderer.QuickLaunchPadding.Left;
             foreach (QuickLaunchIcon icon in icons)
             {
                 icon.Location = new Point(x, 0);
@@ -219,6 +219,13 @@ namespace SimpleClassicTheme.Taskbar.UIElements.QuickLaunch
 
         private void QuickLaunch_Load(object sender, EventArgs e)
         {
+        }
+
+        protected override void OnPaintBackground(PaintEventArgs e)
+        {
+            base.OnPaintBackground(e);
+
+            Config.Default.Renderer.DrawQuickLaunch(this, e.Graphics);
         }
     }
 }
