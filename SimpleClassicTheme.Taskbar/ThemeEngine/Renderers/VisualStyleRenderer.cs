@@ -13,8 +13,7 @@ namespace SimpleClassicTheme.Taskbar.ThemeEngine.Renderers
     class VisualStyleRenderer : BaseRenderer
     {
         private readonly VisualStyleColorScheme colorScheme;
-
-        readonly ClassicRenderer r = new();
+        private readonly ClassicRenderer r = new();
 
         public VisualStyleRenderer(VisualStyleColorScheme colorScheme)
         {
@@ -31,7 +30,20 @@ namespace SimpleClassicTheme.Taskbar.ThemeEngine.Renderers
 
         public override int TaskButtonMinimalWidth => r.TaskButtonMinimalWidth;
 
-        public override Padding QuickLaunchPadding => new(3);
+        public override Padding QuickLaunchPadding
+        {
+            get
+            {
+                if (Config.Default.IsLocked)
+                {
+                    return new(3);
+                }
+                else
+                {
+                    return new(15, 0, 12, 0);
+                }
+            }
+        }
 
         public override Point GetQuickLaunchIconLocation(int index)
         {
@@ -57,9 +69,9 @@ namespace SimpleClassicTheme.Taskbar.ThemeEngine.Renderers
             int index = (IsHover ? 1 : 0) + (IsActive ? 2 : 0);
 
             //r.DrawTaskButtonGroupWindow(taskbarGroup, g);
-            var toolbarElement = colorScheme["TaskBand::Toolbar"];
-            var toolbarElementPressed = colorScheme["TaskBand::Toolbar(pressed)"];
-            var buttonElement = colorScheme["TaskBand::Toolbar.Button"];
+            VisualStyleElement toolbarElement = colorScheme["TaskBand::Toolbar"];
+            VisualStyleElement toolbarElementPressed = colorScheme["TaskBand::Toolbar(pressed)"];
+            VisualStyleElement buttonElement = colorScheme["TaskBand::Toolbar.Button"];
 
             var textColor = toolbarElement.TextColor.Value;
 
@@ -70,7 +82,8 @@ namespace SimpleClassicTheme.Taskbar.ThemeEngine.Renderers
 
             using var textBrush = new SolidBrush(textColor);
 
-            g.DrawElement(buttonElement, new Rectangle(Point.Empty, taskbarProgram.Size), index);
+            Rectangle bounds = new Rectangle(Point.Empty, taskbarProgram.Size);
+            g.DrawElement(buttonElement, bounds, index);
 
             // Draw text and icon
             StringFormat format = new();
@@ -93,6 +106,7 @@ namespace SimpleClassicTheme.Taskbar.ThemeEngine.Renderers
             {
                 g.DrawString(taskbarProgram.Title, toolbarElement.Font, textBrush, IsActive ? new Rectangle(5, 10, taskbarProgram.Width - 5 - 3 - taskbarProgram.SpaceNeededNextToText, 13) : new Rectangle(4, 9, taskbarProgram.Width - 4 - 3 - taskbarProgram.SpaceNeededNextToText, 14), format);
             }
+            g.DebugDrawPadding(buttonElement, bounds);
         }
 
         public override void DrawTaskButtonGroupButton(GroupedTaskbarProgram taskbarProgram, Graphics g)
@@ -125,27 +139,33 @@ namespace SimpleClassicTheme.Taskbar.ThemeEngine.Renderers
             g.TextContrast = 12;
 
             using var textBrush = new SolidBrush(startButtonElement.TextColor.Value);
-            g.DrawElement(startButtonElement, new Rectangle(0, 0, startButton.Width, startButton.Height + 2), (int)startButton.MouseState);
+            Rectangle rect = new(0, 0, startButton.Width, startButton.Height + 2);
+            g.DrawElement(startButtonElement, rect, (int)startButton.MouseState);
             g.DrawString(startButtonElement, "start", 35, 3, startButton.Width - 35, startButton.Height - 3);
         }
 
         public override void DrawSystemTray(Control systemTray, Graphics g)
         {
             var element = colorScheme["TrayNotifyHoriz::TrayNotify.Background"];
-
             g.DrawElement(element, new Rectangle(Point.Empty, systemTray.Size));
-
-
-            //using (TextureBrush brush = new(systemTrayTexture, WrapMode.Tile))
-            //	g.FillRectangle(brush, systemTray.ClientRectangle);
-            //g.DrawImageUnscaled(systemTrayBorder, new Point(0, 0));
-
-            //r.DrawSystemTray(systemTray, g);
         }
 
-        public override void DrawQuickLaunch(QuickLaunch quickLaunch, Graphics g)
+        public override void DrawQuickLaunch(QuickLaunch systemTray, Graphics g)
         {
-            r.DrawQuickLaunch(quickLaunch, g);
+            if (Config.Default.IsLocked)
+            {
+                return;
+            }
+
+            DrawGripper(5, -1, systemTray.Height, g);
+            DrawGripper(systemTray.Width - 6, -1, systemTray.Height, g);
+        }
+
+        public void DrawGripper(int x, int y, int height, Graphics g)
+        {
+            var element = colorScheme["TaskBar::Rebar.Gripper"];
+            var gripperWidth = element.Image.Width;
+            g.DrawElement(element, new Rectangle(x, y, gripperWidth, height));
         }
 
         public override Point GetSystemTrayIconLocation(int index)
