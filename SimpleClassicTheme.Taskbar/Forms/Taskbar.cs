@@ -34,7 +34,7 @@ namespace SimpleClassicTheme.Taskbar
         private readonly Dictionary<int, string> groupKeys = new();
 
         //private Thread BackgroundThread;
-        private IntPtr CrossThreadHandle;
+        private readonly Screen _screen;
         private bool dummy;
         private List<BaseTaskbarProgram> icons = new();
         private Range taskArea;
@@ -118,29 +118,13 @@ namespace SimpleClassicTheme.Taskbar
 
             //Thread.CurrentThread.CurrentUICulture = CultureInfo.InstalledUICulture;
             Primary = isPrimary;
-            
+
             //Initialize thingies
             InitializeComponent();
-            HandleCreated += delegate { CrossThreadHandle = Handle; };
             systemTray1.SizeChanged += delegate { UpdateUI(); UpdateUI(); };
             TopLevel = true;
 
-            if (Config.Default.UseExplorerTaskbarPosition)
-            {
-                var tvsd = GetSystemTaskbarData();
-                Height = tvsd.rcLastStuck.Bottom - tvsd.rcLastStuck.Top;
-            }
-            else
-            {
-                //Fix height according to renderers preferences
-                Height = Config.Default.Renderer.TaskbarHeight;
-            }
-            
-            //Fix height according to renderers preferences
-            Height = Config.Default.Renderer.TaskbarHeight;
-            startButton1.Height = Height;
-            systemTray1.Height = Height;
-            quickLaunch1.Height = Height;
+            UpdateHeight();
 
             //Make sure programs are aware of the new work area
             if (isPrimary)
@@ -154,12 +138,33 @@ namespace SimpleClassicTheme.Taskbar
             }
         }
 
+        private void UpdateHeight()
+        {
+            if (Config.Default.UseExplorerTaskbarPosition)
+            {
+                var tvsd = GetSystemTaskbarData();
+                Height = tvsd.rcLastStuck.Bottom - tvsd.rcLastStuck.Top;
+            }
+            else
+            {
+                //Fix height according to renderers preferences
+                Height = Config.Default.Renderer.TaskbarHeight;
+            }
+
+            //Fix height according to renderers preferences
+            Height = Config.Default.Renderer.TaskbarHeight;
+            startButton1.Height = Height;
+            systemTray1.Height = Height;
+            quickLaunch1.Height = Height;
+        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Taskbar"/> class from the specified <see cref="Screen"/>.
         /// </summary>
         /// <param name="screen">The <see cref="Screen"/> class from which to initialize this <see cref="Taskbar"/> class</param>
         public Taskbar(Screen screen) : this(screen.Primary)
         {
+            _screen = screen;
             ShowOnScreen(screen);
         }
 
@@ -938,10 +943,15 @@ namespace SimpleClassicTheme.Taskbar
 
         private void ApplyWorkArea(IEnumerable<Window> windows)
         {
+            if (_screen == null)
+            {
+                Logger.Instance.Log(LoggerVerbosity.Detailed, "Taskbar", "Failed to apply work area because no screen was provided when taskbar was created.");
+                return;
+            }
+
             using var _ = logicTiming.StartRegion("Resize work area");
 
-            var screen = Screen.FromHandle(CrossThreadHandle);
-            var workArea = screen.Bounds;
+            var workArea = _screen.Bounds;
             Rectangle rect;
             Point desiredLocation;
 
@@ -957,7 +967,7 @@ namespace SimpleClassicTheme.Taskbar
                 desiredLocation = new(workArea.Left, workArea.Bottom);
             }
 
-            if (!screen.WorkingArea.Equals(workArea))
+            if (!_screen.WorkingArea.Equals(workArea))
             {
                 var windowHandles = windows.Select(a => a.Handle).ToArray();
                 var isBelowWin10 = Environment.OSVersion.Version.Major < 10;

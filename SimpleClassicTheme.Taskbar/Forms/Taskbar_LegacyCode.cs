@@ -89,7 +89,7 @@ namespace SimpleClassicTheme.Taskbar
             {
                 var window = new Window(hWnd);
                 var isTrayWindow = window.ClassName == "Shell_TrayWnd" || window.ClassName == "Shell_SecondaryTrayWnd";
-                return isTrayWindow && Screen.FromHandle(hWnd).Bounds == Screen.FromHandle(CrossThreadHandle).Bounds;
+                return isTrayWindow && Screen.FromHandle(hWnd).Bounds == _screen.Bounds;
             });
 
             return trayWindows.Select(hWnd => new Window(hWnd));
