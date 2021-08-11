@@ -3,7 +3,6 @@ using SimpleClassicTheme.Taskbar.Helpers;
 
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Windows.Forms;
 
 namespace SimpleClassicTheme.Taskbar
@@ -20,12 +19,9 @@ namespace SimpleClassicTheme.Taskbar
                 for (int i = 0; i < Application.OpenForms.Count; i++)
                 {
                     var form = Application.OpenForms[i];
-                    if (form is Taskbar taskbar)
+                    if (form is Taskbar taskbar && taskbar.ParentForm is not Settings)
                     {
-                        if (form.ParentForm is not Settings)
-                        {
-                            yield return taskbar;
-                        }
+                        yield return taskbar;
                     }
                 }
             }
@@ -35,20 +31,11 @@ namespace SimpleClassicTheme.Taskbar
         {
             Logger.Instance.Log(LoggerVerbosity.Detailed, "TaskbarManager", "Generating new taskbars");
 
-            var activeBars = OpenTaskbars;
+            DestroyAllTaskbars();
 
-            foreach (Taskbar bar in activeBars)
+            if (Config.Default.EnablePassiveTray)
             {
-                foreach (Control d in bar.Controls)
-                    d.Dispose();
-                bar.selfClose = true;
-                bar.Close();
-                bar.Dispose();
-            }
-
-            if (Config.Default.EnablePassiveTray && TrayNotificationService == null)
-            {
-                TrayNotificationService = new();
+                TrayNotificationService ??= new();
             }
             else if (!Config.Default.EnablePassiveTray && TrayNotificationService is not null)
             {
@@ -59,13 +46,18 @@ namespace SimpleClassicTheme.Taskbar
             int taskbars = 0;
             foreach (Screen screen in Screen.AllScreens)
             {
-                taskbars++;
-                Rectangle rect = screen.Bounds;
-                Taskbar taskbar = new(screen.Primary);
-                taskbar.ShowOnScreen(screen);
-                Logger.Instance.Log(LoggerVerbosity.Detailed, "TaskbarManager", $"Created taskbar in working area: {screen.Bounds}");
+                // Skip over non-primary screens if the user only wants one taskbar.
                 if (!Config.Default.ShowTaskbarOnAllDesktops && !screen.Primary)
-                    taskbar.NeverShow = true;
+                {
+                    continue;
+                }
+
+                // This constructors calls ShowOnScreen
+                Taskbar taskbar = new(screen);
+                
+                Logger.Instance.Log(LoggerVerbosity.Detailed, "TaskbarManager", $"Created taskbar in working area: {screen.Bounds}");
+                
+                taskbars++;
             }
             Logger.Instance.Log(LoggerVerbosity.Detailed, "TaskbarManager", $"Created {taskbars} taskbars in total");
         }

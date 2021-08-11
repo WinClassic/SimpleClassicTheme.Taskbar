@@ -154,6 +154,15 @@ namespace SimpleClassicTheme.Taskbar
             }
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Taskbar"/> class from the specified <see cref="Screen"/>.
+        /// </summary>
+        /// <param name="screen">The <see cref="Screen"/> class from which to initialize this <see cref="Taskbar"/> class</param>
+        public Taskbar(Screen screen) : this(screen.Primary)
+        {
+            ShowOnScreen(screen);
+        }
+
         protected override void OnPaint(PaintEventArgs e) => Config.Default.Renderer.DrawTaskBar(this, e.Graphics);
 
         protected override void WndProc(ref Message m)
