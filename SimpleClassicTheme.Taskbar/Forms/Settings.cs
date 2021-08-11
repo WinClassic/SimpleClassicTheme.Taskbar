@@ -4,6 +4,7 @@ using SimpleClassicTheme.Taskbar.Helpers.NativeMethods;
 using SimpleClassicTheme.Taskbar.ThemeEngine.VisualStyles;
 
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
@@ -415,10 +416,7 @@ namespace SimpleClassicTheme.Taskbar
 
             if (visualStylePaths.Length != 0)
             {
-
-                visualStyles = visualStylePaths
-                    .Select((path) => new VisualStyle(path))
-                    .ToArray();
+                visualStyles = GetVisualStyles().ToArray();
 
                 visualStyleComboBox.Items.Clear();
 
@@ -440,6 +438,30 @@ namespace SimpleClassicTheme.Taskbar
 
                 PopulateVisualStyleCombos();
             }
+        }
+
+        private IEnumerable<VisualStyle> GetVisualStyles()
+        {
+            List<VisualStyle> visualStyles = new(visualStylePaths.Length);
+
+            foreach (var path in visualStylePaths)
+            {
+                try
+                {
+                    visualStyles.Add(new(path));
+                }
+                catch
+                {
+                    MessageBox.Show(
+                        this,
+                        $"{Path.GetFileNameWithoutExtension(path)} has failed to load. Verify that it is a valid Windows XP visual style.",
+                        string.Empty,
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Exclamation);
+                }
+            }
+
+            return visualStyles;
         }
 
         private void PopulateVisualStyleCombos()
