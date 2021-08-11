@@ -121,7 +121,7 @@ namespace SimpleClassicTheme.Taskbar
 
             //Initialize thingies
             InitializeComponent();
-            systemTray1.SizeChanged += delegate { UpdateUI(); UpdateUI(); };
+            systemTray.SizeChanged += delegate { UpdateUI(); UpdateUI(); };
             TopLevel = true;
 
             UpdateHeight();
@@ -153,9 +153,9 @@ namespace SimpleClassicTheme.Taskbar
 
             //Fix height according to renderers preferences
             Height = Config.Default.Renderer.TaskbarHeight;
-            startButton1.Height = Height;
-            systemTray1.Height = Height;
-            quickLaunch1.Height = Height;
+            startButton.Height = Height;
+            systemTray.Height = Height;
+            quickLaunch.Height = Height;
         }
 
         /// <summary>
@@ -227,8 +227,8 @@ namespace SimpleClassicTheme.Taskbar
         private void Taskbar_Load(object sender, EventArgs e)
         {
             //TODO: Add an option to registry tweak classic alt+tab
-            quickLaunch1.Disabled = (!Primary) || (!Config.Default.EnableQuickLaunch);
-            quickLaunch1.UpdateIcons();
+            quickLaunch.Disabled = (!Primary) || (!Config.Default.EnableQuickLaunch);
+            quickLaunch.UpdateIcons();
 
             // Create shell hook
             if (!Config.Default.EnableActiveTaskbar)
@@ -374,20 +374,20 @@ namespace SimpleClassicTheme.Taskbar
                 taskbarProgram.ActiveWindow = taskbarProgram.Window.Handle == ForegroundWindow;
 
             // Check if the foreground window was the start menu
-            startButton1.UpdateState(new Window(ForegroundWindow));
+            startButton.UpdateState(new Window(ForegroundWindow));
 
             if (Primary)
             {
-                systemTray1.UpdateTime();
+                systemTray.UpdateTime();
 
                 using (uiTiming.StartRegion("Updating System Tray icons"))
                 {
-                    systemTray1.UpdateIcons();
+                    systemTray.UpdateIcons();
                 }
 
                 using (uiTiming.StartRegion("Update Quick Launch icons"))
                 {
-                    quickLaunch1.UpdateIcons();
+                    quickLaunch.UpdateIcons();
                 }
             }
 
@@ -854,10 +854,10 @@ namespace SimpleClassicTheme.Taskbar
         private void LayoutTaskbandButtons()
         {
             // Calculate availabe space in taskbar and then divide that space over all programs
-            int startX = quickLaunch1.Location.X + quickLaunch1.Width + 4;
+            int startX = quickLaunch.Location.X + quickLaunch.Width + 4;
             int programWidth = Primary ? Config.Default.Tweaks.TaskbarProgramWidth + Config.Default.Tweaks.SpaceBetweenTaskbarIcons : 24;
 
-            int availableSpace = verticalDivider3.Location.X - startX - 6;
+            int availableSpace = verticalDivider.Location.X - startX - 6;
             availableSpace += Config.Default.Tweaks.SpaceBetweenTaskbarIcons;
 
             if (icons.Count > 0 && availableSpace / icons.Count > programWidth)
@@ -865,7 +865,7 @@ namespace SimpleClassicTheme.Taskbar
 
             int x = startX;
             int iconWidth = icons.Any() ? (int)Math.Floor((double)availableSpace / icons.Count) - Config.Default.Tweaks.SpaceBetweenTaskbarIcons : 1;
-            int maxX = verticalDivider3.Location.X - iconWidth;
+            int maxX = verticalDivider.Location.X - iconWidth;
 
             // Re-display all windows (except heldDownButton)
             foreach (BaseTaskbarProgram icon in icons)
@@ -883,7 +883,7 @@ namespace SimpleClassicTheme.Taskbar
                 icon.Height = Height;
                 icon.Visible = true;
 
-                verticalDivider3.BringToFront();
+                verticalDivider.BringToFront();
 
                 x += icon.Width + Config.Default.Tweaks.SpaceBetweenTaskbarIcons;
 
@@ -898,7 +898,7 @@ namespace SimpleClassicTheme.Taskbar
             if (heldDownButton != null)
             {
                 heldDownButton.BringToFront();
-                verticalDivider3.BringToFront();
+                verticalDivider.BringToFront();
             }
 
             taskArea = new Range(new Index(startX), new Index(maxX));
@@ -909,27 +909,27 @@ namespace SimpleClassicTheme.Taskbar
 
         private void LayoutUI()
         {
-            quickLaunch1.Location = new Point(startButton1.Location.X + startButton1.Width + 2, 1);
+            quickLaunch.Location = new Point(startButton.Location.X + startButton.Width + 2, 1);
             LayoutTaskbandButtons();
-            verticalDivider3.Location = new Point(systemTray1.Location.X - 9, verticalDivider3.Location.Y);
+            verticalDivider.Location = new Point(systemTray.Location.X - 9, verticalDivider.Location.Y);
         }
 
         private void UpdateUI()
         {
-            startButton1.UpdateState(new Window(User32.GetForegroundWindow()));
+            startButton.UpdateState(new Window(User32.GetForegroundWindow()));
 
             if (Primary)
             {
-                systemTray1.UpdateTime();
+                systemTray.UpdateTime();
 
                 using (uiTiming.StartRegion("Updating System Tray icons"))
                 {
-                    systemTray1.UpdateIcons();
+                    systemTray.UpdateIcons();
                 }
 
                 using (uiTiming.StartRegion("Update Quick Launch icons"))
                 {
-                    quickLaunch1.UpdateIcons();
+                    quickLaunch.UpdateIcons();
                 }
             }
 
