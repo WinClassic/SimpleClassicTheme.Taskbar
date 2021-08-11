@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 
 namespace SimpleClassicTheme.Taskbar.Helpers
@@ -24,7 +24,28 @@ namespace SimpleClassicTheme.Taskbar.Helpers
                     continue;
                 }
 
-                graphics.DrawImage(image, dstRect, srcRect);
+                if (tile)
+                {
+                    var cut = ((Bitmap)image).Clone(srcRect, image.PixelFormat);
+                    using (var textureBrush = new TextureBrush(cut, WrapMode.Tile))
+                    {
+                        // We use transforms so the results are identical:
+                        //
+                        // If we would run this method without transforms
+                        // on two different positions, the start of the
+                        // bitmap would look different. This is because
+                        // each paint function is acting like a stencil
+                        // for a Brush (in this case TextureBrush).
+
+                        graphics.TranslateTransform(dstRect.X, dstRect.Y);
+                        graphics.FillRectangle(textureBrush, new (Point.Empty, dstRect.Size));
+                        graphics.ResetTransform();
+                    }
+                }
+                else
+                {
+                    graphics.DrawImage(image, dstRect, srcRect);
+                }
             }
         }
     }
