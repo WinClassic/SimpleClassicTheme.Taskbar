@@ -490,7 +490,7 @@ namespace SimpleClassicTheme.Taskbar
 
         private void HandleWindowCreated(IntPtr wParam)
         {
-            if (Environment.OSVersion.Version.Major >= 10 && !UnmanagedCodeMigration.IsWindowOnCurrentVirtualDesktop(wParam))
+            if (HelperFunctions.ShouldUseVirtualDesktops && !VirtualDesktops.IsWindowOnCurrentVirtualDesktop(wParam))
             {
                 return;
             }

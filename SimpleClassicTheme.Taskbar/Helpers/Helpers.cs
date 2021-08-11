@@ -16,6 +16,16 @@ namespace SimpleClassicTheme.Taskbar.Helpers
 {
     internal static class HelperFunctions
     {
+        public static bool IsWindows10OrHigher => Environment.OSVersion.Version.Major >= 10;
+
+        public static bool CanEnableVirtualDesktops => IsWindows10OrHigher && IsExplorerRunning;
+
+        public static bool ShouldEnableVirtualDesktops => CanEnableVirtualDesktops && Config.Default.Tweaks.EnableVirtualDesktops;
+
+        public static bool ShouldUseVirtualDesktops => ShouldEnableVirtualDesktops && VirtualDesktops.IsInitialized;
+
+        public static bool IsExplorerRunning => Process.GetProcessesByName("explorer").Length > 0;
+
         public static void Crawl(this Control control, Action<Control> action)
         {
             foreach (Control childControl in control.Controls)

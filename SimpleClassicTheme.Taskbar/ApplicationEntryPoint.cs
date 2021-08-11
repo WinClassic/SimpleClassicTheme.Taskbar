@@ -22,7 +22,7 @@ namespace SimpleClassicTheme.Taskbar
     {
         private static readonly ErrorHandler errorHandler = new() { SentryDsn = "https://eadebff4c83e42e4955d85403ff0cc7c@o925637.ingest.sentry.io/5874762" };
         private static uint virtualDesktopNotificationCookie;
-        public static UnmanagedCodeMigration.VirtualDesktopNotification VirtualDesktopNotification { get; private set; }
+        public static VirtualDesktopNotification VirtualDesktopNotification { get; private set; }
         public static bool SCTCompatMode = false;
         public static int ErrorCount = 0;
         public static UserControlEx ErrorSource;
@@ -37,8 +37,8 @@ namespace SimpleClassicTheme.Taskbar
             Logger.Instance.Log(LoggerVerbosity.Detailed, "EntryPoint", $"Killed all taskbars, exiting");
             Logger.Instance.Dispose();
 
-            if (Environment.OSVersion.Version.Major >= 10 && virtualDesktopNotificationCookie != 0)
-                UnmanagedCodeMigration.UnregisterVdmNotification(virtualDesktopNotificationCookie);
+            if (VirtualDesktops.IsInitialized && virtualDesktopNotificationCookie != 0)
+                VirtualDesktops.UnregisterVdmNotification(virtualDesktopNotificationCookie);
 
             Environment.Exit(0);
         }
@@ -122,15 +122,15 @@ namespace SimpleClassicTheme.Taskbar
                 Logger.Instance.Log(LoggerVerbosity.Detailed, "EntryPoint", "Debug instance, ignoring incorrect architecture");
             }
 
-            if (Environment.OSVersion.Version.Major >= 10 && Process.GetProcessesByName("explorer").Length > 0)
+            if (HelperFunctions.CanEnableVirtualDesktops)
             {
-                Logger.Instance.Log(LoggerVerbosity.Detailed, "EntryPoint", "OSVersion.Major is equal or above 10. Initializing IVirtualDesktopManager");
+                Logger.Instance.Log(LoggerVerbosity.Detailed, "EntryPoint", "Initializing virtual desktops");
 
                 try
                 {
-                    UnmanagedCodeMigration.InitializeVdmInterface();
+                    VirtualDesktops.InitializeVdmInterface();
                     VirtualDesktopNotification = new();
-                    virtualDesktopNotificationCookie = UnmanagedCodeMigration.RegisterVdmNotification(VirtualDesktopNotification);
+                    virtualDesktopNotificationCookie = VirtualDesktops.RegisterVdmNotification(VirtualDesktopNotification);
                 }
                 catch (Exception ex)
                 {

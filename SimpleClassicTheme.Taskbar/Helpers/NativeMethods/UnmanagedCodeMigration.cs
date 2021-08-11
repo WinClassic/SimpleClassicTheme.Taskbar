@@ -117,70 +117,6 @@ namespace SimpleClassicTheme.Taskbar.Helpers.NativeMethods
 		}
 		#endregion
 
-		#region NativeInterfaces
-		[ComImport]
-		[Guid("a5cd92ff-29be-454c-8d04-d82879fb3f1b")]
-		[InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-		public interface IVirtualDesktopManager
-		{
-			bool IsWindowOnCurrentVirtualDesktop(IntPtr topLevelWindow);
-			Guid GetWindowDesktopId(IntPtr topLevelWindow);
-			void MoveWindowToDesktop(IntPtr topLevelWindow, ref Guid desktopId);
-		}
-
-		[ComImport]
-		[Guid("c179334c-4295-40d3-bea1-c654d965605a")]
-		[InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-		public interface IVirtualDesktopNotification
-		{
-			void VirtualDesktopCreated(IntPtr pDesktop);
-			void VirtualDesktopDestroyBegin(IntPtr pDesktopDestroyed, IntPtr pDesktopFallback);
-			void VirtualDesktopDestroyFailed(IntPtr pDesktopDestroyed, IntPtr pDesktopFallback);
-			void VirtualDesktopDestroyed(IntPtr pDesktopDestroyed, IntPtr pDesktopFallback);
-			void ViewVirtualDesktopChanged(IntPtr pView);
-			void CurrentVirtualDesktopChanged(IntPtr pDesktopOld, IntPtr pDesktopNew);
-		}
-
-		[ComImport]
-		[Guid("0cd45e71-d927-4f15-8b0a-8fef525337bf")]
-		[InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-		public interface IVirtualDesktopNotificationService
-		{
-			int Register(IVirtualDesktopNotification pNotification, out uint dwCookie);
-			int Unregister(uint dwCookie);
-		}
-
-		[ComImport]
-		[Guid("6d5140c1-7436-11ce-8034-00aa006009fa")]
-		[InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-		public interface IServiceProvider
-		{
-			[PreserveSig]
-			[return: MarshalAs(UnmanagedType.I4)]
-			int QueryService(ref Guid guidService, ref Guid riid, [MarshalAs(UnmanagedType.Interface)] out object ppvObject);
-		}
-
-		public class VirtualDesktopNotification : IVirtualDesktopNotification
-		{
-			public EventHandler CurrentDesktopChanged;
-
-			public void VirtualDesktopCreated(IntPtr pDesktop) { }
-			public void VirtualDesktopDestroyBegin(IntPtr pDesktopDestroyed, IntPtr pDesktopFallback) { }
-			public void VirtualDesktopDestroyFailed(IntPtr pDesktopDestroyed, IntPtr pDesktopFallback) { }
-			public void VirtualDesktopDestroyed(IntPtr pDesktopDestroyed, IntPtr pDesktopFallback) { }
-			public void ViewVirtualDesktopChanged(IntPtr pView) { }
-			public void CurrentVirtualDesktopChanged(IntPtr pDesktopOld, IntPtr pDesktopNew)
-			{
-				CurrentDesktopChanged?.Invoke(this, EventArgs.Empty);
-			}
-		}
-		#endregion
-
-	    static IVirtualDesktopNotificationService virtualDesktopNotificationService;
-		static IVirtualDesktopManager virtualDesktopManager;
-
-		static bool s_isVdmInitialized;
-
 		internal static string GetAppUserModelId(int pid)
 		{
 			IntPtr process = Kernel32.OpenProcess(Kernel32.PROCESS_QUERY_LIMITED_INFORMATION, false, pid);
@@ -336,53 +272,6 @@ namespace SimpleClassicTheme.Taskbar.Helpers.NativeMethods
 			return (int)User32.SendMessage(sysTray, User32.TB_BUTTONCOUNT, 0, 0);
 		}
 
-		internal static void InitializeVdmInterface()
-		{
-		    Type vdmType = Type.GetTypeFromCLSID(new Guid("aa509086-5ca9-4c25-8f95-589d3c07b48a"));
-			virtualDesktopManager = (IVirtualDesktopManager) Activator.CreateInstance(vdmType);
-
-			Type spType = Type.GetTypeFromCLSID(new Guid("c2f03a33-21f5-47fa-b4bb-156362a2f239"));
-			IServiceProvider serviceProvider = (IServiceProvider) Activator.CreateInstance(spType);
-			serviceProvider.QueryService(new Guid("a501fdec-4a09-464c-ae4e-1b9c21b84918"), typeof(IVirtualDesktopNotificationService).GUID, out object ppvObject);
-			virtualDesktopNotificationService = (IVirtualDesktopNotificationService)ppvObject;
-
-			s_isVdmInitialized = virtualDesktopManager is not null;
-		}
-		
-		internal static uint RegisterVdmNotification(IVirtualDesktopNotification notification)
-		{
-			try
-			{
-				virtualDesktopNotificationService.Register(notification, out uint cookie);
-				return cookie;
-			}
-			catch (Exception e)
-			{
-				Logger.Instance.Log(LoggerVerbosity.Basic, "VDMService", "Failed to register VDM Notification. Reason: " + e.Message);
-				return 0U;
-			}
-		}
-
-		internal static void UnregisterVdmNotification(uint notificationCookie)
-		{
-            if (s_isVdmInitialized)
-            {
-				virtualDesktopNotificationService?.Unregister(notificationCookie);
-            }
-		}
-
-		internal static bool IsWindowOnCurrentVirtualDesktop(IntPtr window)
-		{
-			if (s_isVdmInitialized)
-			{
-				return virtualDesktopManager.IsWindowOnCurrentVirtualDesktop(window);
-				//bool isWndOnDekstop = false;
-				//ref bool pointer = ref isWndOnDekstop;
-				//vdmType.InvokeMember("IsWindowOnCurrentVirtualDesktop", System.Reflection.BindingFlags.InvokeMethod, null, vdmObject, new object[] { window, pointer });
-				//return isWndOnDekstop;
-			}
-			return true;
-		}
 
 		internal static void SetWorkingArea(RECT rect, bool sendChange, IEnumerable<IntPtr> windows)
 		{

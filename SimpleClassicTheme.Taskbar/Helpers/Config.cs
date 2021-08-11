@@ -13,7 +13,6 @@ namespace SimpleClassicTheme.Taskbar.Helpers
 {
     public class Config : ConfigBase<Config>
     {
-
         private string rendererPath = "Internal/Classic";
 
         public Config() : base(@"Simple Classic Theme\Taskbar", ConfigType.Taskbar)
@@ -47,7 +46,6 @@ namespace SimpleClassicTheme.Taskbar.Helpers
         public string VisualStyleColor { get; set; } = string.Empty;
         public string VisualStylePath { get; set; } = string.Empty;
         public string VisualStyleSize { get; set; } = string.Empty;
-
         public bool IsLocked { get; set; } = false;
         public Tweaks Tweaks { get; set; } = new();
 
@@ -85,6 +83,10 @@ namespace SimpleClassicTheme.Taskbar.Helpers
     {
         [DisplayName("Enable debugging options")]
         public bool EnableDebugging { get; set; } = Debugger.IsAttached;
+
+        [DisplayName("Enable virtual desktops")]
+        [Description("Defines whether integration for virtual desktops should be enabled. (Windows 10 and up)")]
+        public bool EnableVirtualDesktops { get; set; } = HelperFunctions.CanEnableVirtualDesktops;
 
         [Category("Task view")]
         [DisplayName("Grouping method")]
