@@ -169,5 +169,8 @@ namespace SimpleClassicTheme.Taskbar.Helpers.NativeMethods
 
         [DllImport(nameof(User32))]
         internal static extern int TrackPopupMenuEx(IntPtr hmenu, uint fuFlags, int x, int y, IntPtr hwnd, IntPtr lptpm);
+
+        [DllImport(nameof(User32), SetLastError = true, CharSet = CharSet.Unicode)]
+        internal static extern IntPtr LoadImageW(IntPtr hinst, string lpszName, uint uType, int cxDesired, int cyDesired, uint fuLoad);
     }
 }

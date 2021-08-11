@@ -41,8 +41,8 @@ namespace SimpleClassicTheme.Taskbar.Helpers.NativeMethods
         [DllImport(nameof(Kernel32), CharSet = CharSet.Auto)]
         internal static extern int GetShortPathName([MarshalAs(UnmanagedType.LPWStr)] string path, [MarshalAs(UnmanagedType.LPWStr)] StringBuilder shortPath, int shortPathLength);
 
-        [DllImport(nameof(Kernel32), SetLastError = true, ExactSpelling = true, CharSet = CharSet.Ansi)]
-        internal static extern IntPtr LoadLibraryExA(string lpLibFileName, IntPtr hFile, uint dwFlags);
+        [DllImport(nameof(Kernel32), SetLastError = true, ExactSpelling = true, CharSet = CharSet.Unicode)]
+        internal static extern IntPtr LoadLibraryExW(string lpLibFileName, IntPtr hFile, uint dwFlags);
 
         [DllImport(nameof(Kernel32), CharSet = CharSet.Ansi, ExactSpelling = true)]
         internal static extern IntPtr LoadResource(IntPtr hModule, IntPtr hResInfo);
