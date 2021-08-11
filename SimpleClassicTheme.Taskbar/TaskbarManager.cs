@@ -52,9 +52,9 @@ namespace SimpleClassicTheme.Taskbar
                     continue;
                 }
 
-                // This constructors calls ShowOnScreen
                 Taskbar taskbar = new(screen);
-                
+                taskbar.Show();
+
                 Logger.Instance.Log(LoggerVerbosity.Detailed, "TaskbarManager", $"Created taskbar in working area: {screen.Bounds}");
                 
                 taskbars++;

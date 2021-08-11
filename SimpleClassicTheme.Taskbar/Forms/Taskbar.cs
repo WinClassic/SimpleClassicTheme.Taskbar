@@ -165,7 +165,10 @@ namespace SimpleClassicTheme.Taskbar
         public Taskbar(Screen screen) : this(screen.Primary)
         {
             _screen = screen;
-            ShowOnScreen(screen);
+
+            StartPosition = FormStartPosition.Manual;
+            Location = new Point(_screen.WorkingArea.Left, _screen.Bounds.Bottom - Config.Default.Renderer.TaskbarHeight);
+            Size = new Size(_screen.Bounds.Width, Config.Default.Renderer.TaskbarHeight);
         }
 
         protected override void OnPaint(PaintEventArgs e) => Config.Default.Renderer.DrawTaskBar(this, e.Graphics);
@@ -1029,15 +1032,6 @@ namespace SimpleClassicTheme.Taskbar
 
             // ExitMenuItemCondition.RequireShortcut
             return ModifierKeys.HasFlag(Keys.Control | Keys.Shift);
-        }
-
-        //Function that displays the taskbar on the specified screen
-        public void ShowOnScreen(Screen screen)
-        {
-            StartPosition = FormStartPosition.Manual;
-            Location = new Point(screen.WorkingArea.Left, screen.Bounds.Bottom - Config.Default.Renderer.TaskbarHeight);
-            Size = new Size(screen.Bounds.Width, Config.Default.Renderer.TaskbarHeight);
-            Show();
         }
     }
 }
