@@ -4,7 +4,6 @@ using SimpleClassicTheme.Taskbar.Helpers.NativeMethods;
 using System;
 using System.Drawing;
 using System.Windows.Forms;
-using System.Xml.Linq;
 
 using static SimpleClassicTheme.Taskbar.Helpers.NativeMethods.WinDef;
 
@@ -12,6 +11,25 @@ namespace SimpleClassicTheme.Taskbar.ThemeEngine.VisualStyles
 {
     public static class VisualStyleExtensions
     {
+        public static void DebugDrawPadding(this Graphics graphics, VisualStyleElement element, Rectangle bounds)
+        {
+            if (element.ContentMargins is Padding contentMargin)
+            {
+                DebugDrawPadding(graphics, bounds, contentMargin, Color.Lime);
+            }
+        }
+        public static void DebugDrawPadding(this Graphics graphics, Rectangle bounds, Padding padding, Color color)
+        {
+            var backColor = Color.FromArgb(96, color);
+            using (var brush = new SolidBrush(backColor))
+            {
+                graphics.FillRectangle(brush, 0, 0, bounds.Width, padding.Top);
+                graphics.FillRectangle(brush, 0, bounds.Height - padding.Bottom, bounds.Width, padding.Bottom);
+                graphics.FillRectangle(brush, 0, padding.Top, padding.Left, bounds.Height - padding.Vertical);
+                graphics.FillRectangle(brush, bounds.Width - padding.Right, padding.Top, padding.Right, bounds.Height - padding.Vertical);
+            }
+        }
+
         public static void DrawElement(this Graphics graphics, VisualStyleElement element, Rectangle bounds, int? imageIndex = null)
         {
             var bitmap = element.Image;
