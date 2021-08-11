@@ -90,6 +90,7 @@
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
             this.customIconFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.contentSplitContainer = new System.Windows.Forms.SplitContainer();
+            this.customThemeFolderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
             this.tabControl.SuspendLayout();
             this.tabGeneral.SuspendLayout();
             this.tabThemes.SuspendLayout();
@@ -801,6 +802,11 @@
             this.contentSplitContainer.SplitterDistance = 72;
             this.contentSplitContainer.TabIndex = 7;
             // 
+            // customThemeFolderBrowserDialog
+            // 
+            this.customThemeFolderBrowserDialog.Description = "Please select the theme directory";
+            this.customThemeFolderBrowserDialog.UseDescriptionForTitle = true;
+            // 
             // Settings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -910,5 +916,6 @@
         private System.Windows.Forms.TabPage visualStyleTab;
         private System.Windows.Forms.CheckBox enableGroupingCheckBox;
         private System.Windows.Forms.Button manageHiddenElementsButton;
+        private System.Windows.Forms.FolderBrowserDialog customThemeFolderBrowserDialog;
     }
 }

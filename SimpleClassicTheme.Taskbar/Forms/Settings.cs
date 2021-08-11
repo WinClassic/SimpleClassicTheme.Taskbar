@@ -131,35 +131,6 @@ namespace SimpleClassicTheme.Taskbar
             Close();
         }
 
-        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if ((string)themeComboBox.SelectedItem == "Custom...")
-            {
-                FolderBrowserDialog fbd = new();
-                if (fbd.ShowDialog() == DialogResult.OK)
-                {
-                    string[] files = { "settings.txt", "startbutton.png", "systemtrayborder.png", "systemtraytexture.png", "taskbartexture.png", "taskbuttongroupwindowborder.png", "taskbuttonnormal.png", "taskbuttonnormalhover.png", "taskbuttonpressed.png", "taskbuttonpressedhover.png" };
-                    string[] filesInDirectory = Directory.GetFiles(fbd.SelectedPath);
-                    string[] filesInDirectoryLower = new string[filesInDirectory.Length];
-                    for (int i = 0; i < filesInDirectory.Length; i++)
-                        filesInDirectoryLower[i] = Path.GetFileName(filesInDirectory[i]).ToLower();
-                    if (files.SequenceEqual(filesInDirectoryLower))
-                    {
-                        themeComboBox.Items.Clear();
-                        themeComboBox.Items.Add("Classic");
-                        themeComboBox.Items.Add("Luna");
-                        themeComboBox.Items.Add("Visual Style");
-                        themeComboBox.Items.Add("Custom...");
-                        themeComboBox.Items.Add(fbd.SelectedPath);
-                        themeComboBox.SelectedItem = fbd.SelectedPath;
-                        return;
-                    }
-                }
-
-                UpdateSelectedRenderer();
-            }
-        }
-
         private void CustomButtonBrowseButton_Click(object sender, EventArgs e)
         {
             customButtonFileDialog.ShowDialog();
@@ -405,9 +376,72 @@ namespace SimpleClassicTheme.Taskbar
             });
         }
 
-        private void themeComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        private void ThemeComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            visualStyleTab.Enabled = themeComboBox.SelectedItem is string label && label == "Visual Style";
+            if (themeComboBox.SelectedItem is not string label)
+            {
+                return;
+            }
+
+            visualStyleTab.Enabled = label == "Visual Style";
+
+            if (label == "Custom...")
+            {
+                DialogResult dialogResult = customThemeFolderBrowserDialog.ShowDialog();
+                if (dialogResult != DialogResult.OK)
+                {
+                    UpdateSelectedRenderer();
+                    return;
+                }
+
+                string path = customThemeFolderBrowserDialog.SelectedPath;
+                if (VerifyCustomTheme(path))
+                {
+                    themeComboBox.Items.Clear();
+
+                    // Commented these lines because it makes no sense
+                    // to always reset the list
+
+                    // themeComboBox.Items.Add("Classic");
+                    // themeComboBox.Items.Add("Luna");
+                    // themeComboBox.Items.Add("Visual Style");
+                    // themeComboBox.Items.Add("Custom...");
+
+                    if (themeComboBox.Items.Contains(path))
+                    {
+                        themeComboBox.Items.Add(path);
+                        themeComboBox.SelectedItem = path;
+                    }
+                        
+                    return;
+                }
+
+                UpdateSelectedRenderer();
+            }
+        }
+
+        /// <summary>
+        /// Checks the provided <paramref name="path"/> against a predefined list of files
+        /// </summary>
+        /// <param name="path">Path of custom theme</param>
+        /// <returns>Returns <see cref="true"/>, if <paramref name="path"/> has all required files.</returns>
+        private static bool VerifyCustomTheme(string path)
+        {
+            string[] requiredFiles = {
+                "settings.txt",
+                "startbutton.png",
+                "systemtrayborder.png",
+                "systemtraytexture.png",
+                "taskbartexture.png",
+                "taskbuttongroupwindowborder.png",
+                "taskbuttonnormal.png",
+                "taskbuttonnormalhover.png",
+                "taskbuttonpressed.png",
+                "taskbuttonpressedhover.png"
+            };
+
+            IEnumerable<string> files = Directory.GetFiles(path).Select(fp => Path.GetFileName(fp).ToLower());
+            return requiredFiles.SequenceEqual(files);
         }
 
         private void PopulateVisualStyles()
