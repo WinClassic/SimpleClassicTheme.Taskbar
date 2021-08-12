@@ -132,7 +132,6 @@ namespace SimpleClassicTheme.Taskbar.ThemeEngine.Renderers
             {
                 g.DrawString(taskbarProgram.Title, toolbarElement.Font, textBrush, IsActive ? new Rectangle(5, 10, taskbarProgram.Width - 5 - 3 - taskbarProgram.SpaceNeededNextToText, 13) : new Rectangle(4, 9, taskbarProgram.Width - 4 - 3 - taskbarProgram.SpaceNeededNextToText, 14), format);
             }
-            g.DebugDrawPadding(buttonElement, bounds);
         }
 
         public override void DrawTaskButtonGroupButton(GroupedTaskbarProgram taskbarProgram, Graphics g)
