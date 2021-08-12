@@ -7,6 +7,7 @@ using SimpleClassicTheme.Taskbar.ThemeEngine.VisualStyles;
 
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Reflection;
 using System.Resources;
 
 namespace SimpleClassicTheme.Taskbar.Helpers
@@ -144,5 +145,17 @@ namespace SimpleClassicTheme.Taskbar.Helpers
         [DisplayName("Program width")]
         [Description("Defines the width of programs in pixels.")]
         public int TaskbarProgramWidth { get; set; } = 160;
+
+        [Description("Contains experimental changes that aren't ready yet")]
+        public Experiments Experiments { get; set; } = new();
+    }
+
+    [TypeConverter(typeof(ExpandableObjectConverter))]
+    public class Experiments
+    {
+        public override string ToString()
+        {
+            return typeof(Experiments).GetProperties(BindingFlags.Public | BindingFlags.Instance).Length + " experiment(s)";
+        }
     }
 }
