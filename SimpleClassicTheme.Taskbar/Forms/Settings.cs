@@ -560,8 +560,8 @@ namespace SimpleClassicTheme.Taskbar
 
         private void TweaksPropertyGrid_SelectedGridItemChanged(object sender, SelectedGridItemChangedEventArgs e)
         {
-            var obj = tweaksPropertyGrid.SelectedObject;
-            tweakResetButton.Enabled = tweaksPropertyGrid.SelectedGridItem.PropertyDescriptor?.CanResetValue(obj) == true;
+            var descriptor = tweaksPropertyGrid.SelectedGridItem.PropertyDescriptor;
+            tweakResetButton.Enabled = descriptor?.CanResetValue(null) == true;
         }
 
         private void ShowDescriptionButton_CheckedChanged(object sender, EventArgs e)

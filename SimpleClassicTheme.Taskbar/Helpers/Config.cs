@@ -153,6 +153,10 @@ namespace SimpleClassicTheme.Taskbar.Helpers
     [TypeConverter(typeof(ExpandableObjectConverter))]
     public class Experiments
     {
+        [DisplayName("New calculation of start button size for visual styles")]
+        [DefaultValue(false)]
+        public bool NewVsStartCalc { get; set; }
+
         public override string ToString()
         {
             return typeof(Experiments).GetProperties(BindingFlags.Public | BindingFlags.Instance).Length + " experiment(s)";
