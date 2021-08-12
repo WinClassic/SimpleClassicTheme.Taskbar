@@ -24,7 +24,33 @@ namespace SimpleClassicTheme.Taskbar.ThemeEngine.Renderers
         public override Font SystemTrayTimeFont => colorScheme["TrayNotify::Clock"].Font;
         public override Color SystemTrayTimeColor => colorScheme["TrayNotify::Clock"].TextColor.Value;
 
-        public override int StartButtonWidth => r.StartButtonWidth;
+        public override int StartButtonWidth
+        {
+            get
+            {
+                var startButtonElement = colorScheme["Start::Button"];
+                if (Config.Default.Tweaks.Experiments.NewVsStartCalc)
+                {
+                    Padding margins = startButtonElement.ContentMargins.HasValue
+                   ? startButtonElement.ContentMargins.Value
+                   : Padding.Empty;
+
+                    int textWidth = 0;
+                    using (var graphics = Graphics.FromImage(startButtonElement.Image))
+                    {
+                        var textSize = graphics.MeasureString("start", startButtonElement.Font);
+                        textWidth = (int)textSize.Width;
+                    }
+
+                    // Last constant value is the missing icon width, the other one is just a hacky offset
+                    return margins.Horizontal + 25 + textWidth - 4;
+                }
+                else
+                {
+                    return startButtonElement.Image.Width;
+                }
+            }
+        }
 
         public override int TaskbarHeight => Math.Max(colorScheme["TaskBar.BackgroundBottom"].Image.Height, 30);
 
@@ -126,20 +152,28 @@ namespace SimpleClassicTheme.Taskbar.ThemeEngine.Renderers
         public override void DrawStartButton(StartButton startButton, Graphics g)
         {
             var startButtonElement = colorScheme["Start::Button"];
-
-            if (startButton.Width != startButtonElement.Image.Width)
-                startButton.Width = startButtonElement.Image.Width;
-
-            if (startButton.Height != TaskbarHeight)
+            int startButtonHeight;
+            if (Config.Default.Tweaks.Experiments.NewVsStartCalc)
             {
-                startButton.Height = TaskbarHeight;
+                startButtonHeight = startButtonElement.Image.Height / startButtonElement.ImageCount;
+            }
+            else
+            {
+                startButtonHeight = TaskbarHeight + 2;
+            }
+            
+            var expectedSize = new Size(StartButtonWidth, startButtonHeight);
+
+            if (startButton.Size != expectedSize)
+            {
+                startButton.Size = expectedSize;
             }
 
             g.TextRenderingHint = TextRenderingHint.AntiAliasGridFit;
             g.TextContrast = 12;
 
             using var textBrush = new SolidBrush(startButtonElement.TextColor.Value);
-            Rectangle rect = new(0, 0, startButton.Width, startButton.Height + 2);
+            Rectangle rect = new(0, 0, startButton.Width, startButton.Height);
             g.DrawElement(startButtonElement, rect, (int)startButton.MouseState);
             g.DrawString(startButtonElement, "start", 35, 3, startButton.Width - 35, startButton.Height - 3);
         }
