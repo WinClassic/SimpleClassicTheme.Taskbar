@@ -502,16 +502,32 @@ namespace SimpleClassicTheme.Taskbar
         {
             var visualStyle = visualStyles[visualStyleComboBox.SelectedIndex];
 
-            var colorNames = visualStyle.ColorNames.Select((cn) => visualStyle.GetColorDisplay(cn).DisplayName).ToArray();
-            colorSchemeComboBox.Items.Clear();
-            colorSchemeComboBox.Items.AddRange(colorNames);
+            try
+            {
+                var colorNames = visualStyle.ColorNames.Select((cn) => visualStyle.GetColorDisplay(cn).DisplayName).ToArray();
+                colorSchemeComboBox.Items.Clear();
+                colorSchemeComboBox.Items.AddRange(colorNames);
+                colorSchemeComboBox.SelectedIndex = Math.Max(0, Array.IndexOf(visualStyle.ColorNames, Config.Default.VisualStyleColor));
+                colorSchemeComboBox.Enabled = true;
 
-            var sizeNames = visualStyle.SizeNames.Select((sn) => visualStyle.GetSizeDisplay(sn).DisplayName).ToArray();
-            sizeComboBox.Items.Clear();
-            sizeComboBox.Items.AddRange(sizeNames);
+                var sizeNames = visualStyle.SizeNames.Select((sn) => visualStyle.GetSizeDisplay(sn).DisplayName).ToArray();
+                sizeComboBox.Items.Clear();
+                sizeComboBox.Items.AddRange(sizeNames);
+                sizeComboBox.SelectedIndex = Math.Max(0, Array.IndexOf(visualStyle.SizeNames, Config.Default.VisualStyleSize));
+                sizeComboBox.Enabled = true;
+            }
+            catch
+            {
+                colorSchemeComboBox.Enabled = false;
+                sizeComboBox.Enabled = false;
 
-            colorSchemeComboBox.SelectedIndex = Math.Max(0, Array.IndexOf(visualStyle.ColorNames, Config.Default.VisualStyleColor));
-            sizeComboBox.SelectedIndex = Math.Max(0, Array.IndexOf(visualStyle.SizeNames, Config.Default.VisualStyleSize));
+                MessageBox.Show(
+                    this,
+                    "Failed to get color schemes/sizes, please verify that this visual style is valid.",
+                    string.Empty,
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Exclamation);
+            }
         }
 
         private void visualStyleComboBox_SelectedIndexChanged(object sender, EventArgs e)
