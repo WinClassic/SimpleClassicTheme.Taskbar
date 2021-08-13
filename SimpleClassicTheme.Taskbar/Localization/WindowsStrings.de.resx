@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <root>
-  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
     <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
@@ -58,4 +58,28 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="CascadeWindows" xml:space="preserve">
+    <value>Ü&amp;berlappend</value>
+  </data>
+  <data name="LockTaskbar" xml:space="preserve">
+    <value>Taskleiste fi&amp;xieren</value>
+  </data>
+  <data name="Properties" xml:space="preserve">
+    <value>E&amp;igenschaften</value>
+  </data>
+  <data name="ShowDesktop" xml:space="preserve">
+    <value>Des&amp;ktop anzeigen</value>
+  </data>
+  <data name="TaskManager" xml:space="preserve">
+    <value>&amp;Task-Manager</value>
+  </data>
+  <data name="TileWindowsHorizontally" xml:space="preserve">
+    <value>&amp;Nebeneinander</value>
+  </data>
+  <data name="TileWindowsVertically" xml:space="preserve">
+    <value>&amp;Untereinander</value>
+  </data>
+  <data name="Toolbars" xml:space="preserve">
+    <value>S&amp;ymbolleisten</value>
+  </data>
 </root>
