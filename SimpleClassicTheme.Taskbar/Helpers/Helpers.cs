@@ -1,7 +1,4 @@
-﻿using SimpleClassicTheme.Common.Logging;
-using SimpleClassicTheme.Taskbar.Helpers.NativeMethods;
-
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
@@ -138,6 +135,73 @@ namespace SimpleClassicTheme.Taskbar.Helpers
             }
 
             return null;
+        }
+
+        /// <summary>
+        /// Replaces Windows line endings (\r\n) to Unix line endings (\n)
+        /// </summary>
+        public static string CrLfToLf(this string value)
+        {
+            return value.Replace("\r\n", "\n");
+        }
+
+        public static (string Title, string Content) GetToolTipContent(string rawToolTip)
+        {
+            string raw = rawToolTip.CrLfToLf();
+
+            int newLineIndex = raw.IndexOf("\n");
+
+            string title = raw;
+            string text = string.Empty;
+
+            if (newLineIndex != -1)
+            {
+                title = raw.Substring(0, newLineIndex);
+                text = raw[(newLineIndex + 1)..];
+            }
+
+            return (title, text);
+        }
+
+        /// <summary>
+        /// Encapsulates SystemTrayIcon's code for adjusting color of a tray icon.
+        /// </summary>
+        public static void RecolorTrayIcon(Bitmap bitmap)
+        {
+            Rectangle rect = new(new Point(0, 0), bitmap.Size);
+            BitmapData data = bitmap.LockBits(rect, ImageLockMode.ReadWrite, bitmap.PixelFormat);
+
+            int length = Math.Abs(data.Stride) * bitmap.Height;
+
+            byte[] pixelValues = new byte[length];
+            Marshal.Copy(data.Scan0, pixelValues, 0, length);
+
+            (float factorR, float factorG, float factorB, float factorA) = SystemColors.ControlText.GetFactors();
+
+            for (int i = 0; i < pixelValues.Length; i += 4)
+            {
+                byte a = pixelValues[i + 3];
+                byte r = pixelValues[i + 2];
+                byte g = pixelValues[i + 1];
+                byte b = pixelValues[i + 0];
+
+                if (((r << 16) + (g << 8) + (b << 0)) > 0)
+                {
+                    pixelValues[i + 3] = (byte)(a * factorA);
+                    pixelValues[i + 2] = (byte)(r * factorR);
+                    pixelValues[i + 1] = (byte)(g * factorG);
+                    pixelValues[i + 0] = (byte)(b * factorB);
+                }
+            }
+
+            Marshal.Copy(pixelValues, 0, data.Scan0, length);
+
+            bitmap.UnlockBits(data);
+        }
+
+        public static (float R, float G, float B, float A) GetFactors(this Color color)
+        {
+            return (color.R / 255f, color.G / 255f, color.B / 255f, color.A / 255f);
         }
     }
 }
