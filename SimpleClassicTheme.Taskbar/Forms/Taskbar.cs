@@ -4,6 +4,7 @@ using SimpleClassicTheme.Common.Logging;
 using SimpleClassicTheme.Common.Performance;
 using SimpleClassicTheme.Taskbar.Helpers;
 using SimpleClassicTheme.Taskbar.Helpers.NativeMethods;
+using SimpleClassicTheme.Taskbar.Localization;
 
 using System;
 using System.Collections.Generic;
@@ -992,29 +993,29 @@ namespace SimpleClassicTheme.Taskbar
 
             contextMenu.Items.AddRange(new ToolStripItem[]
             {
-                new ToolStripMenuItem("&Toolbars") { Enabled = false },
+                new ToolStripMenuItem(WindowsStrings.Toolbars) { Enabled = false },
                 new ToolStripSeparator(),
-                new ToolStripMenuItem("Ca&scade Windows", null, (_, __) => {
+                new ToolStripMenuItem(WindowsStrings.CascadeWindows, null, (_, __) => {
                     User32.CascadeWindows(IntPtr.Zero, User32.MDITILE_ZORDER, IntPtr.Zero, 0, IntPtr.Zero);
                 }),
-                new ToolStripMenuItem("Tile Windows &Horizontally", null, (_, __) => {
+                new ToolStripMenuItem(WindowsStrings.TileWindowsHorizontally, null, (_, __) => {
                     User32.TileWindows(IntPtr.Zero, User32.MDITILE_HORIZONTAL, IntPtr.Zero, 0, IntPtr.Zero);
                 }),
-                new ToolStripMenuItem("Tile Windows V&ertically", null, (_, __) => {
+                new ToolStripMenuItem(WindowsStrings.TileWindowsVertically, null, (_, __) => {
                     User32.TileWindows(IntPtr.Zero, User32.MDITILE_VERTICAL, IntPtr.Zero, 0, IntPtr.Zero);
                 }),
-                new ToolStripMenuItem("&Show the Desktop", null, (_, __) => Keyboard.KeyPress(Keys.LWin, Keys.D)),
+                new ToolStripMenuItem(WindowsStrings.ShowDesktop, null, (_, __) => Keyboard.KeyPress(Keys.LWin, Keys.D)),
                 new ToolStripSeparator(),
-                new ToolStripMenuItem("Tas&k Manager", null, (_, __) => Process.Start(new ProcessStartInfo("taskmgr") { UseShellExecute = true })),
+                new ToolStripMenuItem(WindowsStrings.TaskManager, null, (_, __) => Process.Start(new ProcessStartInfo("taskmgr") { UseShellExecute = true })),
                 new ToolStripSeparator(),
-                new ToolStripMenuItem("&Lock the Taskbar", null, (_, __) => {
+                new ToolStripMenuItem(WindowsStrings.LockTaskbar, null, (_, __) => {
                     Config.Default.IsLocked = !Config.Default.IsLocked;
                     Config.Default.WriteToRegistry();
 
                     LayoutUI();
                     Invalidate();
                 }) { Checked = Config.Default.IsLocked },
-                new ToolStripMenuItem("P&roperties", null, (_, __) => {
+                new ToolStripMenuItem(WindowsStrings.Properties, null, (_, __) => {
                     new Settings().Show();
                 }),
                 new ToolStripMenuItem("&Exit SCT Taskbar", null, (_, __) => ApplicationEntryPoint.ExitSCTT()) { Available = ShouldShowExit() }

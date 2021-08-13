@@ -36,6 +36,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Update="Localization\WindowsStrings.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>WindowsStrings.resx</DependentUpon>
+    </Compile>
     <Compile Update="Properties\Settings.Designer.cs">
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <AutoGen>True</AutoGen>
@@ -43,6 +48,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Update="Localization\WindowsStrings.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>WindowsStrings.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Update="Theme Engine\Themes\Luna.resx">
       <Generator>ResXFileCodeGenerator</Generator>
     </EmbeddedResource>
