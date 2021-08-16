@@ -71,5 +71,8 @@
         internal const uint WM_RBUTTONDOWN = 0x0204;
         internal const uint WM_RBUTTONUP = 0x0205;
         internal const uint WM_SYSCOMMAND = 0x0112;
+        internal const uint GA_PARENT = 1;
+        internal const uint GA_ROOT = 2;
+        internal const uint GA_ROOTOWNER = 3;
     }
 }
