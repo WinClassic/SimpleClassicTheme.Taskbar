@@ -82,4 +82,11 @@
   <data name="Toolbars" xml:space="preserve">
     <value>S&amp;ymbolleisten</value>
   </data>
+  <data name="Start" xml:space="preserve">
+    <value>Start</value>
+  </data>
+  <data name="StartXp" xml:space="preserve">
+    <value>Start</value>
+    <comment>This is the variant used for visual styles</comment>
+  </data>
 </root>
