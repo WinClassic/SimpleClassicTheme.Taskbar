@@ -1,6 +1,8 @@
 ﻿using SimpleClassicTheme.Taskbar.Forms;
 using SimpleClassicTheme.Taskbar.Helpers;
 using SimpleClassicTheme.Taskbar.Helpers.NativeMethods;
+using SimpleClassicTheme.Taskbar.Localization;
+using SimpleClassicTheme.Taskbar.Properties;
 using SimpleClassicTheme.Taskbar.ThemeEngine.VisualStyles;
 
 using System;
@@ -8,9 +10,11 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Resources;
 using System.Windows.Forms;
 
 namespace SimpleClassicTheme.Taskbar
@@ -32,28 +36,21 @@ namespace SimpleClassicTheme.Taskbar
 
         public void SaveSettings()
         {
-            Config.Default.EnableSystemTrayHover = enableSysTrayHover.Checked;
-            Config.Default.EnableSystemTrayColorChange = enableSysTrayColorChange.Checked;
-            Config.Default.ShowTaskbarOnAllDesktops = showTaskbarOnAllDesktops.Checked;
-            Config.Default.EnableQuickLaunch = enableQuickLaunchCheckBox.Checked;
-            // Config.Default.Tweaks.TaskbarProgramWidth = (int)taskbarProgramWidth.Value;
-            Config.Default.StartButtonImage = customButtonTextBox.Text;
-            Config.Default.StartButtonIconImage = customIconTextBox.Text;
-            Config.Default.StartButtonAppearance = GetCurrentStartButtonAppearance();
-            Config.Default.Language = (string)languageComboBox.SelectedItem;
-           //  Config.Default.Tweaks.ProgramGroupCheck = (ProgramGroupCheck)comboBoxGroupingMethod.SelectedIndex;
-            Config.Default.ExitMenuItemCondition = (ExitMenuItemCondition)exitItemComboBox.SelectedIndex;
             Config.Default.EnableActiveTaskbar = enableActiveTaskbarCheckBox.Checked;
             Config.Default.EnableGrouping = enableGroupingCheckBox.Checked;
+            Config.Default.EnableQuickLaunch = enableQuickLaunchCheckBox.Checked;
+            Config.Default.EnableSystemTrayColorChange = enableSysTrayColorChange.Checked;
+            Config.Default.EnableSystemTrayHover = enableSysTrayHover.Checked;
+            Config.Default.ExitMenuItemCondition = (ExitMenuItemCondition)exitItemComboBox.SelectedIndex;
+            Config.Default.ShowTaskbarOnAllDesktops = showTaskbarOnAllDesktops.Checked;
+            Config.Default.StartButtonAppearance = CurrentStartButtonAppearance;
+            Config.Default.StartButtonIconImage = customIconTextBox.Text;
+            Config.Default.StartButtonImage = customButtonTextBox.Text;
 
-            // Save taskbar filter
-            // string taskbarFilter = "";
-            // foreach (object f in taskbarFilterListBox.Items)
-            // {
-            //     string filter = f.ToString();
-            //     taskbarFilter += filter + "*";
-            // }
-            // Config.Default.TaskbarProgramFilter = taskbarFilter;
+            if (languageComboBox.SelectedItem is CultureInfo cultureInfo)
+            {
+                Config.Default.Language = cultureInfo.ToString();
+            }
 
             // Save renderer path
             switch (themeComboBox.SelectedItem)
@@ -96,23 +93,43 @@ namespace SimpleClassicTheme.Taskbar
             TaskbarManager.GenerateNewTaskbars();
 
             previewTaskbar.Height = Config.Default.Renderer.TaskbarHeight;
-            previewTaskbar.EnumerateWindows();
+            // previewTaskbar.EnumerateWindows();
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        public static IEnumerable<CultureInfo> GetAvailableCultures()
         {
-            // SettingsAddProgramFilter dialog = new();
-            // _ = dialog.ShowDialog(this);
-            // _ = taskbarFilterListBox.Items.Add(dialog.result);
-            // dialog.Dispose();
+            List<CultureInfo> list = new();
+            ResourceManager rm = new(typeof(WindowsStrings));
+            CultureInfo[] cultures = CultureInfo.GetCultures(CultureTypes.AllCultures);
+            foreach (CultureInfo culture in cultures)
+            {
+                try
+                {
+                    if (culture.Equals(CultureInfo.InvariantCulture))
+                    {
+                        continue;
+                    }
+
+                    ResourceSet rs = rm.GetResourceSet(culture, true, false);
+                    if (rs != null)
+                    {
+                        list.Add(culture);
+                    }
+                }
+                catch (CultureNotFoundException)
+                {
+                    //NOP
+                }
+            }
+            return list;
         }
 
-        private void button3_Click(object sender, EventArgs e)
+        private void PopulateAvailableLanguages()
         {
-            // if (taskbarFilterListBox.SelectedIndex != -1)
-            // {
-            //     taskbarFilterListBox.Items.RemoveAt(taskbarFilterListBox.SelectedIndex);
-            // }
+            var defaultCulture = new CultureInfo("en-US");
+            var cultures = GetAvailableCultures().Prepend(defaultCulture);
+            languageComboBox.Items.Clear();
+            languageComboBox.Items.AddRange(cultures.ToArray());
         }
 
         private void ButtonApply_Click(object sender, EventArgs e)
@@ -196,23 +213,26 @@ namespace SimpleClassicTheme.Taskbar
             UpdateStartButton();
         }
 
-        private StartButtonAppearance GetCurrentStartButtonAppearance()
+        private StartButtonAppearance CurrentStartButtonAppearance
         {
-            if (radioStartDefault.Checked)
+            get
             {
-                return StartButtonAppearance.Default;
-            }
-            else if (customIconRadioButton.Checked)
-            {
-                return StartButtonAppearance.CustomIcon;
-            }
-            else if (customButtonRadioButton.Checked)
-            {
-                return StartButtonAppearance.CustomButton;
-            }
-            else
-            {
-                throw new InvalidOperationException();
+                if (radioStartDefault.Checked)
+                {
+                    return StartButtonAppearance.Default;
+                }
+                else if (customIconRadioButton.Checked)
+                {
+                    return StartButtonAppearance.CustomIcon;
+                }
+                else if (customButtonRadioButton.Checked)
+                {
+                    return StartButtonAppearance.CustomButton;
+                }
+                else
+                {
+                    throw new InvalidOperationException();
+                }
             }
         }
 
@@ -249,36 +269,29 @@ namespace SimpleClassicTheme.Taskbar
 
         private void LoadSettings()
         {
-            showTaskbarOnAllDesktops.Checked = Config.Default.ShowTaskbarOnAllDesktops;
-            radioStartDefault.Checked = Config.Default.StartButtonAppearance == StartButtonAppearance.Default;
-            languageComboBox.SelectedItem = Config.Default.Language;
-            exitItemComboBox.SelectedIndex = (int)Config.Default.ExitMenuItemCondition;
-            enableSysTrayHover.Checked = Config.Default.EnableSystemTrayHover;
-            enableSysTrayColorChange.Checked = Config.Default.EnableSystemTrayColorChange;
-            enableQuickLaunchCheckBox.Checked = Config.Default.EnableQuickLaunch;
-            enableActiveTaskbarCheckBox.Checked = Config.Default.EnableActiveTaskbar;
-            customIconTextBox.Text = Config.Default.StartButtonIconImage;
-            customIconRadioButton.Checked = Config.Default.StartButtonAppearance == StartButtonAppearance.CustomIcon;
-            customButtonTextBox.Text = Config.Default.StartButtonImage;
-            enableGroupingCheckBox.Checked = Config.Default.EnableGrouping;
             customButtonRadioButton.Checked = Config.Default.StartButtonAppearance == StartButtonAppearance.CustomButton;
-            // taskbarProgramWidth.Value = Math.Min(Config.Default.Tweaks.TaskbarProgramWidth, taskbarProgramWidth.Maximum);
-            // taskbarProgramWidth.Maximum = Screen.PrimaryScreen.Bounds.Width;
-            // comboBoxGroupingMethod.SelectedIndex = (int)Config.Default.Tweaks.ProgramGroupCheck;
+            customButtonTextBox.Text = Config.Default.StartButtonImage;
+            customIconRadioButton.Checked = Config.Default.StartButtonAppearance == StartButtonAppearance.CustomIcon;
+            customIconTextBox.Text = Config.Default.StartButtonIconImage;
+            enableActiveTaskbarCheckBox.Checked = Config.Default.EnableActiveTaskbar;
+            enableGroupingCheckBox.Checked = Config.Default.EnableGrouping;
+            enableQuickLaunchCheckBox.Checked = Config.Default.EnableQuickLaunch;
+            enableSysTrayColorChange.Checked = Config.Default.EnableSystemTrayColorChange;
+            enableSysTrayHover.Checked = Config.Default.EnableSystemTrayHover;
+            exitItemComboBox.SelectedIndex = (int)Config.Default.ExitMenuItemCondition;
+            radioStartDefault.Checked = Config.Default.StartButtonAppearance == StartButtonAppearance.Default;
+            showTaskbarOnAllDesktops.Checked = Config.Default.ShowTaskbarOnAllDesktops;
 
             if (!Config.Default.Tweaks.EnableDebugging)
             {
                 tabControl.TabPages.Remove(tabDebug);
             }
 
-            // Load taskbar filter
-            // string taskbarFilter = Config.Default.TaskbarProgramFilter;
-            // foreach (string filter in taskbarFilter.Split('*'))
-            //     if (filter != "")
-            //         _ = taskbarFilterListBox.Items.Add(filter);
-
             UpdateSelectedRenderer();
             PopulateVisualStyles();
+
+            PopulateAvailableLanguages();
+            languageComboBox.SelectedItem = new CultureInfo(Config.Default.Language);
 
             tweaksPropertyGrid.SelectedObject = Config.Default.Tweaks;
         }

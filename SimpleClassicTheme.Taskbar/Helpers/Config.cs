@@ -7,14 +7,17 @@ using SimpleClassicTheme.Taskbar.ThemeEngine.VisualStyles;
 
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Globalization;
 using System.Reflection;
 using System.Resources;
+using System.Threading;
 
 namespace SimpleClassicTheme.Taskbar.Helpers
 {
     public class Config : ConfigBase<Config>
     {
         private string rendererPath = "Internal/Classic";
+        private string _language = "en-US";
 
         public Config() : base(@"Simple Classic Theme\Taskbar", ConfigType.Taskbar)
         {
@@ -39,7 +42,16 @@ namespace SimpleClassicTheme.Taskbar.Helpers
         public ExitMenuItemCondition ExitMenuItemCondition { get; internal set; }
         public StartButtonAppearance StartButtonAppearance { get; set; } = StartButtonAppearance.Default;
         public static string ImageThemePath { get; set; } = string.Empty;
-        public string Language { get; set; }
+        public string Language
+        {
+            get => _language;
+            set
+            {
+                var cultureInfo = new CultureInfo(_language = value);
+                Thread.CurrentThread.CurrentCulture = cultureInfo;
+                Thread.CurrentThread.CurrentUICulture = cultureInfo;
+            }
+        }
         public string QuickLaunchOrder { get; set; } = string.Empty;
         public string StartButtonIconImage { get; set; } = string.Empty;
         public string StartButtonImage { get; set; } = string.Empty;
