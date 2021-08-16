@@ -56,7 +56,7 @@ namespace SimpleClassicTheme.Taskbar
                 taskbar.Show();
 
                 Logger.Instance.Log(LoggerVerbosity.Detailed, "TaskbarManager", $"Created taskbar in working area: {screen.Bounds}");
-                
+
                 taskbars++;
             }
             Logger.Instance.Log(LoggerVerbosity.Detailed, "TaskbarManager", $"Created {taskbars} taskbars in total");
@@ -78,16 +78,16 @@ namespace SimpleClassicTheme.Taskbar
                 taskbar.Dispose();
             }
         }
-        
+
         private static void VirtualDesktopNotifcation_CurrentDesktopChanged(object sender, EventArgs e)
         {
-            Logger.Instance.Log(LoggerVerbosity.Detailed, "TaskbarManager", "Current virtual desktop changed, sending notification to all Taskbars.");
-
-            foreach (Taskbar bar in OpenTaskbars)
-            {
-                // Redo the enumeration because the open windows are completely different
-                bar.Invoke(new Action(() => { bar.EnumerateWindows(); }));
-            }
+            // Logger.Instance.Log(LoggerVerbosity.Detailed, "TaskbarManager", "Current virtual desktop changed, sending notification to all Taskbars.");
+            //
+            // foreach (Taskbar bar in OpenTaskbars)
+            // {
+            //     // Redo the enumeration because the open windows are completely different
+            // bar.Invoke(new Action(() => { bar.EnumerateWindows(); }));
+            // }
         }
 
         public static void Initialize()

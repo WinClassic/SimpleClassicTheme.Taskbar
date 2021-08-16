@@ -1,12 +1,12 @@
 ﻿/*
- * 
- * This file contains the current stable code for 
+ *
+ * This file contains the current stable code for
  * haandling with taskbar windows (pulling data).
- * The idea is that we add new code to Taskbar.cs 
+ * The idea is that we add new code to Taskbar.cs
  * and keep this in place as a backup for when
- * things go wrong with the new system (getting 
+ * things go wrong with the new system (getting
  * pushed data).
- * 
+ *
  */
 
 using SimpleClassicTheme.Taskbar.Helpers;
@@ -15,7 +15,6 @@ using SimpleClassicTheme.Taskbar.Helpers.NativeMethods;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 using static SimpleClassicTheme.Taskbar.Helpers.NativeMethods.WinDef;
@@ -24,67 +23,19 @@ namespace SimpleClassicTheme.Taskbar
 {
     public partial class Taskbar : Form
     {
-        //Function to determine which windows to add to the window list
-        private static bool IsAltTabWindow(IntPtr hwnd)
+        public static IEnumerable<Window> GetTaskbarWindows()
         {
-            //If window isn't visible it can't possibly be on the taskbar
-            if (!User32.IsWindowVisible(hwnd))
-                return false;
-
-            //Check if the OS is Windows 10 or higher
-            if (HelperFunctions.ShouldUseVirtualDesktops)
-                //Check if the window is on the current Desktop
-                if (!VirtualDesktops.IsWindowOnCurrentVirtualDesktop(hwnd))
-                    return false;
-
-            //Get the root owner of the window
-            IntPtr root = User32.GetAncestor(hwnd, 3);
-
-            //If the last active popup of the root owner is NOT this window: don't show it
-            //This method is described by Raymond Chen in this blogpost:
-            //https://devblogs.microsoft.com/oldnewthing/20071008-00/?p=24863
-            if (GetLastActivePopupOfWindow(root) != hwnd)
-                return false;
-
-            //Create a Window object
-            Window wi = new(hwnd);
-
-            //If it's a tool window: don't show it
-            if ((wi.WindowInfo.dwExStyle & 0x00000080L) > 0)
-                return false;
-
-            //If it's any of these odd cases: don't show it
-            if (string.IsNullOrWhiteSpace(wi.Title) ||                  // Window without a name
-                Constants.HiddenClassNames.Contains(wi.ClassName) ||    // Other windows
-                (wi.ClassName == "Button" && wi.Title == "Start") ||    // Windows startmenu-button.
-                wi.ClassName.StartsWith("WMP9MediaBarFlyout"))          // WMP's "now playing" taskbar-toolbar
-                return false;
-
-            //UWP app
-            if (wi.ClassName == "ApplicationFrameWindow")
-            {
-                //Do an API call to see if app isn't cloaked
-                _ = DwmApi.DwmGetWindowAttribute(wi.Handle, DwmApi.DWMWINDOWATTRIBUTE.Cloaked, out var d, Marshal.SizeOf(0));
-
-                //If returned value is not 0, the window is cloaked
-                if (d > 0)
-                {
-                    return false;
-                }
-            }
-
-            //If none of those things failed: Yay, we have a window we should display!
-            return true;
-        }
-
-        private static IEnumerable<Window> GetTaskbarWindows()
-        {
-            var trayWindows = UnmanagedHelpers.FilterWindows(IsAltTabWindow);
+            var trayWindows = UnmanagedHelpers.FilterWindows(_ => true);
             return trayWindows.Select(hWnd => new Window(hWnd));
         }
 
         private IEnumerable<Window> GetTrayWindows()
         {
+            if (_screen == null)
+            {
+                return Array.Empty<Window>();
+            }
+
             var trayWindows = UnmanagedHelpers.FilterWindows((hWnd) =>
             {
                 var window = new Window(hWnd);
@@ -95,28 +46,19 @@ namespace SimpleClassicTheme.Taskbar
             return trayWindows.Select(hWnd => new Window(hWnd));
         }
 
-        private void timerUpdateInformation_Tick(object sender, EventArgs e)
+        private void TimerUpdateInformation_Tick(object sender, EventArgs e)
         {
             if (!watchLogic)
                 logicTiming.Start();
 
-            IEnumerable<Window> windows;
-            Window fgWindow = new(User32.GetForegroundWindow());
-
-            //Hide explorer's taskbar(s)
-            WaitBeforeShow = false;
-
             using (var _ = logicTiming.StartRegion("Hide Shell_TrayWnd and Shell_SecondaryTrayWnd"))
             {
-                var enumTrayWindows = GetTrayWindows();
-
-                foreach (Window w in enumTrayWindows)
-                    if ((w.WindowInfo.dwStyle & 0x10000000L) > 0)
-                        User32.ShowWindow(w.Handle, 0);
+                HideExplorerTaskbars();
             }
 
             using (var _ = logicTiming.StartRegion("Hide if ForegroundWindow is fullscreen"))
             {
+                Window fgWindow = new(User32.GetForegroundWindow());
                 //The window should only be visible if the active window is not fullscreen (with the exception of the desktop window)
                 Screen scr = Screen.FromHandle(fgWindow.Handle);
                 User32.GetWindowRect(fgWindow.Handle, out RECT rect);
@@ -132,59 +74,10 @@ namespace SimpleClassicTheme.Taskbar
                     return;
             }
 
-            //Obtain task list
-            using (var _ = logicTiming.StartRegion("Get the task list"))
+            if (Provider is FetchProvider<Window> fetchProvider)
             {
-                windows = GetTaskbarWindows();
+                fetchProvider.Update();
             }
-
-            //Resize work area
-            if (!Dummy)
-            {
-                ApplyWorkArea(windows);
-            }
-
-            //Make a backup of the current icons
-            List<BaseTaskbarProgram> oldList = new(icons);
-
-            //Check if any new window exists, if so: add it
-            foreach (Window window in windows)
-            {
-                if (HasWindow(window.Handle)) continue;
-                if (IsBlacklisted(window)) continue;
-
-                var button = CreateTaskbandButton(window);
-                icons.Add(button);
-            }
-
-            // Create a new list with only the windows that are still open
-            var newIcons = GetValidWindows(icons, windows);
-
-            if (!oldList.SequenceEqual(newIcons))
-            {
-                //Remove controls of the windows that were removed from the list
-                using (var _ = logicTiming.StartRegion("Remove outdated elements"))
-                {
-                    RemoveRemainingPrograms(newIcons);
-                }
-
-                //Create new list for finalized values
-                List<BaseTaskbarProgram> programs = new();
-
-                using (var _ = logicTiming.StartRegion("Do grouping"))
-                {
-                    UpdateTaskbarButtons(newIcons, programs);
-                }
-
-                icons = programs;
-            }
-
-            // Reset taskbar buttons
-            // icons.Clear();
-            // foreach (BaseTaskbarProgram taskbarProgram in newIcons)
-            // {
-            //     icons.Add(taskbarProgram);
-            // }
 
             if (!watchLogic)
             {
@@ -194,10 +87,10 @@ namespace SimpleClassicTheme.Taskbar
             }
 
             //Update UI
-            timerUpdateUI_Tick(true, null);
+            TimerUpdateUI_Tick(true, null);
         }
 
-        private void timerUpdateUI_Tick(object sender, EventArgs e)
+        private void TimerUpdateUI_Tick(object sender, EventArgs e)
         {
             if (!watchUI)
             {

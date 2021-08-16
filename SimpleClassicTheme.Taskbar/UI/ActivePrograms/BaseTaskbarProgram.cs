@@ -146,12 +146,9 @@ namespace SimpleClassicTheme.Taskbar
         }
 
         public abstract void FinishOnPaint(PaintEventArgs e);
-
-        //Abstract functions
-        public abstract bool IsActiveWindow(IntPtr activeWindow);
-
         public abstract void OnClick(object sender, MouseEventArgs e);
         public abstract void OnDoubleClick(object sender, MouseEventArgs e);
+        protected abstract bool CancelMouseDown(MouseEventArgs e);
 
         public void OnPaint(object sender, PaintEventArgs e)
         {
@@ -168,7 +165,11 @@ namespace SimpleClassicTheme.Taskbar
             FinishOnPaint(e);
         }
 
-        protected abstract bool CancelMouseDown(MouseEventArgs e);
+        public virtual bool IsWindow(IntPtr hWnd)
+        {
+            return Window.Handle.Equals(hWnd);
+        }
+
 
         private void BaseTaskbarProgram_Load(object sender, EventArgs e)
         {

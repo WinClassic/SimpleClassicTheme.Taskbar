@@ -91,16 +91,16 @@ namespace SimpleClassicTheme.Taskbar
 			// timerUpdateUI
 			// 
 			this.timerUpdateUI.Interval = 15;
-			this.timerUpdateUI.Tick += new System.EventHandler(this.timerUpdateUI_Tick);
+			this.timerUpdateUI.Tick += new System.EventHandler(this.TimerUpdateUI_Tick);
 			// 
 			// timerUpdateInformation
 			// 
 			this.timerUpdateInformation.Interval = 75;
-			this.timerUpdateInformation.Tick += new System.EventHandler(this.timerUpdateInformation_Tick);
+			this.timerUpdateInformation.Tick += new System.EventHandler(this.TimerUpdateInformation_Tick);
 			// 
 			// timerUpdate
 			// 
-			this.timerUpdate.Tick += new System.EventHandler(this.timerUpdate_Tick);
+			this.timerUpdate.Tick += new System.EventHandler(this.TimerUpdate_Tick);
 			// 
 			// Taskbar
 			// 

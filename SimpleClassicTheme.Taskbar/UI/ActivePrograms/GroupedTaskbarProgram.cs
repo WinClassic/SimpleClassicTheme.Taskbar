@@ -80,31 +80,6 @@ namespace SimpleClassicTheme.Taskbar
             $"Window HWND: {string.Join(", ", ProgramWindows.Select(o => o.Window.Handle.ToString("X8") + (User32.IsWindow(o.Window.Handle) ? "Valid" : "Invalid")).ToArray())}\n" +
             $"Icon HWND: {string.Join(", ", ProgramWindows.Select(o => o.Icon.Handle.ToString("X8") + (User32.IsWindow(o.Icon.Handle) ? "Valid" : "Invalid")).ToArray())}";
 
-        public override bool IsActiveWindow(IntPtr activeWindow)
-        {
-            ApplicationEntryPoint.ErrorSource = this;
-            controlState = "reordering group";
-            foreach (SingleTaskbarProgram window in ProgramWindows)
-            {
-                window.Icon = Taskbar.GetAppIcon(window.Window);
-                if (window.Window.Handle == activeWindow)
-                {
-                    ActiveWindow = true;
-                    window.ActiveWindow = true;
-
-                    _ = ProgramWindows.Remove(window);
-                    ProgramWindows.Insert(0, window);
-                    return true;
-                }
-                else
-                {
-                    window.ActiveWindow = false;
-                }
-            }
-            ActiveWindow = false;
-            return false;
-        }
-
 		public override void OnDoubleClick(object sender, MouseEventArgs e)
 		{
             if (e.X > Width - 19 &&
@@ -232,6 +207,11 @@ namespace SimpleClassicTheme.Taskbar
             var shortPath = new StringBuilder(MAX_PATH);
             _ = Kernel32.GetShortPathName(path, shortPath, MAX_PATH);
             return shortPath.ToString();
+        }
+
+        public override bool IsWindow(IntPtr hWnd)
+        {
+            return ProgramWindows.Any(p => p.IsWindow(hWnd));
         }
     }
 }

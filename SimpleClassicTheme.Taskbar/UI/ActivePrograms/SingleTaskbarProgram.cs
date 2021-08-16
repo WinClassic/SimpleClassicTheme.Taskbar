@@ -11,13 +11,13 @@ using System.Windows.Forms;
 namespace SimpleClassicTheme.Taskbar
 {
     public enum TaskbarProgramClickAction
-	{
+    {
         None,
         ShowHide,
         Close,
         ContextMenu,
         NewInstance,
-	}
+    }
 
     public class SingleTaskbarProgram : BaseTaskbarProgram
     {
@@ -27,6 +27,12 @@ namespace SimpleClassicTheme.Taskbar
         public SingleTaskbarProgram()
         {
             Constructor();
+        }
+
+        public SingleTaskbarProgram(Window window) : this()
+        {
+            Window = window;
+            Process = window.Process;
         }
 
         public override int MinimumWidth => Config.Default.Renderer.TaskButtonMinimalWidth;
@@ -46,17 +52,10 @@ namespace SimpleClassicTheme.Taskbar
             $"Window HWND: {Window.Handle:X8} {(User32.IsWindow(Window.Handle) ? "Valid" : "Invalid")}\n" +
             $"Icon HWND: {Icon.Handle:X8} ({(User32.IsWindow(Icon.Handle) ? "Valid" : "Invalid")})";
 
-        public override bool IsActiveWindow(IntPtr activeWindow)
-        {
-            bool result = activeWindow == Window.Handle;
-            ActiveWindow = result;
-            return result;
-        }
-
         public void PerformClickAction(TaskbarProgramClickAction action, MouseEventArgs e)
-		{
+        {
             switch (action)
-			{
+            {
                 case TaskbarProgramClickAction.ShowHide:
                     if (ActiveWindow)
                     {
@@ -115,10 +114,10 @@ namespace SimpleClassicTheme.Taskbar
                 case TaskbarProgramClickAction.NewInstance:
                     Process.Start(Window.Process.MainModule.FileName);
                     break;
-			}
-		}
+            }
+        }
 
-		public override void OnDoubleClick(object sender, MouseEventArgs e)
+        public override void OnDoubleClick(object sender, MouseEventArgs e)
         {
             ApplicationEntryPoint.ErrorSource = this;
             controlState = "handling mouse double click";
@@ -133,7 +132,7 @@ namespace SimpleClassicTheme.Taskbar
                 PerformClickAction(Config.Default.Tweaks.TaskbarProgramRightDoubleClickAction, e);
         }
 
-		public override void OnClick(object sender, MouseEventArgs e)
+        public override void OnClick(object sender, MouseEventArgs e)
         {
             ApplicationEntryPoint.ErrorSource = this;
             controlState = "handling mouse click";
