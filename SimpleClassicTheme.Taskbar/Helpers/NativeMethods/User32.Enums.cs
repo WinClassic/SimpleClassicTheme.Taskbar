@@ -15,7 +15,8 @@ namespace SimpleClassicTheme.Taskbar.Helpers.NativeMethods
             HSHELL_TASKMAN = 7,
             HSHELL_LANGUAGE = 8,
             HSHELL_ACCESSIBILITYSTATE = 11,
-            HSHELL_APPCOMMAND = 12
+            HSHELL_APPCOMMAND = 12,
+            HSHELL_WINDOWREPLACED = 13,
         }
 
         internal enum ShellHookId : int
