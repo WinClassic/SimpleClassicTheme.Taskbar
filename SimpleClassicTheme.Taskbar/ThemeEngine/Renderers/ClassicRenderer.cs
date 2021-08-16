@@ -1,5 +1,6 @@
 ﻿using SimpleClassicTheme.Taskbar.Helpers;
 using SimpleClassicTheme.Taskbar.Helpers.NativeMethods;
+using SimpleClassicTheme.Taskbar.Localization;
 using SimpleClassicTheme.Taskbar.UIElements.QuickLaunch;
 using SimpleClassicTheme.Taskbar.UIElements.StartButton;
 
@@ -127,7 +128,7 @@ namespace SimpleClassicTheme.Taskbar.ThemeEngine.Renderers
                 g.ResetTransform();
                 bool mouseIsDown = startButton.ClientRectangle.Contains(startButton.PointToClient(Control.MousePosition)) && (Control.MouseButtons & MouseButtons.Left) != 0;
                 g.DrawImage(icon ?? Properties.Resources.startIcon95, mouseIsDown ? new Point(7, 8) : new Point(6, 7));
-                g.DrawString("Start", new Font("Tahoma", 8F, FontStyle.Bold), SystemBrushes.ControlText, mouseIsDown ? new PointF(23F, 9F) : new PointF(22F, 8F));
+                g.DrawString(WindowsStrings.Start, new Font("Tahoma", 8F, FontStyle.Bold), SystemBrushes.ControlText, mouseIsDown ? new PointF(23F, 9F) : new PointF(22F, 8F));
                 icon.Dispose();
             }
             catch

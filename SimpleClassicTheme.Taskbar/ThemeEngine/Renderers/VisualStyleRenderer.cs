@@ -1,4 +1,5 @@
 ﻿using SimpleClassicTheme.Taskbar.Helpers;
+using SimpleClassicTheme.Taskbar.Localization;
 using SimpleClassicTheme.Taskbar.ThemeEngine.VisualStyles;
 using SimpleClassicTheme.Taskbar.UIElements.QuickLaunch;
 using SimpleClassicTheme.Taskbar.UIElements.StartButton;
@@ -38,7 +39,7 @@ namespace SimpleClassicTheme.Taskbar.ThemeEngine.Renderers
                     int textWidth = 0;
                     using (var graphics = Graphics.FromImage(startButtonElement.Image))
                     {
-                        var textSize = graphics.MeasureString("start", startButtonElement.Font);
+                        var textSize = graphics.MeasureString(WindowsStrings.StartXp, startButtonElement.Font);
                         textWidth = (int)textSize.Width;
                     }
 
@@ -160,7 +161,7 @@ namespace SimpleClassicTheme.Taskbar.ThemeEngine.Renderers
             {
                 startButtonHeight = TaskbarHeight + 2;
             }
-            
+
             var expectedSize = new Size(StartButtonWidth, startButtonHeight);
 
             if (startButton.Size != expectedSize)
@@ -174,7 +175,7 @@ namespace SimpleClassicTheme.Taskbar.ThemeEngine.Renderers
             using var textBrush = new SolidBrush(startButtonElement.TextColor.Value);
             Rectangle rect = new(0, 0, startButton.Width, startButton.Height);
             g.DrawElement(startButtonElement, rect, (int)startButton.MouseState);
-            g.DrawString(startButtonElement, "start", 35, 3, startButton.Width - 35, startButton.Height - 3);
+            g.DrawString(startButtonElement, WindowsStrings.StartXp, 35, 3, startButton.Width - 35, startButton.Height - 3);
         }
 
         public override void DrawSystemTray(Control systemTray, Graphics g)

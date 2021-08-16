@@ -129,6 +129,13 @@
   <data name="ShowDesktop" xml:space="preserve">
     <value>&amp;Show the Desktop</value>
   </data>
+  <data name="Start" xml:space="preserve">
+    <value>Start</value>
+  </data>
+  <data name="StartXp" xml:space="preserve">
+    <value>start</value>
+    <comment>This is the variant used for visual styles</comment>
+  </data>
   <data name="TaskManager" xml:space="preserve">
     <value>Tas&amp;k Manager</value>
   </data>
