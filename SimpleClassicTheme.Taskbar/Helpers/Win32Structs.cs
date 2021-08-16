@@ -10,7 +10,7 @@ using static SimpleClassicTheme.Taskbar.Helpers.NativeMethods.WinDef;
 namespace SimpleClassicTheme.Taskbar
 {
 
-    public struct Window
+    public struct Window : IEquatable<Window>
     {
         public IntPtr Handle;
         public WINDOWINFO WindowInfo;
@@ -49,6 +49,31 @@ namespace SimpleClassicTheme.Taskbar
             {
                 User32.SetWindowText(Handle, value);
             }
+        }
+
+        public override bool Equals(object obj)
+        {
+            return obj is Window window && Equals(window);
+        }
+
+        public bool Equals(Window other)
+        {
+            return Handle.Equals(other.Handle);
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(Handle);
+        }
+
+        public static bool operator ==(Window left, Window right)
+        {
+            return left.Equals(right);
+        }
+
+        public static bool operator !=(Window left, Window right)
+        {
+            return !(left == right);
         }
     }
 
