@@ -15,14 +15,26 @@ namespace SimpleClassicTheme.Taskbar
         public IntPtr Handle;
         public WINDOWINFO WindowInfo;
         public string GroupingKey;
-        public Process Process;
+        private Process _process;
+
+        public Process Process
+        {
+            get
+            {
+                if (_process == null)
+                {
+                    _ = User32.GetWindowThreadProcessId(Handle, out uint pid);
+                    _process = Process.GetProcessById((int)pid);
+                }
+
+                return _process;
+            }
+        }
 
         public Window(IntPtr handle) : this()
         {
             Handle = handle;
             WindowInfo = WINDOWINFO.FromHWND(handle);
-            _ = User32.GetWindowThreadProcessId(Handle, out uint pid);
-            Process = Process.GetProcessById((int)pid);
         }
 
         public string ClassName
