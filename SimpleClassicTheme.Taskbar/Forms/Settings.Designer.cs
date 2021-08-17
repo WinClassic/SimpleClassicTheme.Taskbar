@@ -164,7 +164,7 @@
             this.tabControl.Multiline = true;
             this.tabControl.Name = "tabControl";
             this.tabControl.SelectedIndex = 0;
-            this.tabControl.Size = new System.Drawing.Size(384, 300);
+            this.tabControl.Size = new System.Drawing.Size(384, 332);
             this.tabControl.SizeMode = System.Windows.Forms.TabSizeMode.FillToRight;
             this.tabControl.TabIndex = 5;
             this.tabControl.SelectedIndexChanged += new System.EventHandler(this.SettingsTabs_SelectedIndexChanged);
@@ -179,7 +179,7 @@
             this.tabGeneral.Location = new System.Drawing.Point(4, 40);
             this.tabGeneral.Name = "tabGeneral";
             this.tabGeneral.Padding = new System.Windows.Forms.Padding(3);
-            this.tabGeneral.Size = new System.Drawing.Size(376, 256);
+            this.tabGeneral.Size = new System.Drawing.Size(376, 288);
             this.tabGeneral.TabIndex = 5;
             this.tabGeneral.Text = "General";
             this.tabGeneral.UseVisualStyleBackColor = true;
@@ -244,7 +244,7 @@
             this.tabThemes.Controls.Add(this.themeLabel);
             this.tabThemes.Location = new System.Drawing.Point(4, 40);
             this.tabThemes.Name = "tabThemes";
-            this.tabThemes.Size = new System.Drawing.Size(376, 256);
+            this.tabThemes.Size = new System.Drawing.Size(376, 288);
             this.tabThemes.TabIndex = 7;
             this.tabThemes.Text = "Themes";
             this.tabThemes.UseVisualStyleBackColor = true;
@@ -386,7 +386,7 @@
             this.tabStartButton.Location = new System.Drawing.Point(4, 40);
             this.tabStartButton.Name = "tabStartButton";
             this.tabStartButton.Padding = new System.Windows.Forms.Padding(10);
-            this.tabStartButton.Size = new System.Drawing.Size(376, 256);
+            this.tabStartButton.Size = new System.Drawing.Size(376, 288);
             this.tabStartButton.TabIndex = 2;
             this.tabStartButton.Text = "Start Button";
             this.tabStartButton.UseVisualStyleBackColor = true;
@@ -472,7 +472,7 @@
             this.tabQuickLaunch.Location = new System.Drawing.Point(4, 40);
             this.tabQuickLaunch.Name = "tabQuickLaunch";
             this.tabQuickLaunch.Padding = new System.Windows.Forms.Padding(3);
-            this.tabQuickLaunch.Size = new System.Drawing.Size(376, 256);
+            this.tabQuickLaunch.Size = new System.Drawing.Size(376, 288);
             this.tabQuickLaunch.TabIndex = 4;
             this.tabQuickLaunch.Text = "Quick Launch";
             this.tabQuickLaunch.UseVisualStyleBackColor = true;
@@ -508,7 +508,7 @@
             this.tabTaskView.Location = new System.Drawing.Point(4, 40);
             this.tabTaskView.Name = "tabTaskView";
             this.tabTaskView.Padding = new System.Windows.Forms.Padding(3);
-            this.tabTaskView.Size = new System.Drawing.Size(376, 256);
+            this.tabTaskView.Size = new System.Drawing.Size(376, 288);
             this.tabTaskView.TabIndex = 0;
             this.tabTaskView.Text = "Task View";
             this.tabTaskView.UseVisualStyleBackColor = true;
@@ -539,7 +539,7 @@
             this.tabSystemTray.Controls.Add(this.enableSysTrayHover);
             this.tabSystemTray.Location = new System.Drawing.Point(4, 40);
             this.tabSystemTray.Name = "tabSystemTray";
-            this.tabSystemTray.Size = new System.Drawing.Size(376, 256);
+            this.tabSystemTray.Size = new System.Drawing.Size(376, 288);
             this.tabSystemTray.TabIndex = 3;
             this.tabSystemTray.Text = "System Tray";
             this.tabSystemTray.UseVisualStyleBackColor = true;
@@ -571,7 +571,7 @@
             this.tabTweaks.Controls.Add(this.tweaksToolStrip);
             this.tabTweaks.Location = new System.Drawing.Point(4, 40);
             this.tabTweaks.Name = "tabTweaks";
-            this.tabTweaks.Size = new System.Drawing.Size(376, 256);
+            this.tabTweaks.Size = new System.Drawing.Size(376, 288);
             this.tabTweaks.TabIndex = 8;
             this.tabTweaks.Text = "Tweaks";
             this.tabTweaks.UseVisualStyleBackColor = true;
@@ -582,7 +582,7 @@
             this.tweaksPropertyGrid.HelpVisible = false;
             this.tweaksPropertyGrid.Location = new System.Drawing.Point(0, 25);
             this.tweaksPropertyGrid.Name = "tweaksPropertyGrid";
-            this.tweaksPropertyGrid.Size = new System.Drawing.Size(376, 231);
+            this.tweaksPropertyGrid.Size = new System.Drawing.Size(376, 263);
             this.tweaksPropertyGrid.TabIndex = 0;
             this.tweaksPropertyGrid.ToolbarVisible = false;
             this.tweaksPropertyGrid.PropertyValueChanged += new System.Windows.Forms.PropertyValueChangedEventHandler(this.tweaksPropertyGrid_PropertyValueChanged);
@@ -635,7 +635,7 @@
             this.tabAbout.Location = new System.Drawing.Point(4, 40);
             this.tabAbout.Name = "tabAbout";
             this.tabAbout.Padding = new System.Windows.Forms.Padding(3);
-            this.tabAbout.Size = new System.Drawing.Size(376, 256);
+            this.tabAbout.Size = new System.Drawing.Size(376, 288);
             this.tabAbout.TabIndex = 1;
             this.tabAbout.Text = "About";
             // 
@@ -655,7 +655,7 @@
             this.copyrightTablePanel.RowCount = 2;
             this.copyrightTablePanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.copyrightTablePanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.copyrightTablePanel.Size = new System.Drawing.Size(370, 193);
+            this.copyrightTablePanel.Size = new System.Drawing.Size(370, 225);
             this.copyrightTablePanel.TabIndex = 28;
             // 
             // labelCopyrightSCTT
@@ -679,7 +679,7 @@
             this.labelCopyrightWindows.Location = new System.Drawing.Point(3, 71);
             this.labelCopyrightWindows.Margin = new System.Windows.Forms.Padding(3);
             this.labelCopyrightWindows.Name = "labelCopyrightWindows";
-            this.labelCopyrightWindows.Size = new System.Drawing.Size(179, 119);
+            this.labelCopyrightWindows.Size = new System.Drawing.Size(179, 151);
             this.labelCopyrightWindows.TabIndex = 27;
             this.labelCopyrightWindows.Text = "Microsoft Windows\r\n© 2020 Microsoft Corporation\r\nAll rights reserved";
             // 
@@ -704,7 +704,7 @@
             this.label7.Location = new System.Drawing.Point(188, 71);
             this.label7.Margin = new System.Windows.Forms.Padding(3);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(179, 119);
+            this.label7.Size = new System.Drawing.Size(179, 151);
             this.label7.TabIndex = 28;
             this.label7.Text = "SCT is licensed under\r\nthe GPLv3 license.\r\nThis means it comes with \r\nno warranty" +
     " what so ever.";
@@ -728,7 +728,7 @@
             this.tabDebug.Controls.Add(this.enableActiveTaskbarCheckBox);
             this.tabDebug.Location = new System.Drawing.Point(4, 40);
             this.tabDebug.Name = "tabDebug";
-            this.tabDebug.Size = new System.Drawing.Size(376, 256);
+            this.tabDebug.Size = new System.Drawing.Size(376, 288);
             this.tabDebug.TabIndex = 6;
             this.tabDebug.Text = "DEBUG";
             this.tabDebug.UseVisualStyleBackColor = true;
@@ -768,8 +768,8 @@
             this.panelPreview.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelPreview.Location = new System.Drawing.Point(0, 0);
             this.panelPreview.Name = "panelPreview";
-            this.panelPreview.Size = new System.Drawing.Size(384, 72);
             this.panelPreview.Padding = new System.Windows.Forms.Padding(1);
+            this.panelPreview.Size = new System.Drawing.Size(384, 40);
             this.panelPreview.TabIndex = 6;
             this.panelPreview.Paint += new System.Windows.Forms.PaintEventHandler(this.PanelPreview_Paint);
             this.panelPreview.Resize += new System.EventHandler(this.PanelPreview_Resize);
@@ -795,13 +795,13 @@
             // contentSplitContainer.Panel1
             // 
             this.contentSplitContainer.Panel1.Controls.Add(this.panelPreview);
-            this.contentSplitContainer.Panel1MinSize = 72;
+            this.contentSplitContainer.Panel1MinSize = 40;
             // 
             // contentSplitContainer.Panel2
             // 
             this.contentSplitContainer.Panel2.Controls.Add(this.tabControl);
             this.contentSplitContainer.Size = new System.Drawing.Size(384, 376);
-            this.contentSplitContainer.SplitterDistance = 72;
+            this.contentSplitContainer.SplitterDistance = 40;
             this.contentSplitContainer.TabIndex = 7;
             // 
             // customThemeFolderBrowserDialog
