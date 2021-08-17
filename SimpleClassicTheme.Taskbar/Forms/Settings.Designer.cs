@@ -765,12 +765,13 @@
             // panelPreview
             // 
             this.panelPreview.BackColor = System.Drawing.SystemColors.Desktop;
-            this.panelPreview.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.panelPreview.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelPreview.Location = new System.Drawing.Point(0, 0);
             this.panelPreview.Name = "panelPreview";
             this.panelPreview.Size = new System.Drawing.Size(384, 72);
+            this.panelPreview.Padding = new System.Windows.Forms.Padding(1);
             this.panelPreview.TabIndex = 6;
+            this.panelPreview.Paint += new System.Windows.Forms.PaintEventHandler(this.PanelPreview_Paint);
             // 
             // notifyIcon1
             // 

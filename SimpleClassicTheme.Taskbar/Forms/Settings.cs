@@ -2,12 +2,10 @@
 using SimpleClassicTheme.Taskbar.Helpers;
 using SimpleClassicTheme.Taskbar.Helpers.NativeMethods;
 using SimpleClassicTheme.Taskbar.Localization;
-using SimpleClassicTheme.Taskbar.Properties;
 using SimpleClassicTheme.Taskbar.ThemeEngine.VisualStyles;
 
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
@@ -252,19 +250,28 @@ namespace SimpleClassicTheme.Taskbar
                 previewTaskbar.Show();
             }
 
-            const int weirdOffset = -4;
-            previewTaskbar.Top = panelPreview.Height - previewTaskbar.Height + weirdOffset;
+            const int borderSize = 1;
+            const int borderHorizontal = borderSize * 2;
+            int visibleWidth = panelPreview.Width - borderHorizontal;
+            int offsetX;
+
+            previewTaskbar.Top = panelPreview.Height - previewTaskbar.Height - borderSize;
 
             if (showRightSide)
             {
-                previewTaskbar.Left = panelPreview.Width - previewTaskbar.Width;
+                offsetX = panelPreview.Width - previewTaskbar.Width - borderSize;
+                previewTaskbar.Left = offsetX;
                 previewTaskbar.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             }
             else
             {
-                previewTaskbar.Left = 0;
+                offsetX = 0;
+                previewTaskbar.Left = 1;
                 previewTaskbar.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             }
+
+            Rectangle regionRect = new(offsetX *= -1, 0, visibleWidth, previewTaskbar.Height);
+            previewTaskbar.Region = new(regionRect);
         }
 
         private void LoadSettings()
@@ -425,7 +432,7 @@ namespace SimpleClassicTheme.Taskbar
                         themeComboBox.Items.Add(path);
                         themeComboBox.SelectedItem = path;
                     }
-                        
+
                     return;
                 }
 
@@ -588,6 +595,12 @@ namespace SimpleClassicTheme.Taskbar
             {
                 dialog.ShowDialog();
             }
+        }
+
+        private void PanelPreview_Paint(object sender, PaintEventArgs e)
+        {
+            Rectangle rect = new(Point.Empty, panelPreview.Size);
+            ControlPaint.DrawBorder3D(e.Graphics, rect, Border3DStyle.SunkenOuter);
         }
     }
 }
