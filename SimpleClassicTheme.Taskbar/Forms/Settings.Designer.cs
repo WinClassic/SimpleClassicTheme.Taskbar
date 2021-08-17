@@ -795,11 +795,13 @@
             // contentSplitContainer.Panel1
             // 
             this.contentSplitContainer.Panel1.Controls.Add(this.panelPreview);
+            this.contentSplitContainer.Panel1.Cursor = System.Windows.Forms.Cursors.Default;
             this.contentSplitContainer.Panel1MinSize = 40;
             // 
             // contentSplitContainer.Panel2
             // 
             this.contentSplitContainer.Panel2.Controls.Add(this.tabControl);
+            this.contentSplitContainer.Panel2.Cursor = System.Windows.Forms.Cursors.Default;
             this.contentSplitContainer.Size = new System.Drawing.Size(384, 376);
             this.contentSplitContainer.SplitterDistance = 40;
             this.contentSplitContainer.TabIndex = 7;
