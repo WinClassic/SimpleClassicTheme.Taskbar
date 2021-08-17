@@ -772,6 +772,7 @@
             this.panelPreview.Padding = new System.Windows.Forms.Padding(1);
             this.panelPreview.TabIndex = 6;
             this.panelPreview.Paint += new System.Windows.Forms.PaintEventHandler(this.PanelPreview_Paint);
+            this.panelPreview.Resize += new System.EventHandler(this.PanelPreview_Resize);
             // 
             // notifyIcon1
             // 

@@ -602,5 +602,10 @@ namespace SimpleClassicTheme.Taskbar
             Rectangle rect = new(Point.Empty, panelPreview.Size);
             ControlPaint.DrawBorder3D(e.Graphics, rect, Border3DStyle.SunkenOuter);
         }
+
+        private void PanelPreview_Resize(object sender, EventArgs e)
+        {
+            panelPreview.Invalidate();
+        }
     }
 }
