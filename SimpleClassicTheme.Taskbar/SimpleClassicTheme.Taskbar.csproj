@@ -67,6 +67,6 @@
     <StartupObject>SimpleClassicTheme.Taskbar.ApplicationEntryPoint</StartupObject>
     <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
     <PackageIcon>SimpleClassicTheme.ico</PackageIcon>
-    <ApplicationIcon>SimpleClassicTheme.ico</ApplicationIcon>
+    <ApplicationIcon>Resources\SimpleClassicTheme.ico</ApplicationIcon>
   </PropertyGroup>
 </Project>

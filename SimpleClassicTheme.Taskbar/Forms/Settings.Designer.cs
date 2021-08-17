@@ -822,12 +822,13 @@
             this.Controls.Add(this.buttonCancel);
             this.Controls.Add(this.buttonApply);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(399, 442);
             this.Name = "Settings";
-            this.Text = "SimpleClassicTheme Taskbar - Control Panel";
+            this.ShowIcon = false;
+            this.ShowInTaskbar = false;
+            this.Text = "Taskbar Properties";
             this.Load += new System.EventHandler(this.Settings_Load);
             this.tabControl.ResumeLayout(false);
             this.tabGeneral.ResumeLayout(false);
