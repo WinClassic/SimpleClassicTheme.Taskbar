@@ -117,7 +117,7 @@ namespace SimpleClassicTheme.Taskbar.Helpers
             var fileNameBuilder = new StringBuilder(buffer);
             var bufferLength = (uint)fileNameBuilder.Capacity + 1;
 
-            var handle = OpenProcess(0x0400,false, process.Id);
+            var handle = OpenProcess(0x0400, false, process.Id);
 
             if (handle == IntPtr.Zero)
             {
@@ -202,6 +202,39 @@ namespace SimpleClassicTheme.Taskbar.Helpers
         public static (float R, float G, float B, float A) GetFactors(this Color color)
         {
             return (color.R / 255f, color.G / 255f, color.B / 255f, color.A / 255f);
+        }
+
+        public static Bitmap ChangePixelFormat(Bitmap bitmap, PixelFormat pixelFormat)
+        {
+            Bitmap result = new(bitmap.Width, bitmap.Height, pixelFormat);
+            Rectangle bmpBounds = new(Point.Empty, bitmap.Size);
+            BitmapData srcData = bitmap.LockBits(bmpBounds, ImageLockMode.ReadOnly, bitmap.PixelFormat);
+            BitmapData resData = result.LockBits(bmpBounds, ImageLockMode.WriteOnly, result.PixelFormat);
+
+            long srcScan0 = srcData.Scan0.ToInt64();
+            long resScan0 = resData.Scan0.ToInt64();
+            int srcStride = srcData.Stride;
+            int resStride = resData.Stride;
+            int rowLength = Math.Abs(srcData.Stride);
+            try
+            {
+                byte[] buffer = new byte[rowLength];
+                for (int y = 0; y < srcData.Height; y++)
+                {
+                    IntPtr sourcePtr = new(srcScan0 + (y * srcStride));
+                    Marshal.Copy(sourcePtr, buffer, 0, rowLength);
+
+                    IntPtr resPtr = new(resScan0 + (y * resStride));
+                    Marshal.Copy(buffer, 0, resPtr, rowLength);
+                }
+            }
+            finally
+            {
+                bitmap.UnlockBits(srcData);
+                result.UnlockBits(resData);
+            }
+
+            return result;
         }
     }
 }

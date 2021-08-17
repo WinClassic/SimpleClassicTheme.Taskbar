@@ -73,6 +73,26 @@ namespace SimpleClassicTheme.Taskbar.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap CrashIcon {
+            get {
+                object obj = ResourceManager.GetObject("CrashIcon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap FlagXP {
+            get {
+                object obj = ResourceManager.GetObject("FlagXP", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap logo_sct_t {
             get {
                 object obj = ResourceManager.GetObject("logo_sct+t", resourceCulture);
@@ -93,39 +113,9 @@ namespace SimpleClassicTheme.Taskbar.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap startDepressed {
-            get {
-                object obj = ResourceManager.GetObject("startDepressed", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap startIcon {
-            get {
-                object obj = ResourceManager.GetObject("startIcon", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
         internal static System.Drawing.Bitmap startIcon95 {
             get {
                 object obj = ResourceManager.GetObject("startIcon95", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap startPressed {
-            get {
-                object obj = ResourceManager.GetObject("startPressed", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -146,18 +136,6 @@ namespace SimpleClassicTheme.Taskbar.Properties {
         internal static System.Drawing.Bitmap win98scttbanner {
             get {
                 object obj = ResourceManager.GetObject("win98scttbanner", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap CrashIcon
-        {
-            get
-            {
-                object obj = ResourceManager.GetObject("CrashIcon", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

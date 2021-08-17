@@ -2,6 +2,7 @@
 
 using System;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.Windows.Forms;
 
 namespace SimpleClassicTheme.Taskbar.ThemeEngine.VisualStyles
@@ -38,7 +39,7 @@ namespace SimpleClassicTheme.Taskbar.ThemeEngine.VisualStyles
                 if (_font == null)
                 {
                     var split = FontName.Split(", ", StringSplitOptions.RemoveEmptyEntries);
-                    
+
                     var fontFamily = split[0];
                     var fontSize = float.Parse(split[1]);
                     var fontStyle = FontStyle.Regular;
@@ -66,7 +67,14 @@ namespace SimpleClassicTheme.Taskbar.ThemeEngine.VisualStyles
 
                     if (Transparent)
                     {
-                        bitmap = bitmap.RemoveTransparencyKey(TransparentColor);
+                        if (Bitmap.GetPixelFormatSize(bitmap.PixelFormat) == 32)
+                        {
+                            bitmap = HelperFunctions.ChangePixelFormat(bitmap, PixelFormat.Format32bppArgb);
+                        }
+                        else
+                        {
+                            bitmap = bitmap.RemoveTransparencyKey(TransparentColor);
+                        }
                     }
 
                     _image = bitmap;
@@ -116,7 +124,7 @@ namespace SimpleClassicTheme.Taskbar.ThemeEngine.VisualStyles
                 _font.Dispose();
                 _font = null;
             }
-           
+
             GC.SuppressFinalize(this);
         }
 

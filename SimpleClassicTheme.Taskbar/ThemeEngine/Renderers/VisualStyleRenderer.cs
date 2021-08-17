@@ -5,6 +5,7 @@ using SimpleClassicTheme.Taskbar.UIElements.StartButton;
 
 using System;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.Drawing.Text;
 using System.Windows.Forms;
 
@@ -14,10 +15,13 @@ namespace SimpleClassicTheme.Taskbar.ThemeEngine.Renderers
     {
         private readonly VisualStyleColorScheme colorScheme;
         private readonly ClassicRenderer r = new();
+        private Bitmap _flagBitmap;
 
         public VisualStyleRenderer(VisualStyleColorScheme colorScheme)
         {
             this.colorScheme = colorScheme;
+
+            _flagBitmap = HelperFunctions.ChangePixelFormat(Properties.Resources.FlagXP, PixelFormat.Format32bppArgb);
         }
 
         public override Point SystemTrayTimeLocation => r.SystemTrayTimeLocation;
@@ -160,7 +164,7 @@ namespace SimpleClassicTheme.Taskbar.ThemeEngine.Renderers
             {
                 startButtonHeight = TaskbarHeight + 2;
             }
-            
+
             var expectedSize = new Size(StartButtonWidth, startButtonHeight);
 
             if (startButton.Size != expectedSize)
@@ -168,12 +172,11 @@ namespace SimpleClassicTheme.Taskbar.ThemeEngine.Renderers
                 startButton.Size = expectedSize;
             }
 
-            g.TextRenderingHint = TextRenderingHint.AntiAliasGridFit;
-            g.TextContrast = 12;
-
+            var contentMargin = startButtonElement.ContentMargins ?? Padding.Empty;
             using var textBrush = new SolidBrush(startButtonElement.TextColor.Value);
-            Rectangle rect = new(0, 0, startButton.Width, startButton.Height);
-            g.DrawElement(startButtonElement, rect, (int)startButton.MouseState);
+            Rectangle bounds = new(0, 0, startButton.Width, startButton.Height);
+            g.DrawElement(startButtonElement, bounds, (int)startButton.MouseState);
+            g.DrawImageUnscaled(_flagBitmap, contentMargin.Left - 1, contentMargin.Top + 3);
             g.DrawString(startButtonElement, "start", 35, 3, startButton.Width - 35, startButton.Height - 3);
         }
 

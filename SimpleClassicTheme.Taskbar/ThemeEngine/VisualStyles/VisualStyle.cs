@@ -5,7 +5,6 @@ using IniParser.Parser;
 using SimpleClassicTheme.Taskbar.Helpers.NativeMethods;
 
 using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -75,7 +74,7 @@ namespace SimpleClassicTheme.Taskbar.ThemeEngine.VisualStyles
 
             return buffer;
         }
-        
+
         public string[] ColorNames
         {
             get
@@ -99,7 +98,7 @@ namespace SimpleClassicTheme.Taskbar.ThemeEngine.VisualStyles
 
         }
 
-        
+
         public VisualStyleColorScheme[] GetColorSchemes()
         {
             var colorSchemes = new VisualStyleColorScheme[ColorNames.Length * SizeNames.Length];
@@ -183,8 +182,12 @@ namespace SimpleClassicTheme.Taskbar.ThemeEngine.VisualStyles
 
         public Bitmap LoadBitmap(string filePath)
         {
-            var resourceName = GetResourceName(filePath);
-            return Bitmap.FromResource(hModule, resourceName);
+            string resourceName = GetResourceName(filePath);
+            //IntPtr hBitmap = User32.LoadImageW(hModule, resourceName, 0, 0, 0, 0x00002000 | 0x00008000 | 0x00000040 | 0x00000080);
+            //IntPtr hBitmap = User32.LoadBitmapW(hModule, resourceName);
+            //Bitmap bitmap = Bitmap.FromHbitmap(hBitmap);
+            Bitmap bitmap = Bitmap.FromResource(hModule, resourceName);
+            return bitmap;
         }
 
         public VisualStyleColorScheme GetColorScheme(string iniFileName)
