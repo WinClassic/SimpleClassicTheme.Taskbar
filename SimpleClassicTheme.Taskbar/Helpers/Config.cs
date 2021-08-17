@@ -1,7 +1,5 @@
 ﻿using SimpleClassicTheme.Common.Configuration;
 using SimpleClassicTheme.Common.Serialization;
-
-using SimpleClassicTheme.Taskbar.ThemeEngine;
 using SimpleClassicTheme.Taskbar.ThemeEngine.Renderers;
 using SimpleClassicTheme.Taskbar.ThemeEngine.VisualStyles;
 
@@ -70,11 +68,7 @@ namespace SimpleClassicTheme.Taskbar.Helpers
                 switch (rendererPath = value)
                 {
                     case "Internal/ImageRenderer":
-                        Renderer = ImageThemePath switch
-                        {
-                            "Internal/ImageRenderer/Luna" => new ImageRenderer(new ResourceManager("SimpleClassicThemeTaskbar.ThemeEngine.Themes.Luna", typeof(Config).Assembly)),
-                            _ => new ImageRenderer(ImageThemePath),
-                        };
+                        Renderer = new ImageRenderer(ImageThemePath);
                         break;
 
                     case "Internal/VisualStyle":

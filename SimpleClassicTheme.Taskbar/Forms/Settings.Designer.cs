@@ -320,10 +320,6 @@
             // 
             this.colorSchemeComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.colorSchemeComboBox.FormattingEnabled = true;
-            this.colorSchemeComboBox.Items.AddRange(new object[] {
-            "Classic",
-            "Luna",
-            "Custom..."});
             this.colorSchemeComboBox.Location = new System.Drawing.Point(176, 40);
             this.colorSchemeComboBox.Name = "colorSchemeComboBox";
             this.colorSchemeComboBox.Size = new System.Drawing.Size(184, 21);
@@ -355,7 +351,6 @@
             this.themeComboBox.FormattingEnabled = true;
             this.themeComboBox.Items.AddRange(new object[] {
             "Classic",
-            "Luna",
             "Visual Style",
             "Custom..."});
             this.themeComboBox.Location = new System.Drawing.Point(184, 8);

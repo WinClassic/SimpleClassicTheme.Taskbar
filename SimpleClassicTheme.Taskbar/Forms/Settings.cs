@@ -312,10 +312,6 @@ namespace SimpleClassicTheme.Taskbar
                     themeComboBox.SelectedItem = "Classic";
                     break;
 
-                case "Internal/Luna":
-                    themeComboBox.SelectedItem = "Luna";
-                    break;
-
                 case "Internal/VisualStyle":
                     themeComboBox.SelectedItem = "Visual Style";
                     break;
