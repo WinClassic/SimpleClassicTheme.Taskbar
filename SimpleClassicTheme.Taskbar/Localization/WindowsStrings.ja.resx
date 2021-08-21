@@ -65,4 +65,13 @@
     <value>スタート</value>
     <comment>This is the variant used for visual styles</comment>
   </data>
+  <data name="Toolbars" xml:space="preserve">
+    <value>ツール バー(&amp;T)</value>
+  </data>
+  <data name="TaskManager" xml:space="preserve">
+    <value>タスク マネージャー(&amp;K)...</value>
+  </data>
+  <data name="Properties" xml:space="preserve">
+    <value>プロパティ(&amp;R)</value>
+  </data>
 </root>
