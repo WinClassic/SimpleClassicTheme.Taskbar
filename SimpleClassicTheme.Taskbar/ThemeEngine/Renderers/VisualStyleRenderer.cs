@@ -1,5 +1,6 @@
-﻿using SimpleClassicTheme.Taskbar.Helpers;
-using SimpleClassicTheme.Taskbar.ThemeEngine.VisualStyles;
+﻿using Craftplacer.Windows.VisualStyles;
+
+using SimpleClassicTheme.Taskbar.Helpers;
 using SimpleClassicTheme.Taskbar.UIElements.QuickLaunch;
 using SimpleClassicTheme.Taskbar.UIElements.StartButton;
 
@@ -9,15 +10,18 @@ using System.Drawing.Imaging;
 using System.Drawing.Text;
 using System.Windows.Forms;
 
+using Padding = Craftplacer.Windows.VisualStyles.Padding;
+using WfPadding = System.Windows.Forms.Padding;
+
 namespace SimpleClassicTheme.Taskbar.ThemeEngine.Renderers
 {
     class VisualStyleRenderer : BaseRenderer
     {
-        private readonly VisualStyleColorScheme colorScheme;
+        private readonly ColorScheme colorScheme;
         private readonly ClassicRenderer r = new();
         private Bitmap _flagBitmap;
 
-        public VisualStyleRenderer(VisualStyleColorScheme colorScheme)
+        public VisualStyleRenderer(ColorScheme colorScheme)
         {
             this.colorScheme = colorScheme;
 
@@ -99,9 +103,10 @@ namespace SimpleClassicTheme.Taskbar.ThemeEngine.Renderers
             int index = (IsHover ? 1 : 0) + (IsActive ? 2 : 0);
 
             //r.DrawTaskButtonGroupWindow(taskbarGroup, g);
-            VisualStyleElement toolbarElement = colorScheme["TaskBand::Toolbar"];
-            VisualStyleElement toolbarElementPressed = colorScheme["TaskBand::Toolbar(pressed)"];
-            VisualStyleElement buttonElement = colorScheme["TaskBand::Toolbar.Button"];
+            Element toolbarElement = colorScheme["TaskBand::Toolbar"];
+            Element toolbarElementPressed = colorScheme["TaskBand::Toolbar(pressed)"];
+            Element buttonElement = colorScheme["TaskBand::Toolbar.Button"];
+            Element groupCount = colorScheme["TaskBand.GroupCount"];
 
             var textColor = toolbarElement.TextColor.Value;
 
