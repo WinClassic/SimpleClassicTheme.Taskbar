@@ -2,13 +2,15 @@
 using System.Drawing;
 using System.Runtime.InteropServices;
 
-namespace SimpleClassicTheme.Taskbar.Helpers.NativeMethods
+namespace SimpleClassicTheme.Taskbar.Native.Headers
 {
     /// <summary>
-    /// This header is used by Windows GDI.
+    /// Represents Win32's <c>windef.h</c>.
     /// </summary>
     public static class WinDef
     {
+        internal const int ERROR_INSUFFICIENT_BUFFER = 0x0000007a;
+        internal const int ERROR_SUCCESS = 0x00000000;
         [Serializable]
         [StructLayout(LayoutKind.Sequential)]
         public struct POINT

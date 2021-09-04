@@ -61,6 +61,8 @@ namespace SimpleClassicTheme.Taskbar
                     IsPressed = false;
                 }
 
+                Logger.Instance.Log(LoggerVerbosity.Verbose, "BaseTaskbarProgram", $"Tried to set ActiveWindow to {value}: {new StackTrace()}");
+
                 Invalidate();
             }
         }

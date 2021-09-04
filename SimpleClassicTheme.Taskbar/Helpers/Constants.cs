@@ -18,7 +18,12 @@ namespace SimpleClassicTheme.Taskbar.Helpers
         /// </summary>
         public const int WM_SCT = 0x0420;
 
-        public static string VisualStyleDirectory => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "1337ftw", "SimpleClassicThemeTaskbar", "VisualStyles");
+        /// <summary>
+        /// Gets the location of SCTT's AppData folder.
+        /// </summary>
+        public static string AppDataDirectory => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "1337ftw", "SimpleClassicThemeTaskbar");
+
+        public static string VisualStyleDirectory => Path.Combine(AppDataDirectory, "VisualStyles");
 
         public static readonly string[] HiddenClassNames = new string[]
         {

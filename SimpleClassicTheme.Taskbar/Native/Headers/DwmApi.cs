@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SimpleClassicTheme.Taskbar.Native;
+
 using System.Runtime.InteropServices;
 
 namespace SimpleClassicTheme.Taskbar.Helpers.NativeMethods
@@ -24,7 +25,7 @@ namespace SimpleClassicTheme.Taskbar.Helpers.NativeMethods
             FreezeRepresentation = 15
         }
 
-        [DllImport("dwmapi.dll", CharSet = CharSet.Unicode, SetLastError = true)]
+        [DllImport(nameof(DwmApi), CharSet = CharSet.Unicode, SetLastError = true)]
         internal static extern Integer32 DwmGetWindowAttribute(Integer hwnd, DWMWINDOWATTRIBUTE dwAttribute, out Integer32 pvAttribute, Integer32 cbAttribute);
     }
 }

@@ -109,7 +109,7 @@ namespace SimpleClassicTheme.Taskbar.UIElements.StartButton
                 return;
             }
 
-            // HWND wnd = User32.FindWindowW("Shell_TrayWnd", "");
+            // HWND wnd = FindWindowW("Shell_TrayWnd", "");
             if (e.Button == MouseButtons.Right)
             {
                 Keyboard.KeyPress(Keys.LWin, Keys.X);

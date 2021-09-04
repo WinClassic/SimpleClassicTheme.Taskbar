@@ -1,7 +1,7 @@
 ﻿using SimpleClassicTheme.Common.Configuration;
 using SimpleClassicTheme.Common.Serialization;
 using SimpleClassicTheme.Taskbar.ThemeEngine.Renderers;
-using SimpleClassicTheme.Taskbar.ThemeEngine.VisualStyles;
+using Craftplacer.Windows.VisualStyles;
 
 using System.ComponentModel;
 using System.Diagnostics;
@@ -58,6 +58,7 @@ namespace SimpleClassicTheme.Taskbar.Helpers
         public string VisualStylePath { get; set; } = string.Empty;
         public string VisualStyleSize { get; set; } = string.Empty;
         public bool IsLocked { get; set; } = false;
+        public GroupAppearance GroupAppearance { get; set; } = GroupAppearance.Default;
         public Tweaks Tweaks { get; set; } = new();
 
         public string RendererPath

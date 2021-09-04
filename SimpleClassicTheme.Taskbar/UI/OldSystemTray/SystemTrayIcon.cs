@@ -1,5 +1,5 @@
 ﻿using SimpleClassicTheme.Taskbar.Helpers;
-using SimpleClassicTheme.Taskbar.Helpers.NativeMethods;
+using SimpleClassicTheme.Taskbar.Native.SystemTray;
 
 using System;
 using System.Diagnostics;
@@ -7,6 +7,8 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
+
+using static SimpleClassicTheme.Taskbar.Native.Headers.WinUser;
 
 namespace SimpleClassicTheme.Taskbar.UIElements.OldSystemTray
 {
@@ -18,13 +20,13 @@ namespace SimpleClassicTheme.Taskbar.UIElements.OldSystemTray
 
         public uint PID;
 
-        internal UnmanagedCodeMigration.TBBUTTONINFO TBUTTONINFO_Struct;
+        internal TBBUTTONINFO TBUTTONINFO_Struct;
 
         public new string Text;
 
         public Misc.BetterToolTip toolTip;
 
-        internal SystemTrayIcon(UnmanagedCodeMigration.TBBUTTONINFO button)
+        internal SystemTrayIcon(TBBUTTONINFO button)
         {
             Handle = button.hwnd;
             Text = button.toolTip;
@@ -46,7 +48,7 @@ namespace SimpleClassicTheme.Taskbar.UIElements.OldSystemTray
                 ShowAlways = true
             };
 
-            _ = User32.GetWindowThreadProcessId(Handle, out PID);
+            _ = GetWindowThreadProcessId(Handle, out PID);
             string Pname = Process.GetProcessById(checked((int)PID)).ProcessName;
 
             string tempText = Text.Replace("\r\n", "\n");
@@ -84,7 +86,7 @@ namespace SimpleClassicTheme.Taskbar.UIElements.OldSystemTray
             return Text;
         }
 
-        internal void UpdateTrayIcon(UnmanagedCodeMigration.TBBUTTONINFO button, bool firstTime = false)
+        internal void UpdateTrayIcon(TBBUTTONINFO button, bool firstTime = false)
         {
             if (TBUTTONINFO_Struct.icon != button.icon || firstTime)
             {
@@ -182,16 +184,16 @@ namespace SimpleClassicTheme.Taskbar.UIElements.OldSystemTray
                 return;
             }
 
-            // IntPtr Shell_TrayWnd = User32.FindWindowW("Shell_TrayWnd", "");
-            // _ = User32.GetWindowThreadProcessId(Shell_TrayWnd, out uint pidExplorer);
+            // IntPtr Shell_TrayWnd = FindWindowW("Shell_TrayWnd", "");
+            // _ = GetWindowThreadProcessId(Shell_TrayWnd, out uint pidExplorer);
 
             uint mouse = ((uint)Cursor.Position.Y << 16) | (uint)Cursor.Position.X;
 
-            _ = User32.SendNotifyMessage(TBUTTONINFO_Struct.hwnd, TBUTTONINFO_Struct.callbackMessage, mouse,
+            _ = SendNotifyMessage(TBUTTONINFO_Struct.hwnd, TBUTTONINFO_Struct.callbackMessage, mouse,
                 (e.Button == MouseButtons.Left ? WM_LBUTTONDOWN : WM_RBUTTONDOWN) | (TBUTTONINFO_Struct.id << 16));
-            _ = User32.SendNotifyMessage(TBUTTONINFO_Struct.hwnd, TBUTTONINFO_Struct.callbackMessage, mouse,
+            _ = SendNotifyMessage(TBUTTONINFO_Struct.hwnd, TBUTTONINFO_Struct.callbackMessage, mouse,
                 (e.Button == MouseButtons.Left ? WM_LBUTTONUP : WM_RBUTTONUP) | (TBUTTONINFO_Struct.id << 16));
-            _ = User32.SendNotifyMessage(TBUTTONINFO_Struct.hwnd, TBUTTONINFO_Struct.callbackMessage, mouse,
+            _ = SendNotifyMessage(TBUTTONINFO_Struct.hwnd, TBUTTONINFO_Struct.callbackMessage, mouse,
                 (e.Button == MouseButtons.Left ? NIN_SELECT : WM_CONTEXTMENU) | (TBUTTONINFO_Struct.id << 16));
 
             return;

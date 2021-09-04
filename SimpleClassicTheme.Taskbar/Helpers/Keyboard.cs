@@ -1,7 +1,7 @@
-﻿using SimpleClassicTheme.Taskbar.Helpers.NativeMethods;
-
-using System;
+﻿using System;
 using System.Windows.Forms;
+
+using static SimpleClassicTheme.Taskbar.Native.Headers.WinUser;
 
 namespace SimpleClassicTheme.Taskbar.Helpers
 {
@@ -9,12 +9,12 @@ namespace SimpleClassicTheme.Taskbar.Helpers
     {
         public static void KeyDown(IntPtr hWnd, Keys vKey)
         {
-            _ = User32.PostMessage(hWnd, User32.WM_KEYDOWN, (uint)vKey, 0);
+            _ = PostMessage(hWnd, WM_KEYDOWN, (uint)vKey, 0);
         }
 
         public static void KeyDown(Keys vKey)
         {
-            User32.keybd_event((byte)vKey, 0, User32.KEYEVENTF_EXTENDEDKEY, UIntPtr.Zero);
+            keybd_event((byte)vKey, 0, KEYEVENTF_EXTENDEDKEY, UIntPtr.Zero);
         }
 
         public static void KeyPress(params Keys[] keys)
@@ -41,12 +41,12 @@ namespace SimpleClassicTheme.Taskbar.Helpers
 
         public static void KeyUp(IntPtr hWnd, Keys vKey)
         {
-            _ = User32.PostMessage(hWnd, User32.WM_KEYUP, (uint)vKey, 0);
+            _ = PostMessage(hWnd, WM_KEYUP, (uint)vKey, 0);
         }
 
         public static void KeyUp(Keys vKey)
         {
-            User32.keybd_event((byte)vKey, 0, User32.KEYEVENTF_EXTENDEDKEY | User32.KEYEVENTF_KEYUP, UIntPtr.Zero);
+            keybd_event((byte)vKey, 0, KEYEVENTF_EXTENDEDKEY | KEYEVENTF_KEYUP, UIntPtr.Zero);
         }
     }
 }

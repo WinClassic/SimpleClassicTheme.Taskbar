@@ -1,8 +1,6 @@
-﻿using SimpleClassicTheme.Taskbar.Helpers.NativeMethods;
+﻿using System.Text;
 
-using System;
-using System.Runtime.InteropServices;
-using System.Text;
+using static SimpleClassicTheme.Taskbar.Native.Headers.WinBase;
 
 namespace SimpleClassicTheme.Taskbar.Helpers
 {
@@ -32,7 +30,7 @@ namespace SimpleClassicTheme.Taskbar.Helpers
         public string IniReadValue(string Section, string Key)
         {
             StringBuilder temp = new(255);
-            _ = Kernel32.GetPrivateProfileString(Section, Key, string.Empty, temp, 255, path);
+            _ = GetPrivateProfileString(Section, Key, string.Empty, temp, 255, path);
             return temp.ToString();
         }
 
@@ -47,7 +45,7 @@ namespace SimpleClassicTheme.Taskbar.Helpers
         /// Value Name
         public void IniWriteValue(string Section, string Key, string Value)
         {
-            _ = Kernel32.WritePrivateProfileString(Section, Key, Value, path);
+            _ = WritePrivateProfileString(Section, Key, Value, path);
         }
     }
 }

@@ -62,7 +62,7 @@ if (Do3DBorder)
     {
         RECT rect = new(ClientRectangle);
         uint buttonStyle = style == Border3DStyle.Raised ? DFCS_BUTTONPUSH : DFCS_BUTTONPUSH | DFCS_PUSHED;
-        _ = User32.DrawFrameControl(e.Graphics.GetHdc(), ref rect, DFC_BUTTON, buttonStyle);
+        _ = DrawFrameControl(e.Graphics.GetHdc(), ref rect, DFC_BUTTON, buttonStyle);
         e.Graphics.ReleaseHdc();
     }
     else

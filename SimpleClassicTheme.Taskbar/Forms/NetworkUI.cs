@@ -1,15 +1,15 @@
 ﻿using NativeWifi;
-using System;
-using System.Windows.Forms;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Runtime.InteropServices;
-using System.Drawing;
-using System.Linq;
 
 using SimpleClassicTheme.Taskbar.UIElements.NetworkUI;
-using System.Threading;
-using SimpleClassicTheme.Taskbar.Helpers.NativeMethods;
+
+using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Linq;
+using System.Runtime.InteropServices;
+using System.Windows.Forms;
+
+using static SimpleClassicTheme.Taskbar.Native.Headers.WinUser;
 
 namespace SimpleClassicTheme.Taskbar.Forms
 {
@@ -201,7 +201,7 @@ namespace SimpleClassicTheme.Taskbar.Forms
 
         private void NetworkUI_Load(object sender, EventArgs e)
         {
-            _ = User32.ShowScrollBar(panel1.Handle, (int)ScrollBarDirection.SB_VERT, true);
+            _ = ShowScrollBar(panel1.Handle, (int)ScrollBarDirection.SB_VERT, true);
         }
 
         private void ShowNetworks(int interfaceNo)

@@ -1,4 +1,5 @@
 ﻿using SimpleClassicTheme.Taskbar.Helpers;
+using SimpleClassicTheme.Taskbar.Native.SystemTray;
 using SimpleClassicTheme.Taskbar.UI.Misc;
 
 using System;

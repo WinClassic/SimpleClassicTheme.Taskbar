@@ -1,8 +1,10 @@
 ﻿using SimpleClassicTheme.Common.Logging;
 using SimpleClassicTheme.Taskbar.Helpers;
+using SimpleClassicTheme.Taskbar.Native.SystemTray;
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace SimpleClassicTheme.Taskbar
@@ -25,6 +27,14 @@ namespace SimpleClassicTheme.Taskbar
                     }
                 }
             }
+        }
+
+        /// <summary>
+        /// Gets all window handles defining each taskbar
+        /// </summary>
+        public static IEnumerable<IntPtr> OpenTaskbarHandles
+        {
+            get => OpenTaskbars.Select(taskbar => taskbar.Handle);
         }
 
         public static void GenerateNewTaskbars()

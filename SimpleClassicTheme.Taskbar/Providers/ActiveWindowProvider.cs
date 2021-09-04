@@ -1,4 +1,4 @@
-﻿using SimpleClassicTheme.Taskbar.Helpers;
+﻿using SimpleClassicTheme.Common.Providers;
 
 using System.Collections.Generic;
 

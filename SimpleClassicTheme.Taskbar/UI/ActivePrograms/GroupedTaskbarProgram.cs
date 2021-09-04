@@ -9,6 +9,8 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
+using static SimpleClassicTheme.Taskbar.Native.Headers.FileAPI;
+
 namespace SimpleClassicTheme.Taskbar
 {
     public class GroupedTaskbarProgram : BaseTaskbarProgram
@@ -46,9 +48,20 @@ namespace SimpleClassicTheme.Taskbar
 
         public override string Title
         {
-            get => PrimaryWindow?.Title;
+            get
+            {
+                return Config.Default.GroupAppearance switch
+                {
+                    GroupAppearance.Default => PrimaryWindow?.Title,
+                    GroupAppearance.WindowsXP => Process.MainModule.FileVersionInfo.FileDescription,
+                    _ => throw new NotImplementedException(),
+                };
+            }
+
             set => PrimaryWindow.Title = value;
         }
+
+        public bool IsInsidePopup => Parent is PopupTaskbarGroup;
 
         public override Window Window
         {
@@ -56,12 +69,11 @@ namespace SimpleClassicTheme.Taskbar
             set => PrimaryWindow.Window = value;
         }
 
+
+
         public bool ContainsWindow(IntPtr hwnd)
         {
-            foreach (SingleTaskbarProgram program in ProgramWindows)
-                if (program.Window.Handle == hwnd)
-                    return true;
-            return false;
+            return ProgramWindows.Any(program => program.Window.Handle == hwnd);
         }
 
         public override void FinishOnPaint(PaintEventArgs e)
@@ -77,11 +89,11 @@ namespace SimpleClassicTheme.Taskbar
             $"Process: {Process.MainModule.ModuleName} ({Process.Id})\n" +
             $"Window title: {Title}\n" +
             $"Window class: {Window.ClassName}\n" +
-            $"Window HWND: {string.Join(", ", ProgramWindows.Select(o => o.Window.Handle.ToString("X8") + (User32.IsWindow(o.Window.Handle) ? "Valid" : "Invalid")).ToArray())}\n" +
-            $"Icon HWND: {string.Join(", ", ProgramWindows.Select(o => o.Icon.Handle.ToString("X8") + (User32.IsWindow(o.Icon.Handle) ? "Valid" : "Invalid")).ToArray())}";
+            $"Window HWND: {string.Join(", ", ProgramWindows.Select(o => o.Window.Handle.ToString("X8") + (IsWindow(o.Window.Handle) ? "Valid" : "Invalid")).ToArray())}\n" +
+            $"Icon HWND: {string.Join(", ", ProgramWindows.Select(o => o.Icon.Handle.ToString("X8") + (IsWindow(o.Icon.Handle) ? "Valid" : "Invalid")).ToArray())}";
 
-		public override void OnDoubleClick(object sender, MouseEventArgs e)
-		{
+        public override void OnDoubleClick(object sender, MouseEventArgs e)
+        {
             if (e.X > Width - 19 &&
                 e.X < Width - 3 &&
                 e.Y > 7 &&
@@ -100,23 +112,38 @@ namespace SimpleClassicTheme.Taskbar
             }
         }
 
-		public override void OnClick(object sender, MouseEventArgs e)
+        public override void OnClick(object sender, MouseEventArgs e)
         {
-            if (e.X > Width - 19 &&
-                e.X < Width - 3 &&
-                e.Y > 7 &&
-                e.Y < 24)
-            {
-                GroupWindow.Show(PointToScreen(new Point(0, 0)));
-            }
-            else if (IsMoving)
+            if (IsMoving)
             {
                 IsMoving = false;
             }
             else
             {
-                PrimaryWindow.OnClick(sender, e);
-                ActiveWindow = PrimaryWindow.ActiveWindow;
+                Point controlScreenLocation = PointToScreen(Point.Empty);
+
+                if (Config.Default.GroupAppearance == GroupAppearance.Default)
+                {
+                    Rectangle clickArea = new(Width - 19, 7, 16, 17);
+
+                    if (clickArea.Contains(e.Location))
+                    {
+                        GroupWindow.Show(controlScreenLocation);
+                    }
+                    else
+                    {
+                        PrimaryWindow.OnClick(sender, e);
+                        ActiveWindow = PrimaryWindow.ActiveWindow;
+                    }
+                }
+                else if (Config.Default.GroupAppearance == GroupAppearance.WindowsXP)
+                {
+                    GroupWindow.Show(controlScreenLocation);
+                }
+                else
+                {
+                    throw new NotImplementedException();
+                }
             }
         }
 
@@ -138,19 +165,19 @@ namespace SimpleClassicTheme.Taskbar
         }
 
         public bool RemoveWindow(IntPtr window)
-		{
+        {
             List<SingleTaskbarProgram> referenceList = new(ProgramWindows);
             foreach (SingleTaskbarProgram program in referenceList)
-			{
+            {
                 if (program.Window.Handle == window)
-				{
+                {
                     ProgramWindows.Remove(program);
                     program.Dispose();
-				}
-			}
+                }
+            }
 
             return ProgramWindows.Count > 1;
-		}
+        }
 
         public bool UpdateWindowList(IEnumerable<Window> windows)
         {
@@ -205,7 +232,7 @@ namespace SimpleClassicTheme.Taskbar
         private static string GetShortPath(string path)
         {
             var shortPath = new StringBuilder(MAX_PATH);
-            _ = Kernel32.GetShortPathName(path, shortPath, MAX_PATH);
+            _ = GetShortPathName(path, shortPath, MAX_PATH);
             return shortPath.ToString();
         }
 

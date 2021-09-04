@@ -1,9 +1,9 @@
-﻿using SimpleClassicTheme.Taskbar.Helpers.NativeMethods;
-
+﻿
 using System;
 using System.Drawing;
-using System.Runtime.InteropServices;
 using System.Windows.Forms;
+
+using static SimpleClassicTheme.Taskbar.Native.Headers.WinUser;
 
 namespace SimpleClassicTheme.Taskbar
 {
@@ -16,19 +16,19 @@ namespace SimpleClassicTheme.Taskbar
             IntPtr hwnd = wnd.Handle;
 
             // Try different ways of getting the icon
-            IntPtr iconHandle = User32.SendMessage(hwnd, User32.WM_GETICON, User32.ICON_SMALL2, 0);
+            IntPtr iconHandle = SendMessage(hwnd, WM_GETICON, ICON_SMALL2, 0);
 
             if (iconHandle == IntPtr.Zero)
-                iconHandle = GetClassLongPtr(hwnd, User32.GCL_HICONSM);
+                iconHandle = GetClassLongPtr(hwnd, GCL_HICONSM);
 
             if (iconHandle == IntPtr.Zero)
-                iconHandle = User32.SendMessage(hwnd, User32.WM_GETICON, User32.ICON_SMALL, 0);
+                iconHandle = SendMessage(hwnd, WM_GETICON, ICON_SMALL, 0);
 
             if (iconHandle == IntPtr.Zero)
-                iconHandle = User32.SendMessage(hwnd, User32.WM_GETICON, User32.ICON_BIG, 0);
+                iconHandle = SendMessage(hwnd, WM_GETICON, ICON_BIG, 0);
 
             if (iconHandle == IntPtr.Zero)
-                iconHandle = GetClassLongPtr(hwnd, User32.GCL_HICON);
+                iconHandle = GetClassLongPtr(hwnd, GCL_HICON);
 
             if (iconHandle == IntPtr.Zero)
                 return null;
@@ -40,15 +40,15 @@ namespace SimpleClassicTheme.Taskbar
         public static IntPtr GetClassLongPtr(IntPtr hWnd, int nIndex)
         {
             if (IntPtr.Size > 4)
-                return User32.GetClassLongPtr64(hWnd, nIndex);
+                return GetClassLongPtr64(hWnd, nIndex);
             else
-                return new IntPtr(User32.GetClassLongPtr32(hWnd, nIndex));
+                return new IntPtr(GetClassLongPtr32(hWnd, nIndex));
         }
 
         private static IntPtr GetLastActivePopupOfWindow(IntPtr root)
         {
-            IntPtr lastPopup = User32.GetLastActivePopup(root);
-            if (User32.IsWindowVisible(lastPopup))
+            IntPtr lastPopup = GetLastActivePopup(root);
+            if (IsWindowVisible(lastPopup))
                 return lastPopup;
             if (lastPopup == root)
                 return IntPtr.Zero;

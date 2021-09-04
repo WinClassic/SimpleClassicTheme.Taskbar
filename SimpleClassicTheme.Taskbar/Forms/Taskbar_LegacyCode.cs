@@ -9,6 +9,7 @@
  *
  */
 
+using SimpleClassicTheme.Common.Providers;
 using SimpleClassicTheme.Taskbar.Helpers;
 using SimpleClassicTheme.Taskbar.Helpers.NativeMethods;
 
@@ -17,7 +18,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 
-using static SimpleClassicTheme.Taskbar.Helpers.NativeMethods.WinDef;
+using static SimpleClassicTheme.Taskbar.Native.Headers.WinDef;
+using static SimpleClassicTheme.Taskbar.Native.Headers.WinUser;
 
 namespace SimpleClassicTheme.Taskbar
 {
@@ -58,10 +60,10 @@ namespace SimpleClassicTheme.Taskbar
 
             using (var _ = logicTiming.StartRegion("Hide if ForegroundWindow is fullscreen"))
             {
-                Window fgWindow = new(User32.GetForegroundWindow());
+                Window fgWindow = new(GetForegroundWindow());
                 //The window should only be visible if the active window is not fullscreen (with the exception of the desktop window)
                 Screen scr = Screen.FromHandle(fgWindow.Handle);
-                User32.GetWindowRect(fgWindow.Handle, out RECT rect);
+                GetWindowRect(fgWindow.Handle, out RECT rect);
                 int width = rect.Right - rect.Left, height = rect.Bottom - rect.Top;
                 bool full = width >= scr.Bounds.Width && height >= scr.Bounds.Height;
                 if (NeverShow)

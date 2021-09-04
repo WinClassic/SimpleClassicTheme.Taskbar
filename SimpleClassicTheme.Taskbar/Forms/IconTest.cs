@@ -1,16 +1,9 @@
-﻿using SimpleClassicTheme.Taskbar.Helpers.NativeMethods;
-
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
+﻿using System;
 using System.Drawing;
 using System.Drawing.Imaging;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+
+using static SimpleClassicTheme.Taskbar.Native.Headers.WinUser;
 
 namespace SimpleClassicTheme.Taskbar.Forms
 {
@@ -33,7 +26,7 @@ namespace SimpleClassicTheme.Taskbar.Forms
                 if (iconHandle == IntPtr.Zero)
                     continue;
                 //Bitmap bmp = Bitmap.FromHicon(c);
-                _ = User32.GetIconInfo(iconHandle, out User32.ICONINFO ii);
+                _ = GetIconInfo(iconHandle, out ICONINFO ii);
                 Bitmap bmpIcon = Bitmap.FromHbitmap(ii.hbmColor);
                 Rectangle rectBounds = new(0, 0, bmpIcon.Width, bmpIcon.Height);
                 BitmapData bmData = new();
@@ -63,15 +56,15 @@ namespace SimpleClassicTheme.Taskbar.Forms
             IntPtr hwnd = wnd.Handle;
             IntPtr iconHandle = IntPtr.Zero;
             if (index == 0)
-                iconHandle = User32.SendMessage(hwnd, User32.WM_GETICON, User32.ICON_SMALL2, 0);
+                iconHandle = SendMessage(hwnd, WM_GETICON, ICON_SMALL2, 0);
             if (index == 1)
-                iconHandle = User32.SendMessage(hwnd, User32.WM_GETICON, User32.ICON_SMALL, 0);
+                iconHandle = SendMessage(hwnd, WM_GETICON, ICON_SMALL, 0);
             if (index == 2)
-                iconHandle = User32.SendMessage(hwnd, User32.WM_GETICON, User32.ICON_BIG, 0);
+                iconHandle = SendMessage(hwnd, WM_GETICON, ICON_BIG, 0);
             if (index == 3)
-                iconHandle = Taskbar.GetClassLongPtr(hwnd, User32.GCL_HICONSM);
+                iconHandle = Taskbar.GetClassLongPtr(hwnd, GCL_HICONSM);
             if (index == 4)
-                iconHandle = Taskbar.GetClassLongPtr(hwnd, User32.GCL_HICON);
+                iconHandle = Taskbar.GetClassLongPtr(hwnd, GCL_HICON);
             return iconHandle;
         }
 

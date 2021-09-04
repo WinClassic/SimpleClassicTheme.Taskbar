@@ -10,7 +10,7 @@ using System.Resources;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
-using static SimpleClassicTheme.Taskbar.Helpers.NativeMethods.WinDef;
+using static SimpleClassicTheme.Taskbar.Native.Headers.WinDef;
 
 namespace SimpleClassicTheme.Taskbar.ThemeEngine.Renderers
 {

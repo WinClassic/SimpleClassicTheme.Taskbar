@@ -1,12 +1,13 @@
 ﻿using SimpleClassicTheme.Common.Logging;
 using SimpleClassicTheme.Taskbar.Forms;
 using SimpleClassicTheme.Taskbar.Helpers;
-using SimpleClassicTheme.Taskbar.Helpers.NativeMethods;
 
 using System;
 using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
+
+using static SimpleClassicTheme.Taskbar.Native.Headers.WinUser;
 
 namespace SimpleClassicTheme.Taskbar
 {
@@ -32,11 +33,11 @@ namespace SimpleClassicTheme.Taskbar
         public SingleTaskbarProgram(Window window) : this()
         {
             Window = window;
-            Process = window.Process;
+            Process = Process.GetProcessById(window.ProcessId);
         }
 
         public override int MinimumWidth => Config.Default.Renderer.TaskButtonMinimalWidth;
-        public override Process Process { get => process; set { process = value; /*MessageBox.Show(ApplicationEntryPoint.d.GetAppUserModelId(Process.Id));*/ } }
+        public override Process Process { get => process; set => process = value; }
         public override string Title { get => window.Title; set => throw new NotImplementedException(); }
         public override Window Window { get => window; set => window = value; }
 
@@ -49,72 +50,24 @@ namespace SimpleClassicTheme.Taskbar
             $"Process: {Process.MainModule.ModuleName} ({Process.Id})\n" +
             $"Window title: {Title}\n" +
             $"Window class: {Window.ClassName}\n" +
-            $"Window HWND: {Window.Handle:X8} {(User32.IsWindow(Window.Handle) ? "Valid" : "Invalid")}\n" +
-            $"Icon HWND: {Icon.Handle:X8} ({(User32.IsWindow(Icon.Handle) ? "Valid" : "Invalid")})";
+            $"Window HWND: {Window.Handle:X8} {(IsWindow(Window.Handle) ? "Valid" : "Invalid")}\n" +
+            $"Icon HWND: {Icon.Handle:X8} ({(IsWindow(Icon.Handle) ? "Valid" : "Invalid")})";
 
-        public void PerformClickAction(TaskbarProgramClickAction action, MouseEventArgs e)
+        public override void OnClick(object sender, MouseEventArgs e)
         {
-            switch (action)
-            {
-                case TaskbarProgramClickAction.ShowHide:
-                    if (ActiveWindow)
-                    {
-                        _ = User32.ShowWindow(Window.Handle, User32.SW_MINIMIZE);
-                    }
-                    else
-                    {
-                        if ((Window.WindowInfo.dwStyle & 0x20000000) > 0)
-                            _ = User32.ShowWindow(Window.Handle, 9);
+            ApplicationEntryPoint.ErrorSource = this;
+            controlState = "handling mouse click";
 
-                        _ = User32.SetForegroundWindow(Window.Handle);
-
-                        if (Parent is Taskbar)
-                        {
-                            foreach (Control control in Parent.Controls)
-                            {
-                                if (control is BaseTaskbarProgram program)
-                                {
-                                    program.ActiveWindow = false;
-                                }
-                            }
-                        }
-
-                        ActiveWindow = true;
-                    }
-                    break;
-                case TaskbarProgramClickAction.Close:
-                    User32.SendMessage(Window.Handle, User32.WM_CLOSE, 0, 0);
-                    break;
-                case TaskbarProgramClickAction.ContextMenu:
-                    var systemMenu = User32.GetSystemMenu(Window.Handle, false);
-
-                    if (systemMenu == IntPtr.Zero)
-                    {
-                        Logger.Instance.Log(LoggerVerbosity.Verbose, "SingleTaskbarProgram", $"Got an empty system menu ({systemMenu:X8})");
-                        return;
-                    }
-
-                    // Inserting menu items is bugged sadly.
-                    // User32.AppendMenu(systemMenu, User32.MF_SEPARATOR, 0x0000, IntPtr.Zero);
-                    // User32.AppendMenu(systemMenu, User32.MF_STRING, 0x1337, "Icon Test");
-
-                    // HACK: preserving the pressed down state when the menu is open
-                    ActiveWindow = true;
-
-                    _ = User32.ShowWindow(Window.Handle, User32.SW_SHOW);
-                    _ = User32.SetForegroundWindow(Window.Handle);
-
-                    var screenLocation = PointToScreen(e.Location);
-                    var cmd = User32.TrackPopupMenuEx(systemMenu, User32.TPM_RETURNCMD, screenLocation.X, screenLocation.Y, this.Handle, IntPtr.Zero);
-
-                    ActiveWindow = false;
-
-                    User32.SendMessage(Window.Handle, User32.WM_SYSCOMMAND, cmd, 0);
-                    break;
-                case TaskbarProgramClickAction.NewInstance:
-                    Process.Start(Window.Process.MainModule.FileName);
-                    break;
-            }
+            if (IsMoving)
+                IsMoving = false;
+            else if (ModifierKeys == (Keys.Control | Keys.Shift | Keys.Alt) && e.Button == MouseButtons.Right)
+                new IconTest(Window).Show();
+            else if (e.Button == MouseButtons.Left)
+                PerformClickAction(Config.Default.Tweaks.TaskbarProgramLeftClickAction, e);
+            else if (e.Button == MouseButtons.Middle)
+                PerformClickAction(Config.Default.Tweaks.TaskbarProgramMiddleClickAction, e);
+            else
+                PerformClickAction(Config.Default.Tweaks.TaskbarProgramRightClickAction, e);
         }
 
         public override void OnDoubleClick(object sender, MouseEventArgs e)
@@ -132,21 +85,72 @@ namespace SimpleClassicTheme.Taskbar
                 PerformClickAction(Config.Default.Tweaks.TaskbarProgramRightDoubleClickAction, e);
         }
 
-        public override void OnClick(object sender, MouseEventArgs e)
+        public void PerformClickAction(TaskbarProgramClickAction action, MouseEventArgs e)
         {
-            ApplicationEntryPoint.ErrorSource = this;
-            controlState = "handling mouse click";
+            switch (action)
+            {
+                case TaskbarProgramClickAction.ShowHide:
+                    if (ActiveWindow)
+                    {
+                        _ = ShowWindow(Window.Handle, SW_MINIMIZE);
+                    }
+                    else
+                    {
+                        if ((Window.WindowInfo.dwStyle & 0x20000000) > 0)
+                            _ = ShowWindow(Window.Handle, 9);
 
-            if (IsMoving)
-                IsMoving = false;
-            else if (ModifierKeys == (Keys.Control | Keys.Shift | Keys.Alt) && e.Button == MouseButtons.Right)
-                new IconTest(Window).Show();
-            else if (e.Button == MouseButtons.Left)
-                PerformClickAction(Config.Default.Tweaks.TaskbarProgramLeftClickAction, e);
-            else if (e.Button == MouseButtons.Middle)
-                PerformClickAction(Config.Default.Tweaks.TaskbarProgramMiddleClickAction, e);
-            else
-                PerformClickAction(Config.Default.Tweaks.TaskbarProgramRightClickAction, e);
+                        _ = SetForegroundWindow(Window.Handle);
+
+                        if (Parent is Taskbar)
+                        {
+                            foreach (Control control in Parent.Controls)
+                            {
+                                if (control is BaseTaskbarProgram program)
+                                {
+                                    program.ActiveWindow = false;
+                                }
+                            }
+                        }
+
+                        ActiveWindow = true;
+                    }
+                    break;
+
+                case TaskbarProgramClickAction.Close:
+                    SendMessage(Window.Handle, WM_CLOSE, 0, 0);
+                    break;
+
+                case TaskbarProgramClickAction.ContextMenu:
+                    var systemMenu = GetSystemMenu(Window.Handle, false);
+
+                    if (systemMenu == IntPtr.Zero)
+                    {
+                        Logger.Instance.Log(LoggerVerbosity.Verbose, "SingleTaskbarProgram", $"Got an empty system menu ({systemMenu:X8})");
+                        return;
+                    }
+
+                    // Inserting menu items is bugged sadly.
+                    // AppendMenu(systemMenu, MF_SEPARATOR, 0x0000, IntPtr.Zero);
+                    // AppendMenu(systemMenu, MF_STRING, 0x1337, "Icon Test");
+
+                    // HACK: preserving the pressed down state when the menu is open
+                    ActiveWindow = true;
+
+                    _ = ShowWindow(Window.Handle, SW_SHOW);
+                    _ = SetForegroundWindow(Window.Handle);
+
+                    var screenLocation = PointToScreen(e.Location);
+                    var cmd = TrackPopupMenuEx(systemMenu, TPM_RETURNCMD, screenLocation.X, screenLocation.Y, this.Handle, IntPtr.Zero);
+
+                    ActiveWindow = false;
+
+                    SendMessage(Window.Handle, WM_SYSCOMMAND, cmd, 0);
+                    break;
+
+                case TaskbarProgramClickAction.NewInstance:
+                    Process.Start(Process.MainModule.FileName);
+                    break;
+            }
         }
 
         public override string ToString() => $"Handle: {Window.Handle}, Title: {Title}";

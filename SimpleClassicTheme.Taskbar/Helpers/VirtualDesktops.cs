@@ -3,7 +3,7 @@ using SimpleClassicTheme.Taskbar.Native.Interfaces;
 
 using System;
 
-using IServiceProvider = SimpleClassicTheme.Taskbar.Native.Interfaces.IServiceProvider;
+using IServiceProvider = SimpleClassicTheme.Taskbar.Native.Headers.ServProv.IServiceProvider;
 
 namespace SimpleClassicTheme.Taskbar.Helpers
 {

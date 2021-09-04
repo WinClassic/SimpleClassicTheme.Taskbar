@@ -2,7 +2,7 @@
 
 using System;
 
-namespace SimpleClassicTheme.Taskbar.Helpers.NativeMethods
+namespace SimpleClassicTheme.Taskbar.Native
 {
     /*
      * When to use what integer type:

@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.0.31521.260
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31605.320
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{16D0D798-44E2-4863-A6FB-8AF59A7AA463}"
 	ProjectSection(SolutionItems) = preProject
@@ -18,6 +18,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Old Code", "Old Code", "{12
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimpleClassicTheme.Common", "..\SimpleClassicTheme.Common\SimpleClassicTheme.Common\SimpleClassicTheme.Common.csproj", "{E9317DC3-CA35-4420-B595-444974403E89}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Craftplacer.Windows.VisualStyles", "..\Craftplacer.Windows.VisualStyles\Craftplacer.Windows.VisualStyles\Craftplacer.Windows.VisualStyles.csproj", "{486600C2-E1A2-426D-8B46-A5B52D7574FD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

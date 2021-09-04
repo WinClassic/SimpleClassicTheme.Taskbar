@@ -6,6 +6,9 @@ using System.ComponentModel;
 using System.Runtime.InteropServices;
 using System.Text;
 
+using static SimpleClassicTheme.Taskbar.Native.Headers.WinUser;
+using static SimpleClassicTheme.Taskbar.Native.Headers.MemoryAPI;
+
 namespace SimpleClassicTheme.Taskbar.Helpers
 {
     public static class UnmanagedHelpers
@@ -15,7 +18,7 @@ namespace SimpleClassicTheme.Taskbar.Helpers
             // Read process memory
             var size = Marshal.SizeOf<T>();
             var buffer = new byte[size];
-            Kernel32.ReadProcessMemory(hProcess, baseAddress, buffer, buffer.Length, out _);
+            ReadProcessMemory(hProcess, baseAddress, buffer, buffer.Length, out _);
 
             // Allocate memory for buffer and it to a managed type.
             var handle = GCHandle.Alloc(buffer, GCHandleType.Pinned);
@@ -53,7 +56,7 @@ namespace SimpleClassicTheme.Taskbar.Helpers
                 return true;
             }
 
-            if (User32.EnumWindows(callback, 0) == 0)
+            if (EnumWindows(callback, 0) == 0)
             {
                 windows.Clear();
                 throw new Win32Exception(Marshal.GetLastWin32Error());
@@ -63,11 +66,10 @@ namespace SimpleClassicTheme.Taskbar.Helpers
         }
 
         /// <summary>
-        /// Reads a sequence of characters until a null character is encountered from a process.
+        /// Reads a sequence of characters from a process until a null character is encountered.
         /// </summary>
         /// <param name="hProcess">A handle to the process</param>
         /// <param name="baseAddress">A pointer where to start reading from</param>
-        /// <returns></returns>
         public static string ReadNullTerminatedString(IntPtr hProcess, IntPtr baseAddress)
         {
             StringBuilder stringBuilder = new();
@@ -75,7 +77,7 @@ namespace SimpleClassicTheme.Taskbar.Helpers
 
             while (true)
             {
-                Kernel32.ReadProcessMemory(hProcess, baseAddress, buffer, 2, out _);
+                ReadProcessMemory(hProcess, baseAddress, buffer, 2, out _);
                 string character = Encoding.Unicode.GetString(buffer);
 
                 if (character == "\0")

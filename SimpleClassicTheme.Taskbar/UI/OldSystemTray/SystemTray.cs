@@ -2,6 +2,8 @@
 using SimpleClassicTheme.Common.Performance;
 using SimpleClassicTheme.Taskbar.Helpers;
 using SimpleClassicTheme.Taskbar.Helpers.NativeMethods;
+using SimpleClassicTheme.Taskbar.Native;
+using SimpleClassicTheme.Taskbar.Native.SystemTray;
 
 using System;
 using System.Collections.Generic;
@@ -11,6 +13,8 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+
+using static SimpleClassicTheme.Taskbar.Native.Headers.WinUser;
 
 namespace SimpleClassicTheme.Taskbar.UIElements.OldSystemTray
 {
@@ -58,10 +62,10 @@ namespace SimpleClassicTheme.Taskbar.UIElements.OldSystemTray
             var process = GetProcessFromIcon(buttonInfo).MainModule.ModuleName;
 
             var windowHwnd = buttonInfo.hwnd;
-            var isWindowHwndValid = User32.IsWindow(windowHwnd);
+            var isWindowHwndValid = IsWindow(windowHwnd);
 
             var iconHwnd = buttonInfo.icon;
-            var isIconHwndValid = User32.IsWindow(iconHwnd);
+            var isIconHwndValid = IsWindow(iconHwnd);
 
             sb.AppendLine($"Process: {process} ({buttonInfo.pid})");
             sb.AppendLine($"Corresponding Window HWND: {windowHwnd} ({(isWindowHwndValid ? "Valid" : "Invalid")})");
@@ -81,15 +85,15 @@ namespace SimpleClassicTheme.Taskbar.UIElements.OldSystemTray
             }
 
             //Lists that will receive all button information
-            List<UnmanagedCodeMigration.TBBUTTONINFO> existingButtons = new();
+            List<TBBUTTONINFO> existingButtons = new();
             List<IntPtr> existingHWNDs = new();
             IntPtr tray = GetSystemTrayHandle();
 
             //Loop through all buttons
             using (var _ = trayTiming.StartRegion("Get all TBUTTONINFO's"))
             {
-                UnmanagedCodeMigration.TBBUTTONINFO[] bInfos = UnmanagedCodeMigration.GetTrayButtons(tray);
-                foreach (UnmanagedCodeMigration.TBBUTTONINFO bInfo in bInfos)
+                TBBUTTONINFO[] bInfos = UnmanagedCodeMigration.GetTrayButtons(tray);
+                foreach (TBBUTTONINFO bInfo in bInfos)
                 {
                     //Save it
                     if (bInfo.visible)
@@ -121,7 +125,7 @@ namespace SimpleClassicTheme.Taskbar.UIElements.OldSystemTray
             //Add icons that didn't display before
             using (var _ = trayTiming.StartRegion("Add icons that didn't display"))
             {
-                foreach (UnmanagedCodeMigration.TBBUTTONINFO info in existingButtons)
+                foreach (TBBUTTONINFO info in existingButtons)
                 {
                     //By default we say the icon doesn't exist
                     SystemTrayIcon existingIcon = newIconList.FirstOrDefault((i) => i.Handle == info.hwnd);
@@ -243,24 +247,24 @@ namespace SimpleClassicTheme.Taskbar.UIElements.OldSystemTray
             labelTime.Text = DateTime.Now.ToString(CultureInfo.CurrentCulture.DateTimeFormat.ShortTimePattern);
         }
 
-        private static Process GetProcessFromIcon(UnmanagedCodeMigration.TBBUTTONINFO TBUTTONINFO_Struct)
+        private static Process GetProcessFromIcon(TBBUTTONINFO TBUTTONINFO_Struct)
         {
-            _ = User32.GetWindowThreadProcessId(TBUTTONINFO_Struct.hwnd, out uint pid);
+            _ = GetWindowThreadProcessId(TBUTTONINFO_Struct.hwnd, out uint pid);
             return Process.GetProcessById((int)pid);
         }
 
         private static IntPtr GetSystemTrayHandle()
         {
-            IntPtr hWndTray = User32.FindWindow("Shell_TrayWnd", null);
+            IntPtr hWndTray = FindWindow("Shell_TrayWnd", null);
             if (hWndTray != IntPtr.Zero)
             {
-                hWndTray = User32.FindWindowEx(hWndTray, IntPtr.Zero, "TrayNotifyWnd", null);
+                hWndTray = FindWindowEx(hWndTray, IntPtr.Zero, "TrayNotifyWnd", null);
                 if (hWndTray != IntPtr.Zero)
                 {
-                    hWndTray = User32.FindWindowEx(hWndTray, IntPtr.Zero, "SysPager", null);
+                    hWndTray = FindWindowEx(hWndTray, IntPtr.Zero, "SysPager", null);
                     if (hWndTray != IntPtr.Zero)
                     {
-                        hWndTray = User32.FindWindowEx(hWndTray, IntPtr.Zero, "ToolbarWindow32", null);
+                        hWndTray = FindWindowEx(hWndTray, IntPtr.Zero, "ToolbarWindow32", null);
                         return hWndTray;
                     }
                 }
@@ -268,13 +272,13 @@ namespace SimpleClassicTheme.Taskbar.UIElements.OldSystemTray
             return IntPtr.Zero;
         }
 
-        private UnmanagedCodeMigration.TBBUTTONINFO GetCulpritButtonInfo()
+        private TBBUTTONINFO GetCulpritButtonInfo()
         {
             if (culprit is SystemTrayIcon trayIcon)
             {
                 return trayIcon.TBUTTONINFO_Struct;
             }
-            else if (culprit is UnmanagedCodeMigration.TBBUTTONINFO @struct)
+            else if (culprit is TBBUTTONINFO @struct)
             {
                 return @struct;
             }

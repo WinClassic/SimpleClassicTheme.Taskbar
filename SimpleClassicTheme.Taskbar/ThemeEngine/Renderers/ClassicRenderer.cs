@@ -9,7 +9,8 @@ using System.Drawing.Drawing2D;
 using System.Drawing.Text;
 using System.Windows.Forms;
 
-using static SimpleClassicTheme.Taskbar.Helpers.NativeMethods.WinDef;
+using static SimpleClassicTheme.Taskbar.Native.Headers.WinDef;
+using static SimpleClassicTheme.Taskbar.Native.Headers.WinUser;
 
 namespace SimpleClassicTheme.Taskbar.ThemeEngine.Renderers
 {
@@ -74,7 +75,7 @@ namespace SimpleClassicTheme.Taskbar.ThemeEngine.Renderers
             DrawGripper(systemTray.Width - 7, -1, systemTray.Height, g);
         }
 
-        public void DrawGripper(int x, int y, int height, Graphics g)
+        public static void DrawGripper(int x, int y, int height, Graphics g)
         {
             const int topPad = 4;
             const int bottomPad = 2;
@@ -89,6 +90,7 @@ namespace SimpleClassicTheme.Taskbar.ThemeEngine.Renderers
             Rectangle notchRect = new(x + 4, dentRect.Y + 2, 3, dentRect.Height - 4);
             ControlPaint.DrawBorder3D(g, notchRect, Border3DStyle.RaisedInner);
         }
+
         public override void DrawStartButton(StartButton startButton, Graphics g)
         {
             try
@@ -115,14 +117,14 @@ namespace SimpleClassicTheme.Taskbar.ThemeEngine.Renderers
                 rect.Left += 2;
                 rect.Top += 4;
                 rect.Bottom -= 2;
-                uint buttonStyle = User32.DFCS_BUTTONPUSH;
+                uint buttonStyle = DFCS_BUTTONPUSH;
 
                 if (startButton.Pressed)
                 {
-                    buttonStyle |= User32.DFCS_PUSHED;
+                    buttonStyle |= DFCS_PUSHED;
                 }
 
-                _ = User32.DrawFrameControl(g.GetHdc(), ref rect, User32.DFC_BUTTON, buttonStyle);
+                _ = DrawFrameControl(g.GetHdc(), ref rect, DFC_BUTTON, buttonStyle);
                 g.ReleaseHdc();
                 g.ResetTransform();
                 bool mouseIsDown = startButton.ClientRectangle.Contains(startButton.PointToClient(Control.MousePosition)) && (Control.MouseButtons & MouseButtons.Left) != 0;
@@ -167,14 +169,14 @@ namespace SimpleClassicTheme.Taskbar.ThemeEngine.Renderers
             newRect.Y += 4;
             newRect.Height -= 6;
             RECT rect = newRect;
-            uint buttonStyle = User32.DFCS_BUTTONPUSH;
+            uint buttonStyle = DFCS_BUTTONPUSH;
 
             if (taskbarProgram.IsPushed)
             {
-                buttonStyle |= User32.DFCS_PUSHED;
+                buttonStyle |= DFCS_PUSHED;
             }
 
-            _ = User32.DrawFrameControl(g.GetHdc(), ref rect, User32.DFC_BUTTON, buttonStyle);
+            _ = DrawFrameControl(g.GetHdc(), ref rect, DFC_BUTTON, buttonStyle);
             g.ReleaseHdc();
             g.ResetTransform();
 
@@ -221,14 +223,14 @@ namespace SimpleClassicTheme.Taskbar.ThemeEngine.Renderers
             newRect.Height -= 12;
             RECT rect = newRect;
 
-            uint buttonStyle = User32.DFCS_BUTTONPUSH;
+            uint buttonStyle = DFCS_BUTTONPUSH;
 
             if (taskbarProgram.GroupWindow.Visible)
             {
-                buttonStyle |= User32.DFCS_PUSHED;
+                buttonStyle |= DFCS_PUSHED;
             }
 
-            _ = User32.DrawFrameControl(g.GetHdc(), ref rect, User32.DFC_BUTTON, buttonStyle);
+            _ = DrawFrameControl(g.GetHdc(), ref rect, DFC_BUTTON, buttonStyle);
             g.ReleaseHdc();
             g.ResetTransform();
 
@@ -255,7 +257,7 @@ namespace SimpleClassicTheme.Taskbar.ThemeEngine.Renderers
             Rectangle newRect = taskbarGroup.ClientRectangle;
             RECT rect = newRect;
             uint buttonStyle = DFCS_BUTTONPUSH;
-            _ = User32.DrawFrameControl(g.GetHdc(), ref rect, DFC_BUTTON, buttonStyle);
+            _ = DrawFrameControl(g.GetHdc(), ref rect, DFC_BUTTON, buttonStyle);
             g.ReleaseHdc();
             g.ResetTransform();
         }
@@ -282,8 +284,24 @@ namespace SimpleClassicTheme.Taskbar.ThemeEngine.Renderers
 
         public override int GetSystemTrayWidth(int iconCount) => 63 + (iconCount * (16 + Config.Default.Tweaks.SpaceBetweenTrayIcons));
 
-        public override Point GetTaskButtonGroupWindowButtonLocation(int index) => new(4, (index - 1) * 24);
+        public override Point GetTaskButtonGroupWindowButtonLocation(int index)
+        {
+            if (Config.Default.GroupAppearance == GroupAppearance.Default)
+            {
+                index--;
+            }
 
-        public override Size GetTaskButtonGroupWindowSize(int buttonCount) => new(Config.Default.Tweaks.TaskbarProgramWidth + 8, ((buttonCount - 1) * 24) + 6);
+            return new(4, index * 24);
+        }
+
+        public override Size GetTaskButtonGroupWindowSize(int buttonCount)
+        {
+            if (Config.Default.GroupAppearance == GroupAppearance.Default)
+            {
+                buttonCount--;
+            }
+
+            return new(Config.Default.Tweaks.TaskbarProgramWidth + 8, (buttonCount * 24) + 6);
+        }
     }
 }

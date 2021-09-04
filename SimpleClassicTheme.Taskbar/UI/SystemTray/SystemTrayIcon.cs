@@ -1,13 +1,12 @@
 ﻿using SimpleClassicTheme.Taskbar.Helpers;
-using SimpleClassicTheme.Taskbar.Helpers.NativeMethods;
+using SimpleClassicTheme.Taskbar.Native.Headers;
+using SimpleClassicTheme.Taskbar.Native.SystemTray;
 
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.Drawing;
-using System.Drawing.Imaging;
-using System.Runtime.InteropServices;
 using System.Windows.Forms;
+
+using static SimpleClassicTheme.Taskbar.Native.Headers.WinUser;
 
 namespace SimpleClassicTheme.Taskbar.UIElements.SystemTray
 {
@@ -52,10 +51,10 @@ namespace SimpleClassicTheme.Taskbar.UIElements.SystemTray
             if (data.Flags.HasFlag(SystemTrayNotificationFlags.ToolTipValid))
             {
                 string tempText = Text.Replace("\r\n", "\n");
-                string text = tempText.Contains("\n") ? tempText[(tempText.IndexOf('\n') + 1)..] : "";
+                string text = tempText.Contains('\n') ? tempText[(tempText.IndexOf('\n') + 1)..] : "";
                 string tooltip = $"{text}";
                 toolTip.SetToolTip(this, tooltip);
-                toolTip.ToolTipTitle = tempText.Contains("\n") ? tempText.Substring(0, tempText.IndexOf("\n")) : tempText;
+                toolTip.ToolTipTitle = tempText.Contains('\n') ? tempText.Substring(0, tempText.IndexOf("\n")) : tempText;
             }
             if (data.Flags.HasFlag(SystemTrayNotificationFlags.IconHandleValid))
                 Icon = Icon.FromHandle(NotificationData.IconHandle);
@@ -109,7 +108,7 @@ namespace SimpleClassicTheme.Taskbar.UIElements.SystemTray
 
         private void SystemTrayIcon_MouseMove(object sender, MouseEventArgs e)
         {
-            if (!User32.IsWindow(NotificationData.WindowHandle))
+            if (!IsWindow(NotificationData.WindowHandle))
                 (Parent as SystemTray).TrayNotified(this, new SystemTrayNotificationEventArgs(SystemTrayNotificationType.IconDeleted, NotificationData));
         }
 
@@ -170,7 +169,7 @@ namespace SimpleClassicTheme.Taskbar.UIElements.SystemTray
             uint lParamL = eventMessage;
             uint lParam = (lParamH << 16) | lParamL;
 
-            _ = User32.SendNotifyMessage(hWnd, uCallbackMessage, wParam, lParam);
+            WinUser.SendNotifyMessage(hWnd, uCallbackMessage, wParam, lParam);
 		}
 
         public override string ToString()

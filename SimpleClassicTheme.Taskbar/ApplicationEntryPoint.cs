@@ -7,6 +7,7 @@ using SimpleClassicTheme.Common.Logging;
 using SimpleClassicTheme.Taskbar.Forms;
 using SimpleClassicTheme.Taskbar.Helpers;
 using SimpleClassicTheme.Taskbar.Helpers.NativeMethods;
+using SimpleClassicTheme.Taskbar.Native.SystemTray;
 
 using System;
 using System.Collections.Generic;
@@ -15,6 +16,10 @@ using System.IO;
 using System.Text;
 using System.Windows.Forms;
 using System.Windows.Forms.VisualStyles;
+
+using static SimpleClassicTheme.Taskbar.Native.Headers.WinUser;
+using static SimpleClassicTheme.Taskbar.Native.Headers.ConsoleAPI;
+using SimpleClassicTheme.Taskbar.Native;
 
 namespace SimpleClassicTheme.Taskbar
 {
@@ -49,7 +54,7 @@ namespace SimpleClassicTheme.Taskbar
         [STAThread]
         private static void Main(string[] args)
         {
-            Kernel32.AttachConsole(Kernel32.ATTACH_PARENT_PROCESS);
+            AttachConsole(ATTACH_PARENT_PROCESS);
 
             Parser.Default
                 .ParseArguments<Options, GuiTestOptions, NetworkUiOptions, TrayDumpOptions, VersionOptions>(args)
@@ -165,19 +170,19 @@ namespace SimpleClassicTheme.Taskbar
             Logger.Instance.Log(LoggerVerbosity.Detailed, "EntryPoint", "Dumping system tray information to traydump.txt");
             FileStream fs = new("traydump.txt", FileMode.Create, FileAccess.ReadWrite);
 
-            IntPtr hWndTray = User32.FindWindow("Shell_TrayWnd", null);
+            IntPtr hWndTray = FindWindow("Shell_TrayWnd", null);
             if (hWndTray != IntPtr.Zero)
             {
-                hWndTray = User32.FindWindowEx(hWndTray, IntPtr.Zero, "TrayNotifyWnd", null);
+                hWndTray = FindWindowEx(hWndTray, IntPtr.Zero, "TrayNotifyWnd", null);
                 if (hWndTray != IntPtr.Zero)
                 {
-                    hWndTray = User32.FindWindowEx(hWndTray, IntPtr.Zero, "SysPager", null);
+                    hWndTray = FindWindowEx(hWndTray, IntPtr.Zero, "SysPager", null);
                     if (hWndTray != IntPtr.Zero)
                     {
-                        hWndTray = User32.FindWindowEx(hWndTray, IntPtr.Zero, "ToolbarWindow32", null);
+                        hWndTray = FindWindowEx(hWndTray, IntPtr.Zero, "ToolbarWindow32", null);
                         if (hWndTray != IntPtr.Zero)
                         {
-                            UnmanagedCodeMigration.TBBUTTONINFO[] buttons = UnmanagedCodeMigration.GetTrayButtons(hWndTray);
+                            TBBUTTONINFO[] buttons = UnmanagedCodeMigration.GetTrayButtons(hWndTray);
                             foreach (var button in buttons)
                             {
                                 string str = "START OF TBBUTTONINFO\n";
@@ -213,7 +218,7 @@ namespace SimpleClassicTheme.Taskbar
 
                 foreach (ProcessThread thread in Process.GetProcessById(processId).Threads)
                 {
-                    User32.EnumThreadWindows(thread.Id, (hWnd, lParam) =>
+                    EnumThreadWindows(thread.Id, (hWnd, lParam) =>
                     {
                         handles.Add(hWnd);
                         return true;
@@ -230,15 +235,15 @@ namespace SimpleClassicTheme.Taskbar
                 foreach (IntPtr handle in handles)
                 {
                     StringBuilder builder = new(1000);
-                    User32.GetClassName(handle, builder, 1000);
+                    GetClassName(handle, builder, 1000);
 
                     if (builder.Length > 0)
                         s = s + builder.ToString() + "\n";
 
-                    IntPtr returnValue = User32.SendMessage(handle, Constants.WM_SCT, new IntPtr(Constants.SCTWP_ISSCT), IntPtr.Zero);
+                    IntPtr returnValue = SendMessage(handle, Constants.WM_SCT, new IntPtr(Constants.SCTWP_ISSCT), IntPtr.Zero);
                     if (returnValue != IntPtr.Zero)
                     {
-                        User32.SendMessage(handle, Constants.WM_SCT, new IntPtr(Constants.SCTWP_EXIT), IntPtr.Zero);
+                        SendMessage(handle, Constants.WM_SCT, new IntPtr(Constants.SCTWP_EXIT), IntPtr.Zero);
                     }
                 }
             });

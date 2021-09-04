@@ -1,7 +1,7 @@
-﻿using Microsoft.Win32;
-
-using SimpleClassicTheme.Common.Logging;
+﻿using SimpleClassicTheme.Common.Logging;
+using SimpleClassicTheme.Common.Native.Controls;
 using SimpleClassicTheme.Common.Performance;
+using SimpleClassicTheme.Common.Providers;
 using SimpleClassicTheme.Taskbar.Helpers;
 using SimpleClassicTheme.Taskbar.Helpers.NativeMethods;
 using SimpleClassicTheme.Taskbar.Localization;
@@ -16,6 +16,11 @@ using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 
+using static SimpleClassicTheme.Taskbar.Native.Headers.ProcessThreadsAPI;
+using static SimpleClassicTheme.Taskbar.Native.Headers.PSAPI;
+using static SimpleClassicTheme.Taskbar.Native.Headers.WinBase;
+using static SimpleClassicTheme.Taskbar.Native.Headers.WinUser;
+
 namespace SimpleClassicTheme.Taskbar
 {
     public partial class Taskbar : Form
@@ -29,6 +34,8 @@ namespace SimpleClassicTheme.Taskbar
         public bool Primary = true;
         public bool selfClose = false;
 
+        private static BaseTaskbarProgram lastActiveButton;
+
         //private Thread BackgroundThread;
         private readonly Screen _screen;
 
@@ -41,7 +48,6 @@ namespace SimpleClassicTheme.Taskbar
         private ShellHook _shellHook;
         private bool dummy;
         private Range taskArea;
-        private int taskIconWidth;
         private bool watchLogic = true;
         private bool watchUI = true;
 
@@ -59,17 +65,6 @@ namespace SimpleClassicTheme.Taskbar
             TopLevel = true;
 
             UpdateHeight();
-
-            //Make sure programs are aware of the new work area
-            if (isPrimary)
-            {
-                var windows = GetTaskbarWindows();
-                foreach (Window w in windows)
-                {
-                    //WM_WININICHANGE - SPI_SETWORKAREA
-                    _ = User32.PostMessage(w.Handle, 0x001A, 0x002F, 0);
-                }
-            }
         }
 
         /// <summary>
@@ -85,7 +80,21 @@ namespace SimpleClassicTheme.Taskbar
             Size = new Size(_screen.Bounds.Width, Config.Default.Renderer.TaskbarHeight);
         }
 
-        public static BaseTaskbarProgram LastActiveButton { get; set; }
+        public static BaseTaskbarProgram LastActiveButton
+        {
+            get => lastActiveButton;
+            set
+            {
+                if (lastActiveButton != null)
+                {
+                    lastActiveButton.ActiveWindow = false;
+                }
+
+                lastActiveButton = value;
+                lastActiveButton.ActiveWindow = true;
+            }
+        }
+
         public static IntPtr LastActiveWindow { get; set; }
         public static IntPtr LastOpenWindow { get; set; }
 
@@ -136,15 +145,6 @@ namespace SimpleClassicTheme.Taskbar
             }
         }
 
-        private void HideExplorerTaskbars()
-        {
-            var enumTrayWindows = GetTrayWindows();
-
-            foreach (Window w in enumTrayWindows)
-                if ((w.WindowInfo.dwStyle & 0x10000000L) > 0)
-                    User32.ShowWindow(w.Handle, 0);
-        }
-
         protected override void OnPaint(PaintEventArgs e)
         {
             Config.Default.Renderer.DrawTaskBar(this, e.Graphics);
@@ -154,11 +154,11 @@ namespace SimpleClassicTheme.Taskbar
         {
             switch (m.Msg)
             {
-                case (int)User32.WM_ENDSESSION:
+                case (int)WM_ENDSESSION:
                     ApplicationEntryPoint.ExitSCTT();
                     break;
 
-                case (int)User32.WM_QUERYENDSESSION:
+                case (int)WM_QUERYENDSESSION:
                     m.Result = new IntPtr(1);
                     break;
 
@@ -193,25 +193,6 @@ namespace SimpleClassicTheme.Taskbar
             base.WndProc(ref m);
         }
 
-        private static _TVSD GetSystemTaskbarData()
-        {
-            using (var key = Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Explorer\StuckRects3"))
-            {
-                var data = (byte[])key.GetValue("Settings", null);
-                return UnmanagedHelpers.GetStruct<_TVSD>(data);
-            }
-        }
-
-        private static bool ShouldShowExit()
-        {
-            if (Config.Default.ExitMenuItemCondition == ExitMenuItemCondition.Always)
-            {
-                return true;
-            }
-
-            // ExitMenuItemCondition.RequireShortcut
-            return ModifierKeys.HasFlag(Keys.Control | Keys.Shift);
-        }
 
         /// <summary>
         /// Adds the taskbar button while respecting grouping.
@@ -264,21 +245,10 @@ namespace SimpleClassicTheme.Taskbar
 
             using var _ = logicTiming.StartRegion("Resize work area");
 
-            var workArea = _screen.Bounds;
-            Rectangle rect;
-            Point desiredLocation;
+            Rectangle workArea = _screen.Bounds;
+            workArea.Height -= Height;
 
-            if (Config.Default.UseExplorerTaskbarPosition)
-            {
-                var tvsd = GetSystemTaskbarData();
-                rect = tvsd.rcLastStuck;
-                desiredLocation = rect.Location;
-            }
-            else
-            {
-                workArea.Height -= Height;
-                desiredLocation = new(workArea.Left, workArea.Bottom);
-            }
+            Point desiredLocation = new(workArea.Left, workArea.Bottom);
 
             if (!_screen.WorkingArea.Equals(workArea))
             {
@@ -289,25 +259,6 @@ namespace SimpleClassicTheme.Taskbar
 
             if (!Location.Equals(desiredLocation))
                 Location = desiredLocation;
-        }
-
-        private ToolStripMenuItem ConstructDebuggingMenu()
-        {
-            var debuggingItem = new ToolStripMenuItem("&Debugging");
-
-            debuggingItem.DropDownItems.Add(new ToolStripMenuItem("Watch UI", null, (_, __) =>
-            {
-                uiTiming.Reset();
-                watchUI = !watchUI;
-            }));
-
-            debuggingItem.DropDownItems.Add(new ToolStripMenuItem("Watch Logic", null, (_, __) =>
-            {
-                logicTiming.Reset();
-                watchLogic = !watchLogic;
-            }));
-
-            return debuggingItem;
         }
 
         private GroupedTaskbarProgram ConstructGroupButton(params SingleTaskbarProgram[] programs)
@@ -322,53 +273,12 @@ namespace SimpleClassicTheme.Taskbar
             return group;
         }
 
-        private ContextMenuStrip ConstructTaskbarContextMenu()
-        {
-            ContextMenuStrip contextMenu = new();
-
-            if (Config.Default.Tweaks.EnableDebugging)
-            {
-                contextMenu.Items.Add(ConstructDebuggingMenu());
-            }
-
-            contextMenu.Items.AddRange(new ToolStripItem[]
-            {
-                new ToolStripMenuItem(WindowsStrings.Toolbars) { Enabled = false },
-                new ToolStripSeparator(),
-                new ToolStripMenuItem(WindowsStrings.CascadeWindows, null, (_, __) => {
-                    User32.CascadeWindows(IntPtr.Zero, User32.MDITILE_ZORDER, IntPtr.Zero, 0, IntPtr.Zero);
-                }),
-                new ToolStripMenuItem(WindowsStrings.TileWindowsHorizontally, null, (_, __) => {
-                    User32.TileWindows(IntPtr.Zero, User32.MDITILE_HORIZONTAL, IntPtr.Zero, 0, IntPtr.Zero);
-                }),
-                new ToolStripMenuItem(WindowsStrings.TileWindowsVertically, null, (_, __) => {
-                    User32.TileWindows(IntPtr.Zero, User32.MDITILE_VERTICAL, IntPtr.Zero, 0, IntPtr.Zero);
-                }),
-                new ToolStripMenuItem(WindowsStrings.ShowDesktop, null, (_, __) => Keyboard.KeyPress(Keys.LWin, Keys.D)),
-                new ToolStripSeparator(),
-                new ToolStripMenuItem(WindowsStrings.TaskManager, null, (_, __) => Process.Start(new ProcessStartInfo("taskmgr") { UseShellExecute = true })),
-                new ToolStripSeparator(),
-                new ToolStripMenuItem(WindowsStrings.LockTaskbar, null, (_, __) => {
-                    Config.Default.IsLocked = !Config.Default.IsLocked;
-                    Config.Default.WriteToRegistry();
-
-                    LayoutUI();
-                    Invalidate();
-                }) { Checked = Config.Default.IsLocked },
-                new ToolStripMenuItem(WindowsStrings.Properties, null, (_, __) => {
-                    new Settings().Show();
-                }),
-                new ToolStripMenuItem("&Exit SCT Taskbar", null, (_, __) => ApplicationEntryPoint.ExitSCTT()) { Available = ShouldShowExit() }
-            });
-
-            return contextMenu;
-        }
-
         private SingleTaskbarProgram CreateTaskbandButton(Window window)
         {
             SingleTaskbarProgram button = new(window)
             {
                 Height = Height,
+                ActiveWindow = false,
             };
 
             button.MouseDown += Taskbar_IconDown;
@@ -397,16 +307,16 @@ namespace SimpleClassicTheme.Taskbar
 
             try
             {
-                if (window.Process.HasExited)
+                if (GetExitCodeProcess(window.ProcessHandle, out var exitCode) && exitCode != STILL_ACTIVE)
                 {
                     return null;
                 }
 
                 return Config.Default.Tweaks.ProgramGroupCheck switch
                 {
-                    ProgramGroupCheck.Process => window.Process.Id.ToString(),
-                    ProgramGroupCheck.FileNameAndPath => Kernel32.GetProcessFileName(window.Process.Id),
-                    ProgramGroupCheck.ModuleName => Kernel32.GetProcessModuleName(window.Process.Id),
+                    ProgramGroupCheck.Process => window.ProcessId.ToString(),
+                    ProgramGroupCheck.FileNameAndPath => GetProcessFileName(window.ProcessHandle),
+                    ProgramGroupCheck.ModuleName => GetProcessModuleName(window.ProcessHandle),
                     _ => throw new NotImplementedException(),
                 };
             }
@@ -417,6 +327,15 @@ namespace SimpleClassicTheme.Taskbar
                 Logger.Instance.Log(LoggerVerbosity.Basic, "Taskbar/Groups", $"Failed to compare taskbar programs: {ex}");
                 return null;
             }
+        }
+
+        private void HideExplorerTaskbars()
+        {
+            var enumTrayWindows = GetTrayWindows();
+
+            foreach (Window w in enumTrayWindows)
+                if ((w.WindowInfo.dwStyle & 0x10000000L) > 0)
+                    ShowWindow(w.Handle, 0);
         }
 
         private bool IsGroupConditionMet(BaseTaskbarProgram a, BaseTaskbarProgram b)
@@ -491,12 +410,11 @@ namespace SimpleClassicTheme.Taskbar
             }
 
             taskArea = new Range(new Index(startX), new Index(maxX));
-            taskIconWidth = iconWidth;
 
             Invalidate(true);
         }
 
-        private void LayoutUI()
+        public void LayoutUI()
         {
             quickLaunch.Location = new Point(startButton.Location.X + startButton.Width + 2, 1);
             LayoutTaskbandButtons();
@@ -585,14 +503,14 @@ namespace SimpleClassicTheme.Taskbar
             if (!selfClose)
             {
                 //If we don't close ourselves, show the shutdown dialog
-                var hWnd = User32.FindWindow("Shell_TrayWnd", "");
+                var hWnd = FindWindow("Shell_TrayWnd", "");
                 Keyboard.KeyPress(hWnd, Keys.Menu, Keys.F4);
                 e.Cancel = true;
             }
             else
             {
                 //Show taskbar
-                _ = User32.ShowWindow(User32.FindWindow("Shell_TrayWnd", ""), 5);
+                _ = ShowWindow(FindWindow("Shell_TrayWnd", ""), 5);
             }
         }
 
@@ -645,6 +563,17 @@ namespace SimpleClassicTheme.Taskbar
         //Initialize stuff
         private void Taskbar_Load(object sender, EventArgs e)
         {
+            //Make sure programs are aware of the new work area
+            if (Primary)
+            {
+                var windows = GetTaskbarWindows();
+                foreach (Window w in windows)
+                {
+                    //WM_WININICHANGE - SPI_SETWORKAREA
+                    _ = PostMessage(w.Handle, 0x001A, 0x002F, 0);
+                }
+            }
+
             //TODO: Add an option to registry tweak classic alt+tab
             quickLaunch.Disabled = (!Primary) || (!Config.Default.EnableQuickLaunch);
             quickLaunch.UpdateIcons();
@@ -657,13 +586,26 @@ namespace SimpleClassicTheme.Taskbar
             else
             {
                 _shellHook = new ShellHook(Handle);
-                _shellHook.WindowActivated += (_, wParam) => UpdateActiveWindow(wParam);
+                _shellHook.WindowActivated += (_, wParam) =>
+                {
+                    if (ShouldIgnoreWindow(new(wParam)))
+                    {
+                        return;
+                    }
+
+                    UpdateActiveWindow(wParam);
+                };
 
                 Provider = new ShellHookWindowProvider(_shellHook);
 
                 var initialWindows = GetTaskbarWindows().Where(w => !ShouldIgnoreWindow(w)).ToArray();
                 foreach (var window in initialWindows)
                 {
+                    if (ShouldIgnoreWindow(window))
+                    {
+                        continue;
+                    }
+
                     AddTaskbarButton(CreateTaskbandButton(window));
                 }
 
@@ -679,18 +621,13 @@ namespace SimpleClassicTheme.Taskbar
 
         private void Taskbar_MouseClick(object sender, MouseEventArgs e)
         {
-            //Open context menu
             if (e.Button == MouseButtons.Right)
             {
-                var contextMenu = ConstructTaskbarContextMenu();
-
-                SystemContextMenu menu = SystemContextMenu.FromToolStripItems(contextMenu.Items);
-
-                Point location = PointToScreen(e.Location);
-                menu.Show(Handle, location.X, location.Y);
-
-                User32.DestroyMenu(contextMenu.Handle);
-                contextMenu.Dispose();
+                using (TaskbarContextMenu contextMenu = new(this))
+                {
+                    Point location = PointToScreen(e.Location);
+                    contextMenu.Show(this, location.X, location.Y);
+                }
             }
             else if (e.Button == MouseButtons.Left && e.Location.X == Width - 1)
             {
@@ -700,9 +637,13 @@ namespace SimpleClassicTheme.Taskbar
 
         private void TimerUpdate_Tick(object sender, EventArgs e)
         {
-            IntPtr foregroundWindow = User32.GetForegroundWindow();
-            UpdateActiveWindow(foregroundWindow);
+            IntPtr foregroundWindow = GetForegroundWindow();
             startButton.UpdateState(new Window(foregroundWindow));
+
+            if (_shellHook == null)
+            {
+                UpdateActiveWindow(foregroundWindow);
+            }
 
             if (Primary)
             {
@@ -733,38 +674,22 @@ namespace SimpleClassicTheme.Taskbar
                 return;
             }
 
-            if (LastActiveButton != null)
-            {
-                LastActiveButton.ActiveWindow = false;
-            }
-
             LastActiveWindow = hWnd;
-            LastActiveButton = Programs.FirstOrDefault(prg => prg.IsWindow(LastActiveWindow));
+            var button = Programs.FirstOrDefault(prg => prg.IsWindow(LastActiveWindow));
 
             // No button found that could be our window, creating new one
-            if (LastActiveButton == null)
+            if (button == null)
             {
                 var newButton = CreateTaskbandButton(new(hWnd));
                 AddTaskbarButton(newButton);
-                LastActiveButton = newButton;
+                button = newButton;
             }
 
-            LastActiveButton.ActiveWindow = true;
+            LastActiveButton = button;
         }
 
         private void UpdateHeight()
         {
-            if (Config.Default.UseExplorerTaskbarPosition)
-            {
-                var tvsd = GetSystemTaskbarData();
-                Height = tvsd.rcLastStuck.Bottom - tvsd.rcLastStuck.Top;
-            }
-            else
-            {
-                //Fix height according to renderers preferences
-                Height = Config.Default.Renderer.TaskbarHeight;
-            }
-
             //Fix height according to renderers preferences
             Height = Config.Default.Renderer.TaskbarHeight;
             startButton.Height = Height;
@@ -774,7 +699,8 @@ namespace SimpleClassicTheme.Taskbar
 
         private void UpdateUI()
         {
-            startButton.UpdateState(new Window(User32.GetForegroundWindow()));
+            var foregroundWindow = GetForegroundWindow();
+            startButton.UpdateState(new Window(foregroundWindow));
 
             if (Primary)
             {
@@ -791,12 +717,112 @@ namespace SimpleClassicTheme.Taskbar
                 }
             }
 
-            var foregroundWindow = User32.GetForegroundWindow();
-            UpdateActiveWindow(foregroundWindow);
+            if (_shellHook == null)
+            {
+                UpdateActiveWindow(foregroundWindow);
+            }
 
             LayoutUI();
 
             Invalidate();
+        }
+    }
+
+    internal class TaskbarContextMenu : SystemPopupMenu
+    {
+        private readonly Taskbar _taskbar;
+
+        public TaskbarContextMenu(Taskbar taskbar)
+        {
+            _taskbar = taskbar;
+
+            SystemPopupMenu contextMenu = new()
+            {
+                new SystemPopupMenuItem() { Text = WindowsStrings.Toolbars, Enabled = false },
+                new SystemPopupMenuSeparator(),
+                new SystemPopupMenuItem(WindowsStrings.CascadeWindows, CascadeWindows_Click) { Enabled = false },
+                new SystemPopupMenuItem(WindowsStrings.TileWindowsHorizontally, TileWindowsHorizontally_Click) { Enabled = false },
+                new SystemPopupMenuItem(WindowsStrings.TileWindowsVertically, TileWindowsVertically_Click) { Enabled = false },
+                new SystemPopupMenuItem(WindowsStrings.ShowDesktop, ShowDesktop_Click),
+                new SystemPopupMenuSeparator(),
+                new SystemPopupMenuItem(WindowsStrings.TaskManager, OpenTaskManager_Click),
+                new SystemPopupMenuSeparator(),
+                new SystemPopupMenuItem(WindowsStrings.LockTaskbar, LockTaskbar_Click) { Checked = Config.Default.IsLocked },
+                new SystemPopupMenuItem(WindowsStrings.Properties, OpenProperties_Click),
+                new SystemPopupMenuItem("&Exit SCT Taskbar", ExitSCTT_Click) { Visible = ShouldShowExit},
+            };
+        }
+
+        private void ExitSCTT_Click(object sender, EventArgs e)
+        {
+            ApplicationEntryPoint.ExitSCTT();
+        }
+
+        private void OpenProperties_Click(object sender, EventArgs e)
+        {
+            new Settings().Show();
+        }
+
+        private void OpenTaskManager_Click(object sender, EventArgs e)
+        {
+            Process.Start(new ProcessStartInfo("taskmgr") { UseShellExecute = true });
+        }
+
+        private void CascadeWindows_Click(object sender, EventArgs e)
+        {
+            CascadeWindows(
+                IntPtr.Zero,
+                MDITILE_ZORDER,
+                IntPtr.Zero,
+                0,
+                IntPtr.Zero);
+        }
+
+        private void TileWindowsHorizontally_Click(object sender, EventArgs e)
+        {
+            TileWindows(
+                IntPtr.Zero,
+                MDITILE_HORIZONTAL,
+                IntPtr.Zero,
+                0,
+                IntPtr.Zero);
+        }
+
+        private void TileWindowsVertically_Click(object sender, EventArgs e)
+        {
+            TileWindows(
+                IntPtr.Zero,
+                MDITILE_VERTICAL,
+                IntPtr.Zero,
+                0,
+                IntPtr.Zero);
+        }
+
+        private void LockTaskbar_Click(object sender, EventArgs e)
+        {
+            Config.Default.IsLocked = !Config.Default.IsLocked;
+            Config.Default.WriteToRegistry();
+
+            _taskbar.LayoutUI();
+            _taskbar.Invalidate();
+        }
+
+        private void ShowDesktop_Click(object sender, EventArgs e)
+        {
+            Keyboard.KeyPress(Keys.LWin, Keys.D);
+        }
+
+        private static bool ShouldShowExit
+        {
+            get
+            {
+                if (Config.Default.ExitMenuItemCondition == ExitMenuItemCondition.Always)
+                {
+                    return true;
+                }
+
+                return Control.ModifierKeys.HasFlag(Keys.Control | Keys.Shift);
+            }
         }
     }
 }

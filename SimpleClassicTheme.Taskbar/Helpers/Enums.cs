@@ -29,4 +29,17 @@ namespace SimpleClassicTheme.Taskbar.Helpers
         CustomIcon = 1,
         CustomButton = 2
     }
+
+    public enum GroupAppearance
+    {
+        /// <summary>
+        /// Uses SCT's initial group appearance.
+        /// </summary>
+        Default,
+
+        /// <summary>
+        /// Appearance used by Windows XP and onwards.
+        /// </summary>
+        WindowsXP,
+    }
 }

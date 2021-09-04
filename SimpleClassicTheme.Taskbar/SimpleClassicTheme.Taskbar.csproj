@@ -27,6 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Craftplacer.Windows.VisualStyles\Craftplacer.Windows.VisualStyles\Craftplacer.Windows.VisualStyles.csproj" />
     <ProjectReference Include="..\..\SimpleClassicTheme.Common\SimpleClassicTheme.Common\SimpleClassicTheme.Common.csproj" />
   </ItemGroup>
 

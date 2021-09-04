@@ -1,18 +1,8 @@
 ﻿using SimpleClassicTheme.Taskbar.Helpers;
-using SimpleClassicTheme.Taskbar.Helpers.NativeMethods;
 
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-
-using static SimpleClassicTheme.Taskbar.Helpers.NativeMethods.WinDef;
 
 namespace SimpleClassicTheme.Taskbar
 {
@@ -53,7 +43,8 @@ namespace SimpleClassicTheme.Taskbar
             //Size = new Size(Config.Default.TaskbarProgramWidth + 8, ((parent.ProgramWindows.Count - 1) * 24) + 6);
             Size = Config.Default.Renderer.GetTaskButtonGroupWindowSize(parent.ProgramWindows.Count);
             Location = new Point(buttonScreenCoordinates.X + (parent.Width / 2) - (Width / 2), buttonScreenCoordinates.Y - Height);
-            for (int i = 1; i < parent.ProgramWindows.Count; i++)
+            int i = Config.Default.GroupAppearance == GroupAppearance.Default ? 1 : 0;
+            for (; i < parent.ProgramWindows.Count; i++)
             {
                 SingleTaskbarProgram program = parent.ProgramWindows[i];
                 program.Parent = this;
@@ -82,7 +73,7 @@ namespace SimpleClassicTheme.Taskbar
             // Rectangle newRect = ClientRectangle;
             // RECT rect = newRect;
             // uint buttonStyle = DFCS_BUTTONPUSH;
-            // _ = User32.DrawFrameControl(e.Graphics.GetHdc(), ref rect, DFC_BUTTON, buttonStyle);
+            // _ = DrawFrameControl(e.Graphics.GetHdc(), ref rect, DFC_BUTTON, buttonStyle);
             // e.Graphics.ReleaseHdc();
             // e.Graphics.ResetTransform();
         }

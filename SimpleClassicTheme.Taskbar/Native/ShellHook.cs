@@ -1,9 +1,10 @@
 ﻿using SimpleClassicTheme.Common.Logging;
-using SimpleClassicTheme.Taskbar.Helpers.NativeMethods;
 
 using System;
 using System.ComponentModel;
 using System.Runtime.InteropServices;
+
+using static SimpleClassicTheme.Taskbar.Native.Headers.WinUser;
 
 namespace SimpleClassicTheme.Taskbar.Native
 {
@@ -38,17 +39,17 @@ namespace SimpleClassicTheme.Taskbar.Native
 
         public ShellHook(IntPtr hWnd)
         {
-            //hookProcedure = new User32.WindowsHookProcedure(HookProcedure);
-            //if (User32.SetWindowsHookEx(User32.ShellHookId.WH_SHELL, hookProcedure, Marshal.GetHINSTANCE(typeof(Taskbar).Module), /*Kernel32.GetCurrentThreadId()*/0) == IntPtr.Zero)
+            //hookProcedure = new WindowsHookProcedure(HookProcedure);
+            //if (SetWindowsHookEx(ShellHookId.WH_SHELL, hookProcedure, Marshal.GetHINSTANCE(typeof(Taskbar).Module), /*GetCurrentThreadId()*/0) == IntPtr.Zero)
             
-            if (!User32.RegisterShellHookWindow(hWnd))
+            if (!RegisterShellHookWindow(hWnd))
             {
                 int errorCode = Marshal.GetLastWin32Error();
                 Logger.Instance.Log(LoggerVerbosity.Basic, "ShellHook", $"Failed to create Shell Hook. ({errorCode:X8})");
                 throw new Win32Exception(errorCode);
             }
 
-            WindowMessage = User32.RegisterWindowMessage("SHELLHOOK");
+            WindowMessage = RegisterWindowMessage("SHELLHOOK");
 
             if (WindowMessage == 0)
             {
@@ -60,7 +61,7 @@ namespace SimpleClassicTheme.Taskbar.Native
 
         public IntPtr HandleWindowMessage(IntPtr wParam, IntPtr lParam)
         {
-            var shellEvent = (User32.ShellEvents)wParam;
+            var shellEvent = (ShellEvents)wParam;
             wParam = lParam;
             lParam = IntPtr.Zero;
 
@@ -71,30 +72,30 @@ namespace SimpleClassicTheme.Taskbar.Native
                 HandleShellEvent(shellEvent, wParam, lParam);
             }
 
-            return User32.CallNextHookEx(IntPtr.Zero, shellEvent, wParam, lParam);
+            return CallNextHookEx(IntPtr.Zero, shellEvent, wParam, lParam);
         }
 
-        private void HandleShellEvent(User32.ShellEvents shellEvent, IntPtr wParam, IntPtr lParam)
+        private void HandleShellEvent(ShellEvents shellEvent, IntPtr wParam, IntPtr lParam)
         {
             switch (shellEvent)
             {
-                case User32.ShellEvents.HSHELL_WINDOWCREATED:
+                case ShellEvents.HSHELL_WINDOWCREATED:
                     WindowCreated?.Invoke(this, wParam);
                     break;
 
-                case User32.ShellEvents.HSHELL_WINDOWACTIVATED:
+                case ShellEvents.HSHELL_WINDOWACTIVATED:
                     WindowActivated?.Invoke(this, wParam);
                     break;
 
-                case User32.ShellEvents.HSHELL_WINDOWDESTROYED:
+                case ShellEvents.HSHELL_WINDOWDESTROYED:
                     WindowDestroyed?.Invoke(this, wParam);
                     break;
 
-                case User32.ShellEvents.HSHELL_REDRAW:
+                case ShellEvents.HSHELL_REDRAW:
                     WindowRedrawn?.Invoke(this, wParam);
                     break;
 
-                case User32.ShellEvents.HSHELL_WINDOWREPLACED:
+                case ShellEvents.HSHELL_WINDOWREPLACED:
                     WindowReplaced?.Invoke(this, wParam);
                     break;
 

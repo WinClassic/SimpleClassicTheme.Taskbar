@@ -41,15 +41,12 @@
             this.languageComboBox = new System.Windows.Forms.ComboBox();
             this.languageLabel = new System.Windows.Forms.Label();
             this.tabThemes = new System.Windows.Forms.TabPage();
-            this.tabControl1 = new System.Windows.Forms.TabControl();
+            this.rendererSettingsTabControl = new System.Windows.Forms.TabControl();
             this.visualStyleTab = new System.Windows.Forms.TabPage();
+            this.visualStyleSelector = new SimpleClassicTheme.Taskbar.UI.VisualStyleSelector();
             this.sizeComboBox = new System.Windows.Forms.ComboBox();
-            this.label3 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.manageStylesButton = new System.Windows.Forms.Button();
-            this.colorSchemeComboBox = new System.Windows.Forms.ComboBox();
-            this.visualStyleComboBox = new System.Windows.Forms.ComboBox();
-            this.label4 = new System.Windows.Forms.Label();
             this.themeComboBox = new System.Windows.Forms.ComboBox();
             this.themeLabel = new System.Windows.Forms.Label();
             this.tabStartButton = new System.Windows.Forms.TabPage();
@@ -64,6 +61,7 @@
             this.quickLaunchLinkLabel = new System.Windows.Forms.Label();
             this.enableQuickLaunchCheckBox = new System.Windows.Forms.CheckBox();
             this.tabTaskView = new System.Windows.Forms.TabPage();
+            this.groupAppearanceComboBox = new System.Windows.Forms.ComboBox();
             this.manageHiddenElementsButton = new System.Windows.Forms.Button();
             this.enableGroupingCheckBox = new System.Windows.Forms.CheckBox();
             this.tabSystemTray = new System.Windows.Forms.TabPage();
@@ -91,10 +89,11 @@
             this.customIconFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.contentSplitContainer = new System.Windows.Forms.SplitContainer();
             this.customThemeFolderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
+            this.groupAppearanceLabel = new System.Windows.Forms.Label();
             this.tabControl.SuspendLayout();
             this.tabGeneral.SuspendLayout();
             this.tabThemes.SuspendLayout();
-            this.tabControl1.SuspendLayout();
+            this.rendererSettingsTabControl.SuspendLayout();
             this.visualStyleTab.SuspendLayout();
             this.tabStartButton.SuspendLayout();
             this.tabQuickLaunch.SuspendLayout();
@@ -211,9 +210,9 @@
             this.exitItemComboBox.Items.AddRange(new object[] {
             "Always",
             "When pressing Ctrl+Shift"});
-            this.exitItemComboBox.Location = new System.Drawing.Point(192, 40);
+            this.exitItemComboBox.Location = new System.Drawing.Point(184, 40);
             this.exitItemComboBox.Name = "exitItemComboBox";
-            this.exitItemComboBox.Size = new System.Drawing.Size(176, 21);
+            this.exitItemComboBox.Size = new System.Drawing.Size(184, 21);
             this.exitItemComboBox.TabIndex = 5;
             // 
             // languageComboBox
@@ -223,9 +222,9 @@
             this.languageComboBox.Items.AddRange(new object[] {
             "en-US",
             "nl-NL"});
-            this.languageComboBox.Location = new System.Drawing.Point(192, 8);
+            this.languageComboBox.Location = new System.Drawing.Point(184, 8);
             this.languageComboBox.Name = "languageComboBox";
-            this.languageComboBox.Size = new System.Drawing.Size(176, 21);
+            this.languageComboBox.Size = new System.Drawing.Size(184, 21);
             this.languageComboBox.TabIndex = 1;
             // 
             // languageLabel
@@ -239,7 +238,7 @@
             // 
             // tabThemes
             // 
-            this.tabThemes.Controls.Add(this.tabControl1);
+            this.tabThemes.Controls.Add(this.rendererSettingsTabControl);
             this.tabThemes.Controls.Add(this.themeComboBox);
             this.tabThemes.Controls.Add(this.themeLabel);
             this.tabThemes.Location = new System.Drawing.Point(4, 40);
@@ -249,57 +248,56 @@
             this.tabThemes.Text = "Themes";
             this.tabThemes.UseVisualStyleBackColor = true;
             // 
-            // tabControl1
+            // rendererSettingsTabControl
             // 
-            this.tabControl1.Appearance = System.Windows.Forms.TabAppearance.Buttons;
-            this.tabControl1.Controls.Add(this.visualStyleTab);
-            this.tabControl1.Location = new System.Drawing.Point(4, 40);
-            this.tabControl1.Name = "tabControl1";
-            this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(370, 208);
-            this.tabControl1.SizeMode = System.Windows.Forms.TabSizeMode.FillToRight;
-            this.tabControl1.TabIndex = 7;
+            this.rendererSettingsTabControl.Appearance = System.Windows.Forms.TabAppearance.Buttons;
+            this.rendererSettingsTabControl.Controls.Add(this.visualStyleTab);
+            this.rendererSettingsTabControl.Location = new System.Drawing.Point(4, 40);
+            this.rendererSettingsTabControl.Name = "rendererSettingsTabControl";
+            this.rendererSettingsTabControl.SelectedIndex = 0;
+            this.rendererSettingsTabControl.Size = new System.Drawing.Size(370, 245);
+            this.rendererSettingsTabControl.TabIndex = 7;
             // 
             // visualStyleTab
             // 
+            this.visualStyleTab.BackColor = System.Drawing.Color.Transparent;
+            this.visualStyleTab.Controls.Add(this.visualStyleSelector);
             this.visualStyleTab.Controls.Add(this.sizeComboBox);
-            this.visualStyleTab.Controls.Add(this.label3);
             this.visualStyleTab.Controls.Add(this.label6);
             this.visualStyleTab.Controls.Add(this.manageStylesButton);
-            this.visualStyleTab.Controls.Add(this.colorSchemeComboBox);
-            this.visualStyleTab.Controls.Add(this.visualStyleComboBox);
-            this.visualStyleTab.Controls.Add(this.label4);
             this.visualStyleTab.Location = new System.Drawing.Point(4, 25);
             this.visualStyleTab.Name = "visualStyleTab";
             this.visualStyleTab.Padding = new System.Windows.Forms.Padding(7);
-            this.visualStyleTab.Size = new System.Drawing.Size(362, 179);
+            this.visualStyleTab.Size = new System.Drawing.Size(362, 216);
             this.visualStyleTab.TabIndex = 0;
             this.visualStyleTab.Text = "Visual Style Settings";
             this.visualStyleTab.UseVisualStyleBackColor = true;
+            // 
+            // visualStyleSelector
+            // 
+            this.visualStyleSelector.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable;
+            this.visualStyleSelector.FormattingEnabled = true;
+            this.visualStyleSelector.IntegralHeight = false;
+            this.visualStyleSelector.Location = new System.Drawing.Point(0, 0);
+            this.visualStyleSelector.Name = "visualStyleSelector";
+            this.visualStyleSelector.ScrollAlwaysVisible = true;
+            this.visualStyleSelector.Size = new System.Drawing.Size(360, 152);
+            this.visualStyleSelector.TabIndex = 13;
+            this.visualStyleSelector.SelectedIndexChanged += new System.EventHandler(this.VisualStyleSelector_SelectedIndexChanged);
             // 
             // sizeComboBox
             // 
             this.sizeComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.sizeComboBox.FormattingEnabled = true;
-            this.sizeComboBox.Location = new System.Drawing.Point(176, 72);
+            this.sizeComboBox.Location = new System.Drawing.Point(184, 160);
             this.sizeComboBox.Name = "sizeComboBox";
-            this.sizeComboBox.Size = new System.Drawing.Size(184, 21);
+            this.sizeComboBox.Size = new System.Drawing.Size(176, 21);
             this.sizeComboBox.TabIndex = 12;
-            // 
-            // label3
-            // 
-            this.label3.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.label3.Location = new System.Drawing.Point(0, 8);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(176, 16);
-            this.label3.TabIndex = 7;
-            this.label3.Text = "Visual style:";
-            this.label3.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
             // 
             // label6
             // 
             this.label6.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.label6.Location = new System.Drawing.Point(0, 73);
+            this.label6.Location = new System.Drawing.Point(0, 160);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(176, 16);
             this.label6.TabIndex = 11;
@@ -308,42 +306,13 @@
             // 
             // manageStylesButton
             // 
-            this.manageStylesButton.Location = new System.Drawing.Point(176, 103);
+            this.manageStylesButton.Location = new System.Drawing.Point(184, 192);
             this.manageStylesButton.Name = "manageStylesButton";
-            this.manageStylesButton.Size = new System.Drawing.Size(184, 23);
+            this.manageStylesButton.Size = new System.Drawing.Size(176, 23);
             this.manageStylesButton.TabIndex = 0;
             this.manageStylesButton.Text = "&Manage installed styles";
             this.manageStylesButton.UseVisualStyleBackColor = true;
-            this.manageStylesButton.Click += new System.EventHandler(this.manageStylesButton_Click);
-            // 
-            // colorSchemeComboBox
-            // 
-            this.colorSchemeComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.colorSchemeComboBox.FormattingEnabled = true;
-            this.colorSchemeComboBox.Location = new System.Drawing.Point(176, 40);
-            this.colorSchemeComboBox.Name = "colorSchemeComboBox";
-            this.colorSchemeComboBox.Size = new System.Drawing.Size(184, 21);
-            this.colorSchemeComboBox.TabIndex = 10;
-            // 
-            // visualStyleComboBox
-            // 
-            this.visualStyleComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.visualStyleComboBox.FormattingEnabled = true;
-            this.visualStyleComboBox.Location = new System.Drawing.Point(176, 8);
-            this.visualStyleComboBox.Name = "visualStyleComboBox";
-            this.visualStyleComboBox.Size = new System.Drawing.Size(184, 21);
-            this.visualStyleComboBox.TabIndex = 8;
-            this.visualStyleComboBox.SelectedIndexChanged += new System.EventHandler(this.visualStyleComboBox_SelectedIndexChanged);
-            // 
-            // label4
-            // 
-            this.label4.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.label4.Location = new System.Drawing.Point(0, 40);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(176, 16);
-            this.label4.TabIndex = 9;
-            this.label4.Text = "Color scheme:";
-            this.label4.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+            this.manageStylesButton.Click += new System.EventHandler(this.ManageStylesButton_Click);
             // 
             // themeComboBox
             // 
@@ -353,9 +322,9 @@
             "Classic",
             "Visual Style",
             "Custom..."});
-            this.themeComboBox.Location = new System.Drawing.Point(184, 8);
+            this.themeComboBox.Location = new System.Drawing.Point(192, 8);
             this.themeComboBox.Name = "themeComboBox";
-            this.themeComboBox.Size = new System.Drawing.Size(184, 21);
+            this.themeComboBox.Size = new System.Drawing.Size(176, 21);
             this.themeComboBox.TabIndex = 5;
             this.themeComboBox.SelectedIndexChanged += new System.EventHandler(this.ThemeComboBox_SelectedIndexChanged);
             // 
@@ -498,6 +467,8 @@
             // 
             // tabTaskView
             // 
+            this.tabTaskView.Controls.Add(this.groupAppearanceLabel);
+            this.tabTaskView.Controls.Add(this.groupAppearanceComboBox);
             this.tabTaskView.Controls.Add(this.manageHiddenElementsButton);
             this.tabTaskView.Controls.Add(this.enableGroupingCheckBox);
             this.tabTaskView.Location = new System.Drawing.Point(4, 40);
@@ -508,11 +479,23 @@
             this.tabTaskView.Text = "Task View";
             this.tabTaskView.UseVisualStyleBackColor = true;
             // 
+            // groupAppearanceComboBox
+            // 
+            this.groupAppearanceComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.groupAppearanceComboBox.FormattingEnabled = true;
+            this.groupAppearanceComboBox.Items.AddRange(new object[] {
+            "Default",
+            "Windows XP"});
+            this.groupAppearanceComboBox.Location = new System.Drawing.Point(184, 32);
+            this.groupAppearanceComboBox.Name = "groupAppearanceComboBox";
+            this.groupAppearanceComboBox.Size = new System.Drawing.Size(184, 21);
+            this.groupAppearanceComboBox.TabIndex = 40;
+            // 
             // manageHiddenElementsButton
             // 
-            this.manageHiddenElementsButton.Location = new System.Drawing.Point(8, 32);
+            this.manageHiddenElementsButton.Location = new System.Drawing.Point(184, 64);
             this.manageHiddenElementsButton.Name = "manageHiddenElementsButton";
-            this.manageHiddenElementsButton.Size = new System.Drawing.Size(165, 23);
+            this.manageHiddenElementsButton.Size = new System.Drawing.Size(184, 23);
             this.manageHiddenElementsButton.TabIndex = 39;
             this.manageHiddenElementsButton.Text = "Manage hidden elements...";
             this.manageHiddenElementsButton.UseVisualStyleBackColor = true;
@@ -523,10 +506,10 @@
             this.enableGroupingCheckBox.ImeMode = System.Windows.Forms.ImeMode.NoControl;
             this.enableGroupingCheckBox.Location = new System.Drawing.Point(8, 8);
             this.enableGroupingCheckBox.Name = "enableGroupingCheckBox";
-            this.enableGroupingCheckBox.Size = new System.Drawing.Size(360, 16);
+            this.enableGroupingCheckBox.Size = new System.Drawing.Size(360, 24);
             this.enableGroupingCheckBox.TabIndex = 38;
             this.enableGroupingCheckBox.Text = "Enable grouping";
-            this.enableGroupingCheckBox.UseVisualStyleBackColor = false;
+            this.enableGroupingCheckBox.CheckedChanged += new System.EventHandler(this.EnableGroupingCheckBox_CheckedChanged);
             // 
             // tabSystemTray
             // 
@@ -543,7 +526,7 @@
             // 
             this.enableSysTrayColorChange.AutoSize = true;
             this.enableSysTrayColorChange.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.enableSysTrayColorChange.Location = new System.Drawing.Point(8, 31);
+            this.enableSysTrayColorChange.Location = new System.Drawing.Point(8, 32);
             this.enableSysTrayColorChange.Name = "enableSysTrayColorChange";
             this.enableSysTrayColorChange.Size = new System.Drawing.Size(195, 17);
             this.enableSysTrayColorChange.TabIndex = 31;
@@ -580,7 +563,7 @@
             this.tweaksPropertyGrid.Size = new System.Drawing.Size(376, 263);
             this.tweaksPropertyGrid.TabIndex = 0;
             this.tweaksPropertyGrid.ToolbarVisible = false;
-            this.tweaksPropertyGrid.PropertyValueChanged += new System.Windows.Forms.PropertyValueChangedEventHandler(this.tweaksPropertyGrid_PropertyValueChanged);
+            this.tweaksPropertyGrid.PropertyValueChanged += new System.Windows.Forms.PropertyValueChangedEventHandler(this.TweaksPropertyGrid_PropertyValueChanged);
             this.tweaksPropertyGrid.SelectedGridItemChanged += new System.Windows.Forms.SelectedGridItemChangedEventHandler(this.TweaksPropertyGrid_SelectedGridItemChanged);
             // 
             // tweaksToolStrip
@@ -806,6 +789,15 @@
             this.customThemeFolderBrowserDialog.Description = "Please select the theme directory";
             this.customThemeFolderBrowserDialog.UseDescriptionForTitle = true;
             // 
+            // groupAppearanceLabel
+            // 
+            this.groupAppearanceLabel.Location = new System.Drawing.Point(24, 32);
+            this.groupAppearanceLabel.Name = "groupAppearanceLabel";
+            this.groupAppearanceLabel.Size = new System.Drawing.Size(160, 16);
+            this.groupAppearanceLabel.TabIndex = 41;
+            this.groupAppearanceLabel.Text = "Grouping appearance:";
+            this.groupAppearanceLabel.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+            // 
             // Settings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -828,7 +820,7 @@
             this.tabControl.ResumeLayout(false);
             this.tabGeneral.ResumeLayout(false);
             this.tabThemes.ResumeLayout(false);
-            this.tabControl1.ResumeLayout(false);
+            this.rendererSettingsTabControl.ResumeLayout(false);
             this.visualStyleTab.ResumeLayout(false);
             this.tabStartButton.ResumeLayout(false);
             this.tabStartButton.PerformLayout();
@@ -898,11 +890,7 @@
         private System.Windows.Forms.TabPage tabThemes;
         private System.Windows.Forms.ComboBox sizeComboBox;
         private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.ComboBox colorSchemeComboBox;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.ComboBox visualStyleComboBox;
         private System.Windows.Forms.Button manageStylesButton;
-        private System.Windows.Forms.Label label3;
         private System.Windows.Forms.ComboBox themeComboBox;
         private System.Windows.Forms.Label themeLabel;
         private System.Windows.Forms.TabPage tabTweaks;
@@ -912,10 +900,13 @@
         private System.Windows.Forms.ToolStripButton tweakResetButton;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripButton showDescriptionButton;
-        private System.Windows.Forms.TabControl tabControl1;
+        private System.Windows.Forms.TabControl rendererSettingsTabControl;
         private System.Windows.Forms.TabPage visualStyleTab;
         private System.Windows.Forms.CheckBox enableGroupingCheckBox;
         private System.Windows.Forms.Button manageHiddenElementsButton;
         private System.Windows.Forms.FolderBrowserDialog customThemeFolderBrowserDialog;
+        private System.Windows.Forms.ComboBox groupAppearanceComboBox;
+        private UI.VisualStyleSelector visualStyleSelector;
+        private System.Windows.Forms.Label groupAppearanceLabel;
     }
 }

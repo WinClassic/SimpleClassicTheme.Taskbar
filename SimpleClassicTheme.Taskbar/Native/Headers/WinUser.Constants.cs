@@ -1,12 +1,27 @@
-﻿namespace SimpleClassicTheme.Taskbar.Helpers.NativeMethods
+﻿namespace SimpleClassicTheme.Taskbar.Native.Headers
 {
-    internal static partial class User32
+    internal static partial class WinUser
     {
+        internal const int CW_USEDEFAULT = unchecked((int)0x80000000);
+        internal const int GCL_HICON = -14;
+        internal const int GCL_HICONSM = -34;
+        internal const int HWND_BROADCAST = 0xFFFF;
+        internal const int SW_HIDE = 0;
+        internal const int SW_MINIMIZE = 6;
+        internal const int SW_SHOW = 5;
+        internal const int SW_SHOWMAXIMIZED = 3;
+        internal const int SW_SHOWMINIMIZED = 2;
+        internal const int SW_SHOWNORMAL = 1;
+        internal const int WS_EX_TOOLWINDOW = 0x00000080;
+        internal const int WS_EX_TOPMOST = 0x00000008;
+        internal const int WS_OVERLAPPEDWINDOW = 0x00CF0000;
+        internal const int WS_POPUP = CW_USEDEFAULT;
         internal const uint DFC_BUTTON = 4;
         internal const uint DFCS_BUTTONPUSH = 0x10;
         internal const uint DFCS_PUSHED = 512;
-        internal const int GCL_HICON = -14;
-        internal const int GCL_HICONSM = -34;
+        internal const uint GA_PARENT = 1;
+        internal const uint GA_ROOT = 2;
+        internal const uint GA_ROOTOWNER = 3;
         internal const uint ICON_BIG = 1;
         internal const uint ICON_SMALL = 0;
         internal const uint ICON_SMALL2 = 2;
@@ -33,12 +48,6 @@
         internal const uint SPIF_SENDCHANGE = 0x02;
         internal const uint SPIF_SENDWININICHANGE = SPIF_UPDATEINIFILE | SPIF_SENDCHANGE;
         internal const uint SPIF_UPDATEINIFILE = 0x01;
-        internal const int SW_HIDE = 0;
-        internal const int SW_SHOWNORMAL = 1;
-        internal const int SW_SHOWMINIMIZED = 2;
-        internal const int SW_SHOWMAXIMIZED = 3;
-        internal const int SW_SHOW = 5;
-        internal const int SW_MINIMIZE = 6;
         internal const uint TB_BUTTONCOUNT = 0x0418;
         internal const uint TB_GETBUTTON = 0x0417;
         internal const uint TBSTATE_HIDDEN = 0x0008;
@@ -71,8 +80,5 @@
         internal const uint WM_RBUTTONDOWN = 0x0204;
         internal const uint WM_RBUTTONUP = 0x0205;
         internal const uint WM_SYSCOMMAND = 0x0112;
-        internal const uint GA_PARENT = 1;
-        internal const uint GA_ROOT = 2;
-        internal const uint GA_ROOTOWNER = 3;
     }
 }

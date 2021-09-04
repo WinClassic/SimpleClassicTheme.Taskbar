@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-using System.Runtime.InteropServices;
 using System.Drawing.Drawing2D;
-using SimpleClassicTheme.Taskbar.Helpers.NativeMethods;
-using static SimpleClassicTheme.Taskbar.Helpers.NativeMethods.WinDef;
+using System.Windows.Forms;
+
+using static SimpleClassicTheme.Taskbar.Native.Headers.WinDef;
+using static SimpleClassicTheme.Taskbar.Native.Headers.WinUser;
 
 namespace SimpleClassicTheme.Taskbar.UIElements.Misc
 {
@@ -63,7 +58,7 @@ namespace SimpleClassicTheme.Taskbar.UIElements.Misc
                 {
                     RECT rect = ClientRectangle;
                     uint buttonStyle = style == Border3DStyle.Raised ? DFCS_BUTTONPUSH : DFCS_BUTTONPUSH | DFCS_PUSHED;
-                    _ = User32.DrawFrameControl(e.Graphics.GetHdc(), ref rect, DFC_BUTTON, buttonStyle);
+                    _ = DrawFrameControl(e.Graphics.GetHdc(), ref rect, DFC_BUTTON, buttonStyle);
                     e.Graphics.ReleaseHdc();
                 }
                 else
