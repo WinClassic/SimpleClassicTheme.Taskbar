@@ -735,22 +735,19 @@ namespace SimpleClassicTheme.Taskbar
         public TaskbarContextMenu(Taskbar taskbar)
         {
             _taskbar = taskbar;
-
-            SystemPopupMenu contextMenu = new()
-            {
-                new SystemPopupMenuItem() { Text = WindowsStrings.Toolbars, Enabled = false },
-                new SystemPopupMenuSeparator(),
-                new SystemPopupMenuItem(WindowsStrings.CascadeWindows, CascadeWindows_Click) { Enabled = false },
-                new SystemPopupMenuItem(WindowsStrings.TileWindowsHorizontally, TileWindowsHorizontally_Click) { Enabled = false },
-                new SystemPopupMenuItem(WindowsStrings.TileWindowsVertically, TileWindowsVertically_Click) { Enabled = false },
-                new SystemPopupMenuItem(WindowsStrings.ShowDesktop, ShowDesktop_Click),
-                new SystemPopupMenuSeparator(),
-                new SystemPopupMenuItem(WindowsStrings.TaskManager, OpenTaskManager_Click),
-                new SystemPopupMenuSeparator(),
-                new SystemPopupMenuItem(WindowsStrings.LockTaskbar, LockTaskbar_Click) { Checked = Config.Default.IsLocked },
-                new SystemPopupMenuItem(WindowsStrings.Properties, OpenProperties_Click),
-                new SystemPopupMenuItem("&Exit SCT Taskbar", ExitSCTT_Click) { Visible = ShouldShowExit},
-            };
+            
+            Add(new SystemPopupMenuItem() { Text = WindowsStrings.Toolbars, Enabled = false });
+            Add(new SystemPopupMenuSeparator());
+            Add(new SystemPopupMenuItem(WindowsStrings.CascadeWindows, CascadeWindows_Click));
+            Add(new SystemPopupMenuItem(WindowsStrings.TileWindowsHorizontally, TileWindowsHorizontally_Click));
+            Add(new SystemPopupMenuItem(WindowsStrings.TileWindowsVertically, TileWindowsVertically_Click));
+            Add(new SystemPopupMenuItem(WindowsStrings.ShowDesktop, ShowDesktop_Click));
+            Add(new SystemPopupMenuSeparator());
+            Add(new SystemPopupMenuItem(WindowsStrings.TaskManager, OpenTaskManager_Click));
+            Add(new SystemPopupMenuSeparator());
+            Add(new SystemPopupMenuItem(WindowsStrings.LockTaskbar, LockTaskbar_Click) { Checked = Config.Default.IsLocked });
+            Add(new SystemPopupMenuItem(WindowsStrings.Properties, OpenProperties_Click));
+            Add(new SystemPopupMenuItem("&Exit SCT Taskbar", ExitSCTT_Click) { Visible = ShouldShowExit});
         }
 
         private void ExitSCTT_Click(object sender, EventArgs e)
