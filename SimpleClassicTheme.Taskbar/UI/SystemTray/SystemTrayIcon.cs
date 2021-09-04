@@ -99,9 +99,6 @@ namespace SimpleClassicTheme.Taskbar.UIElements.SystemTray
 
 		private void SystemTrayIcon_MouseDoubleClick(object sender, MouseEventArgs e)
 		{
-            const uint WM_LBUTTONDBLCLICK = 0x0203;
-            const uint WM_RBUTTONDBLCLICK = 0x0206;
-
             if (NotificationData.Flags.HasFlag(SystemTrayNotificationFlags.CallbackMessageValid))
                 SendNotifyMessage(Handle, CallbackMessage, Id, (e.Button == MouseButtons.Left) ? WM_LBUTTONDBLCLICK : WM_RBUTTONDBLCLICK, NotificationData.Version);
         }
@@ -114,25 +111,18 @@ namespace SimpleClassicTheme.Taskbar.UIElements.SystemTray
 
         private void SystemTrayIcon_MouseLeave(object sender, EventArgs e)
 		{
-            const uint WM_MOUSELEAVE = 0x0200;
-
             if (NotificationData.Flags.HasFlag(SystemTrayNotificationFlags.CallbackMessageValid))
                 SendNotifyMessage(Handle, CallbackMessage, Id, WM_MOUSELEAVE, NotificationData.Version);
         }
 
 		private void SystemTrayIcon_MouseEnter(object sender, EventArgs e)
 		{
-            const uint WM_MOUSEMOVE = 0x0200;
-
             if (NotificationData.Flags.HasFlag(SystemTrayNotificationFlags.CallbackMessageValid))
                 SendNotifyMessage(Handle, CallbackMessage, Id, WM_MOUSEMOVE, NotificationData.Version);
         }
 
 		private void SystemTrayIcon_MouseUp(object sender, MouseEventArgs e)
         {
-            const uint WM_LBUTTONUP = 0x0202;
-            const uint WM_RBUTTONUP = 0x0205;
-
             if (IsMoving)
             {
                 IsMoving = false;
@@ -145,18 +135,12 @@ namespace SimpleClassicTheme.Taskbar.UIElements.SystemTray
 
 		private void SystemTrayIcon_MouseDown(object sender, MouseEventArgs e)
         {
-            const uint WM_LBUTTONDOWN = 0x0201;
-            const uint WM_RBUTTONDOWN = 0x0204;
-
             if (NotificationData.Flags.HasFlag(SystemTrayNotificationFlags.CallbackMessageValid))
                 SendNotifyMessage(Handle, CallbackMessage, Id, (e.Button == MouseButtons.Left) ? WM_LBUTTONDOWN : WM_RBUTTONDOWN, NotificationData.Version);
         }
 
         private void SystemTrayIcon_MouseClick(object sender, MouseEventArgs e)
         {
-            const uint NIN_SELECT = 0x0400;
-            const uint WM_CONTEXTMENU = 0x007B;
-
             if (NotificationData.Flags.HasFlag(SystemTrayNotificationFlags.CallbackMessageValid) && NotificationData.Version >= 3)
                 SendNotifyMessage(Handle, CallbackMessage, Id, (e.Button == MouseButtons.Left) ? NIN_SELECT : WM_CONTEXTMENU, NotificationData.Version);
         }
