@@ -9,6 +9,7 @@ using System.Globalization;
 using System.Reflection;
 using System.Resources;
 using System.Threading;
+using System.Windows.Forms;
 
 namespace SimpleClassicTheme.Taskbar.Helpers
 {
@@ -60,6 +61,7 @@ namespace SimpleClassicTheme.Taskbar.Helpers
         public bool IsLocked { get; set; } = false;
         public GroupAppearance GroupAppearance { get; set; } = GroupAppearance.Default;
         public Tweaks Tweaks { get; set; } = new();
+        public DockStyle Position { get; set; } = DockStyle.Bottom;
 
         public string RendererPath
         {

@@ -76,7 +76,7 @@ namespace SimpleClassicTheme.Taskbar
             _screen = screen;
 
             StartPosition = FormStartPosition.Manual;
-            Location = new Point(_screen.WorkingArea.Left, _screen.Bounds.Bottom - Config.Default.Renderer.TaskbarHeight);
+            Location = GetLocation(_screen.Bounds);
             Size = new Size(_screen.Bounds.Width, Config.Default.Renderer.TaskbarHeight);
         }
 
@@ -143,6 +143,20 @@ namespace SimpleClassicTheme.Taskbar
                 cp.ExStyle |= 0x80;
                 return cp;
             }
+        }
+
+        /// <summary>
+        /// Gets the appropiate location for this taskbar based on the user's config.
+        /// </summary>
+        private static Point GetLocation(Rectangle bounds)
+        {
+            return Config.Default.Position switch
+            {
+                DockStyle.Top => new Point(bounds.Left, bounds.Top),
+                DockStyle.Bottom => new Point(bounds.Left, bounds.Bottom - Config.Default.Renderer.TaskbarHeight),
+                DockStyle.None or DockStyle.Fill => throw new ArgumentOutOfRangeException(),
+                _ => throw new NotImplementedException(),
+            };
         }
 
         protected override void OnPaint(PaintEventArgs e)
@@ -246,9 +260,22 @@ namespace SimpleClassicTheme.Taskbar
             using var _ = logicTiming.StartRegion("Resize work area");
 
             Rectangle workArea = _screen.Bounds;
-            workArea.Height -= Height;
+            Point desiredLocation = GetLocation(workArea);
 
-            Point desiredLocation = new(workArea.Left, workArea.Bottom);
+            switch (Config.Default.Position)
+            {
+                case DockStyle.Top:
+                    workArea.Y += Height;
+                    workArea.Height -= Height;
+                    break;
+                
+                case DockStyle.Bottom:
+                    workArea.Height -= Height;
+                    break;
+
+                default:
+                    throw new NotImplementedException();
+            }
 
             if (!_screen.WorkingArea.Equals(workArea))
             {

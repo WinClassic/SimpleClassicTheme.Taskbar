@@ -61,6 +61,7 @@
             this.quickLaunchLinkLabel = new System.Windows.Forms.Label();
             this.enableQuickLaunchCheckBox = new System.Windows.Forms.CheckBox();
             this.tabTaskView = new System.Windows.Forms.TabPage();
+            this.groupAppearanceLabel = new System.Windows.Forms.Label();
             this.groupAppearanceComboBox = new System.Windows.Forms.ComboBox();
             this.manageHiddenElementsButton = new System.Windows.Forms.Button();
             this.enableGroupingCheckBox = new System.Windows.Forms.CheckBox();
@@ -89,7 +90,8 @@
             this.customIconFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.contentSplitContainer = new System.Windows.Forms.SplitContainer();
             this.customThemeFolderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
-            this.groupAppearanceLabel = new System.Windows.Forms.Label();
+            this.taskbarLocationLabel = new System.Windows.Forms.Label();
+            this.taskbarLocationComboBox = new System.Windows.Forms.ComboBox();
             this.tabControl.SuspendLayout();
             this.tabGeneral.SuspendLayout();
             this.tabThemes.SuspendLayout();
@@ -170,6 +172,8 @@
             // 
             // tabGeneral
             // 
+            this.tabGeneral.Controls.Add(this.taskbarLocationComboBox);
+            this.tabGeneral.Controls.Add(this.taskbarLocationLabel);
             this.tabGeneral.Controls.Add(this.showTaskbarOnAllDesktops);
             this.tabGeneral.Controls.Add(this.exitItemLabel);
             this.tabGeneral.Controls.Add(this.exitItemComboBox);
@@ -186,7 +190,7 @@
             // showTaskbarOnAllDesktops
             // 
             this.showTaskbarOnAllDesktops.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.showTaskbarOnAllDesktops.Location = new System.Drawing.Point(8, 72);
+            this.showTaskbarOnAllDesktops.Location = new System.Drawing.Point(8, 104);
             this.showTaskbarOnAllDesktops.Name = "showTaskbarOnAllDesktops";
             this.showTaskbarOnAllDesktops.Size = new System.Drawing.Size(360, 17);
             this.showTaskbarOnAllDesktops.TabIndex = 9;
@@ -478,6 +482,15 @@
             this.tabTaskView.TabIndex = 0;
             this.tabTaskView.Text = "Task View";
             this.tabTaskView.UseVisualStyleBackColor = true;
+            // 
+            // groupAppearanceLabel
+            // 
+            this.groupAppearanceLabel.Location = new System.Drawing.Point(24, 32);
+            this.groupAppearanceLabel.Name = "groupAppearanceLabel";
+            this.groupAppearanceLabel.Size = new System.Drawing.Size(160, 16);
+            this.groupAppearanceLabel.TabIndex = 41;
+            this.groupAppearanceLabel.Text = "Grouping appearance:";
+            this.groupAppearanceLabel.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
             // 
             // groupAppearanceComboBox
             // 
@@ -789,14 +802,28 @@
             this.customThemeFolderBrowserDialog.Description = "Please select the theme directory";
             this.customThemeFolderBrowserDialog.UseDescriptionForTitle = true;
             // 
-            // groupAppearanceLabel
+            // taskbarLocationLabel
             // 
-            this.groupAppearanceLabel.Location = new System.Drawing.Point(24, 32);
-            this.groupAppearanceLabel.Name = "groupAppearanceLabel";
-            this.groupAppearanceLabel.Size = new System.Drawing.Size(160, 16);
-            this.groupAppearanceLabel.TabIndex = 41;
-            this.groupAppearanceLabel.Text = "Grouping appearance:";
-            this.groupAppearanceLabel.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+            this.taskbarLocationLabel.Location = new System.Drawing.Point(8, 72);
+            this.taskbarLocationLabel.Name = "taskbarLocationLabel";
+            this.taskbarLocationLabel.Size = new System.Drawing.Size(168, 16);
+            this.taskbarLocationLabel.TabIndex = 10;
+            this.taskbarLocationLabel.Text = "Taskbar location on screen:";
+            this.taskbarLocationLabel.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+            // 
+            // taskbarLocationComboBox
+            // 
+            this.taskbarLocationComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.taskbarLocationComboBox.FormattingEnabled = true;
+            this.taskbarLocationComboBox.Items.AddRange(new object[] {
+            "Top",
+            "Bottom",
+            "Left",
+            "Right"});
+            this.taskbarLocationComboBox.Location = new System.Drawing.Point(184, 72);
+            this.taskbarLocationComboBox.Name = "taskbarLocationComboBox";
+            this.taskbarLocationComboBox.Size = new System.Drawing.Size(184, 21);
+            this.taskbarLocationComboBox.TabIndex = 11;
             // 
             // Settings
             // 
@@ -908,5 +935,7 @@
         private System.Windows.Forms.ComboBox groupAppearanceComboBox;
         private UI.VisualStyleSelector visualStyleSelector;
         private System.Windows.Forms.Label groupAppearanceLabel;
+        private System.Windows.Forms.ComboBox taskbarLocationComboBox;
+        private System.Windows.Forms.Label taskbarLocationLabel;
     }
 }

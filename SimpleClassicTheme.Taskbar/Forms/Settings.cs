@@ -98,6 +98,7 @@ namespace SimpleClassicTheme.Taskbar
             Config.Default.StartButtonIconImage = customIconTextBox.Text;
             Config.Default.StartButtonImage = customButtonTextBox.Text;
             Config.Default.GroupAppearance = (GroupAppearance)groupAppearanceComboBox.SelectedIndex;
+            Config.Default.Position = Enum.Parse<DockStyle>(taskbarLocationComboBox.SelectedItem as string);
 
             if (languageComboBox.SelectedItem is CultureInfo cultureInfo)
             {
@@ -343,6 +344,7 @@ namespace SimpleClassicTheme.Taskbar
             radioStartDefault.Checked = Config.Default.StartButtonAppearance == StartButtonAppearance.Default;
             showTaskbarOnAllDesktops.Checked = Config.Default.ShowTaskbarOnAllDesktops;
             groupAppearanceComboBox.SelectedIndex = (int)Config.Default.GroupAppearance;
+            taskbarLocationComboBox.SelectedIndex = taskbarLocationComboBox.Items.IndexOf(Config.Default.Position.ToString());
 
             if (!Config.Default.Tweaks.EnableDebugging)
             {
