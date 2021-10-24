@@ -96,8 +96,8 @@ namespace SimpleClassicTheme.Taskbar
                     }
                     else
                     {
-                        if ((Window.WindowInfo.dwStyle & 0x20000000) > 0)
-                            _ = ShowWindow(Window.Handle, 9);
+                        if ((Window.WindowInfo.dwStyle & WS_MINIMIZE) != 0)
+                            _ = ShowWindow(Window.Handle, SW_RESTORE);
 
                         _ = SetForegroundWindow(Window.Handle);
 
