@@ -61,7 +61,6 @@ namespace SimpleClassicTheme.Taskbar
             set => PrimaryWindow.Title = value;
         }
 
-        public bool IsInsidePopup => Parent is PopupTaskbarGroup;
 
         public override Window Window
         {

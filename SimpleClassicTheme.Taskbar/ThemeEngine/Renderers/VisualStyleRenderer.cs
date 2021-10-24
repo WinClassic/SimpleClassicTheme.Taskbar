@@ -165,10 +165,7 @@ namespace SimpleClassicTheme.Taskbar.ThemeEngine.Renderers
             }
 
             using var textBrush = new SolidBrush(textColor);
-
-            GroupedTaskbarProgram group = taskbarProgram is GroupedTaskbarProgram ? taskbarProgram as GroupedTaskbarProgram : null;
-
-            if (!(group?.IsInsidePopup == true))
+            if (!(taskbarProgram is SingleTaskbarProgram single && single.IsInsidePopup == true))
             {
                 Rectangle bounds = new(Point.Empty, taskbarProgram.Size);
                 g.DrawElement(buttonElement, bounds, index);
@@ -203,7 +200,7 @@ namespace SimpleClassicTheme.Taskbar.ThemeEngine.Renderers
                 x += iconSize + 2;
             }
 
-            if (group != null)
+            if (taskbarProgram is GroupedTaskbarProgram group)
             {
                 using (var groupCountTextBrush = new SolidBrush(groupCount.TextColor ?? textColor))
                 {
@@ -232,12 +229,12 @@ namespace SimpleClassicTheme.Taskbar.ThemeEngine.Renderers
 
         public override void DrawTaskButtonGroupButton(GroupedTaskbarProgram taskbarProgram, Graphics g)
         {
-            // var sizingMargins = new Padding(8, 3, 18, 8);
-            var element = colorScheme["Combobox.DropDownButton"];
-            var rectangle = new Rectangle(0, 28, 13, 28);
-            // var geometry = new NinePatchGeometry(sizingMargins, rectangle);
-            // g.DrawNinePatch(taskBandButtonBitmap, geometry, new Rectangle(Point.Empty, taskbarProgram.Size));
-            g.DrawElement(element, rectangle, 0);
+            if (Config.Default.GroupAppearance == GroupAppearance.Default)
+            {
+                var element = colorScheme["Combobox.DropDownButton"];
+                var rectangle = new Rectangle(taskbarProgram.Width - 13, 4, 13, 13);
+                g.DrawElement(element, rectangle, 0);
+            }
         }
 
         public override void DrawTaskButtonGroupWindow(PopupTaskbarGroup taskbarGroup, Graphics g)

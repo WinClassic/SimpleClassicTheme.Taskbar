@@ -41,6 +41,8 @@ namespace SimpleClassicTheme.Taskbar
         public override string Title { get => window.Title; set => throw new NotImplementedException(); }
         public override Window Window { get => window; set => window = value; }
 
+        public bool IsInsidePopup => Parent is PopupTaskbarGroup;
+
         public override void FinishOnPaint(PaintEventArgs e)
         {
         }
