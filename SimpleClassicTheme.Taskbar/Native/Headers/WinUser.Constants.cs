@@ -8,6 +8,7 @@
         public const int HWND_BROADCAST = 0xFFFF;
         public const int SW_HIDE = 0;
         public const int SW_MINIMIZE = 6;
+        public const int SW_RESTORE = 9;
         public const int SW_SHOW = 5;
         public const int SW_SHOWMAXIMIZED = 3;
         public const int SW_SHOWMINIMIZED = 2;
@@ -79,6 +80,7 @@
         public const uint WM_LBUTTONDBLCLICK = 0x0203;
         public const uint WM_LBUTTONDOWN = 0x0201;
         public const uint WM_LBUTTONUP = 0x0202;
+        public const uint WS_MINIMIZE = 0x20000000;
         public const uint WM_MOUSELEAVE = 0x0200;
         public const uint WM_MOUSEMOVE = 0x0200;
         public const uint WM_QUERYENDSESSION = 0x0011;

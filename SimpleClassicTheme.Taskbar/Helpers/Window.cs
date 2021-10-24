@@ -13,14 +13,14 @@ namespace SimpleClassicTheme.Taskbar
     {
         public string GroupingKey;
         public IntPtr Handle;
-        internal WINDOWINFO WindowInfo;
+        internal WINDOWINFO WindowInfo => WINDOWINFO.FromHWND(Handle);
         private IntPtr _processHandle;
         private int? _processId;
 
         public Window(IntPtr handle) : this()
         {
             Handle = handle;
-            WindowInfo = WINDOWINFO.FromHWND(handle);
+            //WindowInfo = WINDOWINFO.FromHWND(handle);
         }
 
         public string ClassName
