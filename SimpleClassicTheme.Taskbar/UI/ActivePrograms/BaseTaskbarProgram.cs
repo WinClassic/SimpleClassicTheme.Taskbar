@@ -139,6 +139,8 @@ namespace SimpleClassicTheme.Taskbar
             };
             MouseUp += delegate
             {
+                IsPressed = false;
+                ActiveWindow = activeWindow;
                 Invalidate();
             };
             MouseClick += OnClick;
