@@ -58,6 +58,11 @@
             /// A top-level window is being replaced. The window exists when the system calls this hook.
             /// </summary>
             HSHELL_WINDOWREPLACED = 13,
+
+            /// <summary>
+            /// Similar to <see cref="HSHELL_WINDOWACTIVATED"/>
+            /// </summary>
+            HSHELL_RUDEAPPACTIVATED = 32772,
         }
 
         public enum ShellHookId : int

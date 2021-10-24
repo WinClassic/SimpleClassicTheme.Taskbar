@@ -84,6 +84,7 @@ namespace SimpleClassicTheme.Taskbar.Native
                     break;
 
                 case ShellEvents.HSHELL_WINDOWACTIVATED:
+                case ShellEvents.HSHELL_RUDEAPPACTIVATED:
                     WindowActivated?.Invoke(this, wParam);
                     break;
 
