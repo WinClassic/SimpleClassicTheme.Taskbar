@@ -116,17 +116,17 @@ namespace SimpleClassicTheme.Taskbar
             }
         }
 
-        public IEnumerable<BaseTaskbarProgram> Programs
+        public List<BaseTaskbarProgram> Programs
         {
             get
             {
+                List<BaseTaskbarProgram> list = new();
                 foreach (var control in Controls)
-                {
                     if (control is BaseTaskbarProgram taskbarProgram)
-                    {
-                        yield return taskbarProgram;
-                    }
-                }
+                        list.Add(taskbarProgram);
+                list.Sort((a, b) => 
+                                    a.Location.X.CompareTo(b.Location.X));
+                return list;
             }
         }
 
@@ -576,7 +576,7 @@ namespace SimpleClassicTheme.Taskbar
             }
 
             var offsetFromOrigin = Cursor.Position.X - mouseOriginalX;
-            var distanceFromOrigin = Math.Abs(offsetFromOrigin);
+            var distanceFromOrigin = Math.Abs(mouseOriginalX - Cursor.Position.X);
 
             if (distanceFromOrigin > 5)
                 heldDownButton.IsMoving = true;
