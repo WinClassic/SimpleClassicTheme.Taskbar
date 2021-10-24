@@ -5,11 +5,6 @@
       "commandLineArgs": "--sct",
       "nativeDebugging": false
     },
-    "SCTT (C++)": {
-      "commandName": "Project",
-      "commandLineArgs": "--unmanaged",
-      "nativeDebugging": true
-    },
     "Dump tray": {
       "commandName": "Project",
       "commandLineArgs": "--traydump"
