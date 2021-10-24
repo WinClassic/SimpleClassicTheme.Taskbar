@@ -116,17 +116,21 @@ namespace SimpleClassicTheme.Taskbar
             }
         }
 
-        public List<BaseTaskbarProgram> Programs
+        public IEnumerable<BaseTaskbarProgram> Programs
         {
             get
             {
-                List<BaseTaskbarProgram> list = new();
-                foreach (var control in Controls)
-                    if (control is BaseTaskbarProgram taskbarProgram)
-                        list.Add(taskbarProgram);
-                list.Sort((a, b) => 
-                                    a.Location.X.CompareTo(b.Location.X));
-                return list;
+                return Controls.OfType<BaseTaskbarProgram>().OrderBy(p =>
+                {
+                    var x = p.Left;
+                    if (p != heldDownButton && heldDownButton != null)
+                    {
+                        int a = (heldDownButton.Left - x) < 0 ? -1 : 1; // Figure out in which direction to offset
+                        x += p.Width / 2 * a;
+                    }
+
+                    return x;
+                });
             }
         }
 
@@ -559,9 +563,9 @@ namespace SimpleClassicTheme.Taskbar
 
         private void Taskbar_IconDown(object sender, MouseEventArgs e)
         {
-            if (((Control)sender).Parent == this)
+            if (sender is BaseTaskbarProgram button && button.Parent == this)
             {
-                heldDownButton = (BaseTaskbarProgram)sender;
+                heldDownButton = button;
                 heldDownOriginalX = heldDownButton.Location.X;
                 mouseOriginalX = Cursor.Position.X;
             }
@@ -576,7 +580,7 @@ namespace SimpleClassicTheme.Taskbar
             }
 
             var offsetFromOrigin = Cursor.Position.X - mouseOriginalX;
-            var distanceFromOrigin = Math.Abs(mouseOriginalX - Cursor.Position.X);
+            var distanceFromOrigin = Math.Abs(offsetFromOrigin);
 
             if (distanceFromOrigin > 5)
                 heldDownButton.IsMoving = true;
@@ -589,20 +593,15 @@ namespace SimpleClassicTheme.Taskbar
                 heldDownButton = null;
 
             int x = taskAreaStart;
-            int i = 0;
             foreach (BaseTaskbarProgram icon in Programs)
             {
                 if (icon != heldDownButton)
                 {
                     icon.Location = new Point(x, 0);
                 }
-                else
-                {
-                    Logger.Instance.Log(LoggerVerbosity.Verbose, "Taskbar", $"Selected taskbar button is index {i}");
-                }
 
-                x += icon.Width + Config.Default.Tweaks.SpaceBetweenTaskbarIcons;
-                i++;
+                int width = icon.Width + Config.Default.Tweaks.SpaceBetweenTaskbarIcons;
+                x += width;
             }
         }
 
