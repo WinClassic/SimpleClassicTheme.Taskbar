@@ -47,7 +47,8 @@ namespace SimpleClassicTheme.Taskbar
         private readonly TimingDebugger uiTiming = new();
         private ShellHook _shellHook;
         private bool dummy;
-        private Range taskArea;
+        private int taskAreaStart;
+        private int taskAreaEnd;
         private bool watchLogic = true;
         private bool watchUI = true;
 
@@ -214,16 +215,12 @@ namespace SimpleClassicTheme.Taskbar
         /// <param name="newButton">The new button.</param>
         private void AddTaskbarButton(SingleTaskbarProgram newButton)
         {
-            if (!Config.Default.EnableGrouping)
-            {
-                Controls.Add(newButton);
-                return;
-            }
+            BaseTaskbarProgram sameThing = null;
 
-            BaseTaskbarProgram sameThing = Programs.FirstOrDefault(p =>
+            if (Config.Default.EnableGrouping)
             {
-                return IsGroupConditionMet(p, newButton);
-            });
+                sameThing = Programs.FirstOrDefault(p => IsGroupConditionMet(p, newButton));
+            }
 
             switch (sameThing)
             {
@@ -380,65 +377,83 @@ namespace SimpleClassicTheme.Taskbar
 
         private void LayoutTaskbandButtons()
         {
-            var icons = Programs.ToArray();
+            BaseTaskbarProgram[] icons = Programs.ToArray();
+            bool anyIcons = icons.Length != 0;
 
             // Calculate availabe space in taskbar and then divide that space over all programs
-            int startX = quickLaunch.Location.X + quickLaunch.Width + 4;
-            int programWidth = Primary ? Config.Default.Tweaks.TaskbarProgramWidth + Config.Default.Tweaks.SpaceBetweenTaskbarIcons : 24;
+            int startX = quickLaunch.Location.X + 4;
+            if (quickLaunch.Visible)
+            {
+                startX += quickLaunch.Width;
+            }
 
-            int availableSpace = verticalDivider.Location.X - startX - 6;
-            availableSpace += Config.Default.Tweaks.SpaceBetweenTaskbarIcons;
+            int spacing = Config.Default.Tweaks.SpaceBetweenTaskbarIcons;
+            int iconWidth = Primary ? Config.Default.Tweaks.TaskbarProgramWidth + spacing : 24;
+            if (anyIcons)
+            {
+                int availableSpace = verticalDivider.Location.X - startX + spacing - 6;
+                double sizePerIcon = (double)availableSpace / icons.Length;
 
-            if (icons.Length > 0 && availableSpace / icons.Length > programWidth)
-                availableSpace = icons.Length * programWidth;
+                if (sizePerIcon > iconWidth)
+                {
+                    availableSpace = icons.Length * iconWidth;
+                    sizePerIcon = (double)availableSpace / icons.Length;
+                }
 
-            int x = startX;
-            int iconWidth = Enumerable.Any(icons) ? (int)Math.Floor((double)availableSpace / icons.Length) - Config.Default.Tweaks.SpaceBetweenTaskbarIcons : 1;
+                iconWidth = (int)sizePerIcon - spacing;
+            }
+            else
+            {
+                iconWidth = 1;
+            }
+
             int maxX = verticalDivider.Location.X - iconWidth;
-
             if (maxX < 0)
             {
                 Logger.Instance.Log(LoggerVerbosity.Basic, "Taskbar", "maxX is below 0, aborting layout!");
                 return;
             }
 
-            // Re-display all windows (except heldDownButton)
-            foreach (BaseTaskbarProgram icon in icons)
+            taskAreaStart = startX;
+            taskAreaEnd = maxX;
+
+            if (anyIcons)
             {
-                icon.Width = Math.Max(icon.MinimumWidth, iconWidth);
-                if (icon == heldDownButton)
+                // Re-display all windows (except heldDownButton)
+                int x = startX;
+                foreach (BaseTaskbarProgram icon in icons)
                 {
-                    x += icon.Width + Config.Default.Tweaks.SpaceBetweenTaskbarIcons;
-                    continue;
+                    if (icon == heldDownButton)
+                    {
+                        icon.Width = Math.Max(icon.MinimumWidth, iconWidth);
+                    }
+                    else
+                    {
+                        icon.Location = new Point(x, 0);
+                        icon.Icon = GetAppIcon(icon.Window);
+                        icon.Width = iconWidth;
+                        icon.Height = Height;
+                        // icon.Visible = true;
+                        // icon.Invalidate();
+
+                        if (!Controls.Contains(icon))
+                        {
+                            Controls.Add(icon);
+                        }
+                    }
+
+                    x += icon.Width + spacing;
                 }
 
-                icon.Location = new Point(x, 0);
-                icon.Icon = GetAppIcon(icon.Window);
-                icon.Width = iconWidth;
-                icon.Height = Height;
-                // icon.Visible = true;
+                if (heldDownButton != null)
+                {
+                    heldDownButton.BringToFront();
+                }
 
                 verticalDivider.BringToFront();
 
-                x += icon.Width + Config.Default.Tweaks.SpaceBetweenTaskbarIcons;
-
-                if (!Controls.Contains(icon))
-                {
-                    Controls.Add(icon);
-                }
-
-                // icon.Invalidate();
+                Invalidate(true);
             }
-
-            if (heldDownButton != null)
-            {
-                heldDownButton.BringToFront();
-                verticalDivider.BringToFront();
-            }
-
-            taskArea = new Range(new Index(startX), new Index(maxX));
-
-            Invalidate(true);
         }
 
         public void LayoutUI()
@@ -452,8 +467,9 @@ namespace SimpleClassicTheme.Taskbar
         {
             foreach (string filter in Config.Default.TaskbarProgramFilter.Split('*'))
             {
-                if (filter == "")
+                if (string.IsNullOrWhiteSpace(filter))
                     continue;
+
                 string[] filterParts = filter.Split('|');
                 if (filterParts[1] == "ClassName")
                 {
@@ -527,17 +543,17 @@ namespace SimpleClassicTheme.Taskbar
 
         private void Taskbar_FormClosing(object sender, FormClosingEventArgs e)
         {
+            IntPtr hWnd = FindWindow("Shell_TrayWnd", "");
             if (!selfClose)
             {
                 //If we don't close ourselves, show the shutdown dialog
-                var hWnd = FindWindow("Shell_TrayWnd", "");
                 Keyboard.KeyPress(hWnd, Keys.Menu, Keys.F4);
                 e.Cancel = true;
             }
             else
             {
                 //Show taskbar
-                _ = ShowWindow(FindWindow("Shell_TrayWnd", ""), 5);
+                _ = ShowWindow(hWnd, 5);
             }
         }
 
@@ -554,29 +570,39 @@ namespace SimpleClassicTheme.Taskbar
         private void Taskbar_IconMove(object sender, MouseEventArgs e)
         {
             //See if we're moving, if so calculate new position, if we finished calculate new position
-            if (heldDownButton != null)
+            if (heldDownButton == null)
             {
-                if (Math.Abs(mouseOriginalX - Cursor.Position.X) > 5)
-                    heldDownButton.IsMoving = true;
+                return;
+            }
 
-                Point p = new(heldDownOriginalX + (Cursor.Position.X - mouseOriginalX), heldDownButton.Location.Y);
-                heldDownButton.Location = new Point(Math.Max(taskArea.Start.Value, Math.Min(p.X, taskArea.End.Value)), p.Y);
-                heldDownButton.BringToFront();
+            var offsetFromOrigin = Cursor.Position.X - mouseOriginalX;
+            var distanceFromOrigin = Math.Abs(offsetFromOrigin);
 
-                if ((MouseButtons & MouseButtons.Left) == 0)
-                    heldDownButton = null;
+            if (distanceFromOrigin > 5)
+                heldDownButton.IsMoving = true;
 
-                int x = taskArea.Start.Value;
-                foreach (BaseTaskbarProgram icon in Programs)
+            var newX = Math.Clamp(heldDownOriginalX + offsetFromOrigin, taskAreaStart, taskAreaEnd);
+            heldDownButton.Location = new Point(newX, heldDownButton.Location.Y);
+            heldDownButton.BringToFront();
+
+            if (!MouseButtons.HasFlag(MouseButtons.Left))
+                heldDownButton = null;
+
+            int x = taskAreaStart;
+            int i = 0;
+            foreach (BaseTaskbarProgram icon in Programs)
+            {
+                if (icon != heldDownButton)
                 {
-                    if (icon == heldDownButton)
-                    {
-                        x += icon.Width + Config.Default.Tweaks.SpaceBetweenTaskbarIcons;
-                        continue;
-                    }
                     icon.Location = new Point(x, 0);
-                    x += icon.Width + Config.Default.Tweaks.SpaceBetweenTaskbarIcons;
                 }
+                else
+                {
+                    Logger.Instance.Log(LoggerVerbosity.Verbose, "Taskbar", $"Selected taskbar button is index {i}");
+                }
+
+                x += icon.Width + Config.Default.Tweaks.SpaceBetweenTaskbarIcons;
+                i++;
             }
         }
 
@@ -602,7 +628,7 @@ namespace SimpleClassicTheme.Taskbar
             }
 
             //TODO: Add an option to registry tweak classic alt+tab
-            quickLaunch.Disabled = (!Primary) || (!Config.Default.EnableQuickLaunch);
+            quickLaunch.Disabled = !(Primary && Config.Default.EnableQuickLaunch);
             quickLaunch.UpdateIcons();
 
             if (Config.Default.EnableActiveTaskbar)
