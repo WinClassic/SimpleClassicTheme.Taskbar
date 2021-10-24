@@ -124,7 +124,8 @@ namespace SimpleClassicTheme.Taskbar
                 foreach (var control in Controls)
                     if (control is BaseTaskbarProgram taskbarProgram)
                         list.Add(taskbarProgram);
-                list.Sort((a, b) => 
+                list.Sort((a, b) => a == heldDownButton ? a.Location.X.CompareTo(b.Location.X + ((a.Location.X < b.Location.X ? -1 : 1) * b.Width / 2)) :
+                                    b == heldDownButton ? (a.Location.X + ((b.Location.X < a.Location.X ? -1 : 1) * a.Width / 2)).CompareTo(b.Location.X) :
                                     a.Location.X.CompareTo(b.Location.X));
                 return list;
             }
